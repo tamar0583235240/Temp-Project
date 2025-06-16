@@ -12,6 +12,7 @@ import { useAppDispatch } from "./shared/hooks/reduxHooks";
 =======
 import React from 'react';
 import './App.css';
+import AIInsightsList from './features/dashboard/components/AIInsightsList';
 
 >>>>>>> bc82c02 (Merge branch 'Group3' of https://github.com/tamar0583235240/Temp-Project into Tehila-Fried)
 
@@ -53,6 +54,9 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+
+      <AIInsightsList />
+
       </main>
     </div>
 >>>>>>> bc82c02 (Merge branch 'Group3' of https://github.com/tamar0583235240/Temp-Project into Tehila-Fried)

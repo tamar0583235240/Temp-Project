@@ -3,6 +3,7 @@
 // import { pool } from '../config/dbConnection'; 
 // // import { exampleInterface } from "../interfaces/exampleInterface";
 
+<<<<<<< HEAD
 // const getAllExamples = async (): Promise<any[]> => {
 //   try {
 //     const { data, error } = await supabase
@@ -28,5 +29,29 @@
 // };
 
 // export default { getAllExamples };
+=======
+//import {client} from '../config/dbConnection';
+import { log } from "console";
+import { exampleInterface } from "../interfaces/exampleInterface";
+
+const getAllExamples = async (): Promise<exampleInterface[]> => {
+  try {
+    //   const { data, error } = await client
+    //     .from("examples")
+    //     .select("exampleField1, exampleField2, exampleField3");
+
+    //   if (error) {
+    //     throw error;
+    //   }
+
+    // return data as exampleInterface[];
+    console.log("Fetching examples from Supabase...");
+    return [];
+  } catch (error) {
+    console.error("Error fetching examples from Supabase:", error);
+    throw error;
+  }
+};
+>>>>>>> b9cae16 (AI Insights)
 
 // // export default { getAllExamples };

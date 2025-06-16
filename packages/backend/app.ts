@@ -4,6 +4,7 @@ import answerRouter from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
 import cors from 'cors';
+<<<<<<< HEAD
 // import exampleRouts from './src/routes/exampleRouts';
 import questionRoute from './src/routes/questionRouts';
 import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
@@ -24,6 +25,18 @@ const corsOptions = {
 };
 dotenv.config();
 const app: Application = express();
+=======
+import exampleRouts from './src/routes/exampleRouts';
+import aIInsightRouts from './src/routes/aIInsightRouts';
+// import {client} from './src/config/dbConnection';
+
+const app: Application = express();
+console.log('i am here in app');
+app.use(express.json());
+app.use('/api', exampleRouts);
+app.use('/api/insights', aIInsightRouts);
+app.use(cors());
+>>>>>>> b9cae16 (AI Insights)
 
 
 
