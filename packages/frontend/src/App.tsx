@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import ShareButton from './features/shared-recordings/components/ShareButton';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+        <ShareButton/>
       </main>
     </div>
   );
