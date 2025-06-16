@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import AIInsightsList from './features/dashboard/components/AIInsightsList';
 
 function App() {
   return (
@@ -8,6 +9,9 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+
+      <AIInsightsList />
+
       </main>
     </div>
   );
