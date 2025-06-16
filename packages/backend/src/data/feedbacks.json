@@ -1,0 +1,10 @@
+[
+  {
+    "id": "f1",
+    "sharedRecordingId": "s1",
+    "givenByUserId": "user2",
+    "comment": "דיבור טוב! קצת לא ברור בסוף",
+    "rating": 4,
+    "createdAt": "2024-06-06T12:00:00Z"
+  }
+]
