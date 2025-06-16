@@ -1,8 +1,0 @@
-[
-  {
-    "id": "s1",
-    "ownerId": "user1",
-    "answerId": "a1",
-    "sharedWith": ["user2"]
-  }
-]
