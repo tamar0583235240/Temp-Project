@@ -1,4 +1,4 @@
-// src/app/store.ts
+// store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
 import exampleSlice from '../../features/exampleFeatures/store/exampleSlice'

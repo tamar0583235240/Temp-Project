@@ -17,17 +17,18 @@
 //     console.log(`Server is running on port ${PORT}`);
 // })
 
+
 import express, { Application } from 'express';
 import cors from 'cors';
 import exampleRouts from './src/routes/exampleRouts';
-import {supabase} from './src/config/dbConnection';
-
+import authRoutes from './src/routes/authRoutes';
 
 
 const app: Application = express();
 console.log('i am here in app');
+app.use(cors());
 app.use(express.json());
 app.use('/api', exampleRouts);
-app.use(cors());
+app.use('/api', authRoutes);
 
 export default app;
