@@ -6,8 +6,10 @@ import "./App.css";
 import { MessageModalProvider } from "./shared/ui/MessageModalContext";
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
-
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
+
+// במידה ותרצי להוסיף את הרכיב של המסקנות:
+import AIInsightsList from './features/dashboard/components/AIInsightsList';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,6 +39,8 @@ function App() {
   return (
     <MessageModalProvider>
       <BrowserRouter>
+        {/* אם את רוצה לראות את AIInsightsList, תוסיפי כאן זמנית */}
+        {/* <AIInsightsList /> */}
         <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>
