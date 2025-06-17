@@ -1,8 +1,10 @@
 {
   "dependencies": {
-    "pg": "^8.16.0"
+    "pg": "^8.16.0",
+    "react-router-dom": "^7.6.2"
   },
   "devDependencies": {
-    "@types/pg": "^8.15.4"
+    "@types/pg": "^8.15.4",
+    "@types/react-router-dom": "^5.3.3"
   }
 }
