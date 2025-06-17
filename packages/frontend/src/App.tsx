@@ -23,6 +23,7 @@ import React from 'react';
 import './App.css';
 import UserList from './features/admin/UserList';
 import ProgressStats from './features/dashboard/components/ProgressStats';
+import AddUserForm from './features/admin/components/AddNewUser';
 
 function App() {
   return (
@@ -31,6 +32,8 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+                <AddUserForm />
+
         <UserList />
         <ProgressStats /> {/* בלי userId */}
       </main>
