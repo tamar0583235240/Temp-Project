@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { TipsComponent } from './features/interview/components/tips';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       </header>
       <main>
       </main>
+        <TipsComponent />
     </div>
   );
 }
