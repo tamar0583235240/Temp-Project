@@ -11,6 +11,7 @@ export const RecordingsList = ({userId}:any) => {
 
     if (error || !data) 
         return <div>Error loading recordings</div>;
+    console.log("hgf");
     
     return (
         <div className="recordings-container">
