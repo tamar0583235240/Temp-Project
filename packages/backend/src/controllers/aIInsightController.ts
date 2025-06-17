@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-//import aiInsigthRepository from '../reposioty/aiInsigthRepository';
-import aiInsigthRepository from '../reposioty/aIInsigthRepository';
+import aiInsigthRepository from '../reposioty/aiInsigthRepository';
 
 export const getAiInsigths = async (req: Request, res: Response): Promise<void> => {
     try {
