@@ -1,4 +1,8 @@
+
 import React, { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom'
+import AppRoutes from './shared/routes/appRoutes'
+
 import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
@@ -17,13 +21,9 @@ function App() {
   }, []);
   
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Project base viewer</h1>
-      </header>
-      <main>
-      </main>
-    </div>
+      <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
