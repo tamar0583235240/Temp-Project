@@ -16,7 +16,7 @@ const answerSlice = createSlice({
   initialState,
   reducers: {
     setAnswerByUserId(state, action: PayloadAction<Answer>) {
-      const index = state.data.findIndex(answer => answer.userId === action.payload.userId);
+      const index = state.data.findIndex(answer => answer.user_id === action.payload.user_id);
       if (index !== -1)
         state.data[index] = action.payload;
       else
@@ -25,5 +25,5 @@ const answerSlice = createSlice({
   },
 });
 
-export const { setAnswerByUserId } = answerSlice.actions;
+export const  setAnswerByUserId  = answerSlice.actions;
 export default answerSlice.reducer;
