@@ -1,20 +1,15 @@
-
-import {supabase} from '../config/dbConnection';
 import { exampleInterface } from "../interfaces/exampleInterface";
+import { pool } from "../config/dbConnection"; // אם יצרת את pool בקובץ נפרד
 
 const getAllExamples = async (): Promise<exampleInterface[]> => {
   try {
-    const { data, error } = await supabase
-      .from("examples")
-      .select("exampleField1, exampleField2, exampleField3");
+    const result = await pool.query(
+      'SELECT exampleField1, exampleField2, exampleField3 FROM examples'
+    );
 
-    if (error) {
-      throw error;
-    }
-
-    return data as exampleInterface[];
+    return result.rows as exampleInterface[];
   } catch (error) {
-    console.error("Error fetching examples from Supabase:", error);
+    console.error("Error fetching examples from PostgreSQL:", error);
     throw error;
   }
 };
