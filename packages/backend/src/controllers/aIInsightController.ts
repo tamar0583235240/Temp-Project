@@ -10,3 +10,5 @@ export const getAiInsigths = async (req: Request, res: Response): Promise<void> 
         res.status(500).json({ error });
     }
 };
+
+

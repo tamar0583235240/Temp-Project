@@ -1,17 +1,16 @@
-
 import { api } from "../../../shared/api/api";
-import { exampleType } from "../types/exampleType";
+import { aiInsightsType } from "../types/aiInsightsType";
 
-export const exampleApi = api.injectEndpoints({
+export const aiInsightsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getItems: builder.query<exampleType[], void>({
-      query: () => "users",
+    getItems: builder.query<aiInsightsType[], void>({
+      query: () => "/insights",
       providesTags: ["users"],
     }),
-    addItem: builder.mutation<exampleType, Partial<exampleType>>({
+    addItem: builder.mutation<aiInsightsType, Partial<aiInsightsType>>({
       query: (item) => ({
-        url: "items",
-        method: "POST",
+        url: "/insights",
+        method: "GET",
         body: item,
       }),
       invalidatesTags: ["users"],
@@ -30,4 +29,4 @@ export const {
   useGetItemsQuery,
   useAddItemMutation,
   useDeleteItemMutation,
-} = exampleApi;
+} = aiInsightsApi;
