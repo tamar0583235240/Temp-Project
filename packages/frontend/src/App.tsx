@@ -1,5 +1,8 @@
 import React from 'react';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Login from './features/auth/components/login';
+import Register from './features/auth/components/register';
 
 function App() {
   return (
@@ -8,6 +11,10 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
       </main>
     </div>
   );

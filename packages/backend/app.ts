@@ -20,14 +20,31 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import exampleRouts from './src/routes/exampleRouts';
-import {supabase} from './src/config/dbConnection';
+// import {supabase} from './src/config/dbConnection';
+import {pool} from './src/config/dbConnection';
+import authRoutes from './src/routes/authRoutes';
+
+// Allow requests from frontend origin
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true, // optional, in case you're sending cookies
+};
 
 
 
 const app: Application = express();
-console.log('i am here in app');
+
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.originalUrl}`);
+  next();
+});
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+
 app.use(express.json());
-app.use('/api', exampleRouts);
-app.use(cors());
+app.use('/auth', authRoutes);
 
 export default app;
