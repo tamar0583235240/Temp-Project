@@ -16,11 +16,11 @@
 // app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}`);
 // })
-
+//////////////////////////////////////////////////////////////////
 import express, { Application } from 'express';
 import cors from 'cors';
-import exampleRouts from './src/routes/exampleRouts';
-import {supabase} from './src/config/dbConnection';
+import exampleRouts from './routes/exampleRouts'
+// import {supabase} from './src/config/dbConnection';
 
 
 
