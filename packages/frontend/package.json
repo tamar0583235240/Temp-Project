@@ -5,6 +5,7 @@
   "dependencies": {
     "@jridgewell/gen-mapping": "^0.3.8",
     "@reduxjs/toolkit": "^2.8.2",
+    "@tanstack/react-query": "^5.80.7",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -19,11 +20,15 @@
     "prompts": "^2.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.58.0",
     "react-redux": "^9.2.0",
     "react-scripts": "5.0.1",
     "shadcn": "^2.6.1",
+    "sweetalert2": "^11.22.0",
+    "sweetalert2-react-content": "^5.1.0",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
