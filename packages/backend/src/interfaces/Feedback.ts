@@ -5,4 +5,5 @@ export interface Feedback {
     comment: string
     rating: number | undefined
     createdAt: Date
+    answerCode: string | undefined
 }
