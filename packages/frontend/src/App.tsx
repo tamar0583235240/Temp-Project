@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import InterviewComponent from "./features/interview/components/interviewComponent";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+        <InterviewComponent/>
       </main>
     </div>
   );
