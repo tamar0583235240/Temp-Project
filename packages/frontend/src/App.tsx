@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import AIInsightsList from './features/dashboard/components/aiInsightsList';
+import AIInsightsList from './features/dashboard/components/AIInsightsList';
 
 function App() {
   return (
