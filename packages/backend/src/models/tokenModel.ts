@@ -1,4 +1,4 @@
-import pool from "../config/dbConnection";
+import {pool} from "../config/dbConnection";
 
 export const createToken = async (userId: string, token: string, expiresAt: Date) => {
   await pool.query(
