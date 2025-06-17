@@ -6,17 +6,17 @@ import InterviewComponent from "./features/interview/components/interviewCompone
 
 function App() {
   return (
-    <div className="App">
+    <><div className="App">
       <header className="App-header">
         <h1>Project base viewer</h1>
       </header>
       <main>
-        <InterviewComponent/>
+        <InterviewComponent />
       </main>
     </div>
-      <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <BrowserRouter>
+        <AppRoutes />
+    </BrowserRouter></>
   );
 }
 
