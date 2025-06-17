@@ -5,7 +5,7 @@ export const aiInsightsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getItems: builder.query<aiInsightsType[], void>({
       query: () => "/insights",
-      providesTags: ["Item"],
+      providesTags: ["users"],
     }),
     addItem: builder.mutation<aiInsightsType, Partial<aiInsightsType>>({
       query: (item) => ({
@@ -13,14 +13,14 @@ export const aiInsightsApi = api.injectEndpoints({
         method: "GET",
         body: item,
       }),
-      invalidatesTags: ["Item"],
+      invalidatesTags: ["users"],
     }),
     deleteItem: builder.mutation<void, string>({
       query: (id) => ({
         url: `items/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Item"],
+      invalidatesTags: ["users"],
     }),
   }),
 });
