@@ -26,8 +26,9 @@ import aIInsightRouts from './src/routes/aIInsightRouts';
 const app: Application = express();
 console.log('i am here in app');
 app.use(express.json());
+app.use(cors());
+
 app.use('/api', exampleRouts);
 app.use('/api/insights', aIInsightRouts);
-app.use(cors());
 
 export default app;
