@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Answer } from '../types/answer';
+import { Answer } from '../types/Answer';
 
 const categories = [
   'שמלות לנשים',

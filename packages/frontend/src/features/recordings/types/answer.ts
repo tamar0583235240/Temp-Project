@@ -1,8 +1,8 @@
 export interface Answer {
     id: string
-    userId: string
-    questionId: string
-    fileUrl: string
-    answerFileName:string,
-    submittedAt: Date
+    user_id: string
+    question_id: string
+    file_url: string,
+    answer_file_name:string,
+    submitted_at: Date
 }
