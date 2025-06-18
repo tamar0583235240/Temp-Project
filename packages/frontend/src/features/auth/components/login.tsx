@@ -39,12 +39,12 @@ const Login = () => {
 
         dispatch(setCurrentUser(user));
         sessionStorage.setItem('userId', user.id);
-        sessionStorage.setItem('userType', user.userType?.description || 'unknown');
+        sessionStorage.setItem('role', user.role || 'student');
         sessionStorage.setItem('firstName', user.firstName || '');
         sessionStorage.setItem('lastName', user.lastName || '');
         sessionStorage.setItem('email', user.email || '');
 
-        if (user.userType?.description === 'לקוח') {
+        if (user.role === 'student') {
           navigate('/quickActions');
         } else {
           navigate('/leads');

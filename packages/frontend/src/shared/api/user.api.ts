@@ -1,19 +1,26 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { api } from './api';
+import { User } from '../../features/auth/types/types';
 
-export const userApi = createApi({
-  reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/auth' }),
+interface GoogleCredentialPayload {
+  credential: string;
+}
+
+interface GoogleResponse {
+  user: User;
+}
+
+export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    loginWithGoogle: builder.mutation<any, string>({
+    loginWithGoogle: builder.mutation<GoogleResponse, string>({
       query: (token) => ({
-        url: '/google-login',
+        url: '/auth/google-login',
         method: 'POST',
         body: { payload: { credential: token } },
       }),
     }),
-    registerWithGoogle: builder.mutation<any, string>({
+    registerWithGoogle: builder.mutation<GoogleResponse, string>({
       query: (token) => ({
-        url: '/google-register',
+        url: '/auth/google-register',
         method: 'POST',
         body: { payload: { credential: token } },
       }),

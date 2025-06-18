@@ -1,32 +1,3 @@
-// import { Request, Response } from 'express';
-// import { supabase } from '../config/fakeSupabase';
-// // import { supabase } from '../config/dbConnection';
-
-// export const loginWithGoogle = async (req: Request, res: Response) => {
-//   try {
-//     const { payload } = req.body;
-//     const { email } = payload;
-
-//     const { data: user, error } = await supabase
-//       .from('users')
-//       .select('*')
-//       .eq('email', email)
-//       .single();
-
-//     if (error || !user) {
-//       return res.status(401).json({ message: 'User not found. Please register first.' });
-//     }
-
-//     return res.status(200).json({ user });
-//   } catch (err) {
-//     console.error('Login error:', err);
-//     return res.status(500).json({ message: 'Login failed' });
-//   }
-// };
-
-
-
-
 import { Request, Response } from 'express';
 import { pool } from '../config/dbConnection';
 import { OAuth2Client } from 'google-auth-library';
