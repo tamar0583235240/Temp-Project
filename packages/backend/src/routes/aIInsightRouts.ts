@@ -1,13 +1,7 @@
 import express from 'express';
-import { getAllAiInsights } from '../reposioty/aiInsight';
+import { getAllAiInsights } from '../controllers/aIInsightController';
 
 const router = express.Router();
-router.get('/', async (req, res) => {
-  try {
-    const insights = await getAllAiInsights();
-    res.json(insights);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch insights' });
-  }
-});
+router.get('/', getAllAiInsights); // GET /api/ai-insights
 export default router;
+

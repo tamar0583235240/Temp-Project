@@ -13,10 +13,10 @@ const AIInsightsList: React.FC = () => {
     skip: !userId, // אם אין userId דלג על הקריאה
   });
 
-  if (!userId) return <p> משתמש לא מובר. </p>;
+  // if (!userId) return <p> משתמש לא מובר. </p>;
   if (isLoading) return <p>טוען... אנא המתן...</p>;
   if (isError) return <p>מצטערים, אירעה שגיאה בשליפה.</p>;
-  if (insights.length === 0) return <p> לא נמצאו מסקנות. </p>;
+  // if (insights.length === 0) return <p> לא נמצאו מסקנות. </p>;
 
   return (
     <div>
