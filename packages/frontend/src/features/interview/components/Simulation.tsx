@@ -31,7 +31,16 @@ const Simulation: React.FC = () => {
     const loadQuestions = async () => {
       try {
         const questionsFromServer = await fetchQuestions();
-        dispatch(setQuestions(questionsFromServer));
+          console.log("FROM SERVER:", questionsFromServer);
+        const mappedQuestions = questionsFromServer.map((q: any) => ({
+  id: q.id,
+  text: q.content,
+  type: q.question_type || q.type || "open",
+  options: q.options || [],
+  answered: false,
+}));
+dispatch(setQuestions(mappedQuestions));
+
       } catch (err) {
         console.error("Error loading questions:", err);
       }
