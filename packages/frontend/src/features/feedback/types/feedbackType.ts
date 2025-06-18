@@ -1,6 +1,6 @@
 export interface feedbackType {
     id: string
-    sharedRecordingId: string
+    shared_recording_id: string
     given_by_user_id: string
     comment: string
     rating: number | undefined

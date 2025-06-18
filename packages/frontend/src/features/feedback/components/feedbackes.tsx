@@ -3,29 +3,12 @@
 import { useState } from "react"
 import "./feedbackes.css"
 import { useGetFeedbackesBysharedRecordingIdQuery } from "../services/feedbackApi"
-import { feedbackType } from "../types/feedbackType"
-import { useSelector } from "react-redux"
 
-export const Feedbackes = () => {
-
-    type Feedback = {
-        id:string,
-        sharedRecordingId:string,
-        givenByUserId:string,
-        comment:string,
-        rating?:number,
-        createdAt:Date
-    }
-
-    const { data: feedbackes, isLoading, error } = useGetFeedbackesBysharedRecordingIdQuery("550e8400-e29b-41d4-a718-446655440000")
+export const Feedbackes = (props:any) => {
+    const {sharedRecordingId} = props
+    const { data: feedbackes, isLoading, error } = useGetFeedbackesBysharedRecordingIdQuery(sharedRecordingId)
     
     const [flagShow , setFlagShow] = useState<boolean>(false)   
-    const [fidback , setFidback] = useState<Feedback[]>([
-        // דוגמאות לבדיקה
-        { id: "1",sharedRecordingId: "100",comment: "פידבק מעולה על השיעור", givenByUserId: "יוסי כהן", createdAt: new Date() },
-        { id: "2",sharedRecordingId: "200", comment: "השיעור היה מאוד מועיל", givenByUserId: "שרה לוי", createdAt: new Date() },
-        { id: "3",sharedRecordingId: "300", comment: "רוצה עוד שיעורים כאלה", givenByUserId: "דוד ישראל", createdAt: new Date() }
-    ])
 
     function showFidbackes(): void {
         console.log(feedbackes);

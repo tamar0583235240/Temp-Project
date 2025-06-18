@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Feedbackes } from './features/feedback/components/feedbackes';
-import { Provider } from 'react-redux';
-import { store } from './shared/store/store';
+import { AiInsightsList } from './features/recordings/components/AiInsightsList';
 
 function App() {
   return (
@@ -10,7 +9,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Project base viewer</h1>
-        <Feedbackes></Feedbackes>
+       <Feedbackes sharedRecordingId = {"550e8400-e29b-41d4-a718-446655440000"}></Feedbackes>
+      <AiInsightsList answerId = {"00000000-0000-0000-0000-000000000020"}></AiInsightsList>
       </header>
       <main>
       </main>

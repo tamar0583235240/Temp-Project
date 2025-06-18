@@ -8,10 +8,7 @@ const getFeedbackesBysharedRecordingId = async (sharedRecordingId:string): Promi
     try {
         
         const data = await pool.query(`SELECT * FROM feedback WHERE shared_recording_id = $1` , [sharedRecordingId] );   
-        // if (error) {
-        //     throw error;
-        // }
-        
+
         console.log(data.rows.length);
         
         return data.rows as Feedback[];
