@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 import { getAiInsigths} from '../controllers/aIInsightController';
 

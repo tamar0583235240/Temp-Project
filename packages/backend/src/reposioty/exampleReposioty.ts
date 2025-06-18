@@ -1,5 +1,3 @@
-
-
 // import {supabase} from '../config/dbConnection';
 // import { exampleInterface } from "../interfaces/exampleInterface";
 
@@ -19,4 +17,6 @@
 //     throw error;
 //   }
 // };
+
+// export default { getAllExamples };
 
