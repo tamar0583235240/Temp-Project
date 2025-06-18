@@ -69,7 +69,7 @@ const handleSubmit = () => {
 
   const currentQuestion = questions[currentIndex];
 
-  return (
+  return (<>
     <div className="simulation-container">
       {/* סרגל ניווט */}
       <div className="sidebar">
@@ -168,8 +168,10 @@ const handleSubmit = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
 export default Simulation;
 export {};
+
