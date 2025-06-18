@@ -7,10 +7,43 @@ interface InterviewState {
   loading: boolean;
 }
 
+// const initialState: InterviewState = {
+//   data: [],
+//   currentIndex: 0,
+//   loading: false,
+// };
 const initialState: InterviewState = {
-  data: [],
-  currentIndex: 0,
+  data: [
+    {
+      id: 1,
+      title: "מה זה useState?",
+      content: "useState הוא Hook שמאפשר לך להוסיף state לקומפוננטות פונקציונליות ב-React.",
+      category: "React",
+      tips: "נסה לנהל את ה-state בצורה מינימלית ונקייה.",
+      aiGuidance: "התמקד בהסבר מתי ואיך להשתמש ב-useState.",
+      isActive: true,
+    },
+    {
+      id: 2,
+      title: "הסבר את ההבדל בין props ו-state",
+      content: "props מועברים מההורה, בעוד ש-state הוא פנימי לקומפוננטה.",
+      category: "React",
+      tips: "השתמש ב-props להעברת נתונים בין קומפוננטות.",
+      aiGuidance: "תן דוגמה לקומפוננטת ילד שמקבלת props.",
+      isActive: true,
+    },
+    {
+      id: 3,
+      title: "מה זה Redux?",
+      content: "Redux הוא ספרייה לניהול state גלובלי באפליקציות JavaScript.",
+      category: "State Management",
+      tips: "השתמש ב-Redux רק כאשר האפליקציה דורשת ניהול state מורכב.",
+      aiGuidance: "ציין את המושגים המרכזיים כמו action, reducer, store.",
+      isActive: true,
+    },
+  ],
   loading: false,
+  currentIndex: 0
 };
 
 const interviewSlice = createSlice({

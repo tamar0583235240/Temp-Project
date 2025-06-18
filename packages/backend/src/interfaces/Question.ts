@@ -6,5 +6,4 @@ export interface Question {
     tips: string
     aiGuidance: string
     isActive: boolean
-
 }
