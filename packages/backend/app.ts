@@ -1,7 +1,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import exampleRouts from './src/routes/exampleRouts';
-// import {supabase} from './src/config/dbConnection';
 import usersRoutes from '../backend/src/routes/userRouts'
 import answerRouts from '../backend/src/routes/answerRouts'
 import aIInsightRouts from './src/routes/aIInsightRouts';

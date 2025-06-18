@@ -1,36 +1,22 @@
-// import React from 'react';
-// import { useGetItemsQuery } from '../services/aiInsightsApi'; 
-// import { aiInsightsType } from '../types/aiInsightsType';
-
-// const AIInsightsList: React.FC = () => {
-//   const { data: insights = [], isLoading, isError } = useGetItemsQuery();
-
-//   if (isLoading) return <p>טוען... אנא המתן...</p>;
-//   if (isError) return <p> מצטערים, אירעה שגיאה בשליפה. </p>;
-
-//   return (
-//     <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px' }}>
-//       <h2>המסקנות שלך למעשה:</h2>
-//       <ul>
-//         {insights.map((insight: aiInsightsType) => (
-//           <li key={insight.id}>
-//             {insight.summary}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
 import React from 'react';
 import { useGetItemsQuery } from '../services/aiInsightsApi';
 import { aiInsightsType } from '../types/aiInsightsType';
+import { useUserStore } from '../store/progressSlice';
+import { useGetProgressStatsQuery } from '../../../shared/api/api';
 
 const AIInsightsList: React.FC = () => {
-  const { data: insights = [], isLoading, isError } = useGetItemsQuery();
+  const { data: insights = [] } = useGetItemsQuery();
 
+  const userId = useUserStore((state) => state.userId);
+  
+  const { isLoading, isError } = useGetProgressStatsQuery(userId!, {
+    skip: !userId, // אם אין userId דלג על הקריאה
+  });
+
+  if (!userId) return <p> משתמש לא מובר. </p>;
   if (isLoading) return <p>טוען... אנא המתן...</p>;
   if (isError) return <p>מצטערים, אירעה שגיאה בשליפה.</p>;
+  if (insights.length === 0) return <p> לא נמצאו מסקנות. </p>;
 
   return (
     <div>

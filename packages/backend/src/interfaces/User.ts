@@ -1,3 +1,4 @@
+
 export interface User {
     id: string;
     firstName: string;
@@ -7,4 +8,5 @@ export interface User {
     role: 'student' | 'manager';
     createdAt: Date;
     isActive: boolean;
+    password: string;
 }
