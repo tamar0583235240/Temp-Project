@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
+import Simulation from "../../features/interview/components/Simulation";
 
 export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<p>login</p>} />
-            <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
+            <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><Simulation /></RoleProtectedRoute>} />
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
