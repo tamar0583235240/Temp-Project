@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   nextQuestion,
   prevQuestion,
@@ -9,42 +8,36 @@ import {
   resetQuestion,
   setQuestions,
 } from "../store/slices/simulationSlice";
-import { RootState } from "../store/store";
+import { RootState } from "../../../shared/store/store";
 import { QuestionType } from "../types/questionType";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
 
-
+// API function to fetch questions
+const fetchQuestions = async (): Promise<QuestionType[]> => {
+  const res = await fetch("http://localhost:3001/api/questions");
+  if (!res.ok) throw new Error("Failed to fetch questions");
+  return res.json();
+};
 
 const Simulation: React.FC = () => {
   const dispatch = useDispatch();
   const { questions, currentIndex } = useSelector(
     (state: RootState) => state.simulation
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const dummyQuestions: QuestionType[] = [
-      {
-        id: 1,
-        text: "מהי מטרת React?",
-        answered: false,
-        type: "open",
-      },
-      {
-        id: 2,
-        text: "באיזו שנה יצא Redux Toolkit?",
-        answered: false,
-        type: "closed",
-        options: ["2015", "2019", "2021"],
-      },
-      {
-        id: 3,
-        text: "הסבר בקצרה מה זה TypeScript.",
-        answered: false,
-        type: "open",
-      },
-    ];
-    dispatch(setQuestions(dummyQuestions));
+    const loadQuestions = async () => {
+      try {
+        const questionsFromServer = await fetchQuestions();
+        dispatch(setQuestions(questionsFromServer));
+      } catch (err) {
+        console.error("Error loading questions:", err);
+      }
+    };
+
+    loadQuestions();
   }, [dispatch]);
 
   const handleTextChange = (value: string) => {
@@ -54,12 +47,11 @@ const Simulation: React.FC = () => {
   const handleReset = () => {
     dispatch(resetQuestion(currentIndex));
   };
-const navigate = useNavigate();
 
-const handleSubmit = () => {
-  handleTextChange(currentQuestion.answer ?? "");
-  navigate("/summary");
-};
+  const handleSubmit = () => {
+    handleTextChange(currentQuestion.answer ?? "");
+    navigate("/summary");
+  };
 
   if (!questions.length || currentIndex >= questions.length) {
     return (
@@ -69,7 +61,7 @@ const handleSubmit = () => {
 
   const currentQuestion = questions[currentIndex];
 
-  return (<>
+  return (
     <div className="simulation-container">
       {/* סרגל ניווט */}
       <div className="sidebar">
@@ -168,10 +160,7 @@ const handleSubmit = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 
 export default Simulation;
-export {};
-

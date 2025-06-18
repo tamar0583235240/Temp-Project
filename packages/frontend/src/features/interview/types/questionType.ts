@@ -1,8 +1,8 @@
-export interface QuestionType {
+export type QuestionType = {
   id: number;
   text: string;
-  answered: boolean;
-  type: "open" | "closed";
+  type: 'open' | 'closed';
   options?: string[];
   answer?: string;
-}
+  answered: boolean;
+};
