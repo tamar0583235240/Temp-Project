@@ -16,7 +16,7 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
 
 export const createUser = async (user: Omit<User, 'id' | 'createdAt'> & { password: string }): Promise<User> => {
   const result = await pool.query(
-    `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
+    `INSERT INTO users (id, first_name, last_name, email, phone, role, createdat, is_active, password)
      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7)
      RETURNING *`,
     [
@@ -35,7 +35,7 @@ export const createUser = async (user: Omit<User, 'id' | 'createdAt'> & { passwo
 
 
 export const getAllUsers = async (): Promise<User[]> => {
-  const result = await pool.query('SELECT * FROM users ORDER BY created_at DESC');
+  const result = await pool.query('SELECT * FROM users ORDER BY createdat DESC');
   return result.rows;
 };
 

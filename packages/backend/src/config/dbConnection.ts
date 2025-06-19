@@ -16,3 +16,16 @@ const pool = new Pool({
  });
 console.log('Database connection pool created');
 export {pool}
+
+// async function testDbConnection() {
+//   try {
+//     const result = await pool.query('SELECT 1');
+//     console.log('Database connected! Result:', result.rows);
+//   } catch (error) {
+//     console.error('Database connection failed:', error);
+//   } finally {
+//     await pool.end();
+//   }
+// }
+
+// testDbConnection();

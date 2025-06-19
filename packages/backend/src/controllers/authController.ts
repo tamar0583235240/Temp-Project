@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import * as userRepo from '../reposioty/userRepository';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -9,8 +12,13 @@ export const login = async (req: Request, res: Response) => {
   if (!user) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
+   const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
 
-  const token = `mock-token-${user.id}`;
+  // const token = `mock-token-${user.id}`;
   res.json({ user, token });
 };
 
