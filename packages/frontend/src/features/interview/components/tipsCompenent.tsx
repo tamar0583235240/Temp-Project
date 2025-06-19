@@ -80,7 +80,7 @@ export const TipsComponent: React.FC = () => {
 
             <div style={controlsContainerStyle}>
                 <button onClick={() => setEnabled(!enabled)} style={buttonStyle}>
-                    {enabled ? "🔕 כבה טיפים" : "🔔 הדלק טיפים"}
+                    {enabled ? "🔕 כבה טיפים" : "🔔 הפעל טיפים"}
                 </button>
             </div>
         </>
