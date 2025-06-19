@@ -10,7 +10,7 @@ export const AnswerApi = api.injectEndpoints({
         }),
         
         getQuestionById: builder.query<Question, string>({
-            query: (id) => `answers/getQuestionById/${id}`,
+            query: (id) => `question/getAllQuestionById/${id}`,
             providesTags: ["question"],  
         })
     })
