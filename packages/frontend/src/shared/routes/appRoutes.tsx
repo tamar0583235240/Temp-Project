@@ -3,6 +3,7 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import Simulation from "../../features/interview/components/Simulation";
 import Summary from '../../features/interview/components/Summary';
+import InterviewComponent from "../../features/interview/components/interviewComponent";
 
 export default function AppRoutes() {
     return (
@@ -15,6 +16,7 @@ export default function AppRoutes() {
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
             <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
+            {/* <Route path="/certificate" element={<CertificatePage />} /> */}
             <Route path="/admin/questions" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
                     <p>AdminQuestions</p>
