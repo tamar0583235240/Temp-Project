@@ -1,4 +1,3 @@
-// src/repositories/userRepository.ts
 import { pool } from '../config/dbConnection';
 
 export const findUserByEmail = async (email: string) => {

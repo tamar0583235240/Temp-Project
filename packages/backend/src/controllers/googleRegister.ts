@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { v4 as uuidv4 } from 'uuid';
-import { findUserByEmail, insertUser } from '../repository/userGoogleRepository';
+import { findUserByEmail, insertUser } from '../reposioty/userGoogleRepository';
 
 const client = new OAuth2Client();
 
