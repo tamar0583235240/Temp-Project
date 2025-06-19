@@ -21,7 +21,7 @@ function App() {
   }, []);
 
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <AppRoutes />
     </BrowserRouter>
   );

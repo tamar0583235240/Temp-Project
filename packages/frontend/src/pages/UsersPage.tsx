@@ -11,6 +11,7 @@ console.log(users?.[0]?.role);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <p>Error loading users</p>;
+    console.log("users:", users);
 
     return (
         <div>

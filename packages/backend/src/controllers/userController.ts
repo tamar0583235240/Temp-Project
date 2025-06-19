@@ -21,7 +21,6 @@ export const getUserById = async (req: Request, res: Response) => {
   }
   res.json(user);
 };
-
 export const createUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password, role } = req.body;
   const existing = await (await userRepository.getAllUsers()).find(user => user.email === email);
@@ -41,7 +40,8 @@ export const createUser = async (req: Request, res: Response) => {
     answers: [],
     feedbacks: [],
     passwordResetTokens: [],
-    sharedRecordings: []
+    sharedRecordings: [],
+    resources: []
   };
 
   const user: Users = await userRepository.createUser(newUser);
@@ -61,3 +61,4 @@ export const deleteUser = (req: Request, res: Response) => {
   userRepository.deleteUser(userId);
   res.status(204).send();
 };
+
