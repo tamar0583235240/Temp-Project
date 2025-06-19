@@ -3,7 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
 import exampleSlice from '../../features/exampleFeatures/store/exampleSlice'
 <<<<<<< HEAD
-import simulationSlice from '../../features/interview/store/slices/simulationSlice';
+import simulationSlice from '../../features/interview/store/simulationSlice';
 
 
 import interviewSlice from "../../features/interview/store/interviewSlice";

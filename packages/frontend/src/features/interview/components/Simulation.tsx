@@ -7,7 +7,7 @@ import {
   answerQuestion,
   resetQuestion,
   setQuestions,
-} from "../store/slices/simulationSlice";
+} from "../store/simulationSlice";
 import { RootState } from "../../../shared/store/store";
 import { QuestionType } from "../types/questionType";
 import "./Simulation.css";

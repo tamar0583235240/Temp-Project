@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import simulationReducer from './slices/simulationSlice';
+import simulationReducer from './simulationSlice';
 
 export const store = configureStore({
   reducer: {

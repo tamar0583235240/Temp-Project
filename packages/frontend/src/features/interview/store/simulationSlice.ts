@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { interviewType } from "../../types/questionType";
+import { interviewType } from "../types/questionType";
 
 interface SimulationState {
   questions: interviewType[];
