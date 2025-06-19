@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForgotPasswordMutation } from "../services/authApi";
+import { useForgotPasswordMutation } from "../../../shared/api/passwordApi";
 import { ForgotPasswordForm } from "../types/formTypes";
 
 const schema = yup.object().shape({

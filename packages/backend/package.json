@@ -17,6 +17,7 @@
     "express": "^4.21.2",
     "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
+    "typeorm": "^0.3.24",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

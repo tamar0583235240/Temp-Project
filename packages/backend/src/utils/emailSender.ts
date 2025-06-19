@@ -14,8 +14,8 @@ export async function sendResetEmail(email: string, token: string) {
     from: `"DiversiTech LingoPrep" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'איפוס סיסמה',
-    text: `להלן הקישור לאיפוס הסיסמה שלך: ${resetUrl}`,
-    html: `<p>להלן הקישור לאיפוס הסיסמה שלך:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`,
+    text: ` קישור לאיפוס הסיסמה שלך: ${resetUrl}`,
+    html: `<p> קישור לאיפוס הסיסמה שלך:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`,
   };
 
   await transporter.sendMail(mailOptions);

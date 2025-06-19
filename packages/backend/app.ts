@@ -7,7 +7,6 @@ import authRouts from './src/routes/authRouts';
 // import {supabase} from './src/config/dbConnection';
 
 
-
 const app: Application = express();
 console.log('i am here in app');
 
