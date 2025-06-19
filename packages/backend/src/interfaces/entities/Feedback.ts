@@ -6,28 +6,28 @@ import { SharedRecording } from "./SharedRecording";
 @Entity("Feedback", { schema: "public" })
 export class Feedback {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "comment" })
-  comment: string;
+  comment!: string;
 
   @Column("integer", { name: "rating", nullable: true })
-  rating: number | null;
+  rating!: number | null;
 
   @Column("timestamp without time zone", {
     name: "createdat",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdat: Date;
+  createdat!: Date;
 
   @ManyToOne(() => User, (user) => user.feedbacks)
   @JoinColumn([{ name: "givenbyuserid", referencedColumnName: "id" }])
-  givenbyuser: User;
+  givenbyuser!: User;
 
   @ManyToOne(
     () => SharedRecording,
     (sharedRecording) => sharedRecording.feedbacks
   )
   @JoinColumn([{ name: "sharedrecordingid", referencedColumnName: "id" }])
-  sharedrecording: SharedRecording;
+  sharedrecording!: SharedRecording;
 }

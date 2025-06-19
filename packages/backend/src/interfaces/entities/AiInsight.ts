@@ -5,21 +5,21 @@ import { Answer } from "./Answer";
 @Entity("AIInsight", { schema: "public" })
 export class AiInsight {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "summary", nullable: true })
-  summary: string | null;
+  summary!: string | null;
 
   @Column("integer", { name: "rating", nullable: true })
-  rating: number | null;
+  rating!: number | null;
 
   @Column("text", { name: "strengths", nullable: true })
-  strengths: string | null;
+  strengths!: string | null;
 
   @Column("text", { name: "improvements", nullable: true })
-  improvements: string | null;
+  improvements!: string | null;
 
   @ManyToOne(() => Answer, (answer) => answer.aiInsights)
   @JoinColumn([{ name: "answerid", referencedColumnName: "id" }])
-  answer: Answer;
+  answer!: Answer;
 }

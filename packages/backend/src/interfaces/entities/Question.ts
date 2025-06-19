@@ -5,28 +5,28 @@ import { Answer } from "./Answer";
 @Entity("Question", { schema: "public" })
 export class Question {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "title" })
-  title: string;
+  title!: string;
 
   @Column("text", { name: "content" })
-  content: string;
+  content!: string;
 
   @Column("text", { name: "category" })
-  category: string;
+  category!: string;
 
   @Column("text", { name: "tips", nullable: true })
-  tips: string | null;
+  tips!: string | null;
 
   @Column("text", { name: "aiguidance", nullable: true })
-  aiguidance: string | null;
+  aiguidance!: string | null;
 
   @Column("boolean", { name: "isactive", default: () => "true" })
-  isactive: boolean;
+  isactive!: boolean;
 
   @Column("text", { name: "options", nullable: true, array: true })
-  options: string[] | null;
+  options!: string[] | null;
 
   @Column("character varying", {
     name: "question_type",
@@ -34,8 +34,8 @@ export class Question {
     length: 10,
     default: () => "'open'",
   })
-  questionType: string | null;
+  questionType!: string | null;
 
   @OneToMany(() => Answer, (answer) => answer.question)
-  answers: Answer[];
+  answers!: Answer[];
 }
