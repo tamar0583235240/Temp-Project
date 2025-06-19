@@ -1,11 +1,12 @@
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './shared/routes/appRoutes'
 
 import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
+import { UsersPage } from './pages/UsersPage';
 
 function App() {
 
@@ -19,10 +20,11 @@ function App() {
       dispatch(loginSuccess({ token, user }));
     }
   }, []);
-  
+
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <AppRoutes />
+      <UsersPage />
     </BrowserRouter>
   );
 }

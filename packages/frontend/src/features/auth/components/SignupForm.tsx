@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSignupMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
