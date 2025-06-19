@@ -8,4 +8,5 @@ export interface interviewType {
   isActive: boolean;
   answer?: string;
   answered: boolean;
+  text?: string;
 }

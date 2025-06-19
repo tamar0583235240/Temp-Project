@@ -9,12 +9,12 @@ import {
   setQuestions,
 } from "../store/simulationSlice";
 import { RootState } from "../../../shared/store/store";
-import { QuestionType } from "../types/questionType";
+import { interviewType } from "../types/questionType";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
 
 // API function to fetch questions
-const fetchQuestions = async (): Promise<QuestionType[]> => {
+const fetchQuestions = async (): Promise<interviewType[]> => {
   const res = await fetch("http://localhost:3001/api/questions");
   if (!res.ok) throw new Error("Failed to fetch questions");
   return res.json();
@@ -32,12 +32,19 @@ const Simulation: React.FC = () => {
       try {
         const questionsFromServer = await fetchQuestions();
           console.log("FROM SERVER:", questionsFromServer);
-        const mappedQuestions = questionsFromServer.map((q: any) => ({
+const mappedQuestions = questionsFromServer.map((q: any) => ({
   id: q.id,
-  text: q.content,
+  title: q.title || "",
+  content: q.content || "",
+  category: q.category || "",
+  tips: q.tips || "",
   type: q.question_type || q.type || "open",
   options: q.options || [],
   answered: false,
+  answer: q.answer || "",
+  aiGuidance: q.aiGuidance || "", // Provide a sensible default if missing
+  isActive: q.isActive ?? false,   // Default to false if missing
+  // Add any other required properties with default values if missing
 }));
 dispatch(setQuestions(mappedQuestions));
 
@@ -85,7 +92,7 @@ dispatch(setQuestions(mappedQuestions));
         </div>
 
         <div className="question-buttons scrollable">
-          {questions.map((q: QuestionType, i: number) => (
+          {questions.map((q: interviewType, i: number) => (
             <button
               key={q.id}
               onClick={() => dispatch(goToQuestion(i))}
@@ -113,7 +120,7 @@ dispatch(setQuestions(mappedQuestions));
         <div className="question-text">{currentQuestion.text}</div>
 
         {/* שאלה פתוחה */}
-        {currentQuestion.type === "open" ? (
+        {currentQuestion.category === "open" ? (
           <textarea
             className="answer-input"
             value={currentQuestion.answer ?? ""}
