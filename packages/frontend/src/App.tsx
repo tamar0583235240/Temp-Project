@@ -6,7 +6,6 @@ import AppRoutes from './shared/routes/appRoutes'
 import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
-import { UsersPage } from './pages/UsersPage';
 
 function App() {
 
@@ -22,9 +21,8 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+      <BrowserRouter>
       <AppRoutes />
-      <UsersPage />
     </BrowserRouter>
   );
 }

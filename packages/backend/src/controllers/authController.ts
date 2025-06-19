@@ -30,7 +30,6 @@ export const signup =async (req: Request, res: Response) => {
     phone,
     password,
     role: 'student',
-    createdAt: new Date(),
     isActive: true,
     answers: [],
     feedbacks: [],
