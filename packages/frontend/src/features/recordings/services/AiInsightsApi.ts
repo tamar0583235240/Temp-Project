@@ -1,5 +1,5 @@
 import { api } from "../../../shared/api/api";
-import { AiInsightsType } from "../types/AIInsightsType";
+import { AiInsightsType } from "../types/AiInsightsType";
 
 
 
