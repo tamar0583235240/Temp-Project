@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../shared/hooks/hook';
-import './interviewComponent.css';
 import { useGetAllQuestionsQuery } from '../services/interviewApi';
 import { setItems } from '../store/interviewSlice';
 
