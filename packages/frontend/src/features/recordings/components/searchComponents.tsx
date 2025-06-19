@@ -1,46 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Answer } from '../types/Answer';
+import { useGetAnswersByIdUserQuery } from '../services/answerApi';
+import { data } from 'react-router-dom';
 
-const Arrrecordings: Answer[] = [
-    {
-        id: "1",
-        user_id: "הקלטה 1",
-        question_id: "5",
-        file_url: "2023-09-10",
-        answer_file_name:"תשובה לשאלה 1",
-        submitted_at:new Date("2023-09-10"),
-    },
-    {
-        id: "2",
-        user_id: "הקלטה 2",
-        question_id: "7",
-        file_url: "2023-09-11",
-        answer_file_name:"תשובה לשאלה 2",
-        submitted_at: new Date("2023-09-10"),
-    }
-];
-
-const SearchComponents = () => {
-  const [recordings,setRecordings] = useState<Answer[]>(Arrrecordings);
+export const SearchComponents = ({ }: any) => {
+  const { data: answers, isLoading, error } = useGetAnswersByIdUserQuery(
+    "00000000-0000-0000-0000-000000000004"
+  );
   const [searchText, setSearchText] = useState("");
-  useEffect(() => {
-    const filteredData = recordings.filter(r => r.answer_file_name.includes(searchText));
-    setRecordings(filteredData);
-}, [searchText]);
+  if (isLoading) return <div>טוען...</div>;
+  if (error) return <div>שגיאה בטעינת התשובות</div>;
+  const filteredAnswers = answers?.filter((answer) =>
+    answer.answer_file_name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <div>
-       <input type="text" placeholder="חפש הקלטה" value={searchText} onChange={(e)=>setSearchText(e.target.value)}/>
-       <h3>הקלטות</h3>
-       {recordings.map((recording) => (
-        <div>
-          <p>{recording.user_id}</p>
-          <p>{recording.question_id}</p>
-          <p>{recording.file_url}</p>
-          <p>{recording.answer_file_name}</p>
-        </div>
-      ))}
+      <input type="text" placeholder="חפש הקלטה" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
     </div>
   )
 }
-
-export default SearchComponents

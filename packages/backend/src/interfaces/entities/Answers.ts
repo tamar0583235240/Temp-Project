@@ -29,6 +29,9 @@ export class Answers {
   @Column("text", { name: "answer_file_name" })
   answerFileName: string;
 
+  @Column("integer", { name: "amount_feedbacks", default: () => "0" })
+  amountFeedbacks: number;
+
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
 

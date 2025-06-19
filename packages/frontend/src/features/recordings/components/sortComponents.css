@@ -1,0 +1,43 @@
+.sort-container {
+    direction: rtl;
+    font-family: Arial, sans-serif;
+    text-align: right;
+    margin: 20px;
+  }
+  
+  .sort-label-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .sort-label {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .sort-select {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    width: 200px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  .sorted-list {
+    margin-top: 20px;
+  }
+  
+  .record-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background-color: #fafafa;
+  }
+  
+  
+  
