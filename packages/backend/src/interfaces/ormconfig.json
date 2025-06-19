@@ -1,0 +1,13 @@
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "SARI9577",
+    "database": "diversitech",
+    "synchronize": false,
+    "entities": ["entities/*.ts"]
+  }
+]

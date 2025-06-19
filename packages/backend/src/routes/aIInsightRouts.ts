@@ -3,7 +3,7 @@ import { getAiInsigths} from '../controllers/aIInsightController';
 
 const router = Router();
 
-router.get('/aiInsight',getAiInsigths);
+router.get('/',getAiInsigths);
 
 export default router;
 
