@@ -120,7 +120,7 @@ dispatch(setQuestions(mappedQuestions));
         <div className="question-text">{currentQuestion.text}</div>
 
         {/* שאלה פתוחה */}
-        {currentQuestion.category === "open" ? (
+        {currentQuestion.type === "open" ? (
           <textarea
             className="answer-input"
             value={currentQuestion.answer ?? ""}

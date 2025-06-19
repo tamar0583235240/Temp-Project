@@ -9,4 +9,7 @@ export interface interviewType {
   answer?: string;
   answered: boolean;
   text?: string;
+  type: 'open' | 'closed';
+  options?: string[];
+
 }
