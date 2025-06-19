@@ -41,7 +41,7 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       lastName: user.lastName,
       email: user.email,
       phone: user.phone ?? null, // מתאימים ל-null
-      password: '',
+      password: user.password,
       role: (user.role as UserFormFields['role']) || 'student', // המרה בטוחה
     },
     resolver: yupResolver(schema),
@@ -75,7 +75,7 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       <input {...register('phone')} placeholder="טלפון" />
       {errors.phone && <span style={{ color: 'red' }}>{errors.phone.message}</span>}
 
-      <input {...register('password')} type="password" placeholder="סיסמה" />
+      <input {...register('password')} type="text" placeholder="סיסמא" />
       {errors.password && <span style={{ color: 'red' }}>{errors.password.message}</span>}
 
       <select {...register('role')}>

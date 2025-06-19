@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import { createUserSchema, updateUserSchema } from '../validations/userValidation'
+import { createUserSchema, updateUserSchema } from '../utils/userValidation';
+import { insertUsersFromExcel } from '../reposioty/userRpository';
 
 function mapUserRowToCamelCase(row: any) {
   return {
@@ -12,9 +13,9 @@ function mapUserRowToCamelCase(row: any) {
     email: row.email,
     phone: row.phone,
     role: row.role,
-    password: row.password, 
+    password: row.password,
     createdAt: row.created_at,
-    isActive: row.email && row.password ? true : false,
+    isActive: row.is_active,
   };
 }
 
@@ -24,11 +25,9 @@ export const getAllUsers = async (_: Request, res: Response) => {
     const users = result.rows.map(mapUserRowToCamelCase);
     res.status(200).json(users);
   } catch (error) {
-    console.error('Error getting users:', error);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
-
 
 export const createUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, role, password } = req.body;
@@ -36,14 +35,15 @@ export const createUser = async (req: Request, res: Response) => {
   const createdAt = new Date();
 
   try {
-    const validatedData = await createUserSchema.validate(req.body, { abortEarly: false });
+    await createUserSchema.validate(req.body, { abortEarly: false });
 
-    // שמירת הסיסמה כפי שהיא ללא הצפנה
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, password)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
        RETURNING *`,
-      [id, firstName, lastName, email, phone, role, createdAt, password]
+      [id, firstName, lastName, email, phone, role, createdAt, hashedPassword]
     );
 
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
@@ -51,7 +51,6 @@ export const createUser = async (req: Request, res: Response) => {
     if (error.name === 'ValidationError') {
       return res.status(400).json({ errors: error.errors });
     }
-    console.error('Error creating user:', error);
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
@@ -61,15 +60,12 @@ export const updateUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, role, password } = req.body;
 
   try {
-    const validatedData = await updateUserSchema.validate(req.body, { abortEarly: false });
+    await updateUserSchema.validate(req.body, { abortEarly: false });
 
-    let hashedPassword = null;
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
-    }
+const hashedPassword = password || null;
 
     const result = await pool.query(
-      `UPDATE users SET 
+      `UPDATE users SET
         first_name = $1,
         last_name = $2,
         email = $3,
@@ -90,25 +86,31 @@ export const updateUser = async (req: Request, res: Response) => {
     if (error.name === 'ValidationError') {
       return res.status(400).json({ errors: error.errors });
     }
-    console.error('Error updating user:', error);
     res.status(500).json({ error: 'Failed to update user' });
   }
 };
-
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
     const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
-
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
-
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    console.error('Error deleting user:', error);
     res.status(500).json({ error: 'Failed to delete user' });
+  }
+};
+export const uploadUsersExcel = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) return res.status(400).send('לא נשלח קובץ');
+
+    const insertedUsers = await insertUsersFromExcel(req.file.path);
+    res.status(200).json({ message: 'המשתמשים הועלו בהצלחה!', users: insertedUsers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('שגיאה בעיבוד הקובץ');
   }
 };
