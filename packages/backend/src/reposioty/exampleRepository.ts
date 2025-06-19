@@ -1,6 +1,5 @@
-
 // import { pool } from '../config/dbConnection'; 
-// import { exampleInterface } from "../interfaces/exampleInterface";
+// import { exampleInterface } from "../interfaces/entities/";
 
 // const getAllExamples = async (): Promise<exampleInterface[]> => {
 //   try {

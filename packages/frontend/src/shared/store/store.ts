@@ -2,6 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
 import exampleSlice from '../../features/exampleFeatures/store/exampleSlice'
+import interviewSlice from "../../features/interview/store/buttonsSlice";
 import { tipsApi } from "../../features/interview/services/tipsApi";
 import shownTipsReducer from '../../features/interview/store/tipsSlice';
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
     [tipsApi.reducerPath]: tipsApi.reducer,
     example: exampleSlice,
+    interview: interviewSlice,
     shownTips: shownTipsReducer,
 
   },
