@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../shared/hooks/hook';
-import './interviewComponent.css';
-import { useGetAllQuestionsQuery } from '../services/interviewApi';
-import { setItems } from '../store/interviewSlice';
+import { useGetAllQuestionsQuery } from '../services/buttonsApi';
+import { setItems } from '../store/buttonsSlice';
+import './InterviewComponent.css';
+
 
 const InterviewComponent = () => {
   const dispatch = useAppDispatch();

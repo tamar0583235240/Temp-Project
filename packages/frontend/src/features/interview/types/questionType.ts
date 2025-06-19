@@ -1,8 +1,9 @@
-export type QuestionType = {
+export interface interviewType {
   id: number;
-  text: string;
-  type: 'open' | 'closed';
-  options?: string[];
-  answer?: string;
-  answered: boolean;
-};
+  title: string;
+  content: string;
+  category: string;
+  tips: string;
+  aiGuidance: string;
+  isActive: boolean;
+}
