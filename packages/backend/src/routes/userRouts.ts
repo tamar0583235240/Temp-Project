@@ -4,7 +4,7 @@ import {getAllUsers,updateUser,deleteUser,  createUser, } from "../controllers/u
 const router = express.Router();
 
 router.get("/", getAllUsers);
-router.post("/add", createUser); // ← נוספה כאן
+router.post("/add", createUser);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
 

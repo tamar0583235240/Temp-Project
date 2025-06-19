@@ -7,3 +7,5 @@ router.get('/aiInsight',getAiInsigths);
 
 export default router;
 
+
+

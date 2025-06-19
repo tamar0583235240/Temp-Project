@@ -109,8 +109,10 @@
 
 
 import { Request, Response } from 'express';
-import {pool} from '../config/dbConnection';
+import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
+import { createUserSchema, updateUserSchema } from '../validations/userValidation'
 
 function mapUserRowToCamelCase(row: any) {
   return {
@@ -120,34 +122,51 @@ function mapUserRowToCamelCase(row: any) {
     email: row.email,
     phone: row.phone,
     role: row.role,
+    password: row.password, 
     createdAt: row.created_at,
-    isActive: row.is_active,
+    isActive: row.email && row.password ? true : false,
   };
 }
 
+
 export const createUser = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, role } = req.body;
+  const { firstName, lastName, email, phone, role, password } = req.body;
   const id = uuidv4();
   const createdAt = new Date();
-  const isActive = true;
 
   try {
+    const validatedData = await createUserSchema.validate(req.body, { abortEarly: false });
+
+    // שמירת הסיסמה כפי שהיא ללא הצפנה
     const result = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, password)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [id, firstName, lastName, email, phone, role, createdAt, isActive]
+      [id, firstName, lastName, email, phone, role, createdAt, password]
     );
+
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
-  } catch (error) {
+  } catch (error: any) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ errors: error.errors });
+    }
     console.error('Error creating user:', error);
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
 
+
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { firstName, lastName, email, phone, role } = req.body;
+  const { firstName, lastName, email, phone, role, password } = req.body;
+
+  try {
+        const validatedData = await updateUserSchema.validate(req.body, { abortEarly: false });
+
+    let hashedPassword = null;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
   try {
     const result = await pool.query(
@@ -156,10 +175,11 @@ export const updateUser = async (req: Request, res: Response) => {
         last_name = $2,
         email = $3,
         phone = $4,
-        role = $5
-       WHERE id = $6
+        role = $5,
+        password = COALESCE($6, password)
+       WHERE id = $7
        RETURNING *`,
-      [firstName, lastName, email, phone, role, id]
+      [firstName, lastName, email, phone, role, hashedPassword, id]
     );
 
     if (result.rows.length === 0) {
@@ -167,7 +187,10 @@ export const updateUser = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(mapUserRowToCamelCase(result.rows[0]));
-  } catch (error) {
+  } catch (error:any) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ errors: error.errors });
+    }
     console.error('Error updating user:', error);
     res.status(500).json({ error: 'Failed to update user' });
   }
@@ -184,7 +207,6 @@ export const getAllUsers = async (_: Request, res: Response) => {
   }
 };
 
-// ✅ פונקציית מחיקה
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
 
