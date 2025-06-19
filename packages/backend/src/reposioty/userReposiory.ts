@@ -1,6 +1,6 @@
 import { User } from '@supabase/supabase-js';
 import { pool } from '../config/dbConnection';
-import { Users } from '../models/entities/Users';
+import { Users } from '../interfaces/entities/Users';
 import { get } from 'http';
 
 

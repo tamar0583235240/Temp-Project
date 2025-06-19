@@ -26,6 +26,9 @@ export class Answers {
   })
   submittedAt: Date;
 
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName: string | null;
+
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
 

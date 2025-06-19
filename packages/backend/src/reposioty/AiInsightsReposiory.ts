@@ -1,7 +1,7 @@
 
 import { pool } from '../config/dbConnection';
-import { AiInsights } from '../models/entities/AiInsights';
-import { Feedback } from '../models/entities/Feedback';
+import { AiInsights } from '../interfaces/entities/AiInsights';
+import { Feedback } from '../interfaces/entities/Feedback';
 
 
 

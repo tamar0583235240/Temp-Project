@@ -34,9 +34,6 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-  @Column("char", { name: "password", array: true })
-  password: string[];
-
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
 

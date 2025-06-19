@@ -1,7 +1,7 @@
 import { error } from 'console';
 import { pool } from '../config/dbConnection';
-import { Feedback } from '../models/entities/Feedback';
-import { Users } from '../models/entities/Users';
+import { Feedback } from '../interfaces/entities/Feedback';
+import { Users } from '../interfaces/entities/Users';
 
 
 const getFeedbackesBysharedRecordingId = async (sharedRecordingId:string): Promise<Feedback[]> => {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import feedbackRepository from '../reposioty/feedbackReposioty';
-import { Feedback } from '../models/entities/Feedback';
+import { Feedback } from '../interfaces/entities/Feedback';
 export const getFeedbackesBysharedRecordingId = async (req: Request, res: Response): Promise<Feedback | void> => {
     try {
         const sharedRecordingId = req.params.sharedRecordingId;
