@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { QuestionType } from "../../types/questionType";
+import { interviewType } from "../../types/questionType";
 
 interface SimulationState {
-  questions: QuestionType[];
+  questions: interviewType[];
   currentIndex: number;
 }
 
@@ -15,7 +15,7 @@ const simulationSlice = createSlice({
   name: "simulation",
   initialState,
   reducers: {
-    setQuestions(state, action: PayloadAction<QuestionType[]>) {
+    setQuestions(state, action: PayloadAction<interviewType[]>) {
       state.questions = action.payload;
     },
     answerQuestion(
