@@ -1,0 +1,211 @@
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: calc(); /* במקום overflow-x: hidden */
+  }
+  
+  .full-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    padding: 20px;
+  }
+  .container {
+    padding: 30px;
+    background: linear-gradient(to right, #a8d5ba, #e6ccb2);
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+  
+    /* פתרון: נרכז לגובה המסך בלי גלילה מיותרת */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  h1 {
+    color: #3e3e3e;
+    margin-bottom: 20px;
+    font-size: 3rem;
+  }
+  
+  .form {
+    background: #fefae0;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(92, 64, 51, 0.2);
+    display: inline-block;
+  }
+  
+  input {
+    margin: 10px;
+    padding: 10px;
+    width: 250px;
+    border: 2px solid #8b5e3c;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #ffffffde;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #6b8e23;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background-color: #556b2f;
+  }
+  
+  .message {
+    margin-top: 15px;
+    color: #4b3c2a;
+    font-weight: bold;
+  }
+  
+  .users-list {
+    margin-top: 30px;
+  }
+  
+  .users-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .users-list li {
+    padding: 10px;
+    margin: 5px auto;
+    width: 300px;
+    background-color: #f0ebe1;
+    border-radius: 10px;
+    border: 1px solid #d6c1a1;
+    transition: transform 0.3s;
+  }
+  
+  .users-list li:hover {
+    transform: scale(1.03);
+  }
+/* המשך מהקודם */
+
+.add-button {
+    background-color: #6b8e23;
+    color: white;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    margin: 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s;
+  }
+  
+  .add-button:hover {
+    background-color: #4e7020;
+  }
+
+  .Modal {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    right: 20px; /* מיקום בצד ימין */
+    transform: translateY(-50%); /* שמירה על המרכז האנכי */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+  .float {
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+@keyframes floatUpDown {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+  /* .Overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+  } */
+  .Overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .modal-buttons .cancel {
+    background-color: #d36d6d;
+  }
+  
+  .modal-buttons button {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .modal-buttons button:hover {
+    filter: brightness(1.1);
+  }
+    
+/* בדיקת תקינות */
+  .error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: -8px;
+    margin-bottom: 10px;
+  }
+  
+/* ✅ User added successfully */
+  .message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e6ffe6;
+    color: #006600;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 2px solid #00b300;
+    font-weight: bold;
+    z-index: 9999;
+    animation: fadeInOut 3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -20px); }
+    10% { opacity: 1; transform: translate(-50%, 0); }
+    90% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -20px); }
+  }
+  
+  
