@@ -7,6 +7,7 @@ export const UsersPage = () => {
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <p>Error loading users</p>;
+    console.log("users:", users);
 
     return (
         <div>

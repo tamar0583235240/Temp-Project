@@ -20,10 +20,9 @@ function App() {
       dispatch(loginSuccess({ token, user }));
     }
   }, []);
-  
+
   return (
-      <BrowserRouter>
-      <LoginForm />
+    <BrowserRouter>
       <AppRoutes />
     </BrowserRouter>
   );
