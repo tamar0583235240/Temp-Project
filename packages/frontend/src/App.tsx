@@ -1,14 +1,11 @@
-
-import React, { useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom'
-import AppRoutes from './shared/routes/appRoutes'
-
+import { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './shared/routes/appRoutes';
 import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
 
 function App() {
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -28,20 +25,3 @@ function App() {
 }
 
 export default App;
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <h1>Project base viewer</h1>
-//       </header>
-//       <main>
-//         <ForgotPassword />
-//       </main>
-//     </div>
-//       <BrowserRouter>
-//       <AppRoutes />
-//     </BrowserRouter>
-//   );
-// }
