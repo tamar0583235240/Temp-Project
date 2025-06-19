@@ -1,5 +1,8 @@
 import React from 'react';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Register from './features/auth/components/register';
+import Login from './features/auth/components/login';
 
 function App() {
   return (

@@ -40,9 +40,9 @@ const Login = () => {
         dispatch(setCurrentUser(user));
         sessionStorage.setItem('userId', user.id);
         sessionStorage.setItem('role', user.role || 'student');
-        sessionStorage.setItem('firstName', user.firstName || '');
+        sessionStorage.setItem('firstName', user.firstName);
         sessionStorage.setItem('lastName', user.lastName || '');
-        sessionStorage.setItem('email', user.email || '');
+        sessionStorage.setItem('email', user.email);
 
         if (user.role === 'student') {
           navigate('/quickActions');
