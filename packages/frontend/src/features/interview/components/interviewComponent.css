@@ -1,0 +1,80 @@
+/* .interview-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+  background: #f7f7fa;
+  padding: 40px 0;
+}
+
+.question-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 40px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 16px;
+  transition: box-shadow 0.2s;
+}
+
+.question-title {
+  margin-bottom: 16px;
+  color: #2d3a4b;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin: 24px 0 8px 0;
+}
+
+button {
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:disabled {
+  background: #b0c4de;
+  cursor: not-allowed;
+}
+
+.end-btn {
+  background: #ff7f50;
+  margin-top: 12px;
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  text-align: center;
+  min-width: 300px;
+}
+
+.close-btn {
+  top: 16px;
+  right: 24px;
+  background: transparent;
+  color: #333;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+} */
