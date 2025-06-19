@@ -2,10 +2,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
 import exampleSlice from '../../features/exampleFeatures/store/exampleSlice'
+import simulationSlice from '../../features/interview/store/slices/simulationSlice';
+
+
+import interviewSlice from "../../features/interview/store/interviewSlice";
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     example: exampleSlice,
+    simulation: simulationSlice, 
+    interview: interviewSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),
