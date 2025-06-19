@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import questionRepository from '../repository/questionRepository';
+import questionRepository from '../reposioty/questionRepository';
 
 export const getAllQuestionsController = async (req: Request, res: Response): Promise<void> => {
   console.log('getAllQuestionsController called');

@@ -14,6 +14,9 @@ export class Feedback {
   @Column("integer", { name: "rating", nullable: true })
   rating: number | null;
 
+  @Column("text", { name: "answer_code", nullable: true })
+  answerCode: string | null;
+
   @Column("timestamp without time zone", {
     name: "created_at",
     default: () => "now()",
