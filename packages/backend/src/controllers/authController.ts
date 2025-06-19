@@ -36,6 +36,7 @@ export const signup =async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
+    resources: []
   };
 
   authRepository.signup(newUser);
