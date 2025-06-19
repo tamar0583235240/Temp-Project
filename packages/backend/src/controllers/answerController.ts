@@ -29,9 +29,6 @@ export const createAnswerController = async (req: Request, res: Response) => {
 };
 
 
-
- 
-
 export const getAllAnswersController = async (req: Request, res: Response) => {
   try {
     const answers = await getAllAnswers();
