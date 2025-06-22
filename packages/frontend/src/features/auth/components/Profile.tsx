@@ -1,5 +1,4 @@
 // src/features/auth/Profile.tsx
-import React from 'react';
 import { useAppSelector } from '../../../shared/hooks/reduxHooks';
 
 const Profile = () => {

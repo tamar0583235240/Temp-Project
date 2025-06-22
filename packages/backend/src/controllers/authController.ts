@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
-import * as userRepo from '../reposioty/userRepository';
+import * as userRepository from '../reposioty/userRepository';
 import jwt from 'jsonwebtoken';
+import { Users } from '../interfaces/entities/Users';
+import { v4 as uuidv4 } from 'uuid';
+import authRepository from '../reposioty/authRepository';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'your_refresh_secret';
-// הוספת משתנה לזכור אותי
-//const REMEMBER_ME_DURATION = process.env.REMEMBER_ME_DURATION || '1h'; // ברירת מחדל של 1 שעה
+
+// התחברות
 export const login = async (req: Request, res: Response) => {
-  const { email, password ,rememberMe} = req.body;
+  const { email, password, rememberMe } = req.body;
 
-  const user = await userRepo.getUserByEmailAndPassword(email, password);
-
+  const user = await authRepository.login(email, password);
   if (!user) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
@@ -18,7 +20,7 @@ export const login = async (req: Request, res: Response) => {
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
     JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: rememberMe ? '7d' : '1h' }
   );
 
   const refreshToken = jwt.sign(
@@ -27,7 +29,6 @@ export const login = async (req: Request, res: Response) => {
     { expiresIn: '7d' }
   );
 
-  // שליחת refreshToken ב-HttpOnly cookie
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -38,6 +39,7 @@ export const login = async (req: Request, res: Response) => {
   res.json({ user, token });
 };
 
+// רענון טוקן
 export const refreshToken = (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
@@ -57,6 +59,7 @@ export const refreshToken = (req: Request, res: Response) => {
   }
 };
 
+// התנתקות
 export const logout = (req: Request, res: Response) => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
@@ -66,24 +69,39 @@ export const logout = (req: Request, res: Response) => {
   res.json({ message: 'התנתקת בהצלחה' });
 };
 
+// הרשמה
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = await userRepo.getUserByEmail(email);
+  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }
 
-  const newUser = await userRepo.createUser({
+  const newUser: Users = {
+    id: uuidv4(),
     firstName,
     lastName,
     email,
     phone,
+    password,
     role: 'student',
     isActive: true,
-    password,
-  });
+    answers: [],
+    feedbacks: [],
+    passwordResetTokens: [],
+    sharedRecordings: [],
+    createdAt: new Date(),
+    resources: []
+  };
 
-  const token = `mock-token-${newUser.id}`;
+  await authRepository.signup(newUser);
+
+  const token = jwt.sign(
+    { id: newUser.id, email: newUser.email, role: newUser.role },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
   res.status(201).json({ user: newUser, token });
 };

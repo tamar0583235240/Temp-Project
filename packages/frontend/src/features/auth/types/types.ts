@@ -5,6 +5,6 @@ export interface User {
   email: string;
   phone?: string;
   role: 'student' | 'manager';
-  createdAt: string; // מתורגם מתאריך
+  createdAt: string;
   isActive: boolean;
 }
