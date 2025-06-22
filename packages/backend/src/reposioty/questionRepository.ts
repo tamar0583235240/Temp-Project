@@ -1,10 +1,11 @@
 import { pool } from '../config/dbConnection';
 import { Questions } from '../interfaces/entities/Questions';
 
+
 const getAllQuestions = async (): Promise<Questions[]> => {
   try {
     const query = `
-      SELECT id, title, content, category, tips, ai_guidance, is_active
+      SELECT id, title, content, category, tips, ai_guidance, is_active, options, question_type
       FROM questions
       WHERE is_active = TRUE
     `;
@@ -17,3 +18,4 @@ const getAllQuestions = async (): Promise<Questions[]> => {
 };
 
 export default { getAllQuestions };
+
