@@ -9,7 +9,4 @@ export const getAiInsigths = async (req: Request, res: Response): Promise<void> 
         console.error('Error in ai insigth controller:', error);
         res.status(500).json({ error });
     }
-
 };
-
-
