@@ -6,6 +6,7 @@ import './RecordingsList.css';
 
 export const RecordingsList = ({ user_id }: any) => {
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(user_id);
+    // const (data , error , isLoading) = useGetAllUsersQuery();
 
     if (isLoading)
         return <div>Loading...</div>;
@@ -43,10 +44,11 @@ export const RecordingsList = ({ user_id }: any) => {
                         </audio>
                     </div>
                     <AiInsightsList answerId={recording.id}></AiInsightsList>          
-                    <Feedbackes sharedRecordingId={recording.id}></Feedbackes>
-                   
+                    <Feedbackes props={{sharedRecordingId:recording.id, usersList:[]}} />
                 </div>
             )})}
         </div>
     )
 }
+
+

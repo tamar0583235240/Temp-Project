@@ -4,13 +4,7 @@ import { Feedback } from '../interfaces/entities/Feedback';
 export const getFeedbackesByanswerId = async (req: Request, res: Response): Promise<Feedback | void> => {
     try {
         const sharedRecordingId = req.params.sharedRecordingId;
-<<<<<<< Updated upstream
-        const feedbackes = await feedbackRepository.getFeedbackesBysharedRecordingId(sharedRecordingId);
-        console.log("sary! hi" , feedbackes.length);
-        
-=======
         const feedbackes = await feedbackRepository.getFeedbackesByanswerId(sharedRecordingId);
->>>>>>> Stashed changes
         res.json(feedbackes);
         
         //res.json([{id:"1",sharedRecordingId:"1",givenByUserId:"1",comment:"good",rating:5,createdAt:new Date()},{id:"2",sharedRecordingId:"1",givenByUserId:"1",comment:"good",rating:5,createdAt:new Date()},{id:"3",sharedRecordingId:"1",givenByUserId:"1",comment:"good",rating:5,createdAt:new Date()}])
