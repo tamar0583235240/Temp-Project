@@ -16,7 +16,7 @@ const LoginForm = () => {
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
 
 
-  const [showValidation, setShowValidation] = useState(true);//לשנות לfalse
+  const [showValidation, setShowValidation] = useState(false);//לשנות לfalse
   const [tempEmail, setTempEmail] = useState("ertyu@rt.tyu");
   const navigate = useNavigate();
 
@@ -30,12 +30,12 @@ const LoginForm = () => {
         setShowValidation(true);
         setTempEmail(email);
       } else {
-        setShowValidation(true);//false
+        setShowValidation(false);//false
       }
     });
   } catch (err) {
       console.error('Login error:', err);
-      setShowValidation(true);//false
+      setShowValidation(false);//false
     }
   };
 
