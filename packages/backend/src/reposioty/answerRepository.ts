@@ -8,7 +8,6 @@ const getAllAnswersByIdUser = async (userId:string): Promise<Answers[]> => {
     const values = [userId];
     const { rows } = await pool.query(query, values); 
     return rows as Answers[];
-   
   }catch (error) {
     console.error("Error fetching answers from Supabase:", error);
     throw error;

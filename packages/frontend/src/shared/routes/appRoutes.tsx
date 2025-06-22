@@ -6,6 +6,7 @@ import { SearchComponents } from "../../features/recordings/components/searchCom
 import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
 import {SortComponents} from "../../features/recordings/components/sortComponents"
 
+
 export default function AppRoutes() {
     return (
         <Routes>
@@ -13,8 +14,7 @@ export default function AppRoutes() {
             <Route path="/login" element={<p>login</p>} />
             <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
-            <Route path="/recordings" element={<SearchComponents  allowedRoles={["student"]}><p>Recordings</p></SearchComponents>} />
-            {/* <Route path="/recordings" element={<RecordingsList user_id={'00000000-0000-0000-0000-000000000004'} allowedRoles={["student"]}><p>Recordings</p></RecordingsList>} /> */}
+            <Route path="/recordings" element={<RecordingsList />} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
             <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
             <Route path="/admin/questions" element={
