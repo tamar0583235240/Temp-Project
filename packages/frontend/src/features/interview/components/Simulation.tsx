@@ -1,3 +1,5 @@
+// Simulation.tsx (מעודכן לשימוש ב-RTK Query)
+
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,15 +12,9 @@ import {
 } from "../store/simulationSlice";
 import { RootState } from "../../../shared/store/store";
 import { interviewType } from "../types/questionType";
+import { useGetQuestionsQuery } from "../services/questionsApi";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
-
-// API function to fetch questions
-const fetchQuestions = async (): Promise<interviewType[]> => {
-  const res = await fetch("http://localhost:3001/api/questions");
-  if (!res.ok) throw new Error("Failed to fetch questions");
-  return res.json();
-};
 
 const Simulation: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,34 +23,28 @@ const Simulation: React.FC = () => {
   );
   const navigate = useNavigate();
 
+  // קריאת RTK Query במקום fetch ידני
+  const { data, isLoading, error } = useGetQuestionsQuery();
+
+  // בעת קבלת נתונים מהשרת – מיפוי והכנסה ל-slice
   useEffect(() => {
-    const loadQuestions = async () => {
-      try {
-        const questionsFromServer = await fetchQuestions();
-          console.log("FROM SERVER:", questionsFromServer);
-const mappedQuestions = questionsFromServer.map((q: any) => ({
-  id: q.id,
-  title: q.title || "",
-  content: q.content || "",
-  category: q.category || "",
-  tips: q.tips || "",
-  type: q.question_type || q.type || "open",
-  options: q.options || [],
-  answered: false,
-  answer: q.answer || "",
-  aiGuidance: q.aiGuidance || "", // Provide a sensible default if missing
-  isActive: q.isActive ?? false,   // Default to false if missing
-  // Add any other required properties with default values if missing
-}));
-dispatch(setQuestions(mappedQuestions));
-
-      } catch (err) {
-        console.error("Error loading questions:", err);
-      }
-    };
-
-    loadQuestions();
-  }, [dispatch]);
+    if (data) {
+      const mappedQuestions = data.map((q: any) => ({
+        id: q.id,
+        title: q.title || "",
+        content: q.content || "",
+        category: q.category || "",
+        tips: q.tips || "",
+        type: q.question_type || q.type || "open",
+        options: q.options || [],
+        answered: false,
+        answer: q.answer || "",
+        aiGuidance: q.aiGuidance || "",
+        isActive: q.isActive ?? false,
+      }));
+      dispatch(setQuestions(mappedQuestions));
+    }
+  }, [data, dispatch]);
 
   const handleTextChange = (value: string) => {
     dispatch(answerQuestion({ index: currentIndex, answer: value }));
@@ -69,10 +59,17 @@ dispatch(setQuestions(mappedQuestions));
     navigate("/summary");
   };
 
+  // טיפול בטעינה, שגיאה, והיעדר שאלות
+  if (isLoading) {
+    return <div style={{ padding: "40px", fontSize: "18px" }}>טוען שאלות...</div>;
+  }
+
+  if (error) {
+    return <div style={{ padding: "40px", color: "red" }}>שגיאה בטעינת שאלות</div>;
+  }
+
   if (!questions.length || currentIndex >= questions.length) {
-    return (
-      <div style={{ padding: "40px", fontSize: "18px" }}>טוען שאלות...</div>
-    );
+    return <div>אין שאלות להצגה</div>;
   }
 
   const currentQuestion = questions[currentIndex];
