@@ -46,7 +46,12 @@ export const RecordingsList = ({ user_id }: any) => {
                     <AiInsightsList answerId={recording.id}></AiInsightsList>          
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     <Feedbackes props={{sharedRecordingId:recording.id, usersList:[]}} />
+=======
+                    <Feedbackes sharedRecordingId={recording.id}></Feedbackes>
+                   
+>>>>>>> Stashed changes
 =======
                     <Feedbackes sharedRecordingId={recording.id}></Feedbackes>
                    
