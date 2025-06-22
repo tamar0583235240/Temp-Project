@@ -8,7 +8,7 @@ import { loginSuccess } from '../../../features/auth/store/authSlice';
 export const RecordingsList = () => {
     const user = useSelector((state:RootState) => state.auth.user);  
     // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
-    const userId = user && user.id ? user.id.toString() : '550e8400-e29b-41d4-a718-446655440000';
+    const userId = user && user.id ? user.id.toString() : '00000000-0000-0000-0000-000000000003';
     const {data, error, isLoading }= useGetAnswersByIdUserQuery(userId);    
     if (isLoading)
         return <div>Loading...</div>;
