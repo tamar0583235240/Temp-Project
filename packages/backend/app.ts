@@ -16,3 +16,8 @@ app.use('/api/insights', aIInsightRouts);
 app.use("/api/aiInsight", aIInsightRouts);
 
 export default app;
+
+
+
+
+
