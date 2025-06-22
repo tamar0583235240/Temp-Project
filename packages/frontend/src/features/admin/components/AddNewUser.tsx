@@ -40,6 +40,10 @@ const AddUserWithSwal: React.FC = () => {
       },
     }).then((result) => {
       if (result.isConfirmed && result.value) {
+        // זוהי קריאה ל־ API מסוג POST, שנשלחת לשרת דרך hook של RTK Query:
+       //result.value מכיל את נתוני המשתמש מהטופס.
+      // createUser(...) שולח את זה לשרת.
+     // unwrap() נותן לך גישה ישירה ל־ Promise של הבקשה כדי לתפוס הצלחה/שגיאה.
         createUser(result.value)
           .unwrap()
           .then(() => {
