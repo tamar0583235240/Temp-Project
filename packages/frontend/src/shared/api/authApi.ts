@@ -33,7 +33,15 @@ export const authApi = api.injectEndpoints({
         body: newUser,
       }),
     }),
+    refreshToken: builder.mutation<{ token: string }, void>({
+       query: () => ({
+          url: '/auth/refresh',
+          method: 'POST',
+          credentials: 'include', // חשוב כדי לשלוח cookie
+  }),
+}),
+
   }),
 });
 
-export const { useLoginMutation , useSignupMutation } = authApi;
+export const { useLoginMutation , useSignupMutation , useRefreshTokenMutation } = authApi;

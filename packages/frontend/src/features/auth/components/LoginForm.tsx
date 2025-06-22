@@ -1,6 +1,5 @@
-// src/features/auth/LoginForm.tsx
 import React, { useState, useEffect } from 'react';
-import { useLoginMutation } from '../../../shared/api/authApi';
+import { useLoginMutation, useRefreshTokenMutation} from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
 
@@ -11,6 +10,21 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
 
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
+  const [refreshToken] = useRefreshTokenMutation();
+
+const handleRememberMe = async (checked: boolean) => {
+  setRememberMe(checked);
+  if (checked) {
+    try {
+      const result = await refreshToken().unwrap();
+      localStorage.setItem('token', result.token);
+    } catch (err) {
+      // טיפול בשגיאה
+    }
+  } else {
+    localStorage.removeItem('token');
+  }
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +71,7 @@ const LoginForm = () => {
         type="checkbox"
         placeholder='זכור אותי'
         checked={rememberMe}
-        onChange={(e) => setRememberMe(e.target.checked)}
+        onChange={async (e) => await handleRememberMe(e.target.checked)}
       />
 
       {isError && <p style={{ color: 'red' }}>שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}</p>}
