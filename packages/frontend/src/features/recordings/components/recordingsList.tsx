@@ -44,15 +44,10 @@ export const RecordingsList = ({ user_id }: any) => {
                         </audio>
                     </div>
                     <AiInsightsList answerId={recording.id}></AiInsightsList>          
-<<<<<<< Updated upstream
 
                     <Feedbackes props={{sharedRecordingId:recording.id, usersList:[]}} />
 
 
-=======
-                    <Feedbackes sharedRecordingId={recording.id}></Feedbackes>
-                   
->>>>>>> Stashed changes
                 </div>
             )})}
         </div>
