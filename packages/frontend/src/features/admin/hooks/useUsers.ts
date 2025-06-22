@@ -2,14 +2,14 @@ import {
   useGetUsersQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
-    useCreateUserMutation, // ✅ ייבוא של ההוק החדש
+    useCreateUserMutation, 
 } from '../services/adminApi';
 
 export const useUsers = () => {
   const { data: users, isLoading } = useGetUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
-  const [createUser] = useCreateUserMutation(); // ✅ שימוש בהוק החדש
+  const [createUser] = useCreateUserMutation(); 
 
 
   return {

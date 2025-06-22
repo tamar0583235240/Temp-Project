@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Download, Printer } from "lucide-react";
+import { Download } from "lucide-react";
 
 interface CertificateProps {
   fullName: string;
@@ -12,7 +12,6 @@ export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName })
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
-
     const canvas = await html2canvas(certificateRef.current);
     const imgData = canvas.toDataURL("image/png");
 
@@ -26,46 +25,20 @@ export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName })
     pdf.save("certificate.pdf");
   };
 
-  const handlePrint = () => {
-    if (!certificateRef.current) return;
-
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
-
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>הדפסת תעודה</title>
-        </head>
-        <body dir="rtl" onload="window.print(); window.close();">
-          ${certificateRef.current.outerHTML}
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-  };
-
   return (
     <div className="flex flex-col items-center gap-4 mt-10 relative">
       <div
         ref={certificateRef}
         className="border-4 border-yellow-500 bg-white p-10 rounded-xl shadow-2xl w-[700px] text-center relative"
       >
-        <button
+        {/* עטיפה עם title */}
+        <div
+          className="absolute top-4 right-4 cursor-pointer text-gray-600 hover:text-green-600"
+          title="הורד תעודה"
           onClick={handleDownload}
-          className="absolute top-4 left-4 text-gray-600 hover:text-green-600"
-          title="הורדה כ-PDF"
         >
           <Download size={24} />
-        </button>
-
-        <button
-          onClick={handlePrint}
-          className="absolute top-4 left-12 text-gray-600 hover:text-blue-600"
-          title="הדפס תעודה"
-        >
-          <Printer size={24} />
-        </button>
+        </div>
 
         <h1 className="text-3xl font-bold text-gray-800 mb-4">תעודת הצטיינות</h1>
         <p className="text-lg text-gray-700 mb-6">מוענקת ל־</p>

@@ -8,23 +8,19 @@ export const insertUsersFromExcel = async (filePath: string) => {
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
 
-  // המרה ל-any[] כדי שהטיפוס יהיה ברור
   const jsonData: any[] = xlsx.utils.sheet_to_json(worksheet);
 
-  // רשימה לשמירת המשתמשים שהוכנסו בהצלחה
   const insertedUsers: any[] = [];
 
  for (const userRaw of jsonData) {
-  // ניקוי מפתחות ויצירת אובייקט חדש עם שמות נכונים
   const user: Record<string, any> = {};
   for (const key in userRaw) {
     user[key.trim()] = userRaw[key];
   }
   
-    // כאן מיפוי השדות לפי שמות אמיתיים בקובץ שלך
   const firstName = user['שם פרטי'];
-  const lastName = user['שם משתמש'] || user['שם משפחה']; // מוודא לפי שני השמות
-  const email = user['אימייל']?.trim() || user['אימייל ']?.trim(); // מוודא רווח מיותר
+  const lastName = user['שם משתמש'] || user['שם משפחה']; 
+  const email = user['אימייל']?.trim() || user['אימייל ']?.trim(); 
   const phone = user['טלפון'];
   const role = user['תפקיד'];
   const password = user['סיסמא'] || user['סיסמה'];
@@ -35,12 +31,10 @@ export const insertUsersFromExcel = async (filePath: string) => {
     continue;
   }
 
-    // הוספת משתמש למסד
     try {
       const id = uuidv4();
       const createdAt = new Date();
-      const isActive = true; // ברירת מחדל
-
+      const isActive = true; 
       const result = await pool.query(
         `INSERT INTO users
          (id,first_name, last_name, email, phone, role, created_at, is_active, password)
@@ -59,7 +53,6 @@ export const insertUsersFromExcel = async (filePath: string) => {
   return insertedUsers;
 };
 
-// פונקציה להמרת תאריך אקסל לתאריך JS (אם צריך)
 function excelDateToJSDate(serial: number | undefined) {
   if (typeof serial !== 'number') return null;
   const utc_days = Math.floor(serial - 25569);

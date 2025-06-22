@@ -1,8 +1,7 @@
 import request from 'supertest';
-import app from '../../app'; // הנתיב לקובץ Express שלך
+import app from '../../app';  
 import { pool } from '../config/dbConnection';
 
-// כדי שלא יהיה חיבור אמיתי ל־PostgreSQL
 jest.mock('../config/dbConnection', () => {
   const mClient = {
     query: jest.fn(),
@@ -13,11 +12,10 @@ jest.mock('../config/dbConnection', () => {
 describe('בדיקות ל־User Controller', () => {
 
   afterEach(() => {
-    jest.clearAllMocks(); // מנקה קריאות מוק בסוף כל בדיקה
+    jest.clearAllMocks(); 
   });
 
   test('GET /api/users מחזיר את כל המשתמשים', async () => {
-    // מחזירים שדות snake_case כמו ב־DB
     (pool.query as jest.Mock).mockResolvedValueOnce({
       rows: [
         {
@@ -37,7 +35,7 @@ describe('בדיקות ל־User Controller', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(1);
-    expect(res.body[0].firstName).toBe('שירה');  // כי ה־controller ממיר ל-camelCase
+    expect(res.body[0].firstName).toBe('שירה');  
   });
 
   test('POST /api/users/add יוצר משתמש חדש', async () => {
@@ -62,7 +60,7 @@ describe('בדיקות ל־User Controller', () => {
       email: 'dani@example.com',
       phone: '0501234567',
       role: 'manager',
-      password: '123456', // אם רוצים לשלוח סיסמה
+      password: '123456', 
     });
 
     expect(res.status).toBe(201);
