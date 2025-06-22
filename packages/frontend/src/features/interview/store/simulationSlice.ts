@@ -1,16 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { interviewType } from "../types/questionType";
-
 interface SimulationState {
   questions: interviewType[];
   currentIndex: number;
 }
-
 const initialState: SimulationState = {
   questions: [],
   currentIndex: 0,
 };
-
 const simulationSlice = createSlice({
   name: "simulation",
   initialState,
@@ -50,7 +47,6 @@ const simulationSlice = createSlice({
     },
   },
 });
-
 export const {
   setQuestions,
   answerQuestion,
@@ -59,6 +55,10 @@ export const {
   prevQuestion,
   goToQuestion,
 } = simulationSlice.actions;
-
-
 export default simulationSlice.reducer;
+
+
+
+
+
+

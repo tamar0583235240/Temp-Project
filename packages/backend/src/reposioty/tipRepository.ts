@@ -1,11 +1,15 @@
 import { pool } from '../config/dbConnection';
 import { Tips } from '../interfaces/entities/Tips';
 
+// SELECT id, content
+      // FROM tips
+
 const getAllTips = async (): Promise<Tips[]> => {
   try {
     const query = `
-      SELECT id, content
-      FROM tips
+       SELECT id,tips
+      FROM questions
+      WHERE is_active = TRUE
     `;
 
     const result = await pool.query(query);

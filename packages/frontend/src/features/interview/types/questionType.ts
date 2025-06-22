@@ -11,5 +11,4 @@ export interface interviewType {
   text?: string;
   type: 'open' | 'closed';
   options?: string[];
-
 }

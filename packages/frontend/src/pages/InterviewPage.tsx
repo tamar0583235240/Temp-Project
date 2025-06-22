@@ -6,8 +6,8 @@ const InterviewPage= () => {
   return (
     <div>
      <TipsComponent/>
-     <InterviewComponent/>
      <Simulation/>
+     <InterviewComponent/>
     </div>
   )
 }
