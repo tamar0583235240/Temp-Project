@@ -1,17 +1,23 @@
-import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../../../shared/store/store';
-import { ImprovementSuggestions } from './ImprovementSuggestions';
 import AIInsightsList from './AIInsightsList';
-import ProgressStats from './ProgressStats'
-export const MainDashbord  = () => {
+import ProgressStats from './ProgressStats';
+import { useUserStore } from '../store/progressSlice';
+import { ImprovementSuggestions } from './ImprovementSuggestions';
+
+export const MainDashbord = () => {
+  const userId = useUserStore((state) => state.userId) || "ba24bf25-e017-46bf-a8ca-a4d27a2bc7af";
+
+  // כרגע ImprovementSuggestions מצפה ל־fullName ולא ל־userId
+  // אפשר פשוט להעביר את userId כשם זמני
+  const fullName = userId; // או לשנות ל-"ישראל ישראלי" או שם אמיתי
+
   return (
     <Provider store={store}>
       <div className="space-y-6 p-6 bg-gray-100 min-h-screen">
-        <ImprovementSuggestions />
+        <ImprovementSuggestions fullName={fullName} />
         <AIInsightsList />
-                <ProgressStats /> {/* בלי userId */}
-
+        <ProgressStats />
       </div>
     </Provider>
   );

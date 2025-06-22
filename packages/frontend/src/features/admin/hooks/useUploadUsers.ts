@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useUploadUsersExcelMutation } from "../services/adminApi";
 
 export const useUploadUsers = () => {
-  const [uploadUsersExcel, { isLoading, isError, isSuccess, error }] = useUploadUsersExcelMutation();
+  const [uploadUsersExcel, { isLoading }] = useUploadUsersExcelMutation();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
