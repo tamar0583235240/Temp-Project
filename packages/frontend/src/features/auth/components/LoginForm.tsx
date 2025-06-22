@@ -17,7 +17,7 @@ const LoginForm = () => {
 
 
   const [showValidation, setShowValidation] = useState(true);
-  const [tempEmail, setTempEmail] = useState("");
+  const [tempEmail, setTempEmail] = useState("rivkahorowitz2005@gmail.com");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,7 +46,7 @@ const LoginForm = () => {
     storage.setItem('user', JSON.stringify(data.user));
 
     dispatch(loginSuccess({ user: data.user, token: data.token }));
-    navigate('/dashboard');
+    navigate('../');
   }
   };
 
