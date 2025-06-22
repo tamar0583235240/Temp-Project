@@ -41,15 +41,15 @@ export const validateCode = async (req: Request, res: Response) => {
 
     const validCode = codesPerEmail.get(email);
     if(!validCode){
-        return res.status(400).json({ valid: false, message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית." });
+        return res.status(200).json({ valid: false, message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית." });
     }
     if( Date.now() > validCode.expiresAt){
-        return res.status(400).json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
+        return res.status(200).json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
     }
     if (code === validCode.code) {
         return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
     } else {
-        return res.status(400).json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
+        return res.status(200).json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
     }
 };
 

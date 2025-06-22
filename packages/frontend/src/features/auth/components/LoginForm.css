@@ -81,3 +81,49 @@
   display: block;
   margin: 0 auto;
 }
+
+/* אימות קוד */
+
+
+
+
+
+.code-verification-input-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.code-verification-input-wrapper input {
+  padding: 0.75rem;
+  padding-right: 2.5rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  text-align: center;
+  direction: ltr;
+}
+
+.code-verification-input-wrapper svg {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.code-verification-message {
+  margin-top: 1rem;
+  color: green;
+}
+
+
+.code-verification-button:hover {
+  background-color: #00a374;
+}
+.code-verification-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
