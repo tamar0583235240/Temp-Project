@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/dbConnection';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { createUserSchema, updateUserSchema } from '../utils/userValidation';
 import { insertUsersFromExcel } from '../reposioty/userRpository';
@@ -30,8 +30,7 @@ export const getAllUsers = async (_: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, role, password } = req.body;
-  const id = uuidv4();
+  const { id,firstName, lastName, email, phone, role, password } = req.body;
   const createdAt = new Date();
 
   try {
