@@ -1,8 +1,9 @@
-import { Share2 } from 'lucide-react';
 import { useState } from 'react';
+import { Share2 } from 'lucide-react';
 import ShareDialog from './ShareDialog';
+import './SharedRrcording.css';
 
-const ShareButton=() =>{
+const ShareButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleShare = () => {
@@ -15,19 +16,15 @@ const ShareButton=() =>{
   };
 
   return (
-    <div className="relative">
-      <button
-        onClick={handleShare}
-        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-all text-lg"
-        dir="rtl"
-      >
-        <span>שיתוף</span>
-        <Share2 className="w-5 h-5" />
+    <div className="share-button-wrapper">
+      <button onClick={handleShare} className="download-button" dir="rtl">
+        <Share2 className="download-icon" />
+        שיתוף
       </button>
 
       <ShareDialog open={isDialogOpen} onClose={closeDialog} />
     </div>
   );
-}
+};
 
-export default ShareButton
+export default ShareButton;

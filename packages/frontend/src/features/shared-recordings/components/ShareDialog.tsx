@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, Trash2 } from "lucide-react";
+import "./SharedRrcording.css";
 
 type ShareDialogProps = {
   open: boolean;
@@ -40,61 +41,52 @@ const ShareDialog = ({ open, onClose }: ShareDialogProps) => {
   const getInitial = (name: string) => name.charAt(0);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-      <div className="bg-white rounded-xl shadow-lg w-[400px] p-4 animate-fadeIn">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2 text-lg font-medium">
-            <span>👥</span>
+    <div className="dialog-overlay">
+      <div className="dialog-box">
+        <div className="dialog-header">
+          <div className="dialog-title">
+            <span role="img" aria-label="share">👥</span>
             <span>שיתוף הקלטה</span>
           </div>
-          <button onClick={onClose}>
+          <button onClick={onClose} className="close-button">
             <X />
           </button>
         </div>
 
-        <div className="flex mb-4 gap-2">
+        <div className="dialog-input-row">
           <input
             type="email"
             placeholder="הכנס כתובת אימייל"
-            className="flex-1 border rounded-md px-3 py-2"
+            className="dialog-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button
-            onClick={handleAdd}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
+          <button onClick={handleAdd} className="add-button">
             + הוסף
           </button>
         </div>
 
-        <div className="space-y-3 max-h-60 overflow-auto">
+        <div className="participants-list">
           {participants.map((p, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between border rounded-md px-4 py-2"
-            >
-              <div className="flex items-center gap-3 text-right">
-                <div className="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center font-bold">
+            <div key={i} className="participant-card">
+              <div className="participant-info">
+                <div className="participant-initial">
                   {getInitial(p.name)}
                 </div>
                 <div>
-                  <div className="font-medium">{p.name}</div>
-                  <div className="text-sm text-gray-500">{p.email}</div>
-                  <div className="text-xs text-gray-400">{p.role}</div>
+                  <div className="participant-name">{p.name}</div>
+                  <div className="participant-email">{p.email}</div>
+                  <div className="participant-role">{p.role}</div>
                 </div>
               </div>
-              <button onClick={() => handleDelete(i)}>
-                <Trash2 className="text-red-500 hover:text-red-600" />
+              <button onClick={() => handleDelete(i)} className="delete-button">
+                <Trash2 />
               </button>
             </div>
           ))}
         </div>
 
-        <button
-          onClick={onClose}
-          className="mt-6 w-full bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300"
-        >
+        <button onClick={onClose} className="close-dialog-button">
           סגור
         </button>
       </div>
