@@ -17,7 +17,7 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
             return;
         }
         sendCodeToEmail();
-    }, [email]);
+    }, );
 
     const sendCodeToEmail = async () => {
         if (!email) {
