@@ -4,7 +4,10 @@ import bcrypt from 'bcrypt';
 import { sendResetEmail } from '../utils/emailSender';
 import { getUserByEmail, updateUserPassword } from '../reposioty/userRepository';
 import { createToken, getToken, deleteToken } from '../reposioty/passwordResetRepository';
-import * as userRepo from '../reposioty/userRepository';
+import { Users } from '../interfaces/entities/Users';
+import userRepository from '../reposioty/userRepository';
+import { v4 as uuidv4 } from 'uuid';
+import authRepository from '../reposioty/authRepository';
 
 const TOKEN_EXPIRATION_HOURS = 1;
 
@@ -14,8 +17,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
   try {
     const user = await getUserByEmail(email);
-
-    // גם אם המשתמש לא קיים - מחזירים תשובה "רגילה" מסיבות אבטחה
     if (!user) {
       return res.status(200).json({ message: 'If email exists, reset link sent' });
     }
@@ -61,10 +62,14 @@ export const resetPassword = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
-  const user = await userRepo.getUserByEmailAndPassword(email, password);
-
+  const user = await getUserByEmail(email);
+  
   if (!user) {
+    return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
+  }
+
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
 
@@ -75,21 +80,32 @@ export const login = async (req: Request, res: Response) => {
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = await userRepo.getUserByEmail(email);
+  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }
 
-  const newUser = await userRepo.createUser({
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const newUser: Users = {
+    id: uuidv4(),
     firstName,
     lastName,
     email,
     phone,
+    password: hashedPassword,
     role: 'student',
     isActive: true,
-    password,
-  });
+    answers: [],
+    feedbacks: [],
+    passwordResetTokens: [],
+    sharedRecordings: [],
+    createdAt: new Date(),
+    resources: []
+  };
 
+  await authRepository.signup(newUser);
   const token = `mock-token-${newUser.id}`;
+
   res.status(201).json({ user: newUser, token });
 };
