@@ -10,14 +10,7 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
     const [generateAndSendCode] = useGenerateCodeMutation();
     const [verifyCode] = useValidateCodeMutation();
 
-    useEffect(() => {
-        if (!email) {
-            setMessage("נא להזין אימייל תקין.");
-            setIsCodeSent(false);
-            return;
-        }
-        sendCodeToEmail();
-    }, );
+
 
     const sendCodeToEmail = async () => {
         if (!email) {
@@ -25,21 +18,31 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
             return;
         }
         console.log(`Sending code to email: ${email}`);
-        try{
-        const res = await generateAndSendCode({ email }).unwrap();
-        if (!res?.isSent) {
-            setIsCodeSent(false);
-        }
-        else {
-            setMessage("קוד נשלח לאימייל שלך.");
-            setIsCodeSent(true);
-        }}catch (error) {
+        try {
+            const res = await generateAndSendCode({ email }).unwrap();
+            if (!res?.isSent) {
+                setIsCodeSent(false);
+            }
+            else {
+                setMessage("קוד נשלח לאימייל שלך.");
+                setIsCodeSent(true);
+            }
+        } catch (error) {
             console.error("Error sending code:", error);
             setMessage("שגיאה בשליחת הקוד. נא לנסות שנית.");
         }
 
     }
-
+    useEffect(() => {
+        if (!email) {
+            setMessage("נא להזין אימייל תקין.");
+            setIsCodeSent(false);
+            return;
+        }
+        if (!isCodeSent)
+            sendCodeToEmail();
+        setIsCodeSent(true);
+    }, []);
 
     const validateCode = async () => {
         if (code.length !== 6) {
