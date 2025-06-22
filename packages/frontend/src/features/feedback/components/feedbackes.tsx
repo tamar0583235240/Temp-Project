@@ -3,7 +3,7 @@
 import { useState } from "react"
 import "./feedbackes.css"
 import { useGetFeedbackesBysharedRecordingIdQuery } from "../services/feedbackApi"
-import { Users } from "../types/Users"
+import { Users } from "../types/UsersType"
 
 export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersList: Users[]}}) => {
     const {sharedRecordingId , usersList} = props
