@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
 
@@ -24,13 +26,12 @@ const LoginForm = () => {
       if (rememberMe) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-      } 
-      else {
+      } else {
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('user', JSON.stringify(data.user));
       }
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, rememberMe]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,12 +56,20 @@ const LoginForm = () => {
 
       <input
         type="checkbox"
-        placeholder='זכור אותי'
+        placeholder="זכור אותי"
         checked={rememberMe}
         onChange={(e) => setRememberMe(e.target.checked)}
       />
 
-      {isError && <p style={{ color: 'red' }}>שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}</p>}
+      <button type="button" onClick={() => navigate('/forgot-password')}>
+        שכחתי סיסמה
+      </button>
+
+      {isError && (
+        <p style={{ color: 'red' }}>
+          שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}
+        </p>
+      )}
       {isSuccess && <p>התחברת בהצלחה!</p>}
     </form>
   );

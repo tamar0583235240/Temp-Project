@@ -3,12 +3,13 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import ResetPassword from "../../features/auth/components/ResetPassword";
+import LoginForm from "../../features/auth/components/LoginForm";
 
 export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<p>login</p>} />
+            <Route path="/login" element={<LoginForm />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
