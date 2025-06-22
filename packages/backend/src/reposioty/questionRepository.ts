@@ -5,9 +5,15 @@ const getAllQuestionById = async (Id: string): Promise<Questions> => {
 
   try {
     const query = 'SELECT * FROM questions WHERE id = \$1';
+<<<<<<< HEAD
     const value = [Id];
     const { rows } = await pool.query(query, value);
     
+=======
+    console.log(query)
+    const value = [Id];
+    const { rows } = await pool.query(query, value);
+>>>>>>> 292850b63ee68c443c1ad15c0acee5afeab2ab93
     return rows[0] as Questions;
   
   } catch (error) {
