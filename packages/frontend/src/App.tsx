@@ -1,12 +1,11 @@
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './shared/routes/appRoutes'
 
 import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
-import LoginForm from './features/auth/components/LoginForm';
 
 function App() {
 
