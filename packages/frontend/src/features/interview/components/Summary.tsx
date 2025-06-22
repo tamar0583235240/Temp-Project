@@ -12,8 +12,9 @@ const Summary: React.FC = () => {
 
       {questions.map((q, index) => (
         <div key={q.id} className="question-card">
+          <div className="question-text">{q.text}</div>
           <div className="question-text">
-            {index + 1}. {q.text}
+            {index + 1}. {q.content}
           </div>
           <div className="answer-text">
             תשובתך:{" "}
