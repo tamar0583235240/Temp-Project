@@ -4,6 +4,8 @@ import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
 import './LoginForm.css'; // חשוב!
+import CodeVerificationScreen from './CodeVerificationScreen';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -13,14 +15,44 @@ const LoginForm = () => {
 
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
 
+
+  const [showValidation, setShowValidation] = useState(true);//לשנות לfalse
+  const [tempEmail, setTempEmail] = useState("ertyu@rt.tyu");
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login({ email, password });
+    debugger;
+    try{
+    await login({ email, password }).unwrap().then((res) => {
+      console.log('Login result:', res);
+      if (res?.user && res?.token) {
+        setShowValidation(true);
+        setTempEmail(email);
+      } else {
+        setShowValidation(true);//false
+      }
+    });
+  } catch (err) {
+      console.error('Login error:', err);
+      setShowValidation(true);//false
+    }
+  };
+
+  const successfulLogin = () => {
+    if (data?.user && data?.token) {
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem('token', data.token);
+    storage.setItem('user', JSON.stringify(data.user));
+
+    dispatch(loginSuccess({ user: data.user, token: data.token }));
+    navigate('/dashboard');
+  }
   };
 
   useEffect(() => {
     if (data?.user && data?.token) {
-      dispatch(loginSuccess(data));
+      // dispatch(loginSuccess(data));
 
       const storage = rememberMe ? localStorage : sessionStorage;
       storage.setItem('token', data.token);
@@ -58,6 +90,7 @@ const LoginForm = () => {
           {isLoading ? 'מתחבר...' : 'התחבר'}
         </button>
 
+
         {isError && (
           <p style={{ color: 'red' }}>
             שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}
@@ -65,6 +98,8 @@ const LoginForm = () => {
         )}
         {isSuccess && <p style={{ color: 'green' }}>התחברת בהצלחה!</p>}
       </form>
+      {showValidation && (<CodeVerificationScreen email={tempEmail} onSuccess={successfulLogin}></CodeVerificationScreen>)}
+
     </div>
   );
 };

@@ -60,3 +60,64 @@
   margin-top: 1rem;
   font-size: 0.95rem;
 }
+.dot-container {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.dot {
+  font-size: 24px;
+  animation: bounce 1s infinite;
+  opacity: 0;
+  transform: translateY(0);
+}
+
+.bounce.delay-0 { animation-delay: 0s; }
+.bounce.delay-1 { animation-delay: 0.2s; }
+.bounce.delay-2 { animation-delay: 0.4s; }
+
+/* אימות קוד */
+
+
+
+
+
+.code-verification-input-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.code-verification-input-wrapper input {
+  padding: 0.75rem;
+  padding-right: 2.5rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  text-align: center;
+  direction: ltr;
+}
+
+.code-verification-input-wrapper svg {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.code-verification-message {
+  margin-top: 1rem;
+  color: green;
+}
+
+
+.code-verification-button:hover {
+  background-color: #00a374;
+}
+.code-verification-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
