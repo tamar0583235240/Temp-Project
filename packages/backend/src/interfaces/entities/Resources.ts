@@ -1,19 +1,19 @@
 import { Column, Entity, Index } from "typeorm";
 
-@Index("resources_pkey", ["id"], { unique: true })
+@Index("Resource_pkey", ["id"], { unique: true })
 @Entity("resources", { schema: "public" })
 export class Resources {
-  @Column("uuid", { primary: true, name: "id" })
+  @Column("character varying", { primary: true, name: "id" })
   id: string;
 
-  @Column("text", { name: "title" })
+  @Column("character varying", { name: "title" })
   title: string;
 
-  @Column("text", { name: "type" })
+  @Column("character varying", { name: "type" })
   type: string;
 
-  @Column("text", { name: "description" })
-  description: string;
+  @Column("text", { name: "description", nullable: true })
+  description: string | null;
 
   @Column("text", { name: "file_url" })
   fileUrl: string;

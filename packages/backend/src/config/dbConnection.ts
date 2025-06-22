@@ -1,21 +1,8 @@
 import dotenv from 'dotenv';
-// import { createClient } from '@supabase/supabase-js';
-
-dotenv.config();
-
-// const supabaseUrl = process.env.SUPABASE_URL!;
-// const supabaseKey = process.env.SERVICE_ROLE_KEY!;
-
-// console.log('SUPABASE_KEY: i am here', supabaseKey);
-
-// export const supabase = createClient(supabaseUrl, supabaseKey);
-// src/config/pgClient.ts
 import { Pool } from 'pg';
-
-
 dotenv.config();
 
-const pool = new Pool({
+export const pool = new Pool({
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
   user: process.env.DB_USER,
@@ -23,16 +10,12 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
-// בדיקת חיבור עם async/await
-async function testConnection() {
-  try {
-    const res = await pool.query('SELECT NOW()');
-    console.log('✅ Connected to PostgreSQL at:', res.rows[0].now);
-  } catch (error) {
-    console.error('❌ PostgreSQL connection failed:', error);
-  }
-}
+pool.connect()
+  .then(() => console.log('✅ Connected to PostgreSQL'))
+  .catch(() => console.error('❌ Connection error'));
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_PORT:', process.env.DB_PORT);
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
-testConnection();
-
-export default pool;

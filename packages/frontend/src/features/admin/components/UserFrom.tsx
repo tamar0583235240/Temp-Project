@@ -1,14 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { User } from '../types/userTypes';
+import { user } from '../types/userTypes';
 
 interface Props {
-  user: User;
-  onSubmit: (data: Partial<User>) => void;
+  user: user;
+  onSubmit: (data: Partial<user>) => void;
 }
 
 const UserForm: React.FC<Props> = ({ user, onSubmit }) => {
-  const { register, handleSubmit } = useForm<Partial<User>>({
+  const { register, handleSubmit } = useForm<Partial<user>>({
     defaultValues: user,
   });
 

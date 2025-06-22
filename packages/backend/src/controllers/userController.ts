@@ -1,87 +1,10 @@
-// import { Request, Response } from 'express';
-// import fs from 'fs';
-// import path from 'path';
-// import pool from '../config/pgClient'; // מניח שאת משתמשת בקובץ pgClient.ts
-
-// const usersPath = path.join(__dirname, '../data/users.json');
-
-// // פונקציית עזר לקריאת קובץ
-// function readUsersFile(): any[] {
-//   try {
-//     const raw = fs.readFileSync(usersPath, 'utf-8');
-//     return JSON.parse(raw);
-//   } catch (err) {
-//     console.error('שגיאה בקריאת קובץ המשתמשים:', err);
-//     return [];
-//   }
-// }
-
-// // פונקציית עזר לכתיבת קובץ
-// function writeUsersFile(users: any[]) {
-//   try {
-//     fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-//   } catch (err) {
-//     console.error('שגיאה בכתיבת קובץ המשתמשים:', err);
-//   }
-// }
-
-// // קבלת כל המשתמשים
-// export function getAllUsers(req: Request, res: Response): void {
-//   try {
-//     const users = readUsersFile();
-//     res.status(200).json(users);
-//   } catch (err) {
-//     console.error('שגיאה בקבלת כל המשתמשים:', err);
-//     res.status(500).json({ error: 'אירעה שגיאה בעת טעינת המשתמשים' });
-//   }
-// }
-
-// // עדכון משתמש לפי ID
-// export function updateUser(req: Request, res: Response): void {
-//   try {
-//     const { id } = req.params;
-//     const users = readUsersFile();
-//     const index = users.findIndex(user => user.id === id);
-
-//     if (index === -1) {
-//       res.status(404).json({ error: 'משתמש לא נמצא' });
-//     } else {
-//       users[index] = {
-//         ...users[index],
-//         ...req.body,
-//         updatedAt: new Date().toISOString()
-//       };
-//       writeUsersFile(users);
-//       res.status(200).json(users[index]);
-//     }
-//   } catch (err) {
-//     console.error('שגיאה בעדכון משתמש:', err);
-//     res.status(500).json({ error: 'אירעה שגיאה בעת עדכון המשתמש' });
-//   }
-// }
-
-// // מחיקת משתמש לפי ID
-// export function deleteUser(req: Request, res: Response): void {
-//   try {
-//     const { id } = req.params;
-//     const users = readUsersFile();
-//     const filtered = users.filter(user => user.id !== id);
-
-//     if (filtered.length === users.length) {
-//       res.status(404).json({ error: 'משתמש לא נמצא' });
-//     } else {
-//       writeUsersFile(filtered);
-//       res.status(200).json({ message: 'המשתמש נמחק בהצלחה' });
-//     }
-//   } catch (err) {
-//     console.error('שגיאה במחיקת משתמש:', err);
-//     res.status(500).json({ error: 'אירעה שגיאה בעת מחיקת המשתמש' });
-//   }
-// }
 import { Request, Response } from 'express';
-import pool from '../config/dbConnection'; // חיבור למסד הנתונים
+import { pool } from '../config/dbConnection';
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
+import { createUserSchema, updateUserSchema } from '../utils/userValidation';
+import { insertUsersFromExcel } from '../reposioty/userRpository';
 
-// ממיר שורות DB (snake_case) ל-camelCase
 function mapUserRowToCamelCase(row: any) {
   return {
     id: row.id,
@@ -90,74 +13,104 @@ function mapUserRowToCamelCase(row: any) {
     email: row.email,
     phone: row.phone,
     role: row.role,
+    password: row.password,
     createdAt: row.created_at,
     isActive: row.is_active,
   };
 }
 
-// קבלת כל המשתמשים
-export async function getAllUsers(req: Request, res: Response): Promise<void> {
+export const getAllUsers = async (_: Request, res: Response) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query('SELECT * FROM users');
     const users = result.rows.map(mapUserRowToCamelCase);
     res.status(200).json(users);
-  } catch (err) {
-    console.error('שגיאה בקבלת כל המשתמשים:', err);
-    res.status(500).json({ error: 'אירעה שגיאה בעת טעינת המשתמשים' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
   }
-}
+};
 
-// עדכון משתמש לפי ID
-export async function updateUser(req: Request, res: Response): Promise<void> {
+export const createUser = async (req: Request, res: Response) => {
+  const { firstName, lastName, email, phone, role, password } = req.body;
+  const id = uuidv4();
+  const createdAt = new Date();
+
   try {
-    const { id } = req.params;
-    const { firstName, lastName, email, phone, role } = req.body;
+    await createUserSchema.validate(req.body, { abortEarly: false });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      `UPDATE users SET 
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
+       RETURNING *`,
+      [id, firstName, lastName, email, phone, role, createdAt, hashedPassword]
+    );
+
+    res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
+  } catch (error: any) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ errors: error.errors });
+    }
+    res.status(500).json({ error: 'Failed to create user' });
+  }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { firstName, lastName, email, phone, role, password } = req.body;
+
+  try {
+    await updateUserSchema.validate(req.body, { abortEarly: false });
+
+const hashedPassword = password || null;
+
+    const result = await pool.query(
+      `UPDATE users SET
         first_name = $1,
         last_name = $2,
         email = $3,
         phone = $4,
-        role = $5
-       WHERE id = $6
+        role = $5,
+        password = COALESCE($6, password)
+       WHERE id = $7
        RETURNING *`,
-      [firstName, lastName, email, phone, role, id]
+      [firstName, lastName, email, phone, role, hashedPassword, id]
     );
 
-    if (result.rowCount === 0) {
-      res.status(404).json({ error: 'משתמש לא נמצא' });
-      return;
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    const updatedUser = mapUserRowToCamelCase(result.rows[0]);
-    res.status(200).json(updatedUser);
-
-  } catch (err) {
-    console.error('שגיאה בעדכון משתמש:', err);
-    res.status(500).json({ error: 'אירעה שגיאה בעת עדכון המשתמש' });
+    res.status(200).json(mapUserRowToCamelCase(result.rows[0]));
+  } catch (error: any) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ errors: error.errors });
+    }
+    res.status(500).json({ error: 'Failed to update user' });
   }
-}
+};
 
-// מחיקת משתמש לפי ID
-export async function deleteUser(req: Request, res: Response): Promise<void> {
+export const deleteUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
-
-    const result = await pool.query(
-      'DELETE FROM users WHERE id = $1 RETURNING *;',
-      [id]
-    );
-
-    if (result.rowCount === 0) {
-      res.status(404).json({ error: 'משתמש לא נמצא' });
-      return;
+    const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
     }
-
-    res.status(200).json({ message: 'המשתמש נמחק בהצלחה' });
-
-  } catch (err) {
-    console.error('שגיאה במחיקת משתמש:', err);
-    res.status(500).json({ error: 'אירעה שגיאה בעת מחיקת המשתמש' });
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete user' });
   }
-}
+};
+export const uploadUsersExcel = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) return res.status(400).send('לא נשלח קובץ');
+
+    const insertedUsers = await insertUsersFromExcel(req.file.path);
+    res.status(200).json({ message: 'המשתמשים הועלו בהצלחה!', users: insertedUsers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('שגיאה בעיבוד הקובץ');
+  }
+};

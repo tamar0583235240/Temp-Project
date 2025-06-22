@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import pool from "../config/dbConnection"; // ודא שזה הנתיב שלך לחיבור למסד
+import {pool} from "../config/dbConnection"; // ודא שזה הנתיב שלך לחיבור למסד
 
 export const getProgressStats = async (req: Request, res: Response) => {
   try {

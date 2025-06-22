@@ -1,26 +1,26 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
 
-@Index("questions_pkey", ["id"], { unique: true })
+@Index("Question_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
 export class Questions {
-  @Column("uuid", { primary: true, name: "id" })
+  @Column("character varying", { primary: true, name: "id" })
   id: string;
 
-  @Column("text", { name: "title" })
+  @Column("character varying", { name: "title" })
   title: string;
 
   @Column("text", { name: "content" })
   content: string;
 
-  @Column("text", { name: "category" })
+  @Column("character varying", { name: "category" })
   category: string;
 
-  @Column("text", { name: "tips" })
-  tips: string;
+  @Column("text", { name: "tips", nullable: true })
+  tips: string | null;
 
-  @Column("text", { name: "ai_guidance" })
-  aiGuidance: string;
+  @Column("text", { name: "ai_guidance", nullable: true })
+  aiGuidance: string | null;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;

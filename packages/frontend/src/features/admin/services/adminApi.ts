@@ -1,31 +1,42 @@
 import { api } from "../../../shared/api/api";
-import { User } from "../types/userTypes"; // טיפוס של משתמש
+import { user } from "../types/userTypes";
 
 export const adminApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // שליפת כל המשתמשים
-    getUsers: builder.query<User[], void>({
+    getUsers: builder.query<user[], void>({
       query: () => "users",
-      providesTags: ["User"], // ✅ עובד רק אם tagTypes מוגדר
+      providesTags: ["users"],
     }),
-
-    // עדכון משתמש
-    updateUser: builder.mutation<User, { id: string; data: Partial<User> }>({
+    updateUser: builder.mutation<user, { id: string; data: Partial<user> }>({
       query: ({ id, data }) => ({
         url: `users/${id}`,
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["User"], // ✅ יעדכן את המטמון
+      invalidatesTags: ["users"],
     }),
-
-    // מחיקת משתמש
+    createUser: builder.mutation<user, Partial<user>>({
+      query: (newUser) => ({
+        url: "users/add",
+        method: "POST",
+        body: newUser,
+      }),
+      invalidatesTags: ["users"],
+    }),
     deleteUser: builder.mutation<void, string>({
       query: (id) => ({
         url: `users/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["users"],
+    }),
+    uploadUsersExcel: builder.mutation<void, FormData>({
+      query: (formData) => ({
+        url: "users/upload",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["users"],
     }),
   }),
 });
@@ -34,4 +45,6 @@ export const {
   useGetUsersQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useCreateUserMutation,
+  useUploadUsersExcelMutation,
 } = adminApi;

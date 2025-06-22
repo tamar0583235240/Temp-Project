@@ -4,13 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { useUsers } from './hooks/useUsers';
 import UserCard from './components/UserCard';
 import UserUpdateForm from './components/UserUpdateForm';
-import { User } from './types/userTypes';
+import { user } from './types/userTypes';
 
 const MySwal = withReactContent(Swal);
 
 const UserList = () => {
   const { users: usersFromApi, isLoading, deleteUser, updateUser } = useUsers();
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<user[]>([]);
 
   useEffect(() => {
     if (usersFromApi) {
@@ -39,7 +39,7 @@ const UserList = () => {
     }
   };
 
-  const handleEdit = async (user: User) => {
+  const handleEdit = async (user: user) => {
     await MySwal.fire({
       title: 'עדכון משתמש',
       html: <UserUpdateForm user={user} onSubmit={handleUpdate} />,
@@ -49,7 +49,7 @@ const UserList = () => {
     });
   };
 
-  const handleUpdate = async (data: Partial<User>) => {
+  const handleUpdate = async (data: Partial<user>) => {
     if (!data.id) return;
     try {
       const updated = await updateUser({ id: data.id, data }).unwrap();

@@ -1,5 +1,4 @@
-
-// // import {supabase} from '../config/dbConnection';
+// import {supabase} from '../config/dbConnection';
 // import { exampleInterface } from "../interfaces/exampleInterface";
 
 // const getAllExamples = async (): Promise<exampleInterface[]> => {
@@ -20,3 +19,4 @@
 // };
 
 // export default { getAllExamples };
+
