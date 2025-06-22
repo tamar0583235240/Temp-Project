@@ -1,0 +1,140 @@
+.simulation-container {
+  display: flex;
+  direction: rtl;
+  height: 100vh;
+  font-family: sans-serif;
+}
+.sidebar {
+  width: 240px;
+  background-color: #F2F5F7;
+  border-left: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+.sidebar-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+.nav-buttons {
+  text-align: center;
+  margin: 10px 0;
+}
+.nav-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.question-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.question-button {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: white;
+}
+.question-button.answered {
+  background-color: #D0F0C0;
+}
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #fff;
+}
+.question-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #444;
+}
+.question-text {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+.answer-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.answer-button:hover {
+  background-color: #0056B3;
+}
+.answer-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  resize: vertical;
+}
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.option-item {
+  font-size: 16px;
+}
+/* סרגל עם גלילה אנכית */
+.question-buttons.scrollable {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 8px 0;
+  scrollbar-width: thin;
+}
+/* לחצנים עגולים */
+.question-button {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* נענתה */
+.question-button.answered {
+  background-color: #D0F0C0;
+  border-color: #92C798;
+}
+/* נבחרת כרגע */
+.question-button.current {
+  border: 2px solid #007BFF;
+  font-weight: bold;
+  background-color: #E7F1FF;
+}
+/* אפקט ריחוף */
+.question-button:hover {
+  background-color: #F0F0F0;
+  transform: scale(1.05);
+}
+
+
+
+
