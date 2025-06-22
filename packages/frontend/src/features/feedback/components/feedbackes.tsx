@@ -20,7 +20,6 @@ export const Feedbackes = (props:any) => {
 
     return(
         <div className="recordes-container">
-            <h1 className="recordes-title">רשומות</h1>
             <button className="feedback-toggle-btn" onClick={showFidbackes}>
                 פידבקים ({feedbackes?.length})
                 <span className={`arrow ${flagShow ? 'open' : ''}`}>▼</span>
