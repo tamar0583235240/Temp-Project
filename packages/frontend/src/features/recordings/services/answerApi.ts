@@ -10,11 +10,7 @@ export const AnswerApi = api.injectEndpoints({
         }),
         
         getQuestionById: builder.query<Question, string>({
-<<<<<<< HEAD
             query: (id) => `question/getAllQuestionById/${id}`,
-=======
-            query: (id) => `answers/getQuestionById/${id}`,
->>>>>>> 292850b63ee68c443c1ad15c0acee5afeab2ab93
             providesTags: ["question"],  
         })
     })
