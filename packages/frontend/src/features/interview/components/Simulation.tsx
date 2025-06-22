@@ -69,7 +69,7 @@ const Simulation: React.FC = () => {
         </div>
         <div className="nav-buttons">
           <button onClick={() => dispatch(prevQuestion())} className="nav-arrow">
-            :arrow_up:
+            ⬆️
           </button>
         </div>
         <div className="question-buttons scrollable">
@@ -89,7 +89,7 @@ const Simulation: React.FC = () => {
         </div>
         <div className="nav-buttons">
           <button onClick={() => dispatch(nextQuestion())} className="nav-arrow">
-            :arrow_down:
+            ⬇️
           </button>
         </div>
       </div>
