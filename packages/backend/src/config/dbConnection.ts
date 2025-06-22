@@ -1,5 +1,7 @@
+
 import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
+
 dotenv.config();
 console.log('Database user:', process.env.PGUSER);
 console.log('Database host:', process.env.PGHOST);
