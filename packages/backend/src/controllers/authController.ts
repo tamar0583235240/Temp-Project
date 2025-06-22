@@ -3,6 +3,7 @@ import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository'
 import { v4 as uuidv4 } from 'uuid';
 import authRepository from '../reposioty/authRepository';
+import sendAnEmail from '../utils/sendAnEmail';
 
 
 type CodeData = { code: string, expiresAt: number };
@@ -27,7 +28,7 @@ export const generateAndSendCode = async (req: Request, res: Response) => {
      const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
      codesPerEmail.set(email, { code, expiresAt });
      // בקוד הזה צריך לטפל...
-    // await sendAnEmail(email, `קוד האימות שלך הוא: ${code}`)
+    await sendAnEmail(email, `קוד האימות שלך הוא: ${code}`)
     console.log(`Sending code ${code} to email ${email}`);
     res.status(200).json({sent:true, message: "הקוד נשלח בהצלחה!"});
 }
