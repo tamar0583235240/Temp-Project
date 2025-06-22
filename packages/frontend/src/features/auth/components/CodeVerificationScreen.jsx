@@ -69,7 +69,7 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
             <div >
                 <h3>הכנס קוד אימות</h3>
                 <button onClick={() => { sendCodeToEmail(); }} >שלח קוד לאימייל</button><br />
-                {isCodeSent && (<p className="code-verification-message">{message}</p>)}
+                {message && (<p className="code-verification-message">{message}</p>)}
                 <div>
                     <label>
                         קוד אימות:<br />

@@ -16,8 +16,8 @@ const LoginForm = () => {
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
 
 
-  const [showValidation, setShowValidation] = useState(false);//לשנות לfalse
-  const [tempEmail, setTempEmail] = useState("ertyu@rt.tyu");
+  const [showValidation, setShowValidation] = useState(true);
+  const [tempEmail, setTempEmail] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,12 +30,12 @@ const LoginForm = () => {
         setShowValidation(true);
         setTempEmail(email);
       } else {
-        setShowValidation(false);//false
+        setShowValidation(false);
       }
     });
   } catch (err) {
       console.error('Login error:', err);
-      setShowValidation(false);//false
+      setShowValidation(false);
     }
   };
 
