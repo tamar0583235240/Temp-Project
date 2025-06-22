@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSignupMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
+import GoogleAuthButton from './GoogleAuthButton';
 
 const SignupForm = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +41,12 @@ const SignupForm = () => {
       <button type="submit" disabled={isLoading}>{isLoading ? 'נרשם...' : 'הרשמה'}</button>
       {isError && <p style={{ color: 'red' }}>שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}</p>}
       {isSuccess && <p>נרשמת בהצלחה!</p>}
+      <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+        <p>או הרשם עם:</p>
+        <div style={{ width: '300px', margin: '0 auto' }}>
+          <GoogleAuthButton />
+        </div>
+      </div>
     </form>
   );
 };

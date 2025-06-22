@@ -60,3 +60,24 @@
   margin-top: 1rem;
   font-size: 0.95rem;
 }
+
+.google-auth-btn-wrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.google-auth-btn-wrapper > button,
+.google-auth-btn-wrapper > div {
+  width: 300px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+.google-auth-btn-wrapper iframe {
+  width: 100% !important;
+  min-width: 300px;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+}

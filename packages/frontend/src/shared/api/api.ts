@@ -9,5 +9,3 @@ export const api = createApi({
     tagTypes: ["Item"],
     endpoints: () => ({}),
 });
-
-

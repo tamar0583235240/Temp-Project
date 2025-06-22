@@ -6,6 +6,7 @@ import AppRoutes from './shared/routes/appRoutes'
 import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
 

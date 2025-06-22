@@ -29,6 +29,15 @@ export const userApi = api.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    authWithGoogle: builder.mutation({
+      query: (token: string) => ({
+        url: '/auth/google-auth',
+        method: 'POST',
+        body: {
+          payload: { credential: token },
+        },
+      }),
+    }),
   }),
 });
 
@@ -37,5 +46,6 @@ export const {
   useGetUserByIdQuery, 
   useAddUserMutation, 
   useUpdateUserMutation, 
-  useDeleteUserMutation 
+  useDeleteUserMutation,
+  useAuthWithGoogleMutation
 } = userApi;

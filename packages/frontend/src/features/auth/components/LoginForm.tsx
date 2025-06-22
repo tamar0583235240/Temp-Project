@@ -1,9 +1,9 @@
-// LoginForm.tsx
 import { useState, useEffect } from 'react';
 import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
-import './LoginForm.css'; // חשוב!
+import './LoginForm.css'
+import GoogleLoginButton from './GoogleAuthButton';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -64,6 +64,10 @@ const LoginForm = () => {
           </p>
         )}
         {isSuccess && <p style={{ color: 'green' }}>התחברת בהצלחה!</p>}
+        <div className="google-auth-btn-wrapper">
+          <p>או התחבר עם:</p>
+          <GoogleLoginButton />
+        </div>
       </form>
     </div>
   );

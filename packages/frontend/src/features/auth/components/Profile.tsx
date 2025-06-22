@@ -13,7 +13,7 @@ const Profile = () => {
   return (
     <div>
       <h2>פרופיל משתמש</h2>
-      <p>שם: {user?.first_name} {user?.last_name}</p>
+      <p>שם: {user?.firstName} {user?.lastName}</p>
       <p>אימייל: {user?.email}</p>
       <p>טוקן: {token}</p>
     </div>
