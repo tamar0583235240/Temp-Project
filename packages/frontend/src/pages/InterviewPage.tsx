@@ -2,12 +2,12 @@ import InterviewComponent from "../features/interview/components/buttonsComponen
 import Simulation from "../features/interview/components/Simulation"
 import { TipsComponent } from "../features/interview/components/tipsCompenent"
 
-const InterviewPage= () => {
+const InterviewPage = () => {
   return (
     <div>
-     <TipsComponent/>
-     <Simulation/>
-     <InterviewComponent/>
+      <Simulation />
+      <TipsComponent />
+      <InterviewComponent />
     </div>
   )
 }
