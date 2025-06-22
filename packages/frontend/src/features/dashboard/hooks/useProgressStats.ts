@@ -6,6 +6,6 @@ export const useProgressStats = (userId?: string) => {
   return useQuery<ProgressStats>({
     queryKey: ['progressStats', userId],
     queryFn: () => getProgressStats(userId!),
-    enabled: !!userId, // הקריאה תתבצע רק אם יש userId
+    enabled: !!userId, 
   });
 };

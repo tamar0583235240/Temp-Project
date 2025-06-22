@@ -4,7 +4,6 @@ import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { user } from '../types/userTypes';
 
-// 1. נגדיר את הטיפוס לפי מה שמצפה yup ו-TS, עם phone שיכול להיות string | undefined | null
 type UserFormFields = {
   firstName: string;
   lastName: string;
@@ -14,7 +13,6 @@ type UserFormFields = {
   role: 'student' | 'manager';
 };
 
-// 2. נגדיר סכמה שתאפשר phone להיות string, undefined או null
 const schema: yup.ObjectSchema<UserFormFields> = yup.object({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
@@ -24,7 +22,6 @@ const schema: yup.ObjectSchema<UserFormFields> = yup.object({
   role: yup.mixed<UserFormFields['role']>().oneOf(['student', 'manager'], 'Invalid role').required('Role is required'),
 });
 
-// 3. רכיב הטופס
 interface Props {
   user: user;
   onSubmit: (data: Partial<user>) => Promise<void>;
@@ -40,21 +37,20 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: user.phone ?? null, // מתאימים ל-null
+      phone: user.phone ?? null, 
       password: user.password,
-      role: (user.role as UserFormFields['role']) || 'student', // המרה בטוחה
+      role: (user.role as UserFormFields['role']) || 'student', 
     },
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
 
   const submitAndClose: SubmitHandler<UserFormFields> = async (data) => {
-    // 4. הופכים את המידע לטיפוס Partial<user> עם תיאום תפקיד
     const preparedData: Partial<user> = {
       ...user,
       ...data,
-      role: data.role === 'manager' ? 'manager' : data.role, // אפשר כאן עוד התאמות לפי טיפוס user שלך
-      phone: data.phone === null ? undefined : data.phone, // כדי למנוע null במקום undefined
+      role: data.role === 'manager' ? 'manager' : data.role, 
+      phone: data.phone === null ? undefined : data.phone, 
     };
 
     await onSubmit(preparedData);
