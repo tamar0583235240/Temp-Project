@@ -10,7 +10,7 @@ export const TitleQuestions: React.FC<TitleQuestionsProps> = ({ data }) => {
     
     return (
         <div>
-            {questions.data?.title}
+            {questions.data?.content}
         </div>
     );
 };

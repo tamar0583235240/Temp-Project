@@ -13,3 +13,15 @@ export const questionController = async (req: Request, res: Response): Promise<v
   }
 };
 
+export const adminqQuestionController = async (req: Request, res: Response): Promise<void> => {
+
+  console.log('adminQuestionController called');
+    try {
+    const items = await questionRepository.getAllQuestions();
+    res.json(items);
+  } catch (error) {
+    console.error('Error in questionController:', error);
+    res.status(500).json({ error });
+  }
+};
+

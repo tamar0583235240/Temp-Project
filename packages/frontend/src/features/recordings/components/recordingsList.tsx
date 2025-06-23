@@ -7,7 +7,11 @@ import { useGetAnswersByIdUserQuery, useGetQuestionByIdQuery } from "../services
 import { AiInsightsList } from "./AiInsightsList";
 import './RecordingsList.css';
 
-export const RecordingsList = () => {
+type RecordingsListProps = {
+    allowedRoles: string[];
+}
+
+export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
     const userId = user && user.id ? user.id.toString() : '550e8400-e29b-41d4-a718-446655440000';
