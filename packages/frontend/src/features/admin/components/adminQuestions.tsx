@@ -1,4 +1,5 @@
 import { useGetAllQuestionsQuery } from "../services/adminQuestionApi"
+import './adminQuestions.css';
 
 type AdminQuestionsProps = {
   allowedRoles: string[];
@@ -8,17 +9,27 @@ type AdminQuestionsProps = {
 export const AdminQuestions : React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
 
   const { data, isLoading } = useGetAllQuestionsQuery();
+  
   if (isLoading)
-    return <h2>טוען...</h2>
+    return <div className="admin-questions-container"><h2 className="admin-questions-title">טוען...</h2></div>
   if (!data)
-    return <h2>ישנה בעיה בטעינת השאלות</h2>
+    return <div className="admin-questions-container"><h2 className="admin-questions-title">ישנה בעיה בטעינת השאלות</h2></div>
   if (data.length === 0)
-    return <h2>אין שאלות</h2>
+    return <div className="admin-questions-container"><h2 className="admin-questions-title">אין שאלות</h2></div>
+  
   return (
-    <div>
-      <h2>ניהול שאלות</h2>
+    <div className="admin-questions-container">
+      <h2 className="admin-questions-title">ניהול שאלות</h2>
       {data.map((question) => (
-        <span>{question.title}</span>
+        <div key={question.id} className="question-card">
+          <div className="question-header">
+            <h3 className="question-title">{question.title}</h3>
+          </div>
+          <div className="question-actions">
+            <button className="action-button edit-button">עריכה</button>
+            <button className="action-button delete-button">מחיקה</button>
+          </div>
+        </div>
       ))}
     </div>
   )
