@@ -16,7 +16,7 @@ const LoginForm = () => {
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
 
 
-  const [showValidation, setShowValidation] = useState(true);
+  const [showValidation, setShowValidation] = useState(false);
   const [tempEmail, setTempEmail] = useState("rivkahorowitz2005@gmail.com");
   const navigate = useNavigate();
 
