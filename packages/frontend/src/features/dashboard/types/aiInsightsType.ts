@@ -1,4 +1,4 @@
-import {AIInsight} from '../../../../../backend/src/interfaces/AIInsight'
+import { AIInsight } from "./AIInsightType";
 
 export interface aiInsightsType extends AIInsight {
   
