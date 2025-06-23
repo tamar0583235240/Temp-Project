@@ -1,6 +1,8 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
+import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("users_email_key", ["email"], { unique: true })
@@ -34,11 +36,23 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+  @Column("text", { name: "password" })
+  password: string;
+
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
+
+  @OneToMany(
+    () => PasswordResetTokens,
+    (passwordResetTokens) => passwordResetTokens.user
+  )
+  passwordResetTokens: PasswordResetTokens[];
+
+  @OneToMany(() => Resources, (resources) => resources.user)
+  resources: Resources[];
 
   @OneToMany(
     () => SharedRecordings,

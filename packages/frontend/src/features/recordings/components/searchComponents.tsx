@@ -1,22 +1,24 @@
-import React, { useState } from 'react'
-import { Answer } from '../types/Answer';
-import { useGetAnswersByIdUserQuery } from '../services/answerApi';
-import { data } from 'react-router-dom';
+import React from 'react';
+import './searchComponents.css';
 
-export const SearchComponents = ({ }: any) => {
-  const { data: answers, isLoading, error } = useGetAnswersByIdUserQuery(
-    "00000000-0000-0000-0000-000000000004"
-  );
-  const [searchText, setSearchText] = useState("");
-  if (isLoading) return <div>טוען...</div>;
-  if (error) return <div>שגיאה בטעינת התשובות</div>;
-  const filteredAnswers = answers?.filter((answer) =>
-    answer.answer_file_name.toLowerCase().includes(searchText.toLowerCase())
-  );
+export const SearchComponents = (props: {
+  searchText: string;
+  setSearchText: (text: string) => void;
+}) => {
+  const { searchText, setSearchText } = props;
 
   return (
-    <div>
-      <input type="text" placeholder="חפש הקלטה" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+    <div style={{ margin: '10px 0' }}>
+      <input
+        type="text"
+        placeholder="חפש הקלטה"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        className="search-input"
+      />
     </div>
-  )
-}
+  );
+};
+
+
+
