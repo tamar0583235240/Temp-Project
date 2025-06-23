@@ -7,6 +7,7 @@ interface CertificateProps {
   fullName: string;
 }
 
+
 export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
 
