@@ -4,6 +4,6 @@ import { getAllQuestionsController } from '../controllers/questionController';
 
 const router = Router();
 
-router.get('/', /* exampleMiddleware, */ getAllQuestionsController);
+router.get('/', getAllQuestionsController);
 
 export default router;
