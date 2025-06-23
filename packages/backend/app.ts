@@ -1,7 +1,6 @@
 
 import express, { Application } from 'express';
 import cors from 'cors';
-import authRouts from './src/routes/authRouts';
 import authGoogleRoutes from './src/routes/authGoogleRoutes';
 import exampleRouts from './src/routes/exampleRouts';
 import userRouts from './src/routes/userRouts';

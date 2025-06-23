@@ -12,12 +12,14 @@ const SignupForm = () => {
     lastName: '',
     email: '',
     password: '',
+    phone: '', // אופציונלי, אפשר להוריד
   });
 
   const [signup, { data, isLoading, isError, isSuccess, error }] = useSignupMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,9 +40,12 @@ const SignupForm = () => {
       <input name="lastName" placeholder="שם משפחה" value={form.lastName} onChange={handleChange} required />
       <input name="email" placeholder="אימייל" value={form.email} onChange={handleChange} required />
       <input name="password" placeholder="סיסמה" type="password" value={form.password} onChange={handleChange} required />
-      <button type="submit" disabled={isLoading}>{isLoading ? 'נרשם...' : 'הרשמה'}</button>
+      <input name="phone" placeholder="טלפון" value={form.phone} onChange={handleChange} />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'נרשם...' : 'הרשמה'}
+      </button>
       {isError && <p style={{ color: 'red' }}>שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}</p>}
-      {isSuccess && <p>נרשמת בהצלחה!</p>}
+      {isSuccess && <p style={{ color: 'green' }}>נרשמת בהצלחה!</p>}
       <div style={{ marginTop: '1rem', textAlign: 'center' }}>
         <p>או הרשם עם:</p>
         <div style={{ width: '300px', margin: '0 auto' }}>

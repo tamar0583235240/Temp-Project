@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import * as userRepository from '../reposioty/userRepository';
+import userRepo from '../reposioty/userRepository';
 import jwt from 'jsonwebtoken';
 import { Users } from '../interfaces/entities/Users';
 import { v4 as uuidv4 } from 'uuid';
 import authRepository from '../reposioty/authRepository';
+import userRepository from '../reposioty/userRepository';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const REFRESH_SECRET = process.env.REFRESH_SECRET || 'your_refresh_secret';
@@ -12,7 +13,8 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET || 'your_refresh_secret';
 export const login = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
-  const user = await authRepository.login(email, password);
+
+  const user = await userRepo.getUserByEmailAndPassword(email, password);
   if (!user) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
@@ -26,21 +28,23 @@ export const login = async (req: Request, res: Response) => {
   const refreshToken = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
     REFRESH_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: rememberMe ? '7d' : '2h' }
   );
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 ימים
+    sameSite: 'lax',
+    path: '/',
+    maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000
   });
+
 
   res.json({ user, token });
 };
 
 // רענון טוקן
-export const refreshToken = (req: Request, res: Response) => {
+export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(407).json({ message: 'לא סופק refresh token' });
@@ -48,12 +52,20 @@ export const refreshToken = (req: Request, res: Response) => {
 
   try {
     const userData = jwt.verify(refreshToken, REFRESH_SECRET) as any;
+    const user = await userRepository.getUserById(userData.id); // חשוב!
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     const newToken = jwt.sign(
-      { id: userData.id, email: userData.email, role: userData.role },
+      { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
-    res.json({ token: newToken });
+
+    res.json({ token: newToken, user }); // 👈 מחזיר גם user
+
   } catch (err) {
     return res.status(403).json({ message: 'refresh token לא תקין' });
   }
@@ -73,7 +85,7 @@ export const logout = (req: Request, res: Response) => {
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
+  const existing = (await userRepo.getAllUsers()).find(user => user.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }

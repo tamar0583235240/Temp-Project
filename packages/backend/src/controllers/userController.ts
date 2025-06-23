@@ -1,33 +1,54 @@
-// src/controllers/userController.ts
 import { Request, Response } from 'express';
-import { Users } from '../interfaces/entities/Users';
-import userRepository from '../reposioty/userRepository'
+import userRepository from '../reposioty/userRepository'; // שימי לב לנתיב
 import { v4 as uuidv4 } from 'uuid';
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  const users: Users[] = await userRepository.getAllUsers();
+  // טען את המשתמשים כולל הקשרים (relations) שצריך - זה צריך להיעשות בתוך ה-repository
+  const users = await userRepository.getAllUsers();
   if (!users || users.length === 0) {
     return res.status(404).json({ message: 'No users found' });
   }
-  console.log(users);
   res.json(users);
+};
+
+export const getMe = async (req: Request, res: Response) => {
+  const userId = (req as any).user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const user = await userRepository.getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  res.json({ user });
 };
 
 export const getUserById = async (req: Request, res: Response) => {
   const userId = req.params.id;
-  const user: Users | null = await userRepository.getUserById(userId);
+  const user = await userRepository.getUserById(userId);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
   res.json(user);
 };
+
 export const createUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password, role } = req.body;
-  const existing = await (await userRepository.getAllUsers()).find(user => user.email === email);
+
+  const existingUsers = await userRepository.getAllUsers();
+  const existing = existingUsers.find(user => user.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }
-  const newUser: Users = {
+
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
+
+  const newUser = {
     id: uuidv4(),
     firstName,
     lastName,
@@ -44,21 +65,22 @@ export const createUser = async (req: Request, res: Response) => {
     resources: []
   };
 
-  const user: Users = await userRepository.createUser(newUser);
-  res.status(201).json(user);
+  const createdUser = await userRepository.createUser(newUser);
+  res.status(201).json(createdUser);
 };
+
 export const updateUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
-  const userData: Partial<Users> = req.body;
-  const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
+  const userData = req.body;
+  const updatedUser = await userRepository.updateUser(userId, userData);
   if (!updatedUser) {
     return res.status(404).json({ message: 'User not found' });
   }
   res.json(updatedUser);
 };
-export const deleteUser = (req: Request, res: Response) => {
+
+export const deleteUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
-  userRepository.deleteUser(userId);
+  await userRepository.deleteUser(userId);
   res.status(204).send();
 };
-

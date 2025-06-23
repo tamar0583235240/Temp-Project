@@ -3,7 +3,7 @@ import { Users } from "../interfaces/entities/Users";
 import { User } from '../interfaces/User';
 
 const getAllUsers = async (): Promise<User[]> => {
-  const result = await pool.query('SELECT * FROM users ORDER BY createdat DESC');
+  const result = await pool.query('SELECT * FROM users ORDER BY created_at DESC');
   return result.rows;
 };
 
@@ -13,16 +13,14 @@ const getUserById = async (id: string): Promise<User | null> => {
 };
 
 export const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM users WHERE email = $1 AND password = $2',
-      [email, password]
-    );
-    if (result.rows.length === 0) throw new Error('User not found');
-    return result.rows[0] || null;
-  } catch {
-    throw new Error('User not found');
-  }
+  const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  const user = result.rows[0];
+  if (!user) throw new Error('User not found');
+
+  const isPasswordValid = password === user.password; // Replace with proper password hashing check in production
+  if (!isPasswordValid) throw new Error('Invalid password');
+
+  return user;
 };
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
@@ -57,7 +55,7 @@ const updateUser = async (id: string, userData: Partial<Users>): Promise<Users |
 const createUser = async (user: Omit<User, 'id' | 'createdAt'> & { password: string }): Promise<User> => {
   try {
     const result = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, createdat, is_active, password)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
        VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7)
        RETURNING *`,
       [

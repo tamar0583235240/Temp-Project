@@ -1,91 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { useLoginMutation, useRefreshTokenMutation } from '../../../shared/api/authApi';
+import React, { useState } from 'react';
+import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
-import { loginSuccess } from '../store/authSlice';
-import './LoginForm.css';
-import GoogleLoginButton from './GoogleAuthButton';
+import { loginStart, loginSuccess, loginFailure } from '../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+function LoginForm() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [login] = useLoginMutation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
-  const [refreshToken] = useRefreshTokenMutation();
-
-  const handleRememberMe = async (checked: boolean) => {
-    setRememberMe(checked);
-    if (checked) {
-      try {
-        const result = await refreshToken().unwrap();
-        localStorage.setItem('token', result.token);
-      } catch (err) {
-        console.error('שגיאה ברענון טוקן:', err);
-      }
-    } else {
-      localStorage.removeItem('token');
-    }
-  };
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login({ email, password });
+    dispatch(loginStart());
+    setErrorMessage('');
+
+    try {
+      const res = await login({ email, password, rememberMe }).unwrap();
+
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
+      } else {
+        localStorage.removeItem('rememberMe');
+      }
+
+      // עדכון הסטייט בלבד (לא storage)
+      dispatch(loginSuccess({ token: res.token, user: res.user }));
+
+      // מעבר לעמוד הבית
+      navigate('/home');
+
+    } catch (err: any) {
+      const message = err?.data?.message || 'שגיאה בהתחברות';
+      dispatch(loginFailure(message));
+      setErrorMessage(message);
+    }
   };
 
-  useEffect(() => {
-    if (data?.user && data?.token) {
-      dispatch(loginSuccess(data));
-      const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem('token', data.token);
-      storage.setItem('user', JSON.stringify(data.user));
-    }
-  }, [data, dispatch, rememberMe]);
-
   return (
-    <div className="login-form-container">
-      <form onSubmit={handleSubmit}>
-        <h2>התחברות</h2>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        placeholder="אימייל"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="סיסמה"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        required
+      />
+      <label>
         <input
-          type="email"
-          placeholder="אימייל"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          type="checkbox"
+          checked={rememberMe}
+          onChange={e => setRememberMe(e.target.checked)}
         />
-        <input
-          type="password"
-          placeholder="סיסמה"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <label>
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={async (e) => await handleRememberMe(e.target.checked)}
-          />
-          זכור אותי
-        </label>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'מתחבר...' : 'התחבר'}
-        </button>
+        זכור אותי
+      </label>
+      <button type="submit">התחבר</button>
 
-        {isError && (
-          <p style={{ color: 'red' }}>
-            שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}
-          </p>
-        )}
-        {isSuccess && <p style={{ color: 'green' }}>התחברת בהצלחה!</p>}
-
-        <div className="google-auth-btn-wrapper">
-          <p>או התחבר עם:</p>
-          <GoogleLoginButton />
-        </div>
-      </form>
-    </div>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    </form>
   );
-};
+}
 
 export default LoginForm;

@@ -1,5 +1,6 @@
 import { api } from './api';
 import { User } from '../../features/auth/types/types';
+import { get } from 'http';
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -7,9 +8,15 @@ export const userApi = api.injectEndpoints({
       query: () => '/users',
     }),
     getUserById: builder.query<User, string>({
-      query: (id) => `/users/${id}`,
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: 'GET',
+      }),
     }),
-     addUser: builder.mutation<User, Partial<User>>({
+    getMe: builder.query<User, void>({
+      query: () => '/auth/me',
+    }),
+    addUser: builder.mutation<User, Partial<User>>({
       query: (newUser) => ({
         url: '/users',
         method: 'POST',
@@ -41,11 +48,13 @@ export const userApi = api.injectEndpoints({
   }),
 });
 
-export const { 
-  useGetUsersQuery, 
-  useGetUserByIdQuery, 
-  useAddUserMutation, 
-  useUpdateUserMutation, 
+export const {
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  useGetMeQuery,
+  useAddUserMutation,
+  useUpdateUserMutation,
   useDeleteUserMutation,
-  useAuthWithGoogleMutation
+  useAuthWithGoogleMutation,
+  useLazyGetUserByIdQuery
 } = userApi;
