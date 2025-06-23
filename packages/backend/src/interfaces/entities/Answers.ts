@@ -50,7 +50,6 @@ export class Answers {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 
-
   @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
   feedbacks: Feedback[];
 
