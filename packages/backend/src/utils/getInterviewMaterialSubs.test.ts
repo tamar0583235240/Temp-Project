@@ -47,9 +47,6 @@ describe('בדיקות ל־InterviewMaterialSub Controller', () => {
     // לדוגמה – אם את מוסיפה קוד שדורש query param מסוים
     const res = await request(app).get('/api/interviewMaterialSub?badParam=1');
 
-    // נניח שבקונטרולר הוספת:
-    // if (req.query.badParam) return res.status(400).json({ error: 'Bad request' });
-
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error', 'Bad request');
   });
