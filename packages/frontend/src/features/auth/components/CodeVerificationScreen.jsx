@@ -11,7 +11,6 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
     const [verifyCode] = useValidateCodeMutation();
 
 
-
     const sendCodeToEmail = async () => {
         if (!email) {
             setMessage("אין אפשרות לשלוח קוד לאימייל.");
@@ -70,46 +69,42 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
     return (
         <>
             <div >
-                <h3>הכנס קוד אימות</h3>
-                <button onClick={() => { sendCodeToEmail(); }} >שלח קוד לאימייל</button><br />
-                {message && (<p className="code-verification-message">{message}</p>)}
-                <div>
-                    <label>
-                        קוד אימות:<br />
-                        <div className="code-verification-input-wrapper">
-                            <input
-                                type={showCode ? "text" : "password"}
-                                maxLength={6}
-                                pattern="\d{6}"
-                                value={code}
-                                onChange={e => {
+                <h3>הזן את קוד האימות שנשלח למייל שלך</h3>
+                <button onClick={() => { sendCodeToEmail(); }}  >לא קיבלת קוד? שלח מחדש</button><br />
+                <div className="code-verification-input-wrapper">
+                    <input
+                        type={showCode ? "text" : "password"}
+                        maxLength={6}
+                        pattern="\d{6}"
+                        value={code}
+                        onChange={e => {
 
-                                    setCode(e.target.value.slice(0, 6));
-                                }}
-                                inputMode="numeric"
-                                autoComplete="one-time-code"
-                            />
-                            <span onClick={() => setShowCode(s => !s)} title={showCode ? "הסתר קוד" : "הצג קוד"}>
-                                {showCode ? (
-                                    // Eye open SVG
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="#333" strokeWidth="2" />
-                                        <circle cx="12" cy="12" r="3" stroke="#333" strokeWidth="2" />
-                                    </svg>
-                                ) : (
-                                    // Eye closed SVG
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                        <path d="M17.94 17.94C16.13 19.25 14.13 20 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.06M1 1l22 22" stroke="#333" strokeWidth="2" />
-                                        <path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-5.47" stroke="#333" strokeWidth="2" />
-                                    </svg>
-                                )}
-                            </span>
-                        </div>
-                    </label>
-                    <button onClick={validateCode} className="button" >אשר קוד</button>
+                            setCode(e.target.value.slice(0, 6));
+                        }}
+                        inputMode="numeric"
+                        autoComplete="one-time-code"
+                    />
+                    <span onClick={() => setShowCode(s => !s)} title={showCode ? "הסתר קוד" : "הצג קוד"}>
+                        {showCode ? (
+                            // Eye open SVG
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="#333" strokeWidth="2" />
+                                <circle cx="12" cy="12" r="3" stroke="#333" strokeWidth="2" />
+                            </svg>
+                        ) : (
+                            // Eye closed SVG
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.94 17.94C16.13 19.25 14.13 20 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.06M1 1l22 22" stroke="#333" strokeWidth="2" />
+                                <path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-5.47" stroke="#333" strokeWidth="2" />
+                            </svg>
+                        )}
+                    </span>
                 </div>
+                {message && (<p className="code-verification-message">{message}</p>)}
 
+                <button onClick={validateCode} className="button" >אשר קוד</button>
             </div>
+
         </>
     );
 };
