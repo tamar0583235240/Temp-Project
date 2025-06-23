@@ -8,7 +8,7 @@ const HomePage = () => {
   return (
     <div dir="rtl">
       <div>
-        <div onClick={() => { navigate('/simulation') }}>
+        <div onClick={() => { navigate('/Simulation') }}>
           <button>start simulation</button>
         </div>
         <div onClick={() => { navigate('/dashboard') }}>
