@@ -11,9 +11,10 @@ const AIInsightsList: React.FC = () => {
 
   const { isLoading, isError } = useGetProgressStatsQuery(userId, { skip: !userId });
 
-  if (isLoading) return <p className="text-center text-blue-500 text-lg">טוען... אנא המתן...</p>;
-  if (isError) return <p className="text-center text-red-500 text-lg">אירעה שגיאה בשליפה.</p>;
+  if (isLoading) return <p className="text-center text-blue-500 text-lg">טוען מסקנות...</p>;
   if (insights.length === 0) return <p className="text-center text-gray-600">לא נמצאו מסקנות.</p>;
+  if (isError) return <p className="text-center text-red-500 text-lg">אירעה שגיאה בשליפה.</p>;
+  
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 max-w-3xl mx-auto flex flex-col gap-4" dir="rtl">
