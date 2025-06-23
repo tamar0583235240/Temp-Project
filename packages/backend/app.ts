@@ -9,6 +9,8 @@ dotenv.config();
 
 const app: Application = express();
 console.log('i am here in app');
+
+
 app.use(cors());
 app.use(express.json());
 

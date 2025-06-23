@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { v2 as cloudinary } from 'cloudinary';
 import { Pool } from 'pg';
 import { pool } from '../config/dbConnection';
+import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -60,4 +61,15 @@ export const addFile = async (req: Request, res: Response) => {
     console.error('Upload error:', err);
     res.status(500).json({ message: 'Server error', error: err });
   }
+};
+
+
+export const getInterviewMaterialSubs = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
+        res.json(items);
+    } catch (error) {
+        console.error('Error in interview material sub controller:', error);
+        res.status(500).json({ error });
+    }
 };
