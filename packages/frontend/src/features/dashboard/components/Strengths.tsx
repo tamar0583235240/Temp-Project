@@ -1,6 +1,7 @@
 
 import { useGetAIInsightsQuery } from "../store/aiInsightApi";
 import { Lightbulb, CheckCircle } from "lucide-react";
+import { RoleProtectedRoute } from "../../../shared/components/roleProtectedRoute";
 
 export const SummaryStrengths = () => {
   const { data, error, isLoading } = useGetAIInsightsQuery();

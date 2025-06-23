@@ -4,7 +4,7 @@ import { useGetProgressStatsQuery } from '../../../shared/api/api';
 import { CheckCircle } from 'lucide-react'; 
 
 const ProgressStats: React.FC = () => {
-  const userId = useUserStore((state) => state.userId) || "9f4572ec-25fd-43d0-a0c2-4d86bd84e9f6";
+  const userId = useUserStore((state) => state.userId) || "65d15087-cd1d-4e44-8e66-3980f3e736b3";
   const { data, isLoading, isError } = useGetProgressStatsQuery(userId!, {
     skip: !userId,
   });
