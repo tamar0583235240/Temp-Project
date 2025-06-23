@@ -7,24 +7,26 @@ import interviewSlice from "../../features/interview/store/buttonsSlice";
 import { tipsApi } from "../../features/interview/services/tipsApi";
 import shownTipsReducer from '../../features/interview/store/tipsSlice';
 import { questionsApi } from '../../features/interview/services/questionsApi'; 
+import { buttonsApi } from "../../features/interview/services/buttonsApi";
 
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     [tipsApi.reducerPath]: tipsApi.reducer,
-    example: exampleSlice,
-    simulation: simulationSlice, 
     [questionsApi.reducerPath]: questionsApi.reducer,
+    [buttonsApi.reducerPath]: buttonsApi.reducer,
     interview: interviewSlice,
     shownTips: shownTipsReducer,
-
+    example: exampleSlice,
+    simulation: simulationSlice, 
   },
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware().concat(
     api.middleware,
     tipsApi.middleware,
-    questionsApi.middleware
+    questionsApi.middleware,
+    buttonsApi.middleware 
   ),
   
 });

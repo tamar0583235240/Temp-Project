@@ -4,9 +4,9 @@ import { Question } from '../interfaces/entities/Question';
 const getAllQuestions = async (): Promise<Question[]> => {
   try {
     const query = `
-      SELECT id, title, content, category, tips, aiguidance, isactive, options, question_type
-      FROM "Question"
-      WHERE isactive = TRUE
+      SELECT id, title, content, category, tips, ai_guidance, is_active
+      FROM "questions"
+      WHERE is_active = TRUE
     `;
     const result = await pool.query(query);
     return result.rows as Question[];
