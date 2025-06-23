@@ -21,18 +21,18 @@ export class Answers {
   @Column("text", { name: "file_url" })
   fileUrl: string;
 
-  @Column("timestamp without time zone", {
-    name: "submitted_at",
-    default: () => "now()",
-  })
-  submittedAt: Date;
-
   @Column("character varying", {
     name: "answer_file_name",
     nullable: true,
     length: 255,
   })
   answerFileName: string | null;
+
+  @Column("timestamp without time zone", {
+    name: "submitted_at",
+    default: () => "now()",
+  })
+  submittedAt: Date;
 
   @Column("integer", { name: "amount_feedbacks", nullable: true })
   amountFeedbacks: number | null;
