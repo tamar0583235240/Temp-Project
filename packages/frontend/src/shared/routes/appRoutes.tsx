@@ -1,8 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import LoginForm from "../../features/auth/components/LoginForm";
-import SignupForm from "../../features/auth/components/SignupForm";
 import AuthRedirect from "../../features/auth/components/AuthRedirect";
 import AuthRedirectPage from "../../pages/AuthRedirectPage";
 
@@ -12,7 +10,6 @@ export default function AppRoutes() {
             <Route path="/" element={<AuthRedirect />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/login" element={<AuthRedirectPage />} />
-            <Route path="/signup" element={<SignupForm />} />
             <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
