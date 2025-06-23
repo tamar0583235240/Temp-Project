@@ -1,5 +1,12 @@
 // store/progressSlice.ts
 import { create } from "zustand";
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  // שדות נוספים אם צריך
+}
+
 
 interface UserState {
   userId?: string;

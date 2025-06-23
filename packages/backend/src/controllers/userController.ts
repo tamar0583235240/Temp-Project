@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/dbConnection';
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { createUserSchema, updateUserSchema } from '../utils/userValidation';
 import { insertUsersFromExcel } from '../reposioty/userRpository';
@@ -30,7 +30,8 @@ export const getAllUsers = async (_: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  const { id,firstName, lastName, email, phone, role, password } = req.body;
+  const { firstName, lastName, email, phone, role, password } = req.body;
+  const id = uuidv4();
   const createdAt = new Date();
 
   try {
@@ -47,12 +48,14 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
   } catch (error: any) {
+    console.error("Create user error:", error);
     if (error.name === 'ValidationError') {
       return res.status(400).json({ errors: error.errors });
     }
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
+
 
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;

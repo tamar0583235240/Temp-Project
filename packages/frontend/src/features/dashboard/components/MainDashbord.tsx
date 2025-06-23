@@ -6,7 +6,7 @@ import { useUserStore } from '../store/progressSlice';
 import { ImprovementSuggestions } from './ImprovementSuggestions';
 
 export const MainDashbord = () => {
-  const userId = useUserStore((state) => state.userId) || "ba24bf25-e017-46bf-a8ca-a4d27a2bc7af";
+  const userId = useUserStore((state) => state.userId) || "9f4572ec-25fd-43d0-a0c2-4d86bd84e9f6";
 
   // כרגע ImprovementSuggestions מצפה ל־fullName ולא ל־userId
   // אפשר פשוט להעביר את userId כשם זמני
