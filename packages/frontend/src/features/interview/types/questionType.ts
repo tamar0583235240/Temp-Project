@@ -6,4 +6,10 @@ export interface interviewType {
   tips: string;
   aiGuidance: string;
   isActive: boolean;
+  answer?: string;
+  answered: boolean;
+  text?: string;
+  type: 'open' | 'closed';
+  options?: string[];
+
 }
