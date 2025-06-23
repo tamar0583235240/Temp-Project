@@ -32,6 +32,7 @@ export class Answers {
   @Column("integer", { name: "amount_feedbacks", default: () => "0" })
   amountFeedbacks: number;
 
+
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
 

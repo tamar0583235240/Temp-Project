@@ -1,13 +1,16 @@
 import { api } from "../../../shared/api/api";
-import { FeedBack } from "../types/Feedback";
+import { feedbackType } from "../types/feedbackType";
 
 export const feedbackApi = api.injectEndpoints({
-    endpoints: (builder) => ({
-        getFeedbackByAnswerCode: builder.query<FeedBack[], string>({
-            query: (answerCode) => `feedbacks/getAllFeedbacks/${answerCode} `,
-            providesTags: ["feedbacks"],  
-        })
+  endpoints: (builder) => ({
+    getFeedbackesBysharedRecordingId: builder.query<feedbackType[], string>({
+      query: (sharedRecordingId) => `api/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`,
+      providesTags: ["Feedback"],
     })
+
+  }),
 });
 
-export const { useGetFeedbackByAnswerCodeQuery } = feedbackApi;
+export const {
+  useGetFeedbackesBysharedRecordingIdQuery
+} = feedbackApi;

@@ -6,8 +6,9 @@ export const api = createApi({
 
     }),
     reducerPath: "api",
-    tagTypes: ["Item","answers","questions","feedbacks"],
+    tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question"],
     endpoints: () => ({}),
 });
+
 
 

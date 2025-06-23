@@ -1,15 +1,19 @@
-import { useGetAnswersByIdUserQuery } from "../services/answerApi";
 import { TitleQuestions } from "./question";
 import { RootState } from '../../../shared/store/store';
 import './RecordingsList.css';
-import { useSelector ,useDispatch} from "react-redux";
-import { loginSuccess } from '../../../features/auth/store/authSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { Feedbackes } from "../../feedback/components/feedbackes";
+import { useGetAnswersByIdUserQuery, useGetQuestionByIdQuery } from "../services/answerApi";
+import { AiInsightsList } from "./AiInsightsList";
+import './RecordingsList.css';
 
 export const RecordingsList = () => {
-    const user = useSelector((state:RootState) => state.auth.user);  
+    const user = useSelector((state: RootState) => state.auth.user);
     // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
     const userId = user && user.id ? user.id.toString() : '550e8400-e29b-41d4-a718-446655440000';
-    const {data, error, isLoading }= useGetAnswersByIdUserQuery(userId);    
+    const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
+
+
     if (isLoading)
         return <div>Loading...</div>;
     if (error || !data)
@@ -22,7 +26,7 @@ export const RecordingsList = () => {
                     <div className="card-header">
                         <div className="answer-title-container">
                             <span className="answer-prefix">מענה לשאלה: </span>
-                            <TitleQuestions data={recording.question_id}/>
+                            <TitleQuestions data={recording.question_id} />
                         </div>
                         <a href={recording.file_url} download>
                             <button className="download-button">
@@ -44,8 +48,11 @@ export const RecordingsList = () => {
                             הדפדפן שלך לא תומך בנגן האודיו
                         </audio>
                     </div>
+                    <AiInsightsList answerId={recording.id}></AiInsightsList>
+                    <Feedbackes props={{ sharedRecordingId: recording.id, usersList: [] }} />
                 </div>
-            ))}        
-        </div>    
-    )
+            ))}
+        </div>
+    );
 }
+

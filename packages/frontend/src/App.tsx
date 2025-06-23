@@ -6,9 +6,16 @@ import { RecordingsList } from './features/recordings/components/recordingsList'
 
 function App() {
   return (
+    <div className="App">
       <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+      <header className="App-header">
+        <h1>Project base viewer</h1>
+      </header>
+      <main>
+      </main>
+    </div>
   );
 }
 
