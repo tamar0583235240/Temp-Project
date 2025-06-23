@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { interviewType } from '../types/questionType'; 
-
+import { interviewType } from '../types/questionType';
 export const questionsApi = createApi({
   reducerPath: 'questionsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
@@ -10,5 +9,4 @@ export const questionsApi = createApi({
     }),
   }),
 });
-
 export const { useGetQuestionsQuery } = questionsApi;
