@@ -1,11 +1,12 @@
 import e from 'cors';
 import { pool } from '../config/dbConnection'; 
 import { Questions } from "../interfaces/entities/Questions";
+import { v4 as uuid4 } from 'uuid';
 
 const addQustion = async (question:Questions): Promise<Questions> => {
   try {
 
-    let id: string;
+    let id: string = "";
     let exists = true;
 
     while(exists) {
@@ -16,16 +17,16 @@ const addQustion = async (question:Questions): Promise<Questions> => {
     }
     const query = `
       INSERT INTO qquestions (id , title , content , category , tips , ai_guidance , is_active)
-      VALUES (${question.id}, ${question.title}, ${question.content}, ${question.category}, ${question.tips}, ${question.aiGuidance}, ${question.isActive})
+      VALUES (${id}, ${question.title}, ${question.content}, ${question.category}, ${question.tips}, ${question.aiGuidance}, ${question.isActive})
     `;
 
     const result = await pool.query(query);
-    return result.rows as exampleInterface[];
+    return result.rows[0] as Questions;
 
   } catch (error) {
-    console.error("Error fetching examples from PostgreSQL:", error);
+    console.error("Error adding question to PostgreSQL:", error);
     throw error;
   }
 };
 
-export default { getAllExamples };
+export default { addQustion };
