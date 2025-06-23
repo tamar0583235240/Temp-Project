@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateAndSendCode, login, signup, validateCode, refreshToken, logout } from '../controllers/authController';
+import { generateAndSendCode, login, signup, validateCode, refreshToken, logout, requestSignup, confirmSignup } from '../controllers/authController';
 import { authenticateToken } from '../middlewares/authMiddlewares';
 import { getMe } from '../controllers/userController';
 
@@ -14,5 +14,8 @@ router.post('/validateCode',  validateCode);
 router.post('/refresh', refreshToken);
 router.post('/logout', logout);
 router.get('/me', authenticateToken, getMe);
+router.post('/signup/request', requestSignup);
+router.post('/signup/confirm', confirmSignup);
+
 
 export default router;

@@ -131,6 +131,88 @@ export const logout = (req: Request, res: Response) => {
   res.json({ message: 'התנתקת בהצלחה' });
 };
 
+const pendingSignups = new Map<string, { userData: Users; code: string; expiresAt: number }>();
+
+export const requestSignup = async (req: Request, res: Response) => {
+  const { firstName, lastName, email, phone, password } = req.body;
+
+  if (!email || !password || !firstName || !lastName) {
+    return res.status(400).json({ message: "חסרים פרטים חובה" });
+  }
+
+  const existing = (await userRepo.getAllUsers()).find(u => u.email === email);
+  if (existing) {
+    return res.status(409).json({ message: "אימייל כבר קיים" });
+  }
+
+  // יצירת קוד אימות
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
+
+  // שמירת פרטי המשתמש והקוד זמנית
+  pendingSignups.set(email, {
+    userData: {
+      id: uuidv4(),
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      role: 'student',
+      isActive: true,
+      answers: [],
+      feedbacks: [],
+      passwordResetTokens: [],
+      sharedRecordings: [],
+      createdAt: new Date(),
+      resources: []
+    },
+    code,
+    expiresAt,
+  });
+
+  // שליחת הקוד למייל
+  await sendAnEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
+
+  res.status(200).json({ message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה." });
+};
+
+export const confirmSignup = async (req: Request, res: Response) => {
+  const { email, code } = req.body;
+
+  if (!email || !code) {
+    return res.status(400).json({ message: "אימייל וקוד דרושים" });
+  }
+
+  const pending = pendingSignups.get(email);
+  if (!pending) {
+    return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
+  }
+
+  if (pending.expiresAt < Date.now()) {
+    pendingSignups.delete(email);
+    return res.status(400).json({ message: "הקוד פג תוקף. נא לבקש קוד חדש." });
+  }
+
+  if (pending.code !== code) {
+    return res.status(400).json({ message: "הקוד שגוי." });
+  }
+
+  // יוצרים את המשתמש האמיתי במסד
+  await authRepository.signup(pending.userData);
+  pendingSignups.delete(email);
+
+  // יוצרים טוקן
+  const token = jwt.sign(
+    { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  res.status(201).json({ user: pending.userData, token });
+};
+
+
 // הרשמה
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
