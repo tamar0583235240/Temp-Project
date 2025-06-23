@@ -1,111 +1,85 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
-import { loginSuccess } from '../store/authSlice';
+import { loginSuccess, loginStart, loginFailure } from '../store/authSlice';
 import GoogleLoginButton from './GoogleAuthButton';
-import './LoginForm.css'; // חשוב!
+import './LoginForm.css';
 import CodeVerificationScreen from './CodeVerificationScreen';
 import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+function LoginForm() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [login, { isError, isSuccess, error, data }] = useLoginMutation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
-
-
+  const [errorMessage, setErrorMessage] = useState('');
   const [showValidation, setShowValidation] = useState(false);
-  const [tempEmail, setTempEmail] = useState("rivkahorowitz2005@gmail.com");
-  const navigate = useNavigate();
+  const [tempEmail, setTempEmail] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    debugger;
-    try{
-    await login({ email, password }).unwrap().then((res) => {
-      console.log('Login result:', res);
-      if (res?.user && res?.token) {
-        setShowValidation(true);
-        setTempEmail(email);
-      } else {
-        setShowValidation(false);
-      }
-    });
-  } catch (err) {
-      console.error('Login error:', err);
+    dispatch(loginStart());
+    setErrorMessage('');
+
+    try {
+      const res = await login({ email, password }).unwrap();
+      setTempEmail(email);
+      setShowValidation(true);
+    } catch (err: any) {
+      const message = err?.data?.message || 'שגיאה בהתחברות';
+      dispatch(loginFailure(message));
+      setErrorMessage(message);
       setShowValidation(false);
     }
   };
 
   const successfulLogin = () => {
     if (data?.user && data?.token) {
-    const storage = rememberMe ? localStorage : sessionStorage;
-    storage.setItem('token', data.token);
-    storage.setItem('user', JSON.stringify(data.user));
-
-    dispatch(loginSuccess({ user: data.user, token: data.token }));
-    navigate('../');
-  }
+      dispatch(loginSuccess({ user: data.user, token: data.token }));
+      navigate('/');
+    }
   };
 
-  useEffect(() => {
-    if (data?.user && data?.token) {
-      // dispatch(loginSuccess(data));
-
-      const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem('token', data.token);
-      storage.setItem('user', JSON.stringify(data.user));
-    }
-  }, [data, dispatch, rememberMe]);
-
   return (
-    <div className="login-form-container">
+    <div>
       <form onSubmit={handleSubmit}>
-        <h2>התחברות</h2>
         <input
           type="email"
           placeholder="אימייל"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
           placeholder="סיסמה"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           required
         />
-        <label>
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          זכור אותי
-        </label>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'מתחבר...' : 'התחבר'}
-        </button>
+        <button type="submit">התחבר</button>
 
-
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         {isError && (
           <p style={{ color: 'red' }}>
-            שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}
+            {(error as any)?.data?.message || 'משהו השתבש'}
           </p>
         )}
         {isSuccess && <p style={{ color: 'green' }}>התחברת בהצלחה!</p>}
+
         <div className="google-auth-btn-wrapper">
           <p>או התחבר עם:</p>
           <GoogleLoginButton />
         </div>
       </form>
-      {showValidation && (<CodeVerificationScreen email={tempEmail} onSuccess={successfulLogin}></CodeVerificationScreen>)}
 
+      {showValidation && (
+        <CodeVerificationScreen email={tempEmail} onSuccess={successfulLogin} />
+      )}
     </div>
   );
-};
+}
 
 export default LoginForm;
