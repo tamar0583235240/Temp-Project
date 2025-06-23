@@ -10,9 +10,8 @@ cloudinary.config({
 });
 console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
-export const uploadRecording = async (req: Request, res: Response) => {
+export const addFile = async (req: Request, res: Response) => {
   try {
-    const userId = req.body.userId;
     const file = req.file;
 
     if (!file) {
@@ -23,8 +22,8 @@ export const uploadRecording = async (req: Request, res: Response) => {
       return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
-            resource_type: 'auto',
-            folder: 'recordings',
+            resource_type: 'raw',
+            folder: 'interviewMaterialsHub',
           },
           (error, result) => {
             if (error || !result) {
@@ -43,20 +42,19 @@ export const uploadRecording = async (req: Request, res: Response) => {
     const fileUrl = (result as any).secure_url;
 
     const query = `
-      INSERT INTO "resources" (id, title, type, description, "file_url", "user_id", "created_at")
-      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW())
+      INSERT INTO "interview_materials_sub" ( title, "thumbnail", short_description)
+      VALUES ( $1, $2, $3)
     `;
+
     const values = [
-      req.body.title || 'Recording',
-      'link',
-      req.body.description || '',
+      req.body.title || 'File for interview',
       fileUrl,
-      userId,
+      req.body.description || '',
     ];
 
     await pool.query(query, values);
 
-    res.status(201).json({ message: 'Recording uploaded successfully', url: fileUrl });
+    res.status(201).json({ message: 'file uploaded successfully', url: fileUrl });
 
   } catch (err) {
     console.error('Upload error:', err);
