@@ -10,13 +10,14 @@ import { useNavigate } from 'react-router-dom';
 function LoginForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [login, { isError, isSuccess, error, data }] = useLoginMutation();
+  const [login, { isError, isSuccess, error, data, isLoading}] = useLoginMutation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [showValidation, setShowValidation] = useState(false);
   const [tempEmail, setTempEmail] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,9 +60,20 @@ function LoginForm() {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button type="submit">התחבר</button>
-
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        <label>
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          זכור אותי
+        </label>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'מתחבר...' : 'התחבר'}
+        </button>
+        <button type="button" onClick={() => navigate('/forgot-password')}>
+          שכחתי סיסמה
+        </button>
         {isError && (
           <p style={{ color: 'red' }}>
             {(error as any)?.data?.message || 'משהו השתבש'}

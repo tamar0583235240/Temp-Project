@@ -3,6 +3,9 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import AuthRedirect from "../../features/auth/components/AuthRedirect";
 import AuthRedirectPage from "../../pages/AuthRedirectPage";
+import ForgotPassword from "../../features/auth/components/ForgotPassword";
+import ResetPassword from "../../features/auth/components/ResetPassword";
+import LoginForm from "../../features/auth/components/LoginForm";
 
 export default function AppRoutes() {
     return (
@@ -10,6 +13,8 @@ export default function AppRoutes() {
             <Route path="/" element={<AuthRedirect />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/login" element={<AuthRedirectPage />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
