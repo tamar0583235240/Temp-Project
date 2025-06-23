@@ -4,6 +4,8 @@ import { Questions } from '../interfaces/entities/Questions';
 const addQuestion = async (req: Request, res: Response):Promise<Questions | void> => {
   try {
     const question: Questions = req.body;
+    console.log(question);
+    
     const result = await questionRepository.addQustion(question);
     res.status(201).json(result);
   } catch (error) {

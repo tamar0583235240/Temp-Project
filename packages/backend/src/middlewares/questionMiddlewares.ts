@@ -6,10 +6,10 @@ export const addQuestionMiddleware = (req: Request, res: Response, next: NextFun
         const method = req.method;
         const url = req.originalUrl;
         const question = req.body;
-
-        if(!question.title || !question.content || !question.category || !question.tips || !question.aiGuidance || !question.isActive) {
-            return res.status(400).json({ message: "Missing required fields" });
-        }
+        console.log(question);
+        // if(!question.title || !question.content || !question.category || !question.tips || !question.aiGuidance || !question.isActive) {
+        //     return res.status(400).json({ message: "Missing required fields" });
+        // }
 
         console.log(`[${timestamp}] ${method} ${url}`);
 

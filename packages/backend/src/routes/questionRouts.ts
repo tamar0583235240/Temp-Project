@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { addQuestion } from '../controllers/questionController';
-import { exampleMiddleware } from '../middlewares/exampleMiddlewares';
+import { addQuestionMiddleware } from '../middlewares/questionMiddlewares';
 
-const router = Router();
+const questionRouts = Router();
 
-router.post('/exampleURL', exampleMiddleware, addQuestion);
+questionRouts.post('/questions/addQuestion', addQuestionMiddleware, addQuestion);
 
-export default router;
+export default questionRouts;
