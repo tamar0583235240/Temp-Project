@@ -1,6 +1,8 @@
 import { pool } from '../config/dbConnection';
 import { Users } from "../interfaces/entities/Users";
 import { User } from '../interfaces/User';
+import bcrypt from 'bcrypt';
+
 
 // קבלת משתמש לפי אימייל בלבד
 export const getUserByEmail = async (email: string): Promise<User | null> => {
@@ -36,14 +38,19 @@ const getUserById = async (id: string): Promise<Users | null> => {
 
 // קבלת משתמש לפי אימייל וסיסמה
 export const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
-try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        const user = result.rows[0];
-        if (!user || user.password !== password) throw new Error('Invalid credentials');
-        return user;
-    } catch {
-        throw new Error('User not found');
-    }
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const user = result.rows[0];
+
+    if (!user) throw new Error('Invalid credentials');
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new Error('Invalid credentials');
+
+    return user;
+  } catch {
+    throw new Error('User not found');
+  }
 };
 
 // עדכון סיסמה

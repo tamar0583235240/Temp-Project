@@ -87,9 +87,9 @@ function LoginForm() {
         </div>
       </form>
 
-      {showValidation && (
+      {/* {showValidation && (
         <CodeVerificationScreen email={tempEmail} onSuccess={successfulLogin} />
-      )}
+      )} */}
     </div>
   );
 }
