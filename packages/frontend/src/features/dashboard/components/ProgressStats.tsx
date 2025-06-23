@@ -1,9 +1,10 @@
 import React from 'react';
 import { useUserStore } from '../store/progressSlice';
 import { useGetProgressStatsQuery } from '../../../shared/api/api';
-import { CheckCircle } from 'lucide-react'; // לסמל בצד ימין
+import { CheckCircle } from 'lucide-react'; 
 
 const ProgressStats: React.FC = () => {
+
   const userId = useUserStore((state) => state.userId) || "11111111-1111-1111-1111-111111111111";
   const { data, isLoading, isError } = useGetProgressStatsQuery(userId!, {
     skip: !userId,

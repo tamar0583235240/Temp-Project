@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { RoleProtectedRoute } from '../components/RoleProtectedRoute';
+//import { RoleProtectedRoute } from '../components/RoleProtectedRoute';
+import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import AdminUser from "../../pages/AdminUser"; // ודאי שזה הנתיב הנכון
+import AdminUser from "../../pages/AdminUser"; 
 import Dashboard from '../../pages/dashboard';
 
 
@@ -20,7 +21,6 @@ export default function AppRoutes() {
                     <p>AdminQuestions</p>
                 </RoleProtectedRoute>
             } />
-           {/* כאן הטעינה האמיתית של קומפוננטת AdminUser */}
             <Route path="/admin/users" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
                     <AdminUser />

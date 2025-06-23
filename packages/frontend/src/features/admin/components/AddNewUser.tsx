@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useCreateUserMutation } from '../services/adminApi';
@@ -76,7 +75,7 @@ const SwalForm: React.FC<{ createUser: any }> = ({ createUser }) => {
       <input {...register('email')} placeholder="אימייל" />
       <span style={{ color: 'red' }}>{errors.email?.message}</span>
 
-      <input {...register('password')} placeholder="סיסמה" type="password" />
+      <input {...register('password')} placeholder="סיסמה" type="type" />
       <span style={{ color: 'red' }}>{errors.password?.message}</span>
 
       <input {...register('phone')} placeholder="טלפון" />

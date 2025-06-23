@@ -48,12 +48,14 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
   } catch (error: any) {
+    console.error("Create user error:", error);
     if (error.name === 'ValidationError') {
       return res.status(400).json({ errors: error.errors });
     }
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
+
 
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;

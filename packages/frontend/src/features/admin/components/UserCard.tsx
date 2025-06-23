@@ -21,7 +21,6 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         backgroundColor: '#f9f9f9',
       }}
     >
-      {/* ראש הכרטיס: סטטוס בצד שמאל */}
       <div
         style={{
           display: 'flex',
@@ -54,9 +53,7 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         </div>
       </div>
 
-      {/* פרטי המשתמש במרכז */}
       <div style={{ flexGrow: 1 }}>
-        {/* במקום ID - הסיסמה עם אייקון עין */}
         <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
           <strong></strong>
           <span style={{ fontFamily: 'monospace', letterSpacing: '0.2em' }}>
@@ -75,7 +72,6 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
             title={showPassword ? 'הסתר סיסמה' : 'הראה סיסמה'}
           >
             {showPassword ? (
-              // אייקון עין פתוחה (SVG)
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="20"
@@ -91,7 +87,6 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
                 <path d="M2 12s4-8 10-8 10 8 10 8-4 8-10 8-10-8-10-8z"></path>
               </svg>
             ) : (
-              // אייקון עין סגורה (SVG)
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="20"
@@ -121,7 +116,6 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         <p>{user.phone || 'אין טלפון'}</p>
       </div>
 
-      {/* כפתורי עדכן ומחק בתחתית */}
       <div
         style={{
           display: 'flex',
