@@ -1,5 +1,3 @@
-
-
 import express, { Application } from 'express';
 import cors from 'cors';
 // import exampleRouts from './src/routes/exampleRouts';

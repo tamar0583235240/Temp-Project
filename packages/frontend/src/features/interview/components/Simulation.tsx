@@ -1,4 +1,3 @@
-// Simulation.tsx (מעודכן לשימוש ב-RTK Query)
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,13 +13,13 @@ import { interviewType } from "../types/questionType";
 import { useGetQuestionsQuery } from "../services/questionsApi";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
+
 const Simulation: React.FC = () => {
   const dispatch = useDispatch();
-  const { questions, currentIndex } = useSelector(
-    (state: RootState) => state.simulation
-  );
   const navigate = useNavigate();
+  const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
   const { data, isLoading, error } = useGetQuestionsQuery();
+
   useEffect(() => {
     if (data) {
       const mappedQuestions = data.map((q: any) => ({
@@ -39,48 +38,40 @@ const Simulation: React.FC = () => {
       dispatch(setQuestions(mappedQuestions));
     }
   }, [data, dispatch]);
+
   const handleTextChange = (value: string) => {
     dispatch(answerQuestion({ index: currentIndex, answer: value }));
   };
+
   const handleReset = () => {
     dispatch(resetQuestion(currentIndex));
   };
+
   const handleSubmit = () => {
     handleTextChange(currentQuestion.answer ?? "");
     navigate("/summary");
   };
-  // טיפול בטעינה, שגיאה, והיעדר שאלות
-  if (isLoading) {
-    return <div style={{ padding: "40px", fontSize: "18px" }}>טוען שאלות...</div>;
-  }
-  if (error) {
-    return <div style={{ padding: "40px", color: "red" }}>שגיאה בטעינת שאלות</div>;
-  }
-  if (!questions.length || currentIndex >= questions.length) {
-    return <div>אין שאלות להצגה</div>;
-  }
+
+  if (isLoading) return <div className="loading">טוען שאלות...</div>;
+  if (error) return <div className="error">שגיאה בטעינת שאלות</div>;
+  if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
+
   const currentQuestion = questions[currentIndex];
+
   return (
     <div className="simulation-container">
-      {/* סרגל ניווט */}
+      {/* סרגל צד לניווט בין שאלות */}
       <div className="sidebar">
-        <div className="sidebar-header">
-          {`${currentIndex + 1} מתוך ${questions.length}`}
-        </div>
+        <div className="sidebar-header">{`${currentIndex + 1} מתוך ${questions.length}`}</div>
         <div className="nav-buttons">
-          <button onClick={() => dispatch(prevQuestion())} className="nav-arrow">
-            :arrow_up:
-          </button>
+          <button onClick={() => dispatch(prevQuestion())} className="nav-arrow">▲</button>
         </div>
         <div className="question-buttons scrollable">
           {questions.map((q: interviewType, i: number) => (
             <button
               key={q.id}
               onClick={() => dispatch(goToQuestion(i))}
-              className={`question-button
-                ${q.answered ? "answered" : ""}
-                ${i === currentIndex ? "current" : ""}
-              `}
+              className={`question-button ${q.answered ? "answered" : ""} ${i === currentIndex ? "current" : ""}`}
               title={`שאלה ${i + 1}`}
             >
               {i + 1}
@@ -88,16 +79,15 @@ const Simulation: React.FC = () => {
           ))}
         </div>
         <div className="nav-buttons">
-          <button onClick={() => dispatch(nextQuestion())} className="nav-arrow">
-            :arrow_down:
-          </button>
+          <button onClick={() => dispatch(nextQuestion())} className="nav-arrow">▼</button>
         </div>
       </div>
-      {/* תצוגת שאלה */}
+
+      {/* תוכן השאלה */}
       <div className="main-content">
         <div className="question-title">שאלה {currentIndex + 1}</div>
         <div className="question-text">{currentQuestion.content}</div>
-        {/* שאלה פתוחה */}
+
         {currentQuestion.type === "open" ? (
           <textarea
             className="answer-input"
@@ -121,14 +111,11 @@ const Simulation: React.FC = () => {
             ))}
           </div>
         )}
-        {/* כפתורים */}
-        <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+
+        {/* כפתורי פעולה */}
+        <div className="button-group" style={{ marginTop: "20px" }}>
           {currentIndex === questions.length - 1 ? (
-            <button
-              className="answer-button"
-              onClick={handleSubmit}
-              style={{ backgroundColor: "#28A745" }}
-            >
+            <button className="answer-button" onClick={handleSubmit} style={{ backgroundColor: "#28A745" }}>
               שליחת שאלון
             </button>
           ) : (
@@ -142,11 +129,7 @@ const Simulation: React.FC = () => {
               אישור
             </button>
           )}
-          <button
-            className="answer-button"
-            onClick={handleReset}
-            style={{ backgroundColor: "#DC3545" }}
-          >
+          <button className="answer-button" onClick={handleReset} style={{ backgroundColor: "#DC3545" }}>
             איפוס תשובה
           </button>
         </div>
@@ -154,10 +137,5 @@ const Simulation: React.FC = () => {
     </div>
   );
 };
+
 export default Simulation;
-
-
-
-
-
-
