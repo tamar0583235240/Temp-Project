@@ -4,15 +4,13 @@
   height: 100vh;
   font-family: sans-serif;
 }
-
 .sidebar {
   width: 240px;
-  background-color: #f2f5f7;
+  background-color: #F2F5F7;
   border-left: 1px solid #ddd;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
-
 .sidebar-header {
   font-size: 18px;
   font-weight: bold;
@@ -20,12 +18,10 @@
   color: #333;
   text-align: center;
 }
-
 .nav-buttons {
   text-align: center;
   margin: 10px 0;
 }
-
 .nav-arrow {
   width: 40px;
   height: 40px;
@@ -35,14 +31,12 @@
   border: 1px solid #ccc;
   cursor: pointer;
 }
-
 .question-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
 }
-
 .question-button {
   width: 40px;
   height: 40px;
@@ -52,43 +46,37 @@
   cursor: pointer;
   background-color: white;
 }
-
 .question-button.answered {
-  background-color: #d0f0c0;
+  background-color: #D0F0C0;
 }
-
 .main-content {
   flex: 1;
   padding: 40px;
   background-color: #fff;
 }
-
 .question-title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
   color: #444;
 }
-
 .question-text {
   font-size: 18px;
   line-height: 1.6;
   margin-bottom: 30px;
 }
-
 .answer-button {
   padding: 12px 24px;
   font-size: 16px;
   border-radius: 6px;
-  background-color: #007bff;
+  background-color: #007BFF;
   color: #fff;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
 .answer-button:hover {
-  background-color: #0056b3;
+  background-color: #0056B3;
 }
 .answer-input {
   width: 100%;
@@ -100,14 +88,12 @@
   margin-bottom: 20px;
   resize: vertical;
 }
-
 .options-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
 }
-
 .option-item {
   font-size: 16px;
 }
@@ -118,7 +104,6 @@
   padding: 8px 0;
   scrollbar-width: thin;
 }
-
 /* לחצנים עגולים */
 .question-button {
   width: 40px;
@@ -133,22 +118,23 @@
   align-items: center;
   justify-content: center;
 }
-
 /* נענתה */
 .question-button.answered {
-  background-color: #d0f0c0;
-  border-color: #92c798;
+  background-color: #D0F0C0;
+  border-color: #92C798;
 }
-
 /* נבחרת כרגע */
 .question-button.current {
-  border: 2px solid #007bff;
+  border: 2px solid #007BFF;
   font-weight: bold;
-  background-color: #e7f1ff;
+  background-color: #E7F1FF;
 }
-
 /* אפקט ריחוף */
 .question-button:hover {
-  background-color: #f0f0f0;
+  background-color: #F0F0F0;
   transform: scale(1.05);
 }
+
+
+
+
