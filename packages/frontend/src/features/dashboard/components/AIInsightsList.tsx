@@ -7,8 +7,8 @@ import { CheckCircle } from 'lucide-react';
 
 const AIInsightsList: React.FC = () => {
   const { data: insights = [] } = useGetItemsQuery();
-
   const userId = useUserStore(state => state.userId) || 'b476af1a-1703-4b9e-9245-b13153ca4156';
+
 
   const { isLoading, isError } = useGetProgressStatsQuery(userId, { skip: !userId });
 

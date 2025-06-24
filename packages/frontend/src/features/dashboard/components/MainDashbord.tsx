@@ -8,6 +8,7 @@ import { SummaryStrengths } from './Strengths';
 import { ImprovementSuggestions2 } from './ImprovementSuggestions2';
 
 export const MainDashbord = () => {
+
   const userId = useUserStore((state) => state.userId) || "b476af1a-1703-4b9e-9245-b13153ca4156";
 
   // כרגע ImprovementSuggestions מצפה ל־fullName ולא ל־userId
