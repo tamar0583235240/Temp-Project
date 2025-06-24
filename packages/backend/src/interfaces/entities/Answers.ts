@@ -9,7 +9,6 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
-import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("answers_pkey", ["id"], { unique: true })
