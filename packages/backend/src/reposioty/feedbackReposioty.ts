@@ -3,14 +3,14 @@ import { pool } from '../config/dbConnection';
 import { Feedback } from '../interfaces/entities/Feedback';
 import { Users } from '../interfaces/entities/Users';
 import { get } from 'http';
-import shareRecordingRepository  from '../reposioty/shareRecordingRepository';
+import * as sharedRecordingsRepository from '../reposioty/sharedRecordings.repository';
 
 
 
 const getFeedbackesByanswerId = async (answerId:string): Promise<Feedback[]> => {
     
     try {
-        const sharedRecordingId =  await shareRecordingRepository.getSharedRecordingIdByAnswerId(answerId);
+        const sharedRecordingId =  await sharedRecordingsRepository.getSharedRecordingIdByAnswerId(answerId);
         const data = await pool.query(`SELECT * FROM feedback WHERE shared_recording_id = $1` , [sharedRecordingId] );   
 
         console.log(data.rows.length);

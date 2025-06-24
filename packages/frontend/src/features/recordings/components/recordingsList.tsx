@@ -10,7 +10,7 @@ import './RecordingsList.css';
 export const RecordingsList = () => {
     const user = useSelector((state: RootState) => state.auth.user);
     // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
-    const userId = user && user.id ? user.id.toString() : '550e8400-e29b-41d4-a718-446655440000';
+    const userId = user && user.id ? user.id.toString() : 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
 
     if (isLoading)

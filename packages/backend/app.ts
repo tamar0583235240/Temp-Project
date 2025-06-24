@@ -18,3 +18,23 @@ app.use('/answers', answerRouts);
 app.use('/question', questionRoute); 
 
 export default app
+// -----------------------------------------------------------------------
+
+// import express, { Application } from 'express';
+// import cors from 'cors';
+// import sharedRecordingRouts from './src/routes/sharedRecordingRouts';
+// import { supabase } from './src/config/dbConnection';
+// const app: Application = express();
+
+// console.log('i am here in app');
+
+// app.use(express.json());
+// app.use(cors());
+
+
+
+// app.use('/api', sharedRecordingRouts);
+
+
+// // app.use('api',sharedRecordingRouts.ts)
+// export default app;
