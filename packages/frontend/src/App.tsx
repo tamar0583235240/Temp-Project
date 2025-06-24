@@ -8,12 +8,13 @@ function App() {
 
 
     <div className="App">
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
       <header className="App-header">
         <h1>Project base viewer</h1>
       </header>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+      
       <main>
       </main>
     </div>
