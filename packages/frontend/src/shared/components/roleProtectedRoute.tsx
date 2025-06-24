@@ -11,7 +11,7 @@ export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Eleme
   const user = { role: 'student'};//{ role: 'admin'} //  useAuthStore((state) => state.user);
 
   if (!user
-    //   || !allowedRoles.includes(user.role)
+      // || !allowedRoles.includes(user.role)
    
     ) 
     {

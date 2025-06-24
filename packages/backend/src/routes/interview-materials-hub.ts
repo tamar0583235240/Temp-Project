@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer'
 import { addFile } from '../controllers/interviewMaterialsHub';
-import { getInterviewMaterialSubs } from '../controllers/InterviewMaterialSubController';
+import { getInterviewMaterialSubs } from '../controllers/interviewMaterialsHub';
 
 const router = Router();
 const storage = multer.memoryStorage();
