@@ -40,7 +40,7 @@ const ResourceList = () => {
  const handleDelete = async (id: number) => {
     try {
       await deleteResource(id).unwrap();
-      alert('Resource deleted!');
+      console.log('Resource deleted!');
     } catch (err) {
       console.error('Delete failed:', err);
     }
@@ -48,8 +48,7 @@ const ResourceList = () => {
 
   const handleUpdate = async (id:number,resource:Resource) => {
     try {
-      const updated = await updateResource({ ...resource, id}).unwrap();
-      alert(`Updated: ${updated.resource.title}`);
+      console.log(`Updated: ${id}`);
     } catch (err) {
       console.error('Update failed:', err);
     }
@@ -72,7 +71,7 @@ const ResourceList = () => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500 text-sm">אין משאבים להצגה כרגע.</p>
+        <p className="text-gray-500 text-sm">אין ען להצגה כרגע.</p>
       )}
     </section>
   );
