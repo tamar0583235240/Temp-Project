@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-
+import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { AdminQuestions } from "../../features/admin/components/adminQuestions";
 export default function AppRoutes() {
     return (
         <Routes>
@@ -9,13 +10,13 @@ export default function AppRoutes() {
             <Route path="/login" element={<p>login</p>} />
             <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
-            <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
+            <Route path="/recordings" element={<RecordingsList allowedRoles={["student"]}/>} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
             <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
             <Route path="/admin/questions" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
+                <AdminQuestions allowedRoles={["admin"]}>
                     <p>AdminQuestions</p>
-                </RoleProtectedRoute>
+                </AdminQuestions>
             } />
             <Route path="/admin/users" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>

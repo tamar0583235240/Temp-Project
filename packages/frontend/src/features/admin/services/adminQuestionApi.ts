@@ -11,11 +11,19 @@ export const AdminQuestionApi = api.injectEndpoints({
       body: question,
       }),
       invalidatesTags: ["question"],
-    })
+    }), 
+    getAllQuestions: builder.query<Question[], void>({
+            query: () => 'question/getAllQuestions',
+            providesTags: ['question'],
+        }),    
 
   }),
 });
 
 export const {
-  useAddQuestionMutation
+  useAddQuestionMutation , useGetAllQuestionsQuery
 } = AdminQuestionApi;
+
+
+
+
