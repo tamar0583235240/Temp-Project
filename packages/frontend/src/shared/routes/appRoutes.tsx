@@ -16,6 +16,7 @@ export default function AppRoutes() {
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
             <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
+            
             {/* <Route path="/certificate" element={<CertificatePage />} /> */}
             <Route path="/admin/questions" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>

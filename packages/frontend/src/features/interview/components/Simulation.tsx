@@ -14,6 +14,7 @@ import { interviewType } from "../types/questionType";
 import { useGetQuestionsQuery } from "../services/questionsApi";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
+import AnswerAI from "./AnswerAI";
 
 const Simulation: React.FC = () => {
   const dispatch = useDispatch();
@@ -130,6 +131,7 @@ const Simulation: React.FC = () => {
           <button className="answer-button" onClick={handleReset} style={{ backgroundColor: "#DC3545" }}>
             איפוס תשובה
           </button>
+          <AnswerAI answerId={String(currentQuestion.id)} />
         </div>
       </div>
     </div>
