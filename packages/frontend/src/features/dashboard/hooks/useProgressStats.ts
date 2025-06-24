@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getProgressStats } from '../services/dashboardService';
-import { ProgressStats } from '../types/progress';
+import { ProgressStats } from '../types/aiInsightsType';
 
 export const useProgressStats = (userId?: string) => {
   return useQuery<ProgressStats>({

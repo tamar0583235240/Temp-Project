@@ -6,18 +6,10 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { createRoot } from 'react-dom/client';
+import { userSchema } from '../validation/userSchema';
 
 
 const MySwal = withReactContent(Swal);
-
-const schema = yup.object().shape({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  phone: yup.string().matches(/^\d+$/, 'Phone number must contain only digits').required('Phone number is required'),
-  password: yup.string().matches(/^(?=.*[A-Za-z\u0590-\u05FF])(?=.*\d)[A-Za-z\u0590-\u05FF\d]{6,}$/, 'Password must include letters (English or Hebrew) and numbers, at least 6 characters').required('Password is required'),
-  role: yup.string().required('Role is required'),
-});
 
 const AddUserWithSwal: React.FC = () => {
   const [createUser] = useCreateUserMutation();
@@ -38,29 +30,27 @@ const AddUserWithSwal: React.FC = () => {
   };
 
   return (
-    <button onClick={handleAddUserClick} style={{
-      backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px',
-      border: 'none', borderRadius: '5px', cursor: 'pointer',
-      fontSize: '16px', fontWeight: 'bold',
-    }}>
+    <button onClick={handleAddUserClick} style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px' }}>
       הוסף משתמש
     </button>
   );
 };
 
 const SwalForm: React.FC<{ createUser: any }> = ({ createUser }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema),
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    resolver: yupResolver(userSchema),
     mode: 'onChange',
   });
 
   const onSubmit = async (data: any) => {
     try {
       await createUser(data).unwrap();
+      Swal.close();
       Swal.fire('נוסף!', 'המשתמש נוסף בהצלחה', 'success');
-    } catch (err) {
-      console.error(err);
-      Swal.fire('שגיאה', 'הייתה שגיאה בהוספת המשתמש', 'error');
+      reset();
+    } catch (err: any) {
+      const errorMsg = err?.data?.error || 'הייתה שגיאה בהוספת המשתמש';
+      Swal.fire('שגיאה', errorMsg, 'error');
     }
   };
 
@@ -88,7 +78,9 @@ const SwalForm: React.FC<{ createUser: any }> = ({ createUser }) => {
       </select>
       <span style={{ color: 'red' }}>{errors.role?.message}</span>
 
-      <button type="submit" style={{ marginTop: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', padding: '8px', borderRadius: '4px' }}>שמור</button>
+      <button type="submit" style={{ backgroundColor: '#4CAF50', color: 'white', padding: '8px', border: 'none', borderRadius: '4px' }}>
+        שמור
+      </button>
     </form>
   );
 };

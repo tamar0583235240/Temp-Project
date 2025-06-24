@@ -8,9 +8,7 @@ interface Props {
 
 export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Element {
   const user = { role: 'student'};
-
   if (!user
-   
     ) 
     {
     return <Navigate to="/login" replace />;

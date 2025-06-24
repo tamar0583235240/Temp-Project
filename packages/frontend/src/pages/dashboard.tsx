@@ -1,4 +1,4 @@
-import {MainDashbord} from '../features/dashboard/components/MainDashbord';
+import MainDashbord from '../features/dashboard/components/MainDashbord';
 
 const dashboard= () => {
    

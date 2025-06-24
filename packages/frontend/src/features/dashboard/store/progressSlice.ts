@@ -1,19 +1,15 @@
-// store/progressSlice.ts
 import { create } from "zustand";
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  // שדות נוספים אם צריך
-}
-
 
 interface UserState {
   userId?: string;
+  fullName?: string;
   setUserId: (id: string) => void;
+  setFullName: (name: string) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
   userId: undefined,
+  fullName: undefined,
   setUserId: (id) => set({ userId: id }),
+  setFullName: (name) => set({ fullName: name }),
 }));

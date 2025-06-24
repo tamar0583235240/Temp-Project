@@ -1,22 +1,14 @@
 import React from 'react';
 import { useGetItemsQuery } from '../services/aiInsightsApi';
 import { aiInsightsType } from '../types/aiInsightsType';
-import { useUserStore } from '../store/progressSlice';
-import { useGetProgressStatsQuery } from '../../../shared/api/api';
 import { CheckCircle } from 'lucide-react';
 
 const AIInsightsList: React.FC = () => {
-  const { data: insights = [] } = useGetItemsQuery();
-
-  const userId = useUserStore(state => state.userId) || '66b74e9b-b7e3-4666-882e-b577badf9a5d';
-
-
-  const { isLoading, isError } = useGetProgressStatsQuery(userId, { skip: !userId });
+  const { data: insights = [], isLoading, isError } = useGetItemsQuery();
 
   if (isLoading) return <p className="text-center text-blue-500 text-lg">טוען מסקנות...</p>;
-  if (insights.length === 0) return <p className="text-center text-gray-600">לא נמצאו מסקנות.</p>;
   if (isError) return <p className="text-center text-red-500 text-lg">אירעה שגיאה בשליפה.</p>;
-  
+  if (insights.length === 0) return <p className="text-center text-gray-600">לא נמצאו מסקנות.</p>;
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 max-w-3xl mx-auto flex flex-col gap-4" dir="rtl">

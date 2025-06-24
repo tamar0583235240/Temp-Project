@@ -37,7 +37,7 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     await createUserSchema.validate(req.body, { abortEarly: false });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = password;
 
     const result = await pool.query(
       `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
@@ -49,10 +49,13 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
   } catch (error: any) {
     console.error("Create user error:", error);
+        if (error.code === '23505' && error.constraint === 'users_email_key') {
+      return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
+    }
     if (error.name === 'ValidationError') {
       return res.status(400).json({ errors: error.errors });
-    }
-    res.status(500).json({ error: 'Failed to create user' });
+      }
+    res.status(500).json({ error: 'שגיאת שרת – יצירת משתמש נכשלה' });
   }
 };
 

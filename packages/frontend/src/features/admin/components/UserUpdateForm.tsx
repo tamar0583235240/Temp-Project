@@ -1,26 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { user } from '../types/userTypes';
-
-type UserFormFields = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string | null;
-  password: string;
-  role: 'student' | 'manager';
-};
-
-const schema: yup.ObjectSchema<UserFormFields> = yup.object({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  phone: yup.string().nullable().notRequired().matches(/^\d*$/, 'Phone number must contain only digits'),
-  password: yup.string().matches(/^(?=.*[A-Za-z\u0590-\u05FF])(?=.*\d)[A-Za-z\u0590-\u05FF\d]{6,}$/, 'Password must include letters (English or Hebrew) and numbers, at least 6 characters').required('Password is required'),
-  role: yup.mixed<UserFormFields['role']>().oneOf(['student', 'manager'], 'Invalid role').required('Role is required'),
-});
+import { userSchema, UserFormFields } from '../validation/userSchema';
 
 interface Props {
   user: user;
@@ -37,11 +19,11 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: user.phone ?? null, 
+      phone: user.phone ?? '',
       password: user.password,
-      role: (user.role as UserFormFields['role']) || 'student', 
+      role: user.role === 'manager' ? 'manager' : 'student',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(userSchema),
     mode: 'onChange',
   });
 
@@ -49,8 +31,7 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
     const preparedData: Partial<user> = {
       ...user,
       ...data,
-      role: data.role === 'manager' ? 'manager' : data.role, 
-      phone: data.phone === null ? undefined : data.phone, 
+      phone: data.phone === '' ? undefined : data.phone,
     };
 
     await onSubmit(preparedData);
