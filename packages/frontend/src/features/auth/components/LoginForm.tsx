@@ -17,7 +17,7 @@ const LoginForm = () => {
 
 
   const [showValidation, setShowValidation] = useState(true);
-  const [tempEmail, setTempEmail] = useState("rivkahorowitz2005@gmail.com");
+  const [tempEmail, setTempEmail] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
