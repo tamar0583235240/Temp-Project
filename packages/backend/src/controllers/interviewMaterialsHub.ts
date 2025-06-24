@@ -3,6 +3,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { Pool } from 'pg';
 import { pool } from '../config/dbConnection';
 import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
+import { log } from 'console';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -73,3 +74,18 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
         res.status(500).json({ error });
     }
 };
+export const searchMterials=async(req: Request, res: Response)=>{
+  const q = req.query.q?.toString() || '';
+  console.log("at serarch in back");
+   if (!q) {
+    return res.status(400).json({ message: 'Missing search query' });
+  }
+
+  try {
+    const results = await InterviewMaterialSubRepository.searchFiles(q);
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: 'Search failed' });
+  }
+}
+

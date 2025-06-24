@@ -10,5 +10,19 @@ const getInterviewMaterialSubs = async (): Promise<InterviewMaterialSub[]> => {
         throw error;
     }
 };
+  const searchFiles= async(queryText: string)=> {
+  const tsQuery = queryText.trim().split(/\s+/).join(" & "); 
+  const result = await pool.query(
+    `SELECT id, title, thumbnail, short_description,
+            ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
+     FROM interview_materials_sub
+     WHERE document_with_weights @@ to_tsquery('simple', $1)
+     ORDER BY rank DESC
+     LIMIT 20`,
+    [tsQuery]
+  );
+  return result.rows;
+}
 
-export default { getInterviewMaterialSubs };
+
+export default { getInterviewMaterialSubs ,searchFiles};
