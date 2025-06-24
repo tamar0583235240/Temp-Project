@@ -1,6 +1,6 @@
 import { eType, Resource } from "../types/Resource";
 import { ResourceListItem } from "./ResourceListItem";
-import { useGetResourcesQuery } from "../../../shared/api/resourcesApi";
+import { useDeleteResourceMutation, useGetResourcesQuery, useUpdateResourceMutation } from "../../../shared/api/resourcesApi";
 
 
 const ResourceList = () => {
@@ -33,19 +33,28 @@ const ResourceList = () => {
 
 
 
-
-
-
-
-  const onEdit = (id: number, res: Resource) => {
-    console.log(`Edit resource with id: ${id}`);
-  };
-
-  const onDelete = (id: number) => {
-    console.log(`Delete resource with id: ${id}`);
-  };
-
   const { data: resources, error, isLoading } = useGetResourcesQuery();
+  const [deleteResource] = useDeleteResourceMutation();
+  const [updateResource] = useUpdateResourceMutation();
+
+
+ const handleDelete = async (id: number) => {
+    try {
+      await deleteResource(id).unwrap();
+      alert('Resource deleted!');
+    } catch (err) {
+      console.error('Delete failed:', err);
+    }
+  };
+
+  const handleUpdate = async (resource,id) => {
+    try {
+      const updated = await updateResource({ ...resource, id}).unwrap();
+      alert(`Updated: ${updated.resource.name}`);
+    } catch (err) {
+      console.error('Update failed:', err);
+    }
+  };
 
 
 
@@ -60,7 +69,7 @@ const ResourceList = () => {
           <div
             key={res.id}
             className="bg-white border border-gray-200 p-4 rounded-2xl shadow hover:shadow-lg transition"          >
-            <ResourceListItem item={res} onEdit={onEdit} onDelete={onDelete} />
+            <ResourceListItem item={res} onEdit={handleUpdate} onDelete={handleDelete} />
           </div>
         ))
       ) : (
