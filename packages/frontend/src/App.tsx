@@ -4,6 +4,11 @@ import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './shared/routes/appRoutes'
 
 import './App.css';
+import { MessageModalProvider } from './shared/ui/MessageModalContext';
+
+
+
+
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginSuccess } from './features/auth/store/authSlice';
 import { Route, Routes } from 'react-router-dom';
@@ -22,9 +27,12 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <MessageModalProvider>  
+       <BrowserRouter>
       <AppRoutes />
     </BrowserRouter>
+    </MessageModalProvider>
+
   );
 }
 
