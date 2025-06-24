@@ -19,7 +19,7 @@
 //     return <div className="admin-questions-container"><h2 className="admin-questions-title">ישנה בעיה בטעינת השאלות</h2></div>
 //   if (data.length === 0)
 //     return <div className="admin-questions-container"><h2 className="admin-questions-title">אין שאלות</h2></div>
-
+  
 //   return (
 //     <div className="admin-questions-container">
 //       <h2 className="admin-questions-title">ניהול שאלות</h2>
@@ -102,12 +102,12 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
       {isEdit && selectedQuestion && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <UpdateQuestion
-              id={selectedQuestion.id}
-              initialData={selectedQuestion}
-              onSubmit={handleUpdateSubmit}
-            />
-          </div>
+      <UpdateQuestion
+        id={selectedQuestion.id}
+        initialData={selectedQuestion}
+        onSubmit={handleUpdateSubmit}
+      />
+      </div>
           <button className="close-button" onClick={() => setIsEdit(false)}>סגור</button>
         </div>
       )}
