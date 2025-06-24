@@ -16,10 +16,10 @@
     "dotenv": "^16.3.1",
     "express": "^4.21.2",
     "google-auth-library": "^10.1.0",
+    "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.24",
-    "nodemailer": "^7.0.3"
+    "typeorm": "^0.3.24"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
