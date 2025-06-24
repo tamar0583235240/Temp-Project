@@ -7,7 +7,9 @@ const addQustion = async (question: Questions): Promise<Questions> => {
 
         let id: string = "";
         let exists = true;
-
+        console.log("---------------------");
+        console.log(question);
+         console.log("---------------------");
         id = uuid4();
         const query = `
       INSERT INTO questions (id , title , content , category , tips , ai_guidance , is_active)
