@@ -1,19 +1,18 @@
 // store/progressSlice.ts
-import { create } from "zustand";
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  // שדות נוספים אם צריך
-}
+import { create } from 'zustand';
 
-
-interface UserState {
-  userId?: string;
+interface ProgressState {
+  userId: string | null;
+  answered: number;
+  total: number;
   setUserId: (id: string) => void;
+  setProgress: (answered: number, total: number) => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
-  userId: undefined,
+export const useUserStore = create<ProgressState>((set) => ({
+  userId: null,
+  answered: 0,
+  total: 0,
   setUserId: (id) => set({ userId: id }),
+  setProgress: (answered, total) => set({ answered, total }),
 }));
