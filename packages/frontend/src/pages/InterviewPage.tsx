@@ -53,10 +53,11 @@ const InterviewPage = () => {
         <div className="w-full max-w-2xl space-y-8">
           <Question />
           <Buttons />
+          <TipsComponent/>
         </div>
       </main>
     </div>
   )
 }
 
-export default InterviewPage
+export default InterviewPage;
