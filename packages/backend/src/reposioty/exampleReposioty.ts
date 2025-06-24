@@ -7,9 +7,8 @@ const getAllExamples = async (): Promise<any[]> => {
       SELECT exampleField1, exampleField2, exampleField3
       FROM examples
     `;
-
     const result = await pool.query(query);
-    return result.rows// as exampleInterface[];
+    return result.rows // as exampleInterface[];
 
   } catch (error) {
     console.error("Error fetching examples from PostgreSQL:", error);

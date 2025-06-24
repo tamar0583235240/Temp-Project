@@ -20,6 +20,13 @@ export class Answers {
   @Column("text", { name: "file_url" })
   fileUrl: string;
 
+  @Column("character varying", {
+    name: "answer_file_name",
+    nullable: true,
+    length: 255,
+  })
+  answerFileName: string | null;
+
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
@@ -41,6 +48,9 @@ export class Answers {
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
+
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
+  feedbacks: Feedback[];
 
   @OneToMany(
     () => SharedRecordings,
