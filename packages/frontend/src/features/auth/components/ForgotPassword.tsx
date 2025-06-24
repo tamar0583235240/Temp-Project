@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForgotPasswordMutation } from "../../../shared/api/passwordApi";
-import { ForgotPasswordForm } from "../types/formTypes";
+import { ForgotPasswordForm } from "../types/types";
 
 const schema = yup.object().shape({
   email: yup.string().email("אימייל לא תקין").required("שדה חובה"),

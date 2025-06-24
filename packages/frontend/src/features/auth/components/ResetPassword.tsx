@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useResetPasswordMutation } from "../../../shared/api/passwordApi";
-import { ResetFormData } from "../types/formTypes";
+import { ResetFormData } from "../types/types";
 
 const schema = yup.object().shape({
   password: yup.string().required("שדה חובה").min(6, "לפחות 6 תווים"),

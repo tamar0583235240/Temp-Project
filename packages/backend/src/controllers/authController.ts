@@ -1,16 +1,14 @@
 import { Request, Response } from 'express';
-import userRepo from '../reposioty/userRepository';
 import jwt from 'jsonwebtoken';
-import { Users } from '../interfaces/entities/Users';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import { sendResetEmail } from '../utils/emailSender';
-import { getUserByEmail, updateUserPassword } from '../reposioty/userRepository';
+import { v4 as uuidv4 } from 'uuid';
+import { OAuth2Client } from 'google-auth-library';
+import { Users } from '../interfaces/entities/Users';
 import { createToken, getToken, deleteToken } from '../reposioty/passwordResetRepository';
 import userRepository from '../reposioty/userRepository';
-import { v4 as uuidv4 } from 'uuid';
 import authRepository from '../reposioty/authRepository';
-import sendAnEmail from '../utils/sendAnEmail';
+import { sendResetEmail, sendVerificationCodeEmail } from '../utils/emailSender';
 
 
 type CodeData = { code: string, expiresAt: number };
@@ -35,7 +33,7 @@ export const generateAndSendCode = async (req: Request, res: Response) => {
      const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
      codesPerEmail.set(email, { code, expiresAt });
      // בקוד הזה צריך לטפל...
-    await sendAnEmail(email, `קוד האימות שלך הוא: ${code}`)
+    await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`)
     console.log(`Sending code ${code} to email ${email}`);
     res.status(200).json({sent:true, message: "הקוד נשלח בהצלחה!"});
 }
@@ -71,7 +69,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   if (!email) return res.status(400).json({ message: 'Missing email' });
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await userRepository.getUserByEmail(email);
     if (!user) {
       return res.status(200).json({ message: 'If email exists, reset link sent' });
     }
@@ -105,7 +103,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await updateUserPassword(tokenData.user_id, hashedPassword);
+    await userRepository.updateUserPassword(tokenData.user_id, hashedPassword);
     await deleteToken(token);
 
     return res.status(200).json({ message: 'Password reset successful' });
@@ -119,7 +117,7 @@ export const login = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
 
-  const user = await userRepo.getUserByEmailAndPassword(email, password);
+  const user = await userRepository.getUserByEmailAndPassword(email, password);
   if (!user) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
@@ -195,7 +193,7 @@ export const requestSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
-  const existing = (await userRepo.getAllUsers()).find(u => u.email === email);
+  const existing = (await userRepository.getAllUsers()).find(u => u.email === email);
   if (existing) {
     return res.status(409).json({ message: "אימייל כבר קיים" });
   }
@@ -227,7 +225,7 @@ export const requestSignup = async (req: Request, res: Response) => {
   });
 
   // שליחת הקוד למייל
-  await sendAnEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
+  await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
   res.status(200).json({ message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה." });
 };
@@ -272,7 +270,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = (await userRepo.getAllUsers()).find(user => user.email === email);
+  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }
@@ -305,4 +303,46 @@ export const signup = async (req: Request, res: Response) => {
   );
 
   res.status(201).json({ user: newUser, token });
+};
+
+const client = new OAuth2Client();
+
+export const authWithGoogle = async (req: Request, res: Response) => {
+  try {
+    const { payload } = req.body;
+    if (!payload?.credential) {
+      return res.status(400).json({ message: 'Missing Google credential' });
+    }
+
+    const ticket = await client.verifyIdToken({
+      idToken: payload.credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const googleUser = ticket.getPayload();
+    if (!googleUser?.email) {
+      return res.status(400).json({ message: 'Invalid token or email not found' });
+    }
+
+    let user = await userRepository.getUserByEmail(googleUser.email);
+
+    if (!user) {
+      user = await userRepository.insertUser({
+        id: uuidv4(),
+        first_name: googleUser.given_name ?? '',
+        last_name: googleUser.family_name ?? '',
+        email: googleUser.email,
+        phone: null,
+        role: 'student',
+        is_active: true,
+        password: '',
+        created_at: new Date(),
+      });
+    }
+
+    return res.status(200).json({ user });
+  } catch (err) {
+    console.error('Google Auth error:', err);
+    return res.status(500).json({ message: 'Google authentication failed' });
+  }
 };
