@@ -1,7 +1,6 @@
 // services/resourcesApi.ts
+import { Resource } from '../../features/knowledge-base/types/Source';
 import { api } from './api';
-import { Resource } from '../../features/knowledge-base/types/Resource';
-
 
 interface deleteRes {
     success: boolean;

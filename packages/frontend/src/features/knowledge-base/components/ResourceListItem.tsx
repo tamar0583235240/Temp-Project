@@ -1,11 +1,11 @@
 import { Pencil, Trash2, FileText } from 'lucide-react';
-import { FC } from 'react';
-import { eType, Resource } from '../types/Resource';
+import{Resource,eFileType} from "../types/Source"
 
-const typeLabels: Record<eType, string> = {
-  [eType.text]: "קובץ טקסט",
-  [eType.link]: "לינק",
-  [eType.pdf]: "קובץ PDF",
+
+const typeLabels: Record<eFileType, string> = {
+  [eFileType.text]: "קובץ טקסט",
+  [eFileType.link]: "לינק",
+  [eFileType.pdf]: "קובץ PDF",
 };
 
 interface ResourceListItemProps {
