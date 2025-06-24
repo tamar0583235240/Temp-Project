@@ -3,26 +3,18 @@ import { Share2 } from 'lucide-react';
 import ShareDialog from './ShareDialog';
 import './SharedRrcording.css';
 
-const ShareButton = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+type ShareButtonProps = {
+  setIsDialogOpen: (open: boolean) => void;
+};
 
-  const handleShare = () => {
-    console.log('שיתוף בוצע!');
-    setIsDialogOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-  };
+const ShareButton = ({setIsDialogOpen}: ShareButtonProps) => {
 
   return (
     <div className="share-button-wrapper">
-      <button onClick={handleShare} className="download-button" dir="rtl">
+      <button onClick={()=>{setIsDialogOpen(true)}} className="download-button">
         <Share2 className="download-icon" />
         שיתוף
       </button>
-
-      <ShareDialog open={isDialogOpen} onClose={closeDialog} />
     </div>
   );
 };
