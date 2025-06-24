@@ -28,10 +28,10 @@ const getAllQuestions = async (): Promise<Questions[]> => {
   }
 }
 
-const deleteQuestionById = async (id: string): Promise<string> => {
+const deleteQuestionById = async (id: string,is_active:boolean): Promise<string> => {
   try {
-    const query = 'DELETE FROM questions WHERE id = $1';
-    const values = [id];
+    const query = 'UPDATE questions SET is_active = $1 WHERE id = $2';
+    const values = [is_active,id];
     await pool.query(query, values);
     return "Question deleted successfully";
   } catch (error) {

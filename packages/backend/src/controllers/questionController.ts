@@ -29,7 +29,8 @@ export const deleteQuestionController = async (req: Request, res: Response): Pro
   console.log('deleteQuestionController called');
   try {
     const questionId = req.params.question_id;
-    await questionRepository.deleteQuestionById(questionId);
+    const is_active = req.body.is_active;
+    await questionRepository.deleteQuestionById(questionId,is_active);
   } catch (error) {
     console.error('Error in deleteQuestionController:', error);
     res.status(500).json({ error });
