@@ -1,10 +1,12 @@
 
 import express, { Application } from 'express';
 import cors from 'cors';
-import authRouts from './src/routes/authRouts';
 import authGoogleRoutes from './src/routes/authGoogleRoutes';
 import exampleRouts from './src/routes/exampleRouts';
 import userRouts from './src/routes/userRouts';
+import authRouts from './src/routes/authRouts';
+import cookieParser from 'cookie-parser';
+// import {supabase} from './src/config/dbConnection';
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -24,6 +26,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
