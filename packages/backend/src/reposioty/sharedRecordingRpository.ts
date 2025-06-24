@@ -1,6 +1,29 @@
-import { pool } from "../config/dbConnection";
+import { pool } from '../config/dbConnection';
 
-export const getAllAnswers = async () => {
-  const { rows } = await pool.query('SELECT * FROM answers;');
-  return rows;
+export const getSharedWithByAnswerAndOwner = async (
+  answerId: string,
+  ownerId: string
+): Promise<{ name: string; email: string }[]> => {
+  try {
+    const query = `
+      SELECT
+        u.first_name || ' ' || u.last_name AS name,
+        u.email
+      FROM shared_recordings sr
+      JOIN LATERAL unnest(sr.shared_with) AS shared_email(email) ON true
+      JOIN users u ON u.email = shared_email.email
+      WHERE sr.answer_id = $1 AND sr.owner_id = $2
+    `;
+    const values = [answerId, ownerId];
+    const { rows } = await pool.query(query, values);
+    return rows.map(row => ({
+      name: row.name,
+      email: row.email
+    }));
+
+  } catch (error) {
+    console.error("Error fetching shared recordings:", error);
+    throw error;
+  }
 };
+
