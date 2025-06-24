@@ -6,8 +6,18 @@ export const AdminQuestionApi = api.injectEndpoints({
         getAllQuestions: builder.query<Question[], void>({
             query: () => 'question/getAllQuestions',
             providesTags: ['question'],
-        }),     
+        }),  
+        updateQuestionById: builder.mutation<Question, { id: string; data: Partial<Question> }>({
+            query: ({ id, data }) => ({
+              url: `question/updateQuestion/${id}`,
+              method: 'PUT',
+              body: data,
+            }),
+            invalidatesTags: ['question'],
+          }),   
     }),
 });
 
-export const { useGetAllQuestionsQuery } = AdminQuestionApi;
+
+
+export const { useGetAllQuestionsQuery,useUpdateQuestionByIdMutation } = AdminQuestionApi;

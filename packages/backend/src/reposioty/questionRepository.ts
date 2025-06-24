@@ -29,4 +29,41 @@ const getAllQuestions = async (): Promise<Questions[]> => {
   }
 }
 
-export default { getAllQuestionById ,getAllQuestions};
+type QuestionUpdates = Partial<Omit<Questions, 'id'>>;
+
+const updateQuestionById = async (id: string, updates: QuestionUpdates) => {
+  const fields = Object.keys(updates);
+  if (fields.length === 0) {
+    throw new Error('No fields provided for update.');
+  }
+
+  const values = Object.values(updates);
+  const setString = fields
+    .map((field, i) => `"${field}" = $${i + 1}`)
+    .join(', ');
+
+  const query = `
+    UPDATE questions
+    SET ${setString}
+    WHERE id = $${fields.length + 1}
+    RETURNING *;
+  `;
+
+  try {
+    const { rows } = await pool.query(query, [...values, id]);
+
+    if (rows.length === 0) {
+      throw new Error(`Question with id ${id} not found`);
+    }
+
+    return rows[0];
+  } catch (error) {
+    console.error('Error updating question:', error);
+    throw new Error('Failed to update question');
+  }
+};
+
+
+
+
+export default { getAllQuestionById ,getAllQuestions,updateQuestionById};
