@@ -6,6 +6,11 @@ import './App.css';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
+import { MessageModalProvider } from './shared/ui/MessageModalContext';
+
+
+
+
 
 function App() {
   const dispatch = useAppDispatch();
@@ -33,9 +38,12 @@ function App() {
   if (loading) return <p>טוען...</p>;
 
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <MessageModalProvider>  
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </MessageModalProvider>
+
   );
 }
 
