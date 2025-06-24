@@ -1,35 +1,50 @@
-import React from "react";
+import React from 'react';
 
-type DownloadCardProps = {
-  title: string;
-  description: string;
-  onView: () => void;
-  onDownload: () => void;
+const DownloadCard: React.FC = () => {
+    const title = "קובץ לדוגמה";
+    const description = "זהו קובץ PDF מובנה שניתן לצפות בו או להוריד אותו";
+    const fileUrl = "/example.pdf";
+
+    const handleView = () => {
+        window.open(fileUrl, '_blank');
+    };
+
+    const handleDownload = () => {
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = fileUrl.split('/').pop() || 'download';
+        link.click();
+    };
+
+    return (
+        <div style={styles.card}>
+            <div>
+                <h3>{title}</h3>
+                <p>{description}</p>
+            </div>
+            <div style={styles.buttons}>
+                <button onClick={handleView}>צפייה</button>
+                <button onClick={handleDownload}>הורדה</button>
+            </div>
+        </div>
+    );
 };
 
-const DownloadCard: React.FC<DownloadCardProps> = ({ title, description, onView, onDownload }) => {
-  return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-md p-4 flex items-center justify-between mb-4">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-        <p className="text-sm text-gray-500">{description}</p>
-      </div>
-      <div className="flex gap-2">
-        <button
-          onClick={onView}
-          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          צפייה
-        </button>
-        <button
-          onClick={onDownload}
-          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
-        >
-          הורדה
-        </button>
-      </div>
-    </div>
-  );
+const styles = {
+    card: {
+        border: '1px solid #ccc',
+        padding: '12px',
+        borderRadius: '8px',
+        marginBottom: '10px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        direction: 'rtl',
+    } as React.CSSProperties,
+    buttons: {
+        display: 'flex',
+        gap: '10px',
+    } as React.CSSProperties,
 };
 
 export default DownloadCard;
