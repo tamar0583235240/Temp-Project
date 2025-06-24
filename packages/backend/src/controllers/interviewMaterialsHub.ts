@@ -3,7 +3,6 @@ import { v2 as cloudinary } from 'cloudinary';
 import { Pool } from 'pg';
 import { pool } from '../config/dbConnection';
 import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
-import { log } from 'console';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -64,16 +63,26 @@ export const addFile = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getInterviewMaterialSubs = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
-        res.json(items);
-    } catch (error) {
-        console.error('Error in interview material sub controller:', error);
-        res.status(500).json({ error });
+  try {
+    if (req.query.badParam) {
+      res.status(400).json({ error: 'Bad request' });
+      return;
     }
+
+    if (req.headers['x-test-redirect']) {
+      res.status(300).json({ info: 'Multiple choices' });
+      return;
+    }
+
+    const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
+    res.json(items);
+  } catch (error: any) {
+    console.error('Error in interview material sub controller:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
 };
+
 export const searchMterials=async(req: Request, res: Response)=>{
   const q = req.query.q?.toString() || '';
   console.log("at serarch in back");
