@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useUserStore } from '../store/progressSlice';
 import { useGetProgressStatsQuery } from '../../../shared/api/api';
 import { CheckCircle } from 'lucide-react';
-import { useUserStore } from '../store/progressSlice';
 
 const ProgressStats: React.FC = () => {
-  const userId = useUserStore((state) => state.userId);
-  const { data, isLoading, isError } = useGetProgressStatsQuery(userId!, {
+  const userId = useUserStore((state) => state.userId) || "ba24bf25-e017-46bf-a8ca-a4d27a2bc7af";
+  const setProgress = useUserStore((state) => state.setProgress);
+
+  const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
     skip: !userId,
   });
+
+  useEffect(() => {
+    if (data) {
+      setProgress(data.answeredQuestions, data.totalQuestions);
+    }
+  }, [data, setProgress]);
 
   if (!userId) return <p>אנא התחבר</p>;
   if (isLoading) return <p>טוען נתונים...</p>;
