@@ -1,3 +1,4 @@
+import { log } from 'console';
 import { pool } from '../config/dbConnection';
 import { Questions } from "../interfaces/entities/Questions";
 
@@ -10,9 +11,22 @@ const getAllQuestionById = async (Id: string): Promise<Questions> => {
     return rows[0] as Questions;
   
   } catch (error) {
-    console.error("Error fetching answers from Supabase:", error);
+    console.error("Error fetching question from Supabase:", error);
     throw error;
   }
 }
 
-export default { getAllQuestionById };
+const getAllQuestions = async (): Promise<Questions[]> => {
+
+  try {
+    const query = 'SELECT * FROM questions';
+    const { rows } = await pool.query(query);
+    return rows as Questions[];
+  
+  } catch (error) {
+    console.error("Error fetching questions from Supabase:", error);
+    throw error;
+  }
+}
+
+export default { getAllQuestionById ,getAllQuestions};

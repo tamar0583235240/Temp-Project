@@ -11,7 +11,11 @@ import { SearchComponents } from "./searchComponents";
 import { Answer } from "../types/Answer";
 import { useEffect, useState } from "react";
 
-export const RecordingsList = () => {
+type RecordingsListProps = {
+    allowedRoles: string[];
+}
+
+export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userId = user?.id?.toString() ?? '00000000-0000-0000-0000-000000000004';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
