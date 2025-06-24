@@ -25,9 +25,12 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/api', exampleRouts);
+
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/auth', authGoogleRoutes);
+
+app.use(cors());
 
 
 export default app;
