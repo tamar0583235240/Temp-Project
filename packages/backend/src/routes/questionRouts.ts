@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { adminqQuestionController, questionController } from "../controllers/questionController";
-import { questionMiddleware } from "../middlewares/questionMiddleware";
+import { adminqQuestionController, deleteQuestionController, questionController } from "../controllers/questionController";
 
 const router = Router();
-router.get('/getAllQuestionById/:question_id', questionMiddleware , questionController );
+router.get('/getAllQuestionById/:question_id', questionController );
 router.get('/getAllQuestions', adminqQuestionController );
+//router.delete('/deleteQuestionById/:question_id', deleteQuestionController);
 export default router;

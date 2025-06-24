@@ -25,8 +25,8 @@
     margin-bottom: 15px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    width: 70%;
-    max-width: 800px;
+    width: 50%;
+    max-width: 600px;
     box-sizing: border-box;
     overflow: hidden;
     height: auto;
@@ -39,7 +39,7 @@
 
 .question-header {
     background: linear-gradient(135deg, #3d4e58, #3d4e58);
-    padding: 15px 60px;
+    padding: 15px 40px;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -60,7 +60,7 @@
     justify-content: center;
     align-items: center;
     gap: 15px;
-    padding: 20px 60px;
+    padding: 20px 40px;
     border-top: 1px solid #f0f0f0;
 }
 
@@ -75,6 +75,10 @@
     font-weight: 500;
     transition: all 0.2s ease;
     min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .action-button:hover {
@@ -99,6 +103,12 @@
     background: linear-gradient(135deg, #c0392b, #a93226);
 }
 
+.button-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
 /* Layout for very wide screens */
 @media (min-width: 1400px) {
     .admin-questions-container {
@@ -106,47 +116,47 @@
     }
     
     .question-card {
-        width: 60%;
-        max-width: 900px;
+        width: 40%;
+        max-width: 650px;
     }
     
     .question-header {
-        padding: 18px 100px;
+        padding: 18px 50px;
     }
     
     .question-actions {
-        padding: 25px 100px;
+        padding: 25px 50px;
     }
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
     .question-card {
-        width: 65%;
-        max-width: 850px;
+        width: 45%;
+        max-width: 600px;
     }
     
     .question-header {
-        padding: 15px 80px;
+        padding: 15px 45px;
     }
     
     .question-actions {
-        padding: 22px 80px;
+        padding: 22px 45px;
     }
 }
 
 /* Responsive Design for medium screens */
 @media (max-width: 1024px) {
     .question-card {
-        width: 75%;
-        max-width: 700px;
+        width: 55%;
+        max-width: 500px;
     }
     
     .question-header {
-        padding: 12px 50px;
+        padding: 12px 35px;
     }
     
     .question-actions {
-        padding: 18px 50px;
+        padding: 18px 35px;
     }
 }
 
@@ -156,12 +166,12 @@
     }
     
     .question-card {
-        width: 85%;
-        max-width: 600px;
+        width: 70%;
+        max-width: 450px;
     }
     
     .question-header {
-        padding: 12px 30px;
+        padding: 12px 25px;
     }
     
     .question-title {
@@ -169,7 +179,7 @@
     }
     
     .question-actions {
-        padding: 18px 30px;
+        padding: 18px 25px;
         gap: 12px;
     }
     
@@ -177,6 +187,11 @@
         font-size: 0.8rem;
         padding: 8px 16px;
         min-width: 70px;
+    }
+    
+    .button-icon {
+        width: 14px;
+        height: 14px;
     }
     
     .admin-questions-title {
@@ -190,12 +205,12 @@
     }
     
     .question-card {
-        width: 90%;
-        max-width: 400px;
+        width: 85%;
+        max-width: 350px;
     }
     
     .question-header {
-        padding: 10px 25px;
+        padding: 10px 20px;
     }
     
     .question-title {
@@ -203,7 +218,7 @@
     }
     
     .question-actions {
-        padding: 15px 25px;
+        padding: 15px 20px;
         gap: 10px;
         flex-direction: column;
     }
@@ -212,6 +227,11 @@
         font-size: 0.75rem;
         padding: 8px 12px;
         width: 100%;
-        max-width: 150px;
+        max-width: 120px;
+    }
+    
+    .button-icon {
+        width: 12px;
+        height: 12px;
     }
 }

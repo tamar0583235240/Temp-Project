@@ -25,3 +25,13 @@ export const adminqQuestionController = async (req: Request, res: Response): Pro
   }
 };
 
+export const deleteQuestionController = async (req: Request, res: Response): Promise<void> => {
+  console.log('deleteQuestionController called');
+  try {
+    const questionId = req.params.question_id;
+    await questionRepository.deleteQuestionById(questionId);
+  } catch (error) {
+    console.error('Error in deleteQuestionController:', error);
+    res.status(500).json({ error });
+  }
+};
