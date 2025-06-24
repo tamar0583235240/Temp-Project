@@ -4,12 +4,12 @@ import { aiInsightsType } from "../types/aiInsightsType";
 export const aiInsightsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getItems: builder.query<aiInsightsType[], void>({
-      query: () => "/insights",
+      query: () => "/aiInsight",
       providesTags: ["users"],
     }),
     addItem: builder.mutation<aiInsightsType, Partial<aiInsightsType>>({
       query: (item) => ({
-        url: "/insights",
+        url: "/aiInsight",
         method: "GET",
         body: item,
       }),
