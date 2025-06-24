@@ -9,10 +9,10 @@ export default function SharedRecordingsPage() {
 
   return (
     <div className="p-4 grid gap-4">
-      {/* {data.map((recording) => (
+      {data.map((recording) => (
         <SharedRecordingCard key={recording.id} recording={recording} />
-      ))} */}
-      <h1>hello for tamar</h1>
+      ))}
+      
     </div>
   );
 }
