@@ -5,6 +5,7 @@ import { Button } from "../../../shared/ui/button";
 import { GridContainer } from "../../../shared/ui/GridContainer";
 import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
+import { AddQuestion } from "./addQuestion";
 
 type AdminQuestionsProps = {
   allowedRoles: string[];
@@ -45,6 +46,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
       <Heading1 className="mb-8">ניהול שאלות</Heading1>
       
       <div className="space-y-4">
+        <AddQuestion></AddQuestion>
         {data.map((question) => (
           <CardSimple 
             key={question.id} 
