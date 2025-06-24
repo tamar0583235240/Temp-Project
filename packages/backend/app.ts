@@ -2,7 +2,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import exampleRouts from './src/routes/exampleRouts';
-import InterviewMaterialSubRouts from './src/routes/InterviewMaterialSubRouts';
+import InterviewMaterialSubRouts from './src/routes/interviewMaterialsHubRoutes';
 import resourceRouts from './src/routes/resourceRouts';
 
 const app: Application = express();
