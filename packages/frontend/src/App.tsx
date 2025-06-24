@@ -1,4 +1,6 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom'
+import AppRoutes from './shared/routes/appRoutes'
 import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 
@@ -8,15 +10,11 @@ import { MessageModalProvider } from './shared/ui/MessageModalContext';
 
 function App() {
   return (
-      <MessageModalProvider>
-            <div className="App">
-      <header className="App-header">
-        <h1>Project base viewer</h1>
-      </header>
-        <main>
-      </main>
-      </div>
-         </MessageModalProvider>
+    <MessageModalProvider>  
+       <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+    </MessageModalProvider>
 
   );
 }
