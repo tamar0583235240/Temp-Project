@@ -11,7 +11,7 @@ import {
 } from "../store/simulationSlice";
 import { RootState } from "../../../shared/store/store";
 import { interviewType } from "../types/questionType";
-import { useGetQuestionsQuery } from "../services/questionsApi";
+import { useGetAllQuestionsQuery } from "../services/questionsApi";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
 // import AnswerAI from "./AnswerAI";
@@ -20,23 +20,24 @@ const Simulation: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
-  const { data, isLoading, error } = useGetQuestionsQuery();
+  const { data, isLoading, error } = useGetAllQuestionsQuery();
 
   useEffect(() => {
     if (data) {
       const mappedQuestions = data.map((q: any) => ({
-        id: q.id,
-        title: q.title || "",
-        content: q.content || "",
-        category: q.category || "",
-        tips: q.tips || "",
-        type: q.question_type || q.type || "open",
-        options: q.options || [],
-        answered: false,
-        answer: q.answer || "",
-        aiGuidance: q.aiGuidance || "",
-        isActive: q.isActive ?? false,
-      }));
+  id: q.id,
+  title: q.title || "",
+  content: q.content || "",
+  category: q.category || "",
+  tips: q.tips || "",
+  type: q.question_type || q.type || "open",
+  question_type: q.question_type || q.type || "open", // הוספה חשובה!
+  options: q.options || [],
+  answered: false,
+  answer: q.answer || "",
+  aiGuidance: q.aiGuidance || "",
+  isActive: q.isActive ?? false,
+}));
       dispatch(setQuestions(mappedQuestions));
     }
   }, [data, dispatch]);

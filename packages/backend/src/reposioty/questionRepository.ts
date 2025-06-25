@@ -4,7 +4,11 @@ import { Question } from '../interfaces/entities/Question';
 const getAllQuestions = async (): Promise<Question[]> => {
   try {
     const query = `
+<<<<<<< HEAD
       SELECT id, title, content, category, tips, ai_guidance, is_active, options, question_type
+=======
+      SELECT id, title, content, category, tips, ai_guidance, is_active
+>>>>>>> 1ac4eb045616e7d64374b49703644c65dae00703
       FROM "questions"
       WHERE is_active = TRUE
     `;

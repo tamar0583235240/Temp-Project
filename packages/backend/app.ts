@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Routes
 // app.use('/api', exampleRoutes);
-app.use('/simulation', questionRoutes);
+app.use('/api/simulation', questionRoutes);
 app.use('/api/questions', questionRoutes);
 
 

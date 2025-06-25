@@ -4,9 +4,9 @@ export const questionsApi = createApi({
   reducerPath: 'questionsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
   endpoints: (builder) => ({
-    getQuestions: builder.query<interviewType[], void>({
+    getAllQuestions: builder.query<interviewType[], void>({
       query: () => 'questions',
     }),
   }),
 });
-export const { useGetQuestionsQuery } = questionsApi;
+export const { useGetAllQuestionsQuery } = questionsApi;

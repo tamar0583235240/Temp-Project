@@ -34,7 +34,7 @@ export class Question {
     length: 10,
     default: () => "'open'",
   })
-  questionType!: string | null;
+  question_type!: string | null;
 
   @OneToMany(() => Answer, (answer) => answer.question)
   answers!: Answer[];

@@ -1,4 +1,3 @@
-
 import { Pool } from 'pg';
 import * as dotenv from 'dotenv';
 
@@ -9,7 +8,6 @@ console.log('Database name:', process.env.PGDATABASE);
 console.log('Database password:', process.env.PGPASSWORD);
 console.log('Database port:', process.env.PGPORT);
 const pool = new Pool({
-
   user: process.env.PGUSER,
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
@@ -18,3 +16,5 @@ const pool = new Pool({
  });
 console.log('Database connection pool created');
 export {pool}
+
+
