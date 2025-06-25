@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import RemindersComponents from "../../features/reminders/components/remindersComponents"
+import RemindersComponents from "../../features/reminders/components/RemindersComponents"
 
 export default function AppRoutes() {
     return (
