@@ -38,24 +38,25 @@ const InterviewPage = () => {
     
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
       
-      {/* Sidebar */}
-      <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
-        <Sidebar />
-      </aside>
+      
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        <button
+        {/* <button
         className="bg-primary-dark text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark/90 transition"
         onClick={() => navigate('/')}
       >
         לדף הבית
-      </button>
+      </button> */}
         <div className="w-full max-w-2xl space-y-8">
           <Question />
           <Buttons />
           <TipsComponent/>
         </div>
       </main>
+      {/* Sidebar */}
+      <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
+        <Sidebar />
+      </aside>
     </div>
   )
 }
