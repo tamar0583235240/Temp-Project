@@ -15,9 +15,10 @@ module.exports = {
 
 
           background: "var(--color-background)",
-  text: "var(--color-text)",
-  "secondary-text": "var(--color-secondary-text)",
-  border: "var(--color-border)",
+          text: "var(--color-text)",
+          "secondary-text": "var(--color-secondary-text)",
+          border: "var(--color-border)",
+            surface: "var(--color-surface)",
       },
 
 
