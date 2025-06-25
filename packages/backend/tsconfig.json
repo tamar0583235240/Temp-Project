@@ -4,7 +4,7 @@
       "module": "commonjs",
       "lib": ["ES2020"],
       "outDir": "./dist",
-      "rootDir": ".",
+            "rootDir": ".",
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
@@ -16,8 +16,7 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true
     },
-    "include": ["src/**/*", "index.ts"],
-    "exclude": ["node_modules", "dist"],
+    "include": ["src/**/*", "index.ts", "node_modules", "dist"],
     "ts-node": {
       "esm": false
     }

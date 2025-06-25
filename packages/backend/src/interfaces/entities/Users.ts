@@ -9,50 +9,50 @@ import { SharedRecordings } from "./SharedRecordings";
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "first_name" })
-  firstName!: string;
+  firstName: string;
 
   @Column("text", { name: "last_name" })
-  lastName!: string;
+  lastName: string;
 
   @Column("text", { name: "email", unique: true })
-  email!: string;
+  email: string;
 
   @Column("text", { name: "password" })
-  password!: string;
+  password: string;
 
   @Column("text", { name: "phone", nullable: true })
-  phone!: string | null;
+  phone: string | null;
 
   @Column("text", { name: "role" })
-  role!: string;
+  role: string;
 
   @Column("timestamp without time zone", {
     name: "created_at",
     default: () => "now()",
   })
-  createdAt!: Date;
+  createdAt: Date;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
-  isActive!: boolean;
+  isActive: boolean;
 
   @OneToMany(() => Answers, (answers) => answers.user)
-  answers!: Answers[];
+  answers: Answers[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.givenbyuser)
-  feedbacks!: Feedback[];
+  feedbacks: Feedback[];
 
   @OneToMany(
     () => PasswordResetTokens,
     (passwordResetTokens) => passwordResetTokens.user
   )
-  passwordResetTokens!: PasswordResetTokens[];
+  passwordResetTokens: PasswordResetTokens[];
 
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.owner
   )
-  sharedRecordings!: SharedRecordings[];
+  sharedRecordings: SharedRecordings[];
 }
