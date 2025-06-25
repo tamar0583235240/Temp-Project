@@ -16,5 +16,6 @@
   body {
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;
+    direction: rtl;
   }
 }

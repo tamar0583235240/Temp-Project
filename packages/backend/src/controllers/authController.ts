@@ -11,6 +11,8 @@ import authRepository from '../reposioty/authRepository';
 import { sendResetEmail, sendVerificationCodeEmail } from '../utils/emailSender';
 
 
+const SALT_ROUNDS = 10;
+
 type CodeData = { code: string, expiresAt: number };
 const codesPerEmail = new Map<string, CodeData>();//שמירת הקודים לפי המיילים שאליהם נשלחו
 // ניקוי המפות שפג תוקפן -כל שעה
@@ -202,6 +204,8 @@ export const requestSignup = async (req: Request, res: Response) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
 
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
   // שמירת פרטי המשתמש והקוד זמנית
   pendingSignups.set(email, {
     userData: {
@@ -210,7 +214,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       lastName,
       email,
       phone,
-      password,
+      password: hashedPassword,
       role: 'student',
       isActive: true,
       answers: [],
@@ -266,25 +270,32 @@ export const confirmSignup = async (req: Request, res: Response) => {
 };
 
 
-// // הרשמה
+// הרשמה
 // export const signup = async (req: Request, res: Response) => {
 //   const { firstName, lastName, email, phone, password } = req.body;
 
-//   const existing = usersWithPasswords.find((u) => u.email === email);
+//   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
 //   if (existing) {
 //     return res.status(409).json({ message: 'אימייל כבר קיים' });
 //   }
 
-//   const newUser: UserWithPassword = {
+//   const hashedPassword = await bcrypt.hash(password, 10);
+
+//   const newUser: Users = {
 //     id: uuidv4(),
 //     firstName,
 //     lastName,
 //     email,
 //     phone,
-//     password,
+//     password: hashedPassword,
 //     role: 'student',
-//     createdAt: new Date(),
 //     isActive: true,
+//     answers: [],
+//     feedbacks: [],
+//     passwordResetTokens: [],
+//     sharedRecordings: [],
+//     createdAt: new Date(),
+//     resources: []
 //   };
 
 //   await authRepository.signup(newUser);
@@ -295,7 +306,6 @@ export const confirmSignup = async (req: Request, res: Response) => {
 //     { expiresIn: '1h' }
 //   );
 
-//   const token = `mock-token-${newUser.id}`;
 //   res.status(201).json({ user: newUser, token });
 // };
 

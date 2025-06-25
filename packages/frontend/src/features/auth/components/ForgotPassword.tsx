@@ -2,6 +2,10 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForgotPasswordMutation } from "../../../shared/api/passwordApi";
+// import { ForgotPasswordForm } from "../types/types";
+import { Input } from "../../../shared/ui/input";
+import { Button } from "../../../shared/ui/button";
+import { CardSimple } from "../../../shared/ui/card";
 
 // הגדרת הסכמה
 const schema = yup.object({
@@ -34,26 +38,27 @@ const ForgotPassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>שכחתי סיסמה</h2>
+    <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2>שכחתי סיסמה</h2>
 
-      <label>אימייל:</label>
-      <input type="email" {...register("email")} />
-      {errors.email && <p>{errors.email.message}</p>}
+        <label>אימייל:</label>
+        <Input type="email" {...register("email")} />
+        {errors.email && <p>{errors.email.message}</p>}
 
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "טוען..." : "שלח קישור לאיפוס"}
-      </button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "טוען..." : "שלח קישור לאיפוס"}
+        </Button>
 
-      {isSuccess && <p>אם {watch("email")} קיים במערכת – נשלחה אליו הודעה</p>}
-      {error && (
-        <p style={{ color: "red" }}>
-          {(error as any)?.data?.message || "אירעה שגיאה בשליחת האימייל"}
-        </p>
-      )}
-    </form>
+        {isSuccess && <p>אם {watch("email")} קיים במערכת – נשלחה אליו הודעה</p>}
+        {error && (
+          <p style={{ color: "red" }}>
+            {(error as any)?.data?.message || "אירעה שגיאה בשליחת האימייל"}
+          </p>
+        )}
+      </form>
+    </CardSimple>
   );
 
 };
 export default ForgotPassword;
-
