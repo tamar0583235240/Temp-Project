@@ -1,6 +1,5 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-
 import usersRoutes from '../backend/src/routes/userRouts'
 import answerRouts from '../backend/src/routes/answerRouts'
 import aIInsightRouts from './src/routes/aIInsightRouts'; 
@@ -12,7 +11,6 @@ app.use(express.json());
 app.use("/api/users", usersRoutes);
 app.use("/api/questions",answerRouts)
 app.use("/api/aiInsight", aIInsightRouts);
-
 
 export default app;
 
