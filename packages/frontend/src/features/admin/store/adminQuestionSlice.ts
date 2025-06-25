@@ -17,9 +17,13 @@ const adminQuestionSlice = createSlice({
         getAllQuestions: (state, action) => {
             state.questions = action.payload;
             state.loading = false;
+        },
+        deleteQuestionById: (state, action) => {
+            state.questions = action.payload;
+            state.loading = false;
         }
     }
 })
 
-export const { getAllQuestions } = adminQuestionSlice.actions;
+export const { getAllQuestions , deleteQuestionById} = adminQuestionSlice.actions;
 export const  adminQuestionReducer = adminQuestionSlice.reducer;

@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { pool } from '../config/dbConnection';
 import { Questions } from "../interfaces/entities/Questions";
 
@@ -9,7 +8,7 @@ const getAllQuestionById = async (Id: string): Promise<Questions> => {
     const value = [Id];
     const { rows } = await pool.query(query, value);
     return rows[0] as Questions;
-  
+
   } catch (error) {
     console.error("Error fetching question from Supabase:", error);
     throw error;
@@ -22,12 +21,13 @@ const getAllQuestions = async (): Promise<Questions[]> => {
     const query = 'SELECT * FROM questions';
     const { rows } = await pool.query(query);
     return rows as Questions[];
-  
+
   } catch (error) {
     console.error("Error fetching questions from Supabase:", error);
     throw error;
   }
 }
+
 
 type QuestionUpdates = Partial<Omit<Questions, 'id'>>;
 
@@ -65,5 +65,16 @@ const updateQuestionById = async (id: string, updates: QuestionUpdates) => {
 
 
 
+const deleteQuestionById = async (id: string,is_active:boolean): Promise<string> => {
+  try {
+    const query = 'UPDATE questions SET is_active = $1 WHERE id = $2';
+    const values = [is_active,id];
+    await pool.query(query, values);
+    return "Question deleted successfully";
+  } catch (error) {
+    console.error("Error deleting question from Supabase:", error);
+    throw error;
+  }
+}
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById,updateQuestionById };
 
-export default { getAllQuestionById ,getAllQuestions,updateQuestionById};
