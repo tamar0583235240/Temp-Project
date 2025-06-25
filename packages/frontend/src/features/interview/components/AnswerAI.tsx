@@ -1,9 +1,11 @@
-
+import { useSelector } from "react-redux";
 import { useFeedbackAnalysis } from "../hooks/useFeedbackAnalysis";
 import FeedbackDisplay from "./FeedbackDisplay";
 import MagicLoader from "./MagicLoader";
 
-const AnswerAI = ({ answerId }: { answerId: string }) => {
+const AnswerAI = () => {
+  // נניח שה־answerId נמצא ב־state.simulation.currentAnswerId
+  const answerId = useSelector((state: any) => state.simulation.currentAnswerId);
   const { analysis, loading } = useFeedbackAnalysis(answerId);
 
   return (
