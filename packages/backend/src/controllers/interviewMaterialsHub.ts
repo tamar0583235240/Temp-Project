@@ -69,12 +69,10 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
       res.status(400).json({ error: 'Bad request' });
       return;
     }
-
     if (req.headers['x-test-redirect']) {
       res.status(300).json({ info: 'Multiple choices' });
       return;
     }
-
     const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
     res.json(items);
   } catch (error: any) {
