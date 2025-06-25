@@ -26,4 +26,4 @@ export const AdminQuestionApi = api.injectEndpoints({
     }),
 });
 
-export const { useGetAllQuestionsQuery, useDeleteQuestionByIdMutation } = AdminQuestionApi;
+export const { useGetAllQuestionsQuery, useDeleteQuestionByIdMutation , useAddQuestionMutation } = AdminQuestionApi;

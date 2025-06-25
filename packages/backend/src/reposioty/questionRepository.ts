@@ -46,6 +46,9 @@ const getAllQuestions = async (): Promise<Questions[]> => {
   try {
     const query = 'SELECT * FROM questions';
     const { rows } = await pool.query(query);
+    console.log("..............sari w..........");
+    console.log(rows[0]);
+     console.log("..............sari w..........");
     return rows as Questions[];
 
   } catch (error) {

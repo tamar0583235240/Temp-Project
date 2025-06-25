@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useAddQuestionMutation } from "../services/adminQuestionApi"
 import { Button } from "../../../shared/ui/button"
 import { Input } from "../../../shared/ui/input"
 import { CardSimple } from "../../../shared/ui/card"
@@ -9,6 +8,7 @@ import { IconWrapper } from "../../../shared/ui/IconWrapper"
 import { useMessageModal } from "../../../shared/ui/MessageModalContext"
 import { Plus, X, FileQuestion } from "lucide-react"
 import { cn } from "../../../shared/utils/cn"
+import { useAddQuestionMutation } from "../services/adminQuestionApi"
 
 export const AddQuestion = () => {
     const [addQuestion, { isLoading, isSuccess, isError, error }] = useAddQuestionMutation()
@@ -20,8 +20,9 @@ export const AddQuestion = () => {
         content: "",
         category: "",
         tips: "",
-        aiGuidance: "",
-        isActive: true
+        ai_guidance: "",
+        is_active: true,
+        isActive:true
     })
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -38,8 +39,9 @@ export const AddQuestion = () => {
                 content: "",
                 category: "",
                 tips: "",
-                aiGuidance: "",
-                isActive: true
+                ai_guidance: "",
+                is_active: true ,
+                isActive:true
             })
             setIsModalOpen(false)
         } catch (err) {
@@ -54,7 +56,7 @@ export const AddQuestion = () => {
     return (
         <>
             {/* כפתור פתיחת המודל */}
-            <Button
+            <Button style={{ marginRight: "38.5%" , marginTop: "15px" }}
                 onClick={() => setIsModalOpen(true)}
                 variant="primary-dark"
                 size="lg"
@@ -186,8 +188,8 @@ export const AddQuestion = () => {
                                         <textarea
                                             id="aiGuidance"
                                             placeholder="הכנס הוראות למערכת AI לגבי איך להעריך תשובות לשאלה זו..."
-                                            value={newQuestion.aiGuidance}
-                                            onChange={(e) => handleInputChange('aiGuidance', e.target.value)}
+                                            value={newQuestion.ai_guidance}
+                                            onChange={(e) => handleInputChange('ai_guidance', e.target.value)}
                                             required
                                             rows={3}
                                             className={cn(
@@ -229,3 +231,4 @@ export const AddQuestion = () => {
         </>
     )
 }
+

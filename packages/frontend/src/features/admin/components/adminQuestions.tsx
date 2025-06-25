@@ -71,11 +71,11 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
   return (
     <div className="min-h-screen bg-[--color-background]" dir="rtl">
       <div className="bg-white border-b border-[--color-border]">
-        <GridContainer className="py-8">
+        <GridContainer className="py-8" style={{ marginBottom: "0px" }}>
           <div className="text-center">
             <Heading1 className="text-[--color-text] mb-2">ניהול שאלות</Heading1>
-            <p className="text-[--color-secondary-text]">נהל את השאלות הפעילות במערכת</p>
           </div>
+          <AddQuestion></AddQuestion>
         </GridContainer>
       </div>
 
