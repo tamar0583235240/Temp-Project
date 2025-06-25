@@ -20,8 +20,9 @@ const schema: yup.ObjectSchema<InterviewMaterialsSubFormData> = yup.object({
         "video/x-msvideo",
       ];
       return allowedTypes.includes(value[0].type);
-    }),
-});
+    })
+    .notRequired(),
+}).required();
 
 export const CreateInterviewMaterialsSubForm = ({
   onSubmit,

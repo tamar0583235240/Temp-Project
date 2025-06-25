@@ -1,13 +1,24 @@
 export interface User {
   id: string;
-  // firstName: string;
-  // lastName: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  password: string;
   phone?: string;
   role: 'student' | 'manager';
-  createdAt: string; // מתורגם מתאריך
+  createdAt: string;
   isActive: boolean;
-  first_name: string;
-  last_name: string;
 }
+
+export interface ForgotPasswordForm {
+  email: string;
+}
+
+export interface ResetPasswordForm {
+  token: string;
+  password: string;
+}
+
+export type ResetFormData = {
+  password: string;
+  confirm: string;
+};

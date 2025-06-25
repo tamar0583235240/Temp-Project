@@ -2,11 +2,14 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForgotPasswordMutation } from "../../../shared/api/passwordApi";
-import { ForgotPasswordForm } from "../types/formTypes";
 
-const schema = yup.object().shape({
+// הגדרת הסכמה
+const schema = yup.object({
   email: yup.string().email("אימייל לא תקין").required("שדה חובה"),
 });
+
+// יצירת טיפוס מהסכמה
+type ForgotPasswordForm = yup.InferType<typeof schema>;
 
 const ForgotPassword = () => {
   const {
@@ -14,9 +17,10 @@ const ForgotPassword = () => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<ForgotPasswordForm>({
+  } = useForm({
     resolver: yupResolver(schema),
   });
+
 
   const [forgotPassword, { isLoading, isSuccess, error }] =
     useForgotPasswordMutation();
@@ -49,7 +53,7 @@ const ForgotPassword = () => {
       )}
     </form>
   );
-};
 
+};
 export default ForgotPassword;
 

@@ -1,4 +1,3 @@
-// src/controllers/userController.ts
 import { Request, Response } from 'express';
 import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository';
@@ -8,16 +7,32 @@ import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  const users: Users[] = await userRepository.getAllUsers();
+  // טען את המשתמשים כולל הקשרים (relations) שצריך - זה צריך להיעשות בתוך ה-repository
+  const users = await userRepository.getAllUsers();
   if (!users || users.length === 0) {
     return res.status(404).json({ message: 'No users found' });
   }
   res.json(users);
 };
 
+export const getMe = async (req: Request, res: Response) => {
+  const userId = (req as any).user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const user = await userRepository.getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  res.json({ user });
+};
+
 export const getUserById = async (req: Request, res: Response) => {
   const userId = req.params.id;
-  const user: Users | null = await userRepository.getUserById(userId);
+  const user = await userRepository.getUserById(userId);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
@@ -32,6 +47,9 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }
 
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
   const newUser: Users = {
@@ -51,8 +69,8 @@ export const createUser = async (req: Request, res: Response) => {
     resources: []
   };
 
-  const user: Users = await userRepository.createUser(newUser);
-  res.status(201).json(user);
+  const createdUser = await userRepository.createUser(newUser);
+  res.status(201).json(createdUser);
 };
 
 export const updateUser = async (req: Request, res: Response) => {

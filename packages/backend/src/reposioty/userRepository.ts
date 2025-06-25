@@ -1,5 +1,8 @@
 import { pool } from '../config/dbConnection';
 import { Users } from "../interfaces/entities/Users";
+import { User } from '../interfaces/User';
+import bcrypt from 'bcrypt';
+
 
 // קבלת משתמש לפי אימייל בלבד
 export const getUserByEmail = async (email: string): Promise<Users | null> => {
@@ -34,15 +37,20 @@ const getUserById = async (id: string): Promise<Users | null> => {
 };
 
 // קבלת משתמש לפי אימייל וסיסמה
-export const getUserByEmailAndPassword = async (email: string, password: string): Promise<Users | null> => {
-    try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        const user = result.rows[0];
-        if (!user || user.password !== password) throw new Error('Invalid credentials');
-        return user;
-    } catch {
-        throw new Error('User not found');
-    }
+export const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const user = result.rows[0];
+
+    if (!user) throw new Error('Invalid credentials');
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new Error('Invalid credentials');
+
+    return user;
+  } catch {
+    throw new Error('User not found');
+  }
 };
 
 // עדכון סיסמה
@@ -55,6 +63,7 @@ export const updateUserPassword = async (userId: string, newPassword: string) =>
 
 // עדכון פרטי משתמש
 const updateUser = async (id: string, userData: Partial<Users>): Promise<Users | null> => {
+
     try {
         const { firstName, lastName, email, phone, role, isActive, password } = userData;
 
@@ -98,14 +107,44 @@ const createUser = async (user: Users): Promise<Users> => {
     }
 };
 
+const insertUser = async (user: {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string | null;
+  role: string;
+  is_active: boolean;
+  password: string;
+  created_at: Date;
+}) => {
+  const result = await pool.query(
+    `INSERT INTO users (id, first_name, last_name, email, phone, role, is_active, password, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+     RETURNING *`,
+    [
+      user.id,
+      user.first_name,
+      user.last_name,
+      user.email,
+      user.phone,
+      user.role,
+      user.is_active,
+      user.password,
+      user.created_at,
+    ]
+  );
+  return result.rows[0];
+};
+
 // מחיקת משתמש
 const deleteUser = async (id: string): Promise<void> => {
-    try {
-        await pool.query('DELETE FROM users WHERE id = $1', [id]);
-    } catch (error) {
-        console.error("Error deleting user from local DB:", error);
-        throw error;
-    }
+  try {
+    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+  } catch (error) {
+    console.error("Error deleting user from local DB:", error);
+    throw error;
+  }
 };
 
 export default {
@@ -116,5 +155,6 @@ export default {
     updateUserPassword,
     updateUser,
     createUser,
+    insertUser,
     deleteUser
 };
