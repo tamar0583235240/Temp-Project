@@ -41,12 +41,6 @@ const InterviewPage = () => {
       
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        {/* <button
-        className="bg-primary-dark text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark/90 transition"
-        onClick={() => navigate('/')}
-      >
-        לדף הבית
-      </button> */}
         <div className="w-full max-w-2xl space-y-8">
           <Question />
           <Buttons />
