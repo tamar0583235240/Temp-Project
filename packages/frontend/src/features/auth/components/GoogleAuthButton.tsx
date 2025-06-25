@@ -27,7 +27,7 @@ const GoogleAuthButton = () => {
 
         dispatch(loginSuccess({ user: user, token: token }));
 
-        navigate('/home');
+        navigate('/');
       })
       .catch((error: any) => {
         dispatch(loginFailure(error?.data?.message || 'שגיאה בהתחברות עם Google'));

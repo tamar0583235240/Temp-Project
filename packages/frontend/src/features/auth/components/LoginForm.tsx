@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { CardSimple } from '../../../shared/ui/card';
 import { Input } from '../../../shared/ui/input';
 import { Button } from '../../../shared/ui/button';
+import { Link } from 'lucide-react';
 
 function LoginForm() {
   const dispatch = useAppDispatch();
@@ -51,6 +52,7 @@ function LoginForm() {
     <div>
       <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
         <form onSubmit={handleSubmit}>
+          <h2>התחברות</h2>
           <Input
             type="email"
             placeholder="אימייל"
@@ -90,6 +92,11 @@ function LoginForm() {
             <p>או התחבר עם:</p>
             <GoogleLoginButton />
           </div>
+
+          <p className="mt-4 text-center">
+          <a  href="/signup" >עדיין לא רשום? הרשם</a> 
+          </p>
+
         </form>
       </CardSimple>
     </div>

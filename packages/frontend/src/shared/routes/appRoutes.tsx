@@ -16,7 +16,7 @@ export default function AppRoutes() {
       {/* Routes without sidebar */}
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignupForm />} />
-
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       {/* Routes with sidebar */}
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<HomePage />} />
