@@ -14,7 +14,7 @@ import { interviewType } from "../types/questionType";
 import { useGetQuestionsQuery } from "../services/questionsApi";
 import "./Simulation.css";
 import { useNavigate } from "react-router-dom";
-import AnswerAI from "./AnswerAI";
+// import AnswerAI from "./AnswerAI";
 
 const Simulation: React.FC = () => {
   const dispatch = useDispatch();
@@ -118,20 +118,34 @@ const Simulation: React.FC = () => {
               שליחת שאלון
             </button>
           ) : (
+            // <button
+            //   className="answer-button"
+            //   onClick={() => {
+            //     handleTextChange(currentQuestion.answer ?? "");
+            //     setTimeout(() => dispatch(nextQuestion()), 300);
+            //   }}
+            // >
+            //   אישור
+            // </button>
             <button
-              className="answer-button"
-              onClick={() => {
-                handleTextChange(currentQuestion.answer ?? "");
-                setTimeout(() => dispatch(nextQuestion()), 300);
-              }}
-            >
-              אישור
-            </button>
+  className="answer-button"
+  onClick={() => {
+    handleTextChange(currentQuestion.answer ?? "");
+    
+    // איסוף כל ה־IDs של התשובות
+    const answeredIds = questions.map((q) => q.id);
+
+    // ניווט למסך AnswerAI עם ה־ids כ־state
+    navigate("/answers", { state: { answerIds: answeredIds } });
+  }}
+  style={{ backgroundColor: "#007BFF" }}
+>
+  אישור
+</button>
           )}
           <button className="answer-button" onClick={handleReset} style={{ backgroundColor: "#DC3545" }}>
             איפוס תשובה
           </button>
-          <AnswerAI answerId={String(currentQuestion.id)} />
         </div>
       </div>
     </div>
