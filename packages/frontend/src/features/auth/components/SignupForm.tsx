@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
 import GoogleAuthButton from './GoogleAuthButton';
+import { CardSimple } from '../../../shared/ui/card';
+import { Button } from '../../../shared/ui/button';
+import { Input } from '../../../shared/ui/input';
 
 const SignupForm = () => {
   const dispatch = useAppDispatch();
@@ -99,26 +102,27 @@ const SignupForm = () => {
   };
 
   return (
+    <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
     <form onSubmit={handleSubmit}>
       <h2>הרשמה</h2>
 
       {step === 'form' && (
         <>
-          <input
+          <Input
             name="firstName"
             placeholder="שם פרטי"
             value={form.firstName}
             onChange={handleChange}
             required
           />
-          <input
+          <Input
             name="lastName"
             placeholder="שם משפחה"
             value={form.lastName}
             onChange={handleChange}
             required
           />
-          <input
+          <Input
             name="email"
             type="email"
             placeholder="אימייל"
@@ -126,7 +130,7 @@ const SignupForm = () => {
             onChange={handleChange}
             required
           />
-          <input
+          <Input
             name="password"
             type="password"
             placeholder="סיסמה"
@@ -134,7 +138,7 @@ const SignupForm = () => {
             onChange={handleChange}
             required
           />
-          <input
+          <Input
             name="phone"
             placeholder="טלפון (אופציונלי)"
             value={form.phone}
@@ -146,7 +150,7 @@ const SignupForm = () => {
       {step === 'verify' && (
         <>
           <p>קוד אימות נשלח למייל: <b>{form.email}</b></p>
-          <input
+          <Input
             type="text"
             maxLength={6}
             placeholder="הזן קוד אימות"
@@ -157,20 +161,19 @@ const SignupForm = () => {
             inputMode="numeric"
             autoComplete="one-time-code"
           />
-          <button
-            type="button"
+          <Button
             disabled={loading}
             onClick={requestSignupCode}
             style={{ marginTop: '0.5rem' }}
           >
             שלח קוד מחדש
-          </button>
+          </Button>
         </>
       )}
 
-      <button type="submit" disabled={loading} style={{ marginTop: '1rem' }}>
+      <Button type="submit" disabled={loading} style={{ marginTop: '1rem' }}>
         {loading ? 'טוען...' : step === 'form' ? 'הרשם' : 'אמת קוד'}
-      </button>
+      </Button>
 
       {message && <p style={{ color: step === 'verify' ? 'green' : 'red', marginTop: '1rem' }}>{message}</p>}
 
@@ -183,6 +186,7 @@ const SignupForm = () => {
         </div>
       )}
     </form>
+    </CardSimple>
   );
 };
 

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../store/userSlice';
 import { useAuthWithGoogleMutation } from '../../../shared/api/userApi';
+import { loginFailure, loginSuccess } from '../store/authSlice';
 
 const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
 
@@ -22,17 +23,14 @@ const GoogleAuthButton = () => {
       .unwrap()
       .then((res) => {
         const user = res.user;
+        console.log('Google user:', user);
 
-        dispatch(setCurrentUser(user));
-        sessionStorage.setItem('userId', user.id);
-        sessionStorage.setItem('role', user.role || 'student');
-        sessionStorage.setItem('firstName', user.firstName || '');
-        sessionStorage.setItem('lastName', user.lastName || '');
-        sessionStorage.setItem('email', user.email || '');
+        dispatch(loginSuccess({ user: user, token: token }));
 
-        navigate('/welcome');
+        navigate('/');
       })
       .catch((error: any) => {
+        dispatch(loginFailure(error?.data?.message || 'שגיאה בהתחברות עם Google'));
         console.error('Google auth error:', error);
         MySwal.fire({
           title: 'שגיאה',

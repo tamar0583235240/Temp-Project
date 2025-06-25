@@ -4,6 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useResetPasswordMutation } from "../../../shared/api/passwordApi";
 import { ResetFormData } from "../types/types";
+import { CardSimple } from "../../../shared/ui/card";
+import { Input } from "../../../shared/ui/input";
+import { Button } from "../../../shared/ui/button";
 
 const schema = yup.object().shape({
   password: yup.string().required("שדה חובה").min(6, "לפחות 6 תווים"),
@@ -22,7 +25,8 @@ const ResetPassword = () => {
     resolver: yupResolver(schema),
   });
 
-  const [resetPassword, { isLoading, isError, isSuccess, error }] = useResetPasswordMutation();
+  const [resetPassword, { isLoading, isError, isSuccess, error }] =
+    useResetPasswordMutation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,24 +45,26 @@ const ResetPassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* <h2>איפוס סיסמה</h2> */}
-      <label>סיסמה חדשה:</label>
-      <input type="password" {...register("password")} />
-      {errors.password && <p>{errors.password.message}</p>}
-      <label>אימות סיסמה:</label>
-      <input type="password" {...register("confirm")} />
-      {errors.confirm && <p>{errors.confirm.message}</p>}
-      <button type="submit" disabled={isSubmitting || isLoading}>
-        {isLoading ? "טוען..." : "איפוס סיסמה"}
-      </button>
-      {isError && (
-        <p style={{ color: "red" }}>
-          {(error as any)?.data?.message || "אירעה שגיאה"}
-        </p>
-      )}
-      {isSuccess && <p>הסיסמה אופסה בהצלחה!</p>}
-    </form>
+    <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <h2>איפוס סיסמה</h2> */}
+        <label>סיסמה חדשה:</label>
+        <Input type="password" {...register("password")} />
+        {errors.password && <p>{errors.password.message}</p>}
+        <label>אימות סיסמה:</label>
+        <Input type="password" {...register("confirm")} />
+        {errors.confirm && <p>{errors.confirm.message}</p>}
+        <Button type="submit" disabled={isSubmitting || isLoading}>
+          {isLoading ? "טוען..." : "איפוס סיסמה"}
+        </Button>
+        {isError && (
+          <p style={{ color: "red" }}>
+            {(error as any)?.data?.message || "אירעה שגיאה"}
+          </p>
+        )}
+        {isSuccess && <p>הסיסמה אופסה בהצלחה!</p>}
+      </form>
+    </CardSimple>
   );
 };
 

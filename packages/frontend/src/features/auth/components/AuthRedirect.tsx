@@ -6,7 +6,7 @@ export default function AuthRedirect() {
   const token = useSelector((state: RootState) => state.auth.token);
 
   if (token) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   return <Navigate to="/login" />;
