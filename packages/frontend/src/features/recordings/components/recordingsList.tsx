@@ -81,7 +81,7 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
                                                   sm:text-xs sm:px-3 sm:py-1.5
                                                   max-sm:text-xs max-sm:px-2 max-sm:py-1"
                                         icon={
-                                            <svg className="w-4 h-4 sm:w-3 sm:h-3 max-sm:w-3 max-sm:h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <svg className="w-6 h-6 sm:w-5 sm:h-5 max-sm:w-4 max-sm:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12 16L7 11L8.4 9.6L11 12.2V4H13V12.2L15.6 9.6L17 11L12 16Z" fill="currentColor" />
                                                 <path d="M5 20V18H19V20H5Z" fill="currentColor" />
                                             </svg>
@@ -124,7 +124,7 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
                                 controls
                             >
                                 <source src={recording.file_url} type="audio/mpeg" />
-                                הדפדפן שלך לא תומך בנגן האודיו
+                                הדפדפן שלך לא תומך בנגן האודיو
                             </audio>
                         </div>
 
