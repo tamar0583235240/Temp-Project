@@ -9,7 +9,7 @@ import { ImprovementSuggestions2 } from './ImprovementSuggestions2';
 
 export const MainDashbord = () => {
 
-  const userId = useUserStore((state) => state.userId) || "66b74e9b-b7e3-4666-882e-b577badf9a5d";
+  const userId = useUserStore((state) => state.userId) || "af95c702-1f97-41e2-857b-d5c0256aa845";
 
 
   // כרגע ImprovementSuggestions מצפה ל־fullName ולא ל־userId

@@ -12,6 +12,9 @@ const HomePage = () => {
         <div onClick={() => { navigate('/dashboard') }}>
           <button>dashboard</button>
         </div>
+        <div onClick={() => navigate('/admin/users')}>
+          <button>users</button>
+        </div>
         <div onClick={() => { navigate('/resources') }}>
           <button>resources</button>
         </div>
