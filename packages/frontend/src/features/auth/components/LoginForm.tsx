@@ -1,17 +1,14 @@
-// LoginForm.tsx
-import { useState, useEffect } from 'react';
+// src/features/auth/LoginForm.tsx
+import React, { useState, useEffect } from 'react';
 import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess } from '../store/authSlice';
-import { useNavigate } from 'react-router-dom';
-import './LoginForm.css'; // חשוב!
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const [login, { data, isLoading, isError, error, isSuccess }] = useLoginMutation();
 
@@ -23,54 +20,49 @@ const LoginForm = () => {
   useEffect(() => {
     if (data?.user && data?.token) {
       dispatch(loginSuccess(data));
-      const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem('token', data.token);
-      storage.setItem('user', JSON.stringify(data.user));
 
-      navigate('/dashboard'); // אופציונלי: נווטי אחרי התחברות
+      if (rememberMe) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      } 
+      else {
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('user', JSON.stringify(data.user));
+      }
     }
-  }, [data, dispatch, rememberMe, navigate]);
+  }, [data, dispatch]);
 
   return (
-    <div className="login-form-container">
-      <form onSubmit={handleSubmit}>
-        <h2>התחברות</h2>
-        <input
-          type="email"
-          placeholder="אימייל"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="סיסמה"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <label>
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          זכור אותי
-        </label>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'מתחבר...' : 'התחבר'}
-        </button>
-        <button type="button" onClick={() => navigate('/forgot-password')}>
-          שכחתי סיסמה
-        </button>
-        {isError && (
-          <p style={{ color: 'red' }}>
-            שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}
-          </p>
-        )}
-        {isSuccess && <p style={{ color: 'green' }}>התחברת בהצלחה!</p>}
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h2>התחברות</h2>
+      <input
+        type="email"
+        placeholder="אימייל"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="סיסמה"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'מתחבר...' : 'התחבר'}
+      </button>
+
+      <input
+        type="checkbox"
+        placeholder='זכור אותי'
+        checked={rememberMe}
+        onChange={(e) => setRememberMe(e.target.checked)}
+      />
+
+      {isError && <p style={{ color: 'red' }}>שגיאה: {(error as any)?.data?.message || 'משהו השתבש'}</p>}
+      {isSuccess && <p>התחברת בהצלחה!</p>}
+    </form>
   );
 };
 

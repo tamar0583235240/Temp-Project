@@ -7,7 +7,7 @@ export interface ResetPasswordForm {
   password: string;
 }
 
-export type ResetFormData = {
+export interface ResetFormData  {
   password: string;
   confirm: string;
 };

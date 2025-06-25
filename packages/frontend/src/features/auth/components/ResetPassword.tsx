@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useResetPasswordMutation } from "../../../shared/api/passwordApi";
 import { ResetFormData } from "../types/formTypes";
 
@@ -23,12 +23,9 @@ const ResetPassword = () => {
   });
 
   const [resetPassword, { isLoading, isError, isSuccess, error }] = useResetPasswordMutation();
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  // Get token from query string
-  const searchParams = new URLSearchParams(location.search);
-  const token = searchParams.get("token");
+  const navigate = useNavigate();
+  const { token } = useParams<{ token: string }>();
 
   const onSubmit = async (data: ResetFormData) => {
     try {
@@ -42,16 +39,20 @@ const ResetPassword = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* <h2>איפוס סיסמה</h2> */}
+      <h2>איפוס סיסמה</h2>
+
       <label>סיסמה חדשה:</label>
       <input type="password" {...register("password")} />
       {errors.password && <p>{errors.password.message}</p>}
+
       <label>אימות סיסמה:</label>
       <input type="password" {...register("confirm")} />
       {errors.confirm && <p>{errors.confirm.message}</p>}
+
       <button type="submit" disabled={isSubmitting || isLoading}>
         {isLoading ? "טוען..." : "איפוס סיסמה"}
       </button>
+
       {isError && (
         <p style={{ color: "red" }}>
           {(error as any)?.data?.message || "אירעה שגיאה"}

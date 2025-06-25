@@ -2,12 +2,11 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { sendResetEmail } from '../utils/emailSender';
-import { getUserByEmail, updateUserPassword } from '../reposioty/userRepository';
+import { getUserByEmail, updateUserPassword } from '../reposioty/userRepository'; 
 import { createToken, getToken, deleteToken } from '../reposioty/passwordResetRepository';
-import { Users } from '../interfaces/entities/Users';
-import userRepository from '../reposioty/userRepository';
+import { users } from '../config/users';
+import { User } from '../interfaces/User';
 import { v4 as uuidv4 } from 'uuid';
-import authRepository from '../reposioty/authRepository';
 
 const TOKEN_EXPIRATION_HOURS = 1;
 
@@ -17,6 +16,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
   try {
     const user = await getUserByEmail(email);
+
+    // גם אם המשתמש לא קיים - מחזירים תשובה "רגילה" מסיבות אבטחה
     if (!user) {
       return res.status(200).json({ message: 'If email exists, reset link sent' });
     }
@@ -60,52 +61,55 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+// הדמיה של בסיס נתונים
+interface UserWithPassword extends User {
+  password: string;
+}
+
+const usersWithPasswords: UserWithPassword[] = users.map((u) => ({
+  ...u,
+  password: '123456', // סיסמה זמנית
+}));
+
+export const login = (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await getUserByEmail(email);
-  
+
+  const user = usersWithPasswords.find(
+    (u) => u.email === email && u.password === password
+  );
+
   if (!user) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password);
-  if (!passwordMatch) {
-    return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
-  }
-
+  // נניח שאת יוצרת טוקן דמי
   const token = `mock-token-${user.id}`;
+
   res.json({ user, token });
 };
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
+  const existing = usersWithPasswords.find((u) => u.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const newUser: Users = {
+  const newUser: UserWithPassword = {
     id: uuidv4(),
     firstName,
     lastName,
     email,
     phone,
-    password: hashedPassword,
+    password,
     role: 'student',
-    isActive: true,
-    answers: [],
-    feedbacks: [],
-    passwordResetTokens: [],
-    sharedRecordings: [],
     createdAt: new Date(),
-    resources: []
+    isActive: true,
   };
 
-  await authRepository.signup(newUser);
-  const token = `mock-token-${newUser.id}`;
+  usersWithPasswords.push(newUser);
 
+  const token = `mock-token-${newUser.id}`;
   res.status(201).json({ user: newUser, token });
 };

@@ -1,9 +1,8 @@
 import { pool } from '../config/dbConnection';
 import { Users } from "../interfaces/entities/Users";
-import { User } from '../interfaces/User';
 
 // קבלת משתמש לפי אימייל בלבד
-export const getUserByEmail = async (email: string): Promise<User | null> => {
+export const getUserByEmail = async (email: string): Promise<Users | null> => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
         return result.rows[0] || null;
@@ -35,7 +34,7 @@ const getUserById = async (id: string): Promise<Users | null> => {
 };
 
 // קבלת משתמש לפי אימייל וסיסמה
-export const getUserByEmailAndPassword = async (email: string, password: string): Promise<User | null> => {
+export const getUserByEmailAndPassword = async (email: string, password: string): Promise<Users | null> => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
