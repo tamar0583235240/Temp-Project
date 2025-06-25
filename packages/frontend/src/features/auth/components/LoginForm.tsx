@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { CardSimple } from '../../../shared/ui/card';
 import { Input } from '../../../shared/ui/input';
 import { Button } from '../../../shared/ui/button';
-import { Link } from 'lucide-react';
 
 function LoginForm() {
   const dispatch = useAppDispatch();
