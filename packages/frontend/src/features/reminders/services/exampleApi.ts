@@ -1,14 +1,14 @@
 
 import { api } from "../../../shared/api/api";
-import { exampleType } from "../types/exampleType";
+import { reminder } from "../types/reminderType";
 
-export const exampleApi = api.injectEndpoints({
+export const remainderApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getItems: builder.query<exampleType[], void>({
+    getItems: builder.query<reminder[], void>({
       query: () => "items",
       providesTags: ["Item"],
     }),
-    addItem: builder.mutation<exampleType, Partial<exampleType>>({
+    addItem: builder.mutation<reminder, Partial<reminder>>({
       query: (item) => ({
         url: "items",
         method: "POST",
@@ -30,4 +30,4 @@ export const {
   useGetItemsQuery,
   useAddItemMutation,
   useDeleteItemMutation,
-} = exampleApi;
+} = remainderApi;

@@ -23,6 +23,10 @@ const HomePage = () => {
         <div onClick={() => { navigate('/shared') }}>
           <button>shared</button>
         </div>
+
+        <div onClick={() => { navigate('/reminders') }}>
+          <button>reminders</button>
+        </div>
       </div>
       {isManager && (
         <div>
