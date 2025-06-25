@@ -7,7 +7,7 @@ import { GridContainer } from "../../../shared/ui/GridContainer";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
 import { SummaryBox } from "../../../shared/ui/SummaryBox";
 import { Paragraph } from "../../../shared/ui/typography";
-import "./AiInsightsList.css";
+
 
 export const AiInsightsList = (props: any) => {
     const { answerId } = props

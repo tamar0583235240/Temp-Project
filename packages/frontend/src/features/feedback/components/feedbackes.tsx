@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { MessageCircle, ChevronDown, ChevronUp, User, Calendar } from "lucide-react"
-import "./feedbackes.css"
 import { useGetFeedbackesBysharedRecordingIdQuery } from "../services/feedbackApi"
 import { Users } from "../types/UsersType"
 import { Button } from "../../../shared/ui/button"
