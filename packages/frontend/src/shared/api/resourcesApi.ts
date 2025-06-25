@@ -27,15 +27,8 @@ export const resourcesApi = api.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
-        updateResource: builder.mutation<updateRes, Resource>({
-            query: (resource) => ({
-                url: `/resources/${resource.id}`,
-                method: 'put',
-                body: resource,
-
-            }),
-        }),
+      
     }),
 });
 
-export const { useUpdateResourceMutation, useGetResourcesQuery, useDeleteResourceMutation } = resourcesApi;
+export const {useGetResourcesQuery, useDeleteResourceMutation } = resourcesApi;

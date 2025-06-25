@@ -1,43 +1,13 @@
 import { ResourceListItem } from "./ResourceListItem";
-import { useDeleteResourceMutation, useGetResourcesQuery, useUpdateResourceMutation } from "../../../shared/api/resourcesApi";
-import{Resource,eFileType} from "../types/Source"
+import { useDeleteResourceMutation, useGetResourcesQuery } from "../../../shared/api/resourcesApi";
+import { Resource } from "../types/Source"
 
 const ResourceList = () => {
-  const resourceList: Resource[] = [
-    {
-      id: 1,
-      title: "מדריך שימוש",
-      type: eFileType.text,
-      description: "הסבר קצר על המערכת",
-      fileUrl: "https://example.com/resource.pdf",
-      createdAt: new Date(2024, 5, 23, 10, 30, 0),
-    },
-    {
-      id: 2,
-      title: "מסמך הוראות",
-      type: eFileType.pdf,
-      description: "מסמך עם הנחיות נוספות",
-      fileUrl: "https://example.com/instructions.pdf",
-      createdAt: new Date(2024, 6, 1, 15, 45, 0),
-    },
-    {
-      id: 2,
-      title: "מסמך הוראות",
-      type: eFileType.pdf,
-      description: "מסמך עם הנחיות נוספות",
-      fileUrl: "https://example.com/instructions.pdf",
-      createdAt: new Date(2024, 6, 1, 15, 45, 0),
-    }
-  ];
-
-
-
   const { data: resources, error, isLoading } = useGetResourcesQuery();
   const [deleteResource] = useDeleteResourceMutation();
-  const [updateResource] = useUpdateResourceMutation();
 
 
- const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     try {
       await deleteResource(id).unwrap();
       console.log('Resource deleted!');
@@ -46,7 +16,7 @@ const ResourceList = () => {
     }
   };
 
-  const handleUpdate = async (id:number,resource:Resource) => {
+  const handleUpdate = async (id: number, resource: Resource) => {
     try {
       console.log(`Updated: ${id}`);
     } catch (err) {
@@ -56,7 +26,12 @@ const ResourceList = () => {
 
 
 
-  if (isLoading) return <div>טוען...</div>;
+  if (isLoading) return (
+    <div className="flex justify-center items-center h-40">
+      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div>
+      <span className="ml-4 text-green-700 font-semibold">טוען נתונים...</span>
+    </div>
+  )
   if (error) return <div>שגיאה בטעינת המשאבים</div>;
   return (
     <section dir="rtl" className="mt-6 space-y-4 px-4">
