@@ -271,43 +271,43 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
 
 // הרשמה
-export const signup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+// export const signup = async (req: Request, res: Response) => {
+//   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
-  if (existing) {
-    return res.status(409).json({ message: 'אימייל כבר קיים' });
-  }
+//   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
+//   if (existing) {
+//     return res.status(409).json({ message: 'אימייל כבר קיים' });
+//   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+//   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser: Users = {
-    id: uuidv4(),
-    firstName,
-    lastName,
-    email,
-    phone,
-    password: hashedPassword,
-    role: 'student',
-    isActive: true,
-    answers: [],
-    feedbacks: [],
-    passwordResetTokens: [],
-    sharedRecordings: [],
-    createdAt: new Date(),
-    resources: []
-  };
+//   const newUser: Users = {
+//     id: uuidv4(),
+//     firstName,
+//     lastName,
+//     email,
+//     phone,
+//     password: hashedPassword,
+//     role: 'student',
+//     isActive: true,
+//     answers: [],
+//     feedbacks: [],
+//     passwordResetTokens: [],
+//     sharedRecordings: [],
+//     createdAt: new Date(),
+//     resources: []
+//   };
 
-  await authRepository.signup(newUser);
+//   await authRepository.signup(newUser);
 
-  const token = jwt.sign(
-    { id: newUser.id, email: newUser.email, role: newUser.role },
-    JWT_SECRET,
-    { expiresIn: '1h' }
-  );
+//   const token = jwt.sign(
+//     { id: newUser.id, email: newUser.email, role: newUser.role },
+//     JWT_SECRET,
+//     { expiresIn: '1h' }
+//   );
 
-  res.status(201).json({ user: newUser, token });
-};
+//   res.status(201).json({ user: newUser, token });
+// };
 
 const client = new OAuth2Client();
 
