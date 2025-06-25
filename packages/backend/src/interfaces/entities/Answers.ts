@@ -9,12 +9,13 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
+import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
 
-@Index("Answer_pkey", ["id"], { unique: true })
+@Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
 export class Answers {
-  @Column("character varying", { primary: true, name: "id" })
+  @Column("uuid", { primary: true, name: "id" })
   id: string;
 
   @Column("text", { name: "file_url" })
@@ -29,9 +30,6 @@ export class Answers {
   @Column("text", { name: "answer_file_name", nullable: true })
   answerFileName: string | null;
 
-  @Column("integer", { name: "amount_feedbacks", nullable: true })
-  amountFeedbacks: number | null;
-
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
 
@@ -44,6 +42,9 @@ export class Answers {
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
+
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
+  feedbacks: Feedback[];
 
   @OneToMany(
     () => SharedRecordings,
