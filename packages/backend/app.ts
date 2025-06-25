@@ -4,8 +4,6 @@ import cors from 'cors';
 import authGoogleRoutes from './src/routes/authGoogleRoutes';
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
 import dotenv from 'dotenv';
-import resourceRouts from '../backend/src/routes/resourceRouts'
-
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
@@ -21,14 +19,16 @@ const app: Application = express();
 console.log('i am here in app');
 
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/auth', authGoogleRoutes);
-app.use('/api', interviewMaterialsHub);
+app.use('/interview-materials-hub', interviewMaterialsHub);
 
 
 
