@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { useLoginMutation } from "../../../shared/api/authApi";
-import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
-import { loginSuccess, loginStart, loginFailure } from "../store/authSlice";
-import GoogleLoginButton from "./GoogleAuthButton";
-import { useNavigate } from "react-router-dom";
-import { Input } from "../../../shared/ui/input";
-import { Button } from "../../../shared/ui/button";
-import { CardSimple } from "../../../shared/ui/card";
+import React, { useState } from 'react';
+import { useLoginMutation } from '../../../shared/api/authApi';
+import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
+import { loginSuccess, loginStart, loginFailure } from '../store/authSlice';
+import GoogleLoginButton from './GoogleAuthButton';
+import CodeVerificationScreen from './CodeVerificationScreen';
+import { useNavigate } from 'react-router-dom';
+import { CardSimple } from '../../../shared/ui/card';
+import { Input } from '../../../shared/ui/input';
+import { Button } from '../../../shared/ui/button';
 
 function LoginForm() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ function LoginForm() {
       const res = await login({ email, password }).unwrap();
       setTempEmail(email);
       setShowValidation(true);
+      successfulLogin();
     } catch (err: any) {
       const message = err?.data?.message || "שגיאה בהתחברות";
       dispatch(loginFailure(message));
