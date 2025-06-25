@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from './shared/routes/appRoutes';
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./shared/routes/appRoutes";
 
-import './App.css';
-import { useAppDispatch } from './shared/hooks/reduxHooks';
+import "./App.css";
+import { MessageModalProvider } from "./shared/ui/MessageModalContext";
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
-import { MessageModalProvider } from './shared/ui/MessageModalContext';
 
-
-
-
+import { useAppDispatch } from "./shared/hooks/reduxHooks";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,12 +35,11 @@ function App() {
   if (loading) return <p>טוען...</p>;
 
   return (
-    <MessageModalProvider>  
+    <MessageModalProvider>
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>
-
   );
 }
 
