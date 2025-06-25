@@ -88,7 +88,7 @@ const Simulation: React.FC = () => {
         <div className="question-title">שאלה {currentIndex + 1}</div>
         <div className="question-text">{currentQuestion.content}</div>
 
-        {currentQuestion.type === "open" ? (
+        {currentQuestion.question_type === "open" ? (
           <textarea
             className="answer-input"
             value={currentQuestion.answer ?? ""}
