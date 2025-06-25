@@ -27,8 +27,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api', exampleRouts);
+
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
+
+app.use(cors());
 
 
 export default app;
