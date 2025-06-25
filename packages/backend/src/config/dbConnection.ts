@@ -9,6 +9,7 @@ export const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });
+if (process.env.JEST_WORKER_ID === undefined) {
 
 pool.connect()
   .then(() => console.log('✅ Connected to PostgreSQL'))
@@ -18,4 +19,4 @@ console.log('DB_HOST:', process.env.DB_HOST);
 console.log('DB_PORT:', process.env.DB_PORT);
 console.log('DB_NAME:', process.env.DB_NAME);
 console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-
+}
