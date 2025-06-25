@@ -1,11 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
-import AuthRedirect from "../../features/auth/components/AuthRedirect";
-import AuthRedirectPage from "../../pages/AuthRedirectPage";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
-import ResetPassword from "../../features/auth/components/ResetPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";

@@ -31,7 +31,7 @@ const ForgotPassword = () => {
 
   const onSubmit = async (data: ForgotPasswordForm) => {
     try {
-      await forgotPassword({ email: data.email }).unwrap();
+      await forgotPassword({ email: data?.email }).unwrap();
     } catch (e) {
       console.error(e);
     }
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
 
         <label>אימייל:</label>
         <Input type="email" {...register("email")} />
-        {errors.email && <p>{errors.email.message}</p>}
+        {typeof errors.email?.message === "string" && <p>{errors.email.message}</p>}
 
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "טוען..." : "שלח קישור לאיפוס"}
