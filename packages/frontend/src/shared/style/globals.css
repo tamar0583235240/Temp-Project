@@ -12,9 +12,10 @@
     --color-background: #F7FAFC;
   }
 
-   
+
   body {
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;
+    direction: rtl;
   }
 }
