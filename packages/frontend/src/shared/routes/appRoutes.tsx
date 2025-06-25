@@ -5,6 +5,7 @@ import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
+import ResetPassword from "../../features/auth/components/ResetPassword";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       {/* Routes with sidebar */}
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<HomePage />} />
