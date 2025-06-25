@@ -7,6 +7,7 @@ import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
+import Sidebar from './shared/ui/sidebar';
 
 
 

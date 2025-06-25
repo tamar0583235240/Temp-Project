@@ -32,6 +32,8 @@ export const getMe = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
   const userId = req.params.id;
+  console.log(req.params.password)
+  
   const user = await userRepository.getUserById(userId);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
