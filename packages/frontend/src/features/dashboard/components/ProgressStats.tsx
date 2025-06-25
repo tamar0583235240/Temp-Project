@@ -4,12 +4,14 @@ import { CheckCircle } from 'lucide-react';
 import { useUserStore } from '../store/progressSlice';
 
 const ProgressStats: React.FC = () => {
-  const userId = useUserStore((state) => state.userId);
-  const { data, isLoading, isError } = useGetProgressStatsQuery(userId!, {
-    skip: !userId,
+  // אם אין userId בסטור, נשתמש במחרוזת ברירת מחדל
+  const userId = useUserStore((state) => state.userId) || "1d2dd74e-fdd4-4cb3-90da-0ce7ff08248c";
+
+  // לא מדלגים על הקריאה ל־API גם כשיש ברירת מחדל
+  const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
+    skip: false,
   });
 
-  if (!userId) return <p>אנא התחבר</p>;
   if (isLoading) return <p>טוען נתונים...</p>;
   if (isError) return <p>שגיאה בטעינת נתונים</p>;
 
