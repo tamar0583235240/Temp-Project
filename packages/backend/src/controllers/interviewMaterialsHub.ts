@@ -3,6 +3,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { Pool } from 'pg';
 import { pool } from '../config/dbConnection';
 import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
+import processHebrewText from '../utils/processHebrewText';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -41,17 +42,19 @@ export const addFile = async (req: Request, res: Response) => {
     const result = await uploadStream();
 
     const fileUrl = (result as any).secure_url;
+const cleanedText = processHebrewText(`${req.body.title} ${req.body.description || ''}`);
 
-    const query = `
-      INSERT INTO "interview_materials_sub" ( title, "thumbnail", short_description)
-      VALUES ( $1, $2, $3)
-    `;
+const query = `
+  INSERT INTO interview_materials_sub (title, thumbnail, short_description, search_text_cleaned)
+  VALUES ($1, $2, $3, $4)
+`;
 
-    const values = [
-      req.body.title || 'File for interview',
-      fileUrl,
-      req.body.description || '',
-    ];
+ const values = [
+  req.body.title || 'File for interview',
+  fileUrl,
+  req.body.description || '',
+  cleanedText
+];
 
     await pool.query(query, values);
 
