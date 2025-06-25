@@ -8,11 +8,12 @@ console.log('Database password:', process.env.PGPASSWORD);
 console.log('Database port:', process.env.PGPORT);
 const pool = new Pool({
 
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: Number(process.env.PGPORT),
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  
+  port: Number(process.env.DB_PORT),
  });
 console.log('Database connection pool created');
 export {pool}
