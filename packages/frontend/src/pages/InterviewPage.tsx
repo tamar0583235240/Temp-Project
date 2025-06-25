@@ -51,6 +51,7 @@ const InterviewPage = () => {
           <Question />
           <Buttons />
           <TipsComponent/>
+          
         </div>
       </main>
       {/* Sidebar */}
