@@ -8,6 +8,11 @@ import { GridContainer } from "../../../shared/ui/GridContainer";
 import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
+import { useEffect, useState } from "react";
+import { Answer } from "../types/Answer";
+import { FilteringComponents } from "./filteringComponents";
+import { SearchComponents } from "./searchComponents";
+import { SortComponents } from "./sortComponents";
 
 type RecordingsListProps = {
     allowedRoles: string[];
@@ -19,13 +24,83 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
     const userId = user && user.id ? user.id.toString() : '00000000-0000-0000-0000-000000000000';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
 
+    // סטייטים לאחזקת ה-inputs
+    const [searchText, setSearchText] = useState('');
+    const [filterCriteria, setFilterCriteria] = useState<{ dateFilter: string; questionName: string; feedbackCategory: string }>({
+        dateFilter: 'all',
+        questionName: '',
+        feedbackCategory: '',
+    });
+    const [sortOption, setSortOption] = useState('latest');
+
+    const [displayedAnswers, setDisplayedAnswers] = useState<Answer[]>([]);
+
+    useEffect(() => {
+        if (!data) return;
+
+        let results = [...data];
+
+        // סינון לפי חיפוש
+        if (searchText.trim() !== '') {
+            results = results.filter(answer =>
+                answer.answer_file_name.toLowerCase().includes(searchText.toLowerCase())
+            );
+        }
+
+        // סינון לפי שאלה + פידבק (אבל עדיין לא לפי תאריך)
+        results = results.filter(answer => {
+            const questionPass =
+                filterCriteria.questionName === '' || answer.question_id === filterCriteria.questionName;
+            const feedbackPass =
+                filterCriteria.feedbackCategory === '' ||
+                (filterCriteria.feedbackCategory === 'none' && answer.amount_feedbacks === 0) ||
+                (filterCriteria.feedbackCategory === 'low' && answer.amount_feedbacks >= 1 && answer.amount_feedbacks <= 3) ||
+                (filterCriteria.feedbackCategory === 'high' && answer.amount_feedbacks >= 4);
+            return questionPass && feedbackPass;
+        });
+
+        // סינון לפי תאריך
+        if (filterCriteria.dateFilter === 'latest' && results.length > 0) {
+            const latest = results.reduce((a, b) =>
+                new Date(b.submitted_at) > new Date(a.submitted_at) ? b : a
+            );
+            results = [latest]; // נחזיר רק את ההקלטה הכי חדשה מהסינון הקיים
+        } else if (filterCriteria.dateFilter === 'lastWeek') {
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            results = results.filter(answer => new Date(answer.submitted_at) >= oneWeekAgo);
+        } else if (filterCriteria.dateFilter === 'lastMonth') {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            results = results.filter(answer => new Date(answer.submitted_at) >= thirtyDaysAgo);
+        }
+
+        // מיון
+        results.sort((a, b) => {
+            switch (sortOption) {
+                case 'latest':
+                    return new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime();
+                case 'oldest':
+                    return new Date(a.submitted_at).getTime() - new Date(b.submitted_at).getTime();
+                case 'mostFeedbacks':
+                    return b.amount_feedbacks - a.amount_feedbacks;
+                case 'leastFeedbacks':
+                    return a.amount_feedbacks - b.amount_feedbacks;
+                default:
+                    return 0;
+            }
+        });
+
+        setDisplayedAnswers(results);
+    }, [data, searchText, filterCriteria, sortOption]);
+
     if (isLoading)
         return (
             <GridContainer className="text-center" dir="rtl">
                 <Heading1>Loading...</Heading1>
             </GridContainer>
         );
-    
+
     if (error || !data)
         return (
             <GridContainer className="text-center" dir="rtl">
@@ -33,12 +108,30 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
             </GridContainer>
         );
 
-    return (
+    return (  
         <GridContainer maxWidth="lg" className="text-center" dir="rtl" padding="px-2 sm:px-4 lg:px-6">
+             <FilteringComponents
+                filterCriteria={filterCriteria}
+                setFilterCriteria={setFilterCriteria}
+                originalAnswers={data ?? []}
+            />
+
             <Heading1 className="mb-8">ההקלטות שלי</Heading1>
             
+            <div className="top-controls">
+                <SearchComponents
+                    searchText={searchText}
+                    setSearchText={setSearchText}
+                />
+            </div>
+            
+            <SortComponents
+                sortOption={sortOption}
+                setSortOption={setSortOption}
+            />
+            
             <div className="space-y-4">
-                {data.map((recording, index) => (
+                {displayedAnswers.map((recording, index) => (
                     <CardSimple 
                         key={recording.id} 
                         className="w-full max-w-2xl mx-auto overflow-hidden hover:shadow-lg transition-shadow
