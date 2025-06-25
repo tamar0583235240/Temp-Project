@@ -7,7 +7,6 @@ import { MessageModalProvider } from "./shared/ui/MessageModalContext";
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
 import { loginSuccess } from "./features/auth/store/authSlice";
-import SidebarNavigation from "./shared/ui/sidebar";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -26,7 +25,6 @@ function App() {
   return (
     <MessageModalProvider>
       <BrowserRouter>
-        <SidebarNavigation></SidebarNavigation>
         <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>

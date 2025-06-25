@@ -1,9 +1,9 @@
 import * as FaIcons from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
-import { useLocation } from "react-router-dom";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
+
 
 interface NavItem {
   label: string;
@@ -12,16 +12,16 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "בית", href: "/home" },
-  { label: "סימולציה", href: "/simulation" },
-  { label: "דשבורד", href: "/dashboard" },
-  { label: "הקלטות שלי", href: "/my-recordings" },
-  { label: "הקלטות ששיתפו", href: "/shared-recordings" },
-  { label: "מאגר מידע", href: "/knowledge-base" },
-  { label: "ניהול", href: "", isSectionTitle: true },
-  { label: "ניהול שאלות", href: "/manage-questions" },
-  { label: "ניהול משתמשים", href: "/manage-users" },
-  { label: "ניהול מאגר", href: "/manage-knowledge" },
+  { label: "Home", href: "/" },
+  { label: "Simulation", href: "/simulation" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "My Recordings", href: "/recordings" },
+  { label: "Shared Recordings", href: "/shared" },
+  { label: "Resources", href: "/resources" },
+  { label: "Admin", href: "", isSectionTitle: true },
+  { label: "Manage Questions", href: "/admin/questions" },
+  { label: "Manage Users", href: "/admin/users" },
+  { label: "Manage Resources", href: "/admin/resources" },
 ];
 
 const SidebarNavigation = () => {
@@ -29,7 +29,7 @@ const SidebarNavigation = () => {
 
   return (
     <aside
-      className="fixed right-0 top-0 w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right"
+      className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right"
       dir="rtl"
     >
       {/* Header */}
