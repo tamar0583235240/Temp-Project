@@ -9,9 +9,10 @@ import ShareButton from "../../shared-recordings/components/ShareButton";
 
 const RecordingsList = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const userId = user?.id?.toString() ?? '00000000-0000-0000-0000-000000000003';
+  const userId = user?.id?.toString() ?? '00000000-0000-0000-0000-000000000004';
 
   const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
+  console.log("Recordings data:", data);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
@@ -44,6 +45,8 @@ const RecordingsList = () => {
               <ShareButton
                 setIsDialogOpen={() => {
                   setSelectedRecordingId(recording.id);
+                  console.log("Selected recording ID:", recording.id);
+                  
                   setIsDialogOpen(true);
                 }}
               />

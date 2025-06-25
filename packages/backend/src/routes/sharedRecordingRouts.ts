@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { getSharedRecordingParticipants } from '../controllers/sharedRecordingController';
+import { getSharedRecordingParticipants, getPreviouslySharedEmails } from '../controllers/sharedRecordingController';
 
 const router = Router();
 
 router.get('/getSharedRecordingParticipants/:answerId/:ownerId', getSharedRecordingParticipants);
+router.get('/sharedEmails/:userId', getPreviouslySharedEmails);
 
 export default router;

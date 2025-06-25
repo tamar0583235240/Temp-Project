@@ -1,30 +1,49 @@
 import { useState } from "react";
-import { useGetSharedWithQuery } from "../services/ShareApi";
 import { Trash2, X } from "lucide-react";
+import {
+  useGetSharedWithQuery,
+  useAddParticipantMutation,
+  useGetPreviouslySharedEmailsQuery,
+} from "../services/ShareApi";
 import { ShareDialogProps } from "../types/ShareDialogProps";
 
 const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) => {
   const [email, setEmail] = useState("");
 
-  const { data: participants = [], isLoading } = useGetSharedWithQuery({
-    userId,
-    recordingId,
-  }, {
+  const { data: participants = [], isLoading } = useGetSharedWithQuery(
+    { userId, recordingId },
+    { skip: !open }
+  );
+
+  const { data: suggestions = [] } = useGetPreviouslySharedEmailsQuery(userId, {
     skip: !open,
   });
 
-  const handleAdd = () => {
-    console.log("here we should add the participant");
+  const [addParticipant, { isLoading: isAdding }] = useAddParticipantMutation();
+
+  const handleAdd = async () => {
+    if (!email) return;
+    try {
+      await addParticipant({ recordingId, email }).unwrap();
+      setEmail("");
+    } catch (err) {
+      console.error("Error adding participant:", err);
+      alert("שגיאה בהוספת משתתף. נסה שוב.");
+    }
   };
 
   const handleDelete = (index: number) => {
-    console.log("here we should delete the participant", index);
+    console.log("כאן אמור להימחק משתתף לפי אינדקס", index);
   };
 
   const getInitial = (name?: string) => {
-    if (!name || name.length === 0) return '?';
+    if (!name || name.length === 0) return "?";
     return name.charAt(0).toUpperCase();
   };
+
+  const filteredSuggestions = suggestions.filter(
+    (s) => s.email.toLowerCase().includes(email.toLowerCase()) && email.length > 1
+  );
 
   if (!open) return null;
 
@@ -40,7 +59,7 @@ const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) =
           </button>
         </div>
 
-        <div className="dialog-input-row">
+        <div className="dialog-input-row autocomplete-wrapper">
           <input
             type="email"
             placeholder="הכנס כתובת אימייל"
@@ -48,9 +67,26 @@ const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) =
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button onClick={handleAdd} className="add-button">
-            + הוסף
+          <button
+            onClick={handleAdd}
+            className="add-button"
+            disabled={isAdding || !email}
+          >
+            {isAdding ? "מוסיף..." : "+ הוסף"}
           </button>
+          {filteredSuggestions.length > 0 && (
+            <ul className="autocomplete-list">
+              {filteredSuggestions.map((s, i) => (
+                <li
+                  key={i}
+                  className="autocomplete-item"
+                  onClick={() => setEmail(s.email)}
+                >
+                  {s.name ? `${s.name} - ${s.email}` : s.email}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {isLoading ? (
