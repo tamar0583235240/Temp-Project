@@ -2,12 +2,15 @@ import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
+import ForgotPassword from '../../features/auth/components/ForgotPassword';
+import LoginForm from "../../features/auth/components/LoginForm";
 
 export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<p>login</p>} />
+            <Route path="/login" element={<p>{<LoginForm />}</p>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Simulation</p></RoleProtectedRoute>} />
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
