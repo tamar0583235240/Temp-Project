@@ -1,13 +1,13 @@
 // src/app/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import { resourcesApi } from '../../../shared/api/resourcesApi';
+import { interviewMaterialApi } from '../../../shared/api/interviewMaterialApi';
 
 export const store = configureStore({
   reducer: {
     // מוסיפים את reducer של ה-API
-    [resourcesApi.reducerPath]: resourcesApi.reducer,
+    [interviewMaterialApi.reducerPath]: interviewMaterialApi.reducer,
   },
   // מוסיפים את middleware של RTK Query
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(resourcesApi.middleware),
+    getDefaultMiddleware().concat(interviewMaterialApi.middleware),
 });

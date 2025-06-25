@@ -6,7 +6,7 @@ import AuthRedirectPage from "../../pages/AuthRedirectPage";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
-import ResourcePage from "../../features/knowledge-base/components/ResourcePage";
+import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 
 export default function AppRoutes() {
     return (
@@ -20,7 +20,7 @@ export default function AppRoutes() {
             <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
-            <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><ResourcePage /></RoleProtectedRoute>} />
+            <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><InterviewMaterialPage /></RoleProtectedRoute>} />
             <Route path="/admin/questions" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
                     <p>AdminQuestions</p>
