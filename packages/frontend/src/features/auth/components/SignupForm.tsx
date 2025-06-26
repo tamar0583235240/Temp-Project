@@ -5,9 +5,11 @@ import GoogleAuthButton from './GoogleAuthButton';
 import { CardSimple } from '../../../shared/ui/card';
 import { Button } from '../../../shared/ui/button';
 import { Input } from '../../../shared/ui/input';
+import { useNavigate } from 'react-router-dom';
 
 const SignupForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // מצב ניהול השלבים - 'form' = מילוי פרטים, 'verify' = אימות קוד
   const [step, setStep] = useState<'form' | 'verify'>('form');
@@ -67,6 +69,7 @@ const SignupForm = () => {
       if (res.ok) {
         setMessage('ההרשמה הושלמה בהצלחה!');
         dispatch(loginSuccess(data)); // מחובר אוטומטית
+        navigate("/");
       } else {
         setMessage(data.message || 'קוד לא תקין, נסה שנית.');
       }
