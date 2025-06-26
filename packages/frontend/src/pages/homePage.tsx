@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { store } from "../shared/store/store";
-import { ButtonLogout } from "../features/auth/components/ButtonLogout";
 
 const HomePage = () => {
   const navigate = useNavigate();
