@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
-import "./Summary.css";
+// import "./Summary.css";
 
 const Summary: React.FC = () => {
   const { questions } = useSelector((state: RootState) => state.simulation);

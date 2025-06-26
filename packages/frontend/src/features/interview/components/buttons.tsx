@@ -55,14 +55,12 @@ const Buttons = () => {
         </button>
       )}
     </div>
-    {/* {currentQuestion.answered ? ( */}
        <button
       className="text-primary-dark underline"
       onClick={() => setShowEnd(true)}
     >
       סיום השאלון
     </button>
-    {/* // ) : (<div></div>)} */}
    
     {showEnd && (
       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

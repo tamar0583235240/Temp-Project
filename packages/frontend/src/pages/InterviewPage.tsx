@@ -2,11 +2,11 @@ import { useDispatch } from "react-redux"
 import Buttons from "../features/interview/components/buttons"
 import Question from "../features/interview/components/question"
 import Sidebar from "../features/interview/components/sidebar"
-import TipsComponent from "../features/interview/components/tipsCompenent"
 import { useEffect } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
+import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper"
 
 const InterviewPage = () => {
 
@@ -34,24 +34,15 @@ const InterviewPage = () => {
    }, [data, dispatch]);
  
   return (
-
-    
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
       
       
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        {/* <button
-        className="bg-primary-dark text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark/90 transition"
-        onClick={() => navigate('/')}
-      >
-        לדף הבית
-      </button> */}
+      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
         <div className="w-full max-w-2xl space-y-8">
           <Question />
           <Buttons />
-          <TipsComponent/>
-          
+          <AnalysisStepWrapper />
         </div>
       </main>
       {/* Sidebar */}
