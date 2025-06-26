@@ -7,7 +7,7 @@ type OptionType = {
   icon: string;
 };
 
-export default function ToggleButtonComponent() {
+export default function TimeQuestionButton() {
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
