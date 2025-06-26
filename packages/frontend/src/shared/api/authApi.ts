@@ -43,11 +43,11 @@ export const authApi = api.injectEndpoints({
         credentials: 'include', // חשוב כדי לשלוח cookie
       }),
     }),
-    logout: builder.mutation<void, string>({
-      query: (email) => ({
+    logout: builder.mutation<void, User>({
+      query: (user) => ({
         url: '/auth/logout',
         method: 'POST',
-        body: { email },
+        body: { user },
         credentials: 'include', // חשוב כדי לשלוח cookie
       }),
     })

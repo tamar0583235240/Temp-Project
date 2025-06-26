@@ -140,9 +140,12 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
-  const user = await authRepository.login(email, password);
+  try {
+    const user = await authRepository.login(email, password);
+    console.log("User found:", user);
   if (!user) {
-    return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
+    // return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
+    throw new Error("Invalid email or password");
   }
 
   const token = jwt.sign(
@@ -166,6 +169,10 @@ export const login = async (req: Request, res: Response) => {
   });
 
   res.json({ user, token });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({ message: "שגיאה בהתחברות" });
+  }
 };
 
 // רענון טוקן
@@ -198,7 +205,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 // התנתקות
 export const logout = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // מניחים שיש לך authMiddleware שמצרף את `req.user`
+    const userId = req.body.user?.id; // מניחים שיש לך authMiddleware שמצרף את `req.user`
 
     if (!userId) {
       return res.status(401).json({ message: "לא מחובר" });

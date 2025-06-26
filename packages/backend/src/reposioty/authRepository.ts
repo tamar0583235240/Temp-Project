@@ -10,7 +10,7 @@ export const login = async (email: string, password: string): Promise<Users | nu
     if (!user) return null;
 
     // בדיקת סיסמה
-    const isMatch = await bcrypt.compare(password, user.password_hash);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return null;
 
     // סימון כמשתמש פעיל
