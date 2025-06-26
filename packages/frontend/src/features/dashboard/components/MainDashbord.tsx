@@ -1,29 +1,26 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from '../../../shared/store/store';
 import AIInsightsList from './AIInsightsList';
 import ProgressStats from './ProgressStats';
 import { ImprovementSuggestions } from './ImprovementSuggestions';
 import { SummaryStrengths } from './Strengths';
 import { ImprovementSuggestions2 } from './ImprovementSuggestions2';
+import type { RootState } from '../../../shared/store/store';
 
-const MainDashboard = () => {
+export const MainDashboard: React.FC = () => {
+  const userName = useSelector((state: RootState) => state.auth?.user?.firstName ?? "אורח");
+
   return (
     <Provider store={store}>
-      <DashboardContent />
+      <div className="space-y-6 p-6 bg-gray-100 min-h-screen">
+        <ImprovementSuggestions fullName={userName} />
+        <SummaryStrengths />
+        <ImprovementSuggestions2 />
+        <AIInsightsList />
+        <ProgressStats />
+      </div>
     </Provider>
-  );
-};
-
-const DashboardContent = () => {
-  return (
-    <div className="space-y-6 p-6 bg-gray-100 min-h-screen">
-      <ImprovementSuggestions />
-      <SummaryStrengths />
-      <ImprovementSuggestions2 />
-      <AIInsightsList />
-      <ProgressStats />
-    </div>
   );
 };
 
