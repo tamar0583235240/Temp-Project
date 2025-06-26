@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './filteringComponents.css';
 import { TitleQuestions } from './question';
-import { Answer } from '../types/answer';
+import { Answer } from '../types/Answer';
 
 export const FilteringComponents = (props: {
   filterCriteria: {
