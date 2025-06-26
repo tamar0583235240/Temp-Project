@@ -1,40 +1,51 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
 import { useDispatch } from "react-redux";
-import { answerQuestion } from "../store/simulationSlice";
+import { answerQuestion, nextQuestion, resetQuestion } from "../store/simulationSlice";
+import { Bot, Brain, RotateCcw, Sparkles } from "lucide-react";
+
 import AnswerAI from "./AnswerAI";
+import { Button } from "../../../shared/ui/button";
 
 const Question: React.FC = () => {
+  
   const dispatch = useDispatch();
   const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
-
+  const currentQuestion = questions[currentIndex];
+  
   const handleTextChange = (value: string) => {
     dispatch(answerQuestion({ index: currentIndex, answer: value }));
   };
 
+  const handleReset = () => {
+      dispatch(resetQuestion(currentIndex));
+    };
+
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
 
-  const currentQuestion = questions[currentIndex];
-
   return (
-   <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl">
-  <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
-    <div className="flex justify-between items-center mb-2">
-      <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
-        שאלה {currentIndex + 1}
-      </span>
+    <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl">
+      <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
+        <div className="flex justify-between items-center mb-2">
+          <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
+            שאלה {currentIndex + 1}
+          </span>
         </div>
         <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
           {currentQuestion.content}
         </div>
-        {currentQuestion.question_type === "open" ? (
-          <textarea
-            className="w-full min-h-[80px] rounded-md border border-[--color-border] p-3 text-base focus:ring-[--color-primary] focus:border-[--color-primary] bg-[#f7fafc] mb-6"
-            value={currentQuestion.answer ?? ""}
-            onChange={(e) => handleTextChange(e.target.value)}
-            placeholder="הקלד/י את תשובתך כאן..."
-            dir="rtl"
-          />
+
+        
+        
+      {/* אולי נשתמש בהמשך */}
+      {/* {currentQuestion.question_type === "open" ? (
+        <textarea
+          className="w-full min-h-[80px] rounded-md border border-[--color-border] p-3 text-base focus:ring-[--color-primary] focus:border-[--color-primary] bg-[#f7fafc] mb-6"
+          value={currentQuestion.answer ?? ""}
+          onChange={(e) => handleTextChange(e.target.value)}
+          placeholder="הקלד/י את תשובתך כאן..."
+          dir="rtl"
+        />
         ) : (
           <div className="flex flex-col gap-3 mb-6">
             {currentQuestion.options?.map((option, i) => (
@@ -51,11 +62,11 @@ const Question: React.FC = () => {
               </label>
             ))}
           </div>
-        )}
+        )} */}
         <div className="flex gap-4 mt-2 mb-2 w-full">
           <button
             className="w-1/2 bg-[--color-primary] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[--color-primary-dark] transition text-lg flex items-center justify-center"
-            onClick={() => handleTextChange(currentQuestion.answer ?? "")}
+            // onClick={() => handleTextChange(currentQuestion.answer ?? "")}
           >
             התחל הקלטה
           </button>
@@ -68,8 +79,30 @@ const Question: React.FC = () => {
             </svg>
           </button>
         </div>
+      {/* <Button/> */}
+
+      {/* <div className="flex gap-2">
+      <button
+        className="bg-danger text-white px-6 py-2 rounded-lg font-semibold hover:bg-danger/90 transition"
+        onClick={handleReset}
+      >
+        איפוס תשובה
+        <RotateCcw size={20} />
+      </button>
+      <button
+                className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
+                onClick={() => {
+                  handleTextChange(currentQuestion.answer ?? "");
+                  setTimeout(() => dispatch(nextQuestion()), 300);
+                }}
+              >
+                ניתוח AI
+                <Sparkles/>
+                <Bot/>
+              </button>
+          </div> */}
       </div>
-      {/* <AnswerAI answerId={}/> */}
+      
     </div>
   );
 };

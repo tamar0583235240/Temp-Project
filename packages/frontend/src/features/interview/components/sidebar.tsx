@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex flex-col items-center py-6 px-4 h-full bg-white rounded-xl shadow-md border w-64">
       <div className="text-center text-xl font-bold text-primary mb-2">
-        {`${currentIndex + 1} מתוך ${questions.length}`}
+        {`${questions.length} / ${currentIndex + 1}`}
       </div>
 
       {/* אחוזי התקדמות */}
