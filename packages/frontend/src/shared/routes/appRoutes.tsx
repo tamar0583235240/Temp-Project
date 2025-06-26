@@ -2,7 +2,11 @@ import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { SearchComponents } from "../../features/recordings/components/searchComponents";
+import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
+import {SortComponents} from "../../features/recordings/components/sortComponents"
 import { AdminQuestions } from "../../features/admin/components/adminQuestions";
+
 export default function AppRoutes() {
     return (
         <Routes>

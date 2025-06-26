@@ -1,46 +1,160 @@
 import { TitleQuestions } from "./question";
 import { RootState } from '../../../shared/store/store';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Feedbackes } from "../../feedback/components/feedbackes";
-import { useGetAnswersByIdUserQuery, useGetQuestionByIdQuery } from "../services/answerApi";
+import { useGetAnswersByIdUserQuery } from "../services/answerApi";
 import { AiInsightsList } from "./AiInsightsList";
 import { GridContainer } from "../../../shared/ui/GridContainer";
 import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
+import { useEffect, useMemo, useState } from "react";
+import { Answer } from "../types/Answer";
+import { FilteringComponents } from "./filteringComponents";
+import { SearchComponents } from "./searchComponents";
+import { SortComponents } from "./sortComponents";
+import { AiInsightsType } from "../types/AiInsightsType";
+import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 
-type RecordingsListProps = {
-    allowedRoles: string[];
-}
-
-export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) => {
+export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
-    // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
-    const userId = user && user.id ? user.id.toString() : '550e8400-e29b-41d4-a718-446655440000';
+    const userId = user?.id ?? '00000000-0000-0000-0000-000000000004';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
 
-    if (isLoading)
-        return (
-            <GridContainer className="text-center" dir="rtl">
-                <Heading1>Loading...</Heading1>
-            </GridContainer>
-        );
-    
-    if (error || !data)
-        return (
-            <GridContainer className="text-center" dir="rtl">
-                <Heading1>Error loading recordings</Heading1>
-            </GridContainer>
-        );
+    const { data: allInsights, error: aiError, isLoading: isAiLoading } = useGetAiInsightsQuery();
+
+    const insightsMap = useMemo(() => {
+        const map = new Map<string, number>();
+        allInsights?.forEach((insight) => {
+            map.set(insight.answer_id, insight.rating);
+        });
+        return map;
+    }, [allInsights]);
+
+    const [searchText, setSearchText] = useState('');
+    const [filterCriteria, setFilterCriteria] = useState<{
+        dateFilter: string;
+        questionName: string;
+        feedbackCategory: string;
+        ratingFilter: number | null;
+    }>({
+        dateFilter: 'all',
+        questionName: '',
+        feedbackCategory: '',
+        ratingFilter: null,
+    });
+    const [sortOption, setSortOption] = useState('latest');
+    const [displayedAnswers, setDisplayedAnswers] = useState<Answer[]>([]);
+
+    useEffect(() => {
+        if (!data) return;
+
+        (async () => {
+            let results = [...data];
+
+            // סינון חיפוש
+            if (searchText.trim()) {
+                results = results.filter(a =>
+                    a.answer_file_name.toLowerCase().includes(searchText.toLowerCase())
+                );
+            }
+
+            // סינון לפי שאלה ופידבקים
+            results = results.filter(a => {
+                const qok = !filterCriteria.questionName || a.question_id === filterCriteria.questionName;
+                const fb = filterCriteria.feedbackCategory;
+                const fbok =
+                    !fb ||
+                    (fb === 'none' && a.amount_feedbacks === 0) ||
+                    (fb === 'low' && a.amount_feedbacks >= 1 && a.amount_feedbacks <= 3) ||
+                    (fb === 'high' && a.amount_feedbacks >= 4);
+                return qok && fbok;
+            });
+
+            // סינון לפי תאריך
+            if (filterCriteria.dateFilter === 'latest') {
+                const latest = results.reduce((a, b) =>
+                    new Date(b.submitted_at) > new Date(a.submitted_at) ? b : a
+                );
+                results = [latest];
+            } else if (filterCriteria.dateFilter === 'lastWeek') {
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                results = results.filter(a => new Date(a.submitted_at) >= weekAgo);
+            } else if (filterCriteria.dateFilter === 'lastMonth') {
+                const mAgo = new Date();
+                mAgo.setDate(mAgo.getDate() - 30);
+                results = results.filter(a => new Date(a.submitted_at) >= mAgo);
+            }
+
+            // סינון לפי דירוג
+            console.log("allInsights:", allInsights);
+            console.log("insightsMap:", insightsMap);
+            console.log("ratingFilter:", filterCriteria.ratingFilter);
+            if (filterCriteria.ratingFilter !== null) {
+                results = results.filter(ans => {
+                    const rating = insightsMap.get(ans.id);
+                    console.log(`answerId: ${ans.id}, rating: ${rating}`);
+                    return rating === filterCriteria.ratingFilter;
+                });
+            }
+
+
+
+
+
+            // מיון לפי אופציה
+            results.sort((a, b) => {
+                switch (sortOption) {
+                    case 'latest':
+                        return new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime();
+                    case 'oldest':
+                        return new Date(a.submitted_at).getTime() - new Date(b.submitted_at).getTime();
+                    case 'mostFeedbacks':
+                        return b.amount_feedbacks - a.amount_feedbacks;
+                    case 'leastFeedbacks':
+                        return a.amount_feedbacks - b.amount_feedbacks;
+                    default:
+                        return 0;
+                }
+            });
+
+            setDisplayedAnswers(results);
+        })();
+    }, [data, searchText, filterCriteria, sortOption]);
+
+    if (isLoading) return (
+        <GridContainer className="text-center" dir="rtl">
+            <Heading1>טוען הקלטות...</Heading1>
+        </GridContainer>
+    );
+
+    if (error || !data) return (
+        <GridContainer className="text-center" dir="rtl">
+            <Heading1>שגיאה בטעינת הקלטות</Heading1>
+        </GridContainer>
+    );
 
     return (
         <GridContainer maxWidth="lg" className="text-center" dir="rtl" padding="px-2 sm:px-4 lg:px-6">
+            <FilteringComponents
+                filterCriteria={filterCriteria}
+                setFilterCriteria={setFilterCriteria}
+                originalAnswers={data}
+            />
+
             <Heading1 className="mb-8">ההקלטות שלי</Heading1>
-            
+
+            <div className="top-controls">
+                <SearchComponents searchText={searchText} setSearchText={setSearchText} />
+            </div>
+
+            <SortComponents sortOption={sortOption} setSortOption={setSortOption} />
+
             <div className="space-y-4">
-                {data.map((recording, index) => (
-                    <CardSimple 
-                        key={recording.id} 
+                {displayedAnswers.map((recording, index) => (
+                    <CardSimple
+                        key={recording.id}
                         className="w-full max-w-2xl mx-auto overflow-hidden hover:shadow-lg transition-shadow
                                    xl:max-w-3xl xl:w-4/5
                                    lg:max-w-2xl lg:w-4/5  
@@ -54,7 +168,7 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
                                        md:px-8 md:py-3 md:flex-row
                                        sm:px-6 sm:py-3 sm:flex-col sm:gap-3 sm:text-center
                                        max-sm:px-4 max-sm:py-2.5 max-sm:flex-col max-sm:gap-2 max-sm:text-center">
-                            
+
                             <div className="flex items-center gap-3">
                                 <span className="text-lg font-bold
                                                lg:text-xl
@@ -71,7 +185,7 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
                                     <TitleQuestions data={recording.question_id} />
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <a href={recording.file_url} download>
                                     <Button
@@ -114,20 +228,19 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
                                        md:px-8 md:py-2
                                        sm:px-6 sm:py-2
                                        max-sm:px-4 max-sm:py-2">
-                            <audio 
+                            <audio
                                 className="w-full max-w-2xl h-8 outline-none
                                           xl:w-4/5
                                           lg:w-11/12
                                           md:w-full
                                           sm:w-full sm:h-8
-                                          max-sm:w-full max-sm:h-8" 
+                                          max-sm:w-full max-sm:h-8"
                                 controls
                             >
                                 <source src={recording.file_url} type="audio/mpeg" />
                                 הדפדפן שלך לא תומך בנגן האודיو
                             </audio>
                         </div>
-
                         <AiInsightsList answerId={recording.id} />
                         <Feedbackes props={{ sharedRecordingId: recording.id, usersList: [] }} />
                     </CardSimple>
@@ -135,4 +248,5 @@ export const RecordingsList: React.FC<RecordingsListProps> = ({ allowedRoles }) 
             </div>
         </GridContainer>
     );
-}
+};
+

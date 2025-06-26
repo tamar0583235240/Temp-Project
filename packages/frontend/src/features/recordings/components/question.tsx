@@ -7,7 +7,6 @@ interface TitleQuestionsProps {
 
 export const TitleQuestions: React.FC<TitleQuestionsProps> = ({ data }) => {
     const questions = useGetQuestionByIdQuery(data);
-    
     return (
         <div>
             {questions.data?.content}
