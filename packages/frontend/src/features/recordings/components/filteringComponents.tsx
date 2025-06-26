@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Answer } from '../types/Answer';
 import { TitleQuestions } from './question';
 import { Button } from '../../../shared/ui/button';
 import { cn } from '../../../shared/utils/cn';
+import { Star } from 'lucide-react';
 
 export const FilteringComponents = (props: {
   filterCriteria: {
     dateFilter: string;
     questionName: string;
     feedbackCategory: string;
+    ratingFilter: number | null;
   };
   setFilterCriteria: (criteria: {
     dateFilter: string;
     questionName: string;
     feedbackCategory: string;
+    ratingFilter: number | null;
   }) => void;
   originalAnswers: Answer[];
 }) => {
@@ -22,6 +25,7 @@ export const FilteringComponents = (props: {
   const [showDateFilters, setShowDateFilters] = useState(true);
   const [showQuestionFilters, setShowQuestionFilters] = useState(true);
   const [showFeedbackFilter, setShowFeedbackFilter] = useState(true);
+  const [showRatingFilter, setShowRatingFilter] = useState(true);
 
   const uniqueQuestions = Array.from(new Set(originalAnswers.map(a => a.question_id)));
 
@@ -37,8 +41,42 @@ export const FilteringComponents = (props: {
     setFilterCriteria({ ...filterCriteria, feedbackCategory: value });
   };
 
+  const toggleRatingFilter = (value: number) => {
+    setFilterCriteria({ ...filterCriteria, ratingFilter: value });
+  };
+
   const clearFilters = () => {
-    setFilterCriteria({ dateFilter: 'all', questionName: '', feedbackCategory: '' });
+    setFilterCriteria({
+      dateFilter: 'all',
+      questionName: '',
+      feedbackCategory: '',
+      ratingFilter: null,
+    });
+  };
+
+  const renderStars = () => {
+    const selectedRating = filterCriteria.ratingFilter || 0;
+    return (
+      <div className="flex gap-1 pr-2">
+        {[1, 2, 3, 4, 5].map((num) => (
+          <button
+            key={num}
+            type="button"
+            onClick={() => toggleRatingFilter(num)}
+            className="focus:outline-none"
+          >
+            <Star
+              size={20}
+              className={cn(
+                "transition-colors",
+                num <= selectedRating ? "text-yellow-400" : "text-gray-300"
+              )}
+              fill={num <= selectedRating ? "currentColor" : "none"}
+            />
+          </button>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -63,41 +101,27 @@ export const FilteringComponents = (props: {
           onClick={() => setShowDateFilters(!showDateFilters)}
         >
           <span>תאריך</span>
-          <span className="text-sm">{showDateFilters ? '-' : '+'}</span>
+          <span className="text-2xl font-bold">{showDateFilters ? '-' : '+'}</span>
         </h4>
-        
+
         {showDateFilters && (
           <div className="flex flex-col gap-3 pr-2">
-            <label className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
-              <input
-                type="radio"
-                name="date"
-                checked={filterCriteria.dateFilter === 'latest'}
-                onChange={() => toggleDateFilter('latest')}
-                className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
-              />
-              הכי חדשה
-            </label>
-            <label className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
-              <input
-                type="radio"
-                name="date"
-                checked={filterCriteria.dateFilter === 'lastWeek'}
-                onChange={() => toggleDateFilter('lastWeek')}
-                className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
-              />
-              מהשבוע האחרון
-            </label>
-            <label className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
-              <input
-                type="radio"
-                name="date"
-                checked={filterCriteria.dateFilter === 'lastMonth'}
-                onChange={() => toggleDateFilter('lastMonth')}
-                className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
-              />
-              מהחודש האחרון
-            </label>
+            {[
+              { label: 'הכי חדשה', value: 'latest' },
+              { label: 'מהשבוע האחרון', value: 'lastWeek' },
+              { label: 'מהחודש האחרון', value: 'lastMonth' }
+            ].map(({ label, value }) => (
+              <label key={value} className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
+                <input
+                  type="radio"
+                  name="date"
+                  checked={filterCriteria.dateFilter === value}
+                  onChange={() => toggleDateFilter(value)}
+                  className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
+                />
+                {label}
+              </label>
+            ))}
           </div>
         )}
       </div>
@@ -109,9 +133,9 @@ export const FilteringComponents = (props: {
           onClick={() => setShowQuestionFilters(!showQuestionFilters)}
         >
           <span>שאלה</span>
-          <span className="text-sm">{showQuestionFilters ? '-' : '+'}</span>
+          <span className="text-2xl font-bold">{showQuestionFilters ? '-' : '+'}</span>
         </h4>
-        
+
         {showQuestionFilters && (
           <div className="flex flex-col gap-3 pr-2">
             {uniqueQuestions.map(q => (
@@ -137,44 +161,46 @@ export const FilteringComponents = (props: {
           onClick={() => setShowFeedbackFilter(!showFeedbackFilter)}
         >
           <span>כמות פידבקים</span>
-          <span className="text-sm">{showFeedbackFilter ? '-' : '+'}</span>
+          <span className="text-2xl font-bold">{showFeedbackFilter ? '-' : '+'}</span>
         </h4>
-        
+
         {showFeedbackFilter && (
           <div className="flex flex-col gap-3 pr-2">
-            <label className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
-              <input
-                type="radio"
-                name="feedback"
-                checked={filterCriteria.feedbackCategory === 'none'}
-                onChange={() => toggleFeedbackFilter('none')}
-                className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
-              />
-              ללא פידבק
-            </label>
-            <label className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
-              <input
-                type="radio"
-                name="feedback"
-                checked={filterCriteria.feedbackCategory === 'low'}
-                onChange={() => toggleFeedbackFilter('low')}
-                className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
-              />
-              1–3 פידבקים
-            </label>
-            <label className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
-              <input
-                type="radio"
-                name="feedback"
-                checked={filterCriteria.feedbackCategory === 'high'}
-                onChange={() => toggleFeedbackFilter('high')}
-                className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
-              />
-              4+
-            </label>
+            {[
+              { label: 'ללא פידבק', value: 'none' },
+              { label: '1–3 פידבקים', value: 'low' },
+              { label: '4+', value: 'high' }
+            ].map(({ label, value }) => (
+              <label key={value} className="flex items-center gap-3 text-sm text-text-main cursor-pointer hover:text-primary-dark transition-colors">
+                <input
+                  type="radio"
+                  name="feedback"
+                  checked={filterCriteria.feedbackCategory === value}
+                  onChange={() => toggleFeedbackFilter(value)}
+                  className="w-4 h-4 text-primary-dark focus:ring-primary-dark focus:ring-2"
+                />
+                {label}
+              </label>
+            ))}
           </div>
         )}
+      </div>
+
+      {/* Rating Filter Section */}
+      <div className="mb-4">
+        <h4
+          className="font-bold text-lg mb-3 text-primary-dark cursor-pointer flex items-center justify-between hover:text-primary-dark/80 transition-colors"
+          onClick={() => setShowRatingFilter(!showRatingFilter)}
+        >
+          <span>דירוג הקלטה</span>
+          <span className="text-2xl font-bold">{showRatingFilter ? '-' : '+'}</span>
+        </h4>
+        
+        {showRatingFilter && renderStars()}
       </div>
     </div>
   );
 };
+
+
+
