@@ -24,9 +24,6 @@ export class Users {
   @Column("text", { name: "phone", nullable: true })
   phone: string | null;
 
-  @Column("text", { name: "role" })
-  role: string;
-
   @Column("timestamp without time zone", {
     name: "created_at",
     default: () => "now()",
@@ -38,6 +35,13 @@ export class Users {
 
   @Column("text", { name: "password", nullable: true })
   password: string | null;
+
+  @Column("enum", {
+    name: "role",
+    nullable: true,
+    enum: ["student", "manager"],
+  })
+  role: "student" | "manager" | null;
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
