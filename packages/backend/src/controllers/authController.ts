@@ -17,7 +17,7 @@ type CodeData = { code: string, expiresAt: number };
 const codesPerEmail = new Map<string, CodeData>();//שמירת הקודים לפי המיילים שאליהם נשלחו
 // ניקוי המפות שפג תוקפן -כל שעה
 const cleanExpiredCodes = () => {
-     const now = Date.now();
+  const now = Date.now();
   for (const [email, data] of codesPerEmail.entries()) {
     if (data.expiresAt < now) {
       codesPerEmail.delete(email);
@@ -28,37 +28,37 @@ setInterval(cleanExpiredCodes, 60 * 60 * 1000);
 
 
 export const generateAndSendCode = async (req: Request, res: Response) => {
-     const email = req.body.email;
-     if (!email) return res.status(400).json({sent:false, message: "Email is required" });
-     // יצירת קוד אקראי בן 6 ספרות
-     const code = Math.floor(100000 + Math.random() * 900000).toString();
-     const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
-     codesPerEmail.set(email, { code, expiresAt });
-     // בקוד הזה צריך לטפל...
-    await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`)
-    console.log(`Sending code ${code} to email ${email}`);
-    res.status(200).json({sent:true, message: "הקוד נשלח בהצלחה!"});
+  const email = req.body.email;
+  if (!email) return res.status(400).json({ sent: false, message: "Email is required" });
+  // יצירת קוד אקראי בן 6 ספרות
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
+  codesPerEmail.set(email, { code, expiresAt });
+  // בקוד הזה צריך לטפל...
+  await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`)
+  console.log(`Sending code ${code} to email ${email}`);
+  res.status(200).json({ sent: true, message: "הקוד נשלח בהצלחה!" });
 }
 
 export const validateCode = async (req: Request, res: Response) => {
-    const email = req.body.email;
-    const  code  = req.body.code;
+  const email = req.body.email;
+  const code = req.body.code;
 
-    if (!email || !code)
-         return res.status(400).json({ error: "Email and code are required" });
+  if (!email || !code)
+    return res.status(400).json({ error: "Email and code are required" });
 
-    const validCode = codesPerEmail.get(email);
-    if(!validCode){
-        return res.status(200).json({ valid: false, message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית." });
-    }
-    if( Date.now() > validCode.expiresAt){
-        return res.status(200).json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
-    }
-    if (code === validCode.code) {
-        return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
-    } else {
-        return res.status(200).json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
-    }
+  const validCode = codesPerEmail.get(email);
+  if (!validCode) {
+    return res.status(200).json({ valid: false, message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית." });
+  }
+  if (Date.now() > validCode.expiresAt) {
+    return res.status(200).json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
+  }
+  if (code === validCode.code) {
+    return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
+  } else {
+    return res.status(200).json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
+  }
 };
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -118,34 +118,37 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
+  try {
+    const user = await userRepository.getUserByEmailAndPassword(email, password);
+    if (!user) {
+      return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
+    }
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: rememberMe ? '7d' : '1h' }
+    );
 
-  const user = await userRepository.getUserByEmailAndPassword(email, password);
-  if (!user) {
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      REFRESH_SECRET,
+      { expiresIn: rememberMe ? '7d' : '2h' }
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000
+    });
+
+
+    res.json({ user, token });
+  }
+  catch (error) {
     return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
   }
-
-  const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: rememberMe ? '7d' : '1h' }
-  );
-
-  const refreshToken = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    REFRESH_SECRET,
-    { expiresIn: rememberMe ? '7d' : '2h' }
-  );
-
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000
-  });
-
-
-  res.json({ user, token });
 };
 
 // רענון טוקן
