@@ -32,7 +32,6 @@ app.use('/api', exampleRouts);
 
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
-app.use('/auth', authGoogleRoutes);
 app.use('/interviewMaterial',interviewMaterialRoutes);
 
 app.use(cors());

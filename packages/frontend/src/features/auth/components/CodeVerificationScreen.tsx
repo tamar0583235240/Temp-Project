@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useGenerateCodeMutation, useValidateCodeMutation } from "../../../shared/api/verifyCode";
+import { useGenerateCodeMutation, useValidateCodeMutation } from "../../../shared/api/verifyCodeApi";
 
 type Props = {
   email: string;

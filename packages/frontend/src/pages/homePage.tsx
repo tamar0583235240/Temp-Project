@@ -1,11 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/ui/button";
-import { Card, CardSimple } from "../shared/ui/card";
-import { Grid } from "../shared/ui/grid";
 import { GridContainer } from "../shared/ui/GridContainer";
-import { SummaryBox } from "../shared/ui/SummaryBox";
-import { CircleGauge, Mic, Star } from "lucide-react";
-import { Heading1, Paragraph } from "../shared/ui/typography";
 import { store } from "../shared/store/store";
 
 const HomePage = () => {
