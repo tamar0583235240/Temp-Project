@@ -5,7 +5,7 @@ import { useLogoutMutation } from "../../../shared/api/authApi";
 import { Button } from "../../../shared/ui/button";
 import { useNavigate } from "react-router-dom";
 
-const LogoutButton: React.FC = () => {
+export const ButtonLogout = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [logout, { isLoading }] = useLogoutMutation();
   const navigate = useNavigate();
@@ -31,4 +31,4 @@ const LogoutButton: React.FC = () => {
   );
 };
 
-export default LogoutButton;
+// export default LogoutButton;

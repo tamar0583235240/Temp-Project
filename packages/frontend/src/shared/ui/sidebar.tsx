@@ -1,7 +1,8 @@
 import * as FaIcons from "react-icons/fa";
 import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
-import LogoutButton from "../../features/auth/components/LogoutButton";
+import React from "react";
+import { ButtonLogout } from "../../features/auth/components/ButtonLogout";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
@@ -69,7 +70,8 @@ const SidebarNavigation = () => {
           )
         )}
       </nav>
-      <LogoutButton/>
+    
+      <ButtonLogout />
     </aside>
   );
 };
