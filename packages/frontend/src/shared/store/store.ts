@@ -7,6 +7,7 @@ import interviewSlice from "../../features/interview/store/buttonsSlice";
 import { tipsApi } from "../../features/interview/services/tipsApi";
 import shownTipsReducer from '../../features/interview/store/tipsSlice';
 import { questionsApi } from '../../features/interview/services/questionsApi'; 
+import recordingSlice from '../../features/recordings/store/recordingSlice'
 
 
 export const store = configureStore({
@@ -14,7 +15,8 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
     [tipsApi.reducerPath]: tipsApi.reducer,
     example: exampleSlice,
-    simulation: simulationSlice, 
+    simulation: simulationSlice,
+    recording: recordingSlice,
     [questionsApi.reducerPath]: questionsApi.reducer,
     interview: interviewSlice,
     shownTips: shownTipsReducer,

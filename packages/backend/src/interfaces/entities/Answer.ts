@@ -17,8 +17,17 @@ export class Answer {
   @Column("uuid", { primary: true, name: "id" })
   id!: string;
 
+  @Column("uuid", { name: "userid" })
+  userid!: string;
+
+  @Column("uuid", { name: "questionid" })
+  questionid!: string;
+
   @Column("text", { name: "fileurl", nullable: true })
   fileurl!: string | null;
+
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName!: string | null;
 
   @Column("timestamp without time zone", {
     name: "submittedat",
