@@ -1,0 +1,31 @@
+.sort-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+  font-family: inherit;
+}
+
+.sort-label-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sort-label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.sort-select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+  
+  
+  

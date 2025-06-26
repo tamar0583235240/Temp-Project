@@ -2,6 +2,10 @@ import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
+<<<<<<< HEAD
+=======
+import { Resources } from "./Resources";
+>>>>>>> origin/TamarBiton
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("users_email_key", ["email"], { unique: true })
@@ -35,8 +39,18 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+<<<<<<< HEAD
   @Column("text", { name: "password", nullable: true })
   password: string | null;
+=======
+<<<<<<< HEAD
+  @Column("text", { name: "password", nullable: true })
+  password: string | null;
+=======
+  @Column("text", { name: "password" })
+  password: string;
+>>>>>>> 8d7d8a21a7e51e0e565bee46575e3ba71e17593d
+>>>>>>> origin/TamarBiton
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
@@ -50,6 +64,12 @@ export class Users {
   )
   passwordResetTokens: PasswordResetTokens[];
 
+<<<<<<< HEAD
+=======
+  @OneToMany(() => Resources, (resources) => resources.user)
+  resources: Resources[];
+
+>>>>>>> origin/TamarBiton
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.owner

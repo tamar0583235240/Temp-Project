@@ -4,7 +4,10 @@ import answerRouts from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
 import cors from 'cors';
+// import exampleRouts from './src/routes/exampleRouts';
 import questionRoute from './src/routes/questionRouts';
+import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
+
 
 
 const app: Application = express();
@@ -16,5 +19,6 @@ app.use('/api' , AiInsightsRouter )
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouts);
 app.use('/question', questionRoute); 
+app.use('/shared-recordings', sharedRecordingsRoutes);
 
 export default app

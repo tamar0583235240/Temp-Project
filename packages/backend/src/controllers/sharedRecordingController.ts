@@ -1,30 +1,43 @@
 import { Request, Response } from 'express';
-import shareRecordingRepository from '../reposioty/shareRecordingRepository';
-
-
-export const getSharedRecordingIdByAnswerId = async (req: Request, res: Response): Promise<string | void> => {
+import { deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedWithByAnswerAndOwner } from '../reposioty/sharedRecordingRpository';
+export const getSharedRecordingParticipants = async (req: Request, res: Response) => {
+    const { answerId, ownerId } = req.params;
     try {
-        const answerId = req.params.answerId;
-        const sharedRecordingId = await shareRecordingRepository.getSharedRecordingIdByAnswerId(answerId);
-        res.json(sharedRecordingId);
-
+        const sharedWith = await getSharedWithByAnswerAndOwner(answerId, ownerId);
+        res.status(200).json(sharedWith);
     } catch (error) {
-        console.error('Error in getSharedRecordingIdByAnswerId:', error);
-        res.status(500).json({ error });
+        console.error("Error getting shared participants:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
-export const deleteEmailFromSharedRecording = async (req: Request, res: Response): Promise<void> => {
-    try {
-        // 1. חילוץ הפרמטרים מה-URL
-        // const { sharedRecordingId, email } = req.params;
-        const sharedRecordingId = '00000000-0000-0000-0000-000000000040';
-        const email = 'eitan.cohen@example.com';
-        
-        await shareRecordingRepository.deleteEmailFromSharedRecording(sharedRecordingId,email);
-
-    } catch (error) {
-        console.error('Error in getSharedRecordingIdByAnswerId:', error);
-        res.status(500).json({ error });
-    }
+export const getPreviouslySharedEmails = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    const emails = await getAllPreviouslySharedEmails(userId);
+    res.status(200).json(emails);
+  } catch (error) {
+    console.error("Error getting shared emails:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
+
+
+export const deleteEmailFromSharedRecording = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { sharedRecordingId, email } = req.params;
+    await deleteEmailFromSharedRecordingRepo(
+      sharedRecordingId,
+      email
+    );
+    res.sendStatus(204);
+  } catch (error) {
+    console.error('Error deleting email from shared recording:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+

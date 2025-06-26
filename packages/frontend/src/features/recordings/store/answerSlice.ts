@@ -1,28 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Answer } from '../types/Answer';
 import { Question } from '../types/Question';
-
+import { Answer } from '../types/answer';
 interface AnswerState {
   data: Answer[];
   loading: boolean;
 }
-
 const initialState: AnswerState = {
   data: [],
   loading: false,
 };
-
-
 interface QuestionState {
   dataQ: Question | null;
   loading: boolean;
 }
-
 const initialStateQ: QuestionState = {
   dataQ: null,
   loading: false,
 };
-
 const answerSlice = createSlice({
   name: 'answer',
   initialState,
@@ -36,7 +30,6 @@ const answerSlice = createSlice({
     },
   },
 });
-
 const questionSlice = createSlice({
   name: 'question',
   initialState: initialStateQ,

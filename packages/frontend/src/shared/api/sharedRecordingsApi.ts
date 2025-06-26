@@ -13,7 +13,7 @@ export const sharedRecordingsApi = api.injectEndpoints({
     // GET ‑ כל ההקלטות
     getSharedRecordings: builder.query<SharedRecording[], void>({
       query: () => "api/sharedRecordings",
-      providesTags: ["SharedRecording"], // שם יחיד תואם ל‑tagTypes
+      providesTags: ["shared"], // שם יחיד תואם ל‑tagTypes
     }),
 
     // DELETE ‑ הסרת מייל מהרשאות
@@ -22,7 +22,7 @@ export const sharedRecordingsApi = api.injectEndpoints({
         url: `api/sharedRecordings/${id}/shared/${encodeURIComponent(email)}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["SharedRecording"], // מרענן רשימה
+      invalidatesTags: ["shared"], // מרענן רשימה
     }),
   }),
   overrideExisting: false,
