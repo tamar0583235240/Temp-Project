@@ -394,6 +394,9 @@ export const authWithGoogle = async (req: Request, res: Response) => {
         created_at: new Date(),
       });
     }
+    else {
+      await userRepository.updateActiveUser(user.id);
+    }
 
     return res.status(200).json({ user });
   } catch (err) {

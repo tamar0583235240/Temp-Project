@@ -108,6 +108,25 @@ const updateUser = async (
   }
 };
 
+const updateActiveUser = async (
+  id: string,
+): Promise<Users | null> => {
+  try {
+
+    const res = await pool.query(
+      `
+            UPDATE users 
+            SET is_active = true
+            WHERE id = $1 `,
+      [id]
+    );
+    return res.rows[0] || null;
+  } catch (error) {
+    console.error("Error updating user in local DB:", error);
+    throw error;
+  }
+};
+
 // יצירת משתמש חדש
 const createUser = async (user: Users): Promise<Users> => {
   try {
@@ -182,6 +201,7 @@ export default {
   getUserByEmail,
   updateUserPassword,
   updateUser,
+  updateActiveUser,
   createUser,
   insertUser,
   deleteUser,
