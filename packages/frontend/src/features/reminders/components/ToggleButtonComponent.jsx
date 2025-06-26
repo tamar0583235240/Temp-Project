@@ -27,6 +27,7 @@ export default function ToggleButtonComponent() {
     { id: 'every-three-days', text: 'אחת ל-3 ימים', icon: '📅' }
   ];
 
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-md mx-auto">
@@ -38,10 +39,10 @@ export default function ToggleButtonComponent() {
             {/* טקסט ותיאור */}
             <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                טיפים מעשיים
+              תרגול שאלות מקצועיות  
               </h3>
               <p className="text-sm text-gray-600">
-                הכל שעליך לטיפול נושאים וחוויות וזיכרון החוויות להרגלה
+            קבל תזכורות לתרגול שאלות מקצועיות כדי לשפר את הידע שלך.
               </p>
             </div>
             
@@ -71,7 +72,7 @@ export default function ToggleButtonComponent() {
         {isEnabled && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h4 className="text-md font-semibold text-gray-800 mb-4 text-center">
-              בחר תדירות התזכורת:
+               בחר את תדירות התזכורת שלך:
             </h4>
             <div className="grid grid-cols-2 gap-4">
               {options.map((option) => (
