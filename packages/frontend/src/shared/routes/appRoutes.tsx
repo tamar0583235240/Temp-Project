@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import RemindersComponents from "../../features/reminders/components/remindersComponents"
-import ToggleButtonComponent from '../../features/reminders/components/ToggleButtonComponent';//הוספה
+import ToggleButtonComponent from "../../features/reminders/components/ToggleButtonComponent"
 
 export default function AppRoutes() {
     return (
@@ -14,7 +14,7 @@ export default function AppRoutes() {
             <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Recordings</p></RoleProtectedRoute>} />
             <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
             <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
-            {/* <Route path="/toggle"   element={ <RoleProtectedRoute allowedRoles={["student"]}><p>tipes</p> <ToggleButtonComponent /> </RoleProtectedRoute>}/> */}
+            <Route path="/reminders" element={<RoleProtectedRoute allowedRoles={["student"]}><RemindersComponents/></RoleProtectedRoute>} />
             <Route path="/reminders" element={<RoleProtectedRoute allowedRoles={["student"]}><RemindersComponents/></RoleProtectedRoute>} />
             <Route path="/admin/questions" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
