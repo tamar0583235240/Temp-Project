@@ -6,6 +6,7 @@ import { ForgotPasswordForm } from "../types/types";
 import { Input } from "../../../shared/ui/input";
 import { Button } from "../../../shared/ui/button";
 import { CardSimple } from "../../../shared/ui/card";
+
 const schema = yup.object().shape({
   email: yup.string().email("אימייל לא תקין").required("שדה חובה"),
 });
