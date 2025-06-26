@@ -1,6 +1,13 @@
-import dotenv from 'dotenv';
 import { Pool } from 'pg';
+import dotenv from 'dotenv';
+
 dotenv.config();
+
+console.log('Database user:', process.env.DB_USER);
+console.log('Database host:', process.env.DB_HOST);
+console.log('Database name:', process.env.DB_NAME);
+console.log('Database password:', process.env.DB_PASSWORD);
+console.log('Database port:', process.env.DB_PORT);
 
 export const pool = new Pool({
   host: process.env.DB_HOST,
@@ -10,12 +17,8 @@ export const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
-pool.connect()
-  .then(() => console.log('✅ Connected to PostgreSQL'))
-  .catch(() => console.error('❌ Connection error'));
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_PORT:', process.env.DB_PORT);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-
+if (process.env.JEST_WORKER_ID === undefined) {
+  pool.connect()
+    .then(() => console.log('✅ Connected to PostgreSQL'))
+    .catch(() => console.error('❌ Connection error'));
+}

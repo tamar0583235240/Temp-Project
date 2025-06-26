@@ -7,7 +7,8 @@ interface UserState {
   total: number;
   setUserId: (id: string) => void;
   setFullName: (name: string) => void;
-  setProgress: (answered: number, total: number) => void;
+  setAnswered: (count: number) => void;
+  setTotal: (count: number) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -17,5 +18,6 @@ export const useUserStore = create<UserState>((set) => ({
   total: 0,
   setUserId: (id) => set({ userId: id }),
   setFullName: (name) => set({ fullName: name }),
-  setProgress: (answered, total) => set({ answered, total }),
+  setAnswered: (count) => set({ answered: count }),
+  setTotal: (count) => set({ total: count }),
 }));
