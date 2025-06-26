@@ -22,7 +22,7 @@ export default function AppRoutes() {
             <TimeQuestionButton />
             </RoleProtectedRoute>} />         
 
-            <Route path="/reminders" element={<RoleProtectedRoute allowedRoles={["student"]}><RemindersComponents/></RoleProtectedRoute>} />
+            {/* <Route path="/reminders" element={<RoleProtectedRoute allowedRoles={["student"]}><RemindersComponents/></RoleProtectedRoute>} /> */}
             <Route path="/admin/questions" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
                     <p>AdminQuestions</p>
