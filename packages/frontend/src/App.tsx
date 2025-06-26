@@ -11,7 +11,7 @@ function App() {
     <MessageModalProvider>  
        <BrowserRouter>
       <AppRoutes />
-      <AdminQuestions allowedRoles={[]} children={undefined}></AdminQuestions>
+      {/* <AdminQuestions allowedRoles={[]} children={undefined}></AdminQuestions> */}
     </BrowserRouter>
     </MessageModalProvider>
 

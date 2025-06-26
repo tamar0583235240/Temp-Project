@@ -61,6 +61,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
         </GridContainer>
       </div>
     );
+console.log(data);
 
   const activeQuestions = data.filter(question => question.is_active === true);
 

@@ -20,9 +20,10 @@ export const AddQuestion = () => {
         content: "",
         category: "",
         tips: "",
+        aiGuidance: "",
+        isActive:true,
         ai_guidance: "",
-        is_active: true,
-        isActive:true
+        is_active:true
     })
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -39,9 +40,10 @@ export const AddQuestion = () => {
                 content: "",
                 category: "",
                 tips: "",
+                aiGuidance: "",
+                isActive:true,
                 ai_guidance: "",
-                is_active: true ,
-                isActive:true
+                is_active:true
             })
             setIsModalOpen(false)
         } catch (err) {
@@ -188,8 +190,8 @@ export const AddQuestion = () => {
                                         <textarea
                                             id="aiGuidance"
                                             placeholder="הכנס הוראות למערכת AI לגבי איך להעריך תשובות לשאלה זו..."
-                                            value={newQuestion.ai_guidance}
-                                            onChange={(e) => handleInputChange('ai_guidance', e.target.value)}
+                                            value={newQuestion.aiGuidance}
+                                            onChange={(e) => {handleInputChange('aiGuidance', e.target.value);handleInputChange('ai_guidance', e.target.value)}}
                                             required
                                             rows={3}
                                             className={cn(
