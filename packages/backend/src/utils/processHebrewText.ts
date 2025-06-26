@@ -1,10 +1,14 @@
 const processHebrewText = (text: string): string => {
+  console.log("process");
+  
   if (!text) return '';
+    console.log("after");
+
   // הסרת ניקוד, סימני פיסוק
   const cleanedText = text
     .normalize('NFD')
     .replace(/[\u0591-\u05C7]/g, '') // ניקוד
-    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()״׳"'()?]/g, '') // פיסוק
+    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()״׳"'()?]/g, ' ') // הפכי סימני פיסוק לרווח
     .trim();
 
   const prefixes = ['ו', 'ב', 'כ', 'ל', 'מ', 'ש'];
@@ -22,6 +26,6 @@ const processHebrewText = (text: string): string => {
     })
     .filter(Boolean)
 
-      return processedWords.join(' | '); 
+return processedWords.map(w => `${w}:*`).join(' | ');
 }
 export default processHebrewText

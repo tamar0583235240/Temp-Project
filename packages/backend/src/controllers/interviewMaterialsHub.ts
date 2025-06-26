@@ -86,13 +86,15 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
 
 export const searchMterials=async(req: Request, res: Response)=>{
   const q = req.query.q?.toString() || '';
-  console.log("at serarch in back");
+  console.log("at serarch in back",q);
    if (!q) {
     return res.status(400).json({ message: 'Missing search query' });
   }
 
   try {
     const results = await InterviewMaterialSubRepository.searchFiles(q);
+    console.log("result:",results);
+    
     res.json(results);
   } catch (err) {
     res.status(500).json({ error: 'Search failed' });

@@ -15,18 +15,36 @@ const searchFiles = async (queryText: string): Promise<InterviewMaterialSub[]> =
     if (!queryText.trim()) return [];
 
     const smartQuery = processHebrewText(queryText);
+    console.log("smart",smartQuery);
+    
     if (!smartQuery) return [];
+console.log("yess");
 
-    // שלב 1 – ניסיון חיפוש פשוט כמו שהוא
-    let results = await pool.query(
-        `SELECT id, title, thumbnail, short_description,
-     FROM interview_materials_sub
-     WHERE search_text_cleaned ILIKE ANY (string_to_array($1, ' | '))
-     ORDER BY rank DESC
-     LIMIT 20`,
-        [smartQuery]
+//     // שלב 1 – ניסיון חיפוש פשוט כמו שהוא
+// let results = await pool.query(
+//   `SELECT id, title, thumbnail, short_description,
+//           ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
+//    FROM interview_materials_sub
+//    WHERE document_with_weights @@ to_tsquery('simple', $1)
+//    ORDER BY rank DESC
+//    LIMIT 20`,
+//   [smartQuery]
+// );
 
-    );
+//   if (results.rowCount!=null&&results.rowCount > 0) return results.rows;
+
+// שלב 2 – fallback לחיפוש פשוט
+let results = await pool.query(
+  `SELECT id, title, thumbnail, short_description
+   FROM interview_materials_sub
+   WHERE title ILIKE '%' || $1 || '%'
+      OR short_description ILIKE '%' || $1 || '%'
+   LIMIT 20`,
+  [queryText.trim()]
+);
+console.log('QueryText:', queryText);
+console.log('Processed:', smartQuery);
+console.log('Results count (stage 1):', results.rowCount);
 
     if (results.rowCount) return results.rows;
 
@@ -40,8 +58,12 @@ const searchFiles = async (queryText: string): Promise<InterviewMaterialSub[]> =
      LIMIT 20`,
         [smartQuery]
     );
+console.log('QueryText:', queryText);
+console.log('Processed:', smartQuery);
+console.log('Results count (stage 1):', results.rowCount);
 
     return results.rows;
+
 };
 
 
