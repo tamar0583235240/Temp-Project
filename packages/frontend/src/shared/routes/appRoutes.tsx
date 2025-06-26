@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import RecordingsList from "../../features/recordings/components/recordingsList";
+import {RecordingsList} from "../../features/recordings/components/recordingsList";
 
 export default function AppRoutes() {
     return (

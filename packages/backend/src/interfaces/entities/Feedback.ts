@@ -21,9 +21,14 @@ export class Feedback {
   })
   createdAt: Date;
 
+<<<<<<< HEAD
   @ManyToOne(() => Answers, (answers) => answers.feedbacks)
   @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
   answerCode: Answers;
+=======
+  @Column("uuid", { name: "answer_code" })
+  answerCode: string;
+>>>>>>> 8d7d8a21a7e51e0e565bee46575e3ba71e17593d
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])

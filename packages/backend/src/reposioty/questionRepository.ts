@@ -7,7 +7,6 @@ const getAllQuestionById = async (Id: string): Promise<Questions> => {
     const query = 'SELECT * FROM questions WHERE id = \$1';
     const value = [Id];
     const { rows } = await pool.query(query, value);
-    
     return rows[0] as Questions;
   
   } catch (error) {
