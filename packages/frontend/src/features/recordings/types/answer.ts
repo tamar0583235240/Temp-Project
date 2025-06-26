@@ -2,8 +2,7 @@ export interface Answer {
     id: string
     user_id: string
     question_id: string
-    file_url: string,
-    answer_file_name:string,
+    file_url: string
     submitted_at: Date
-    amount_feedbacks:number
+    answer_file_name:string
 }

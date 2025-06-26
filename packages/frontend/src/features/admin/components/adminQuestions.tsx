@@ -19,7 +19,7 @@
 //     return <div className="admin-questions-container"><h2 className="admin-questions-title">ישנה בעיה בטעינת השאלות</h2></div>
 //   if (data.length === 0)
 //     return <div className="admin-questions-container"><h2 className="admin-questions-title">אין שאלות</h2></div>
-  
+
 //   return (
 //     <div className="admin-questions-container">
 //       <h2 className="admin-questions-title">ניהול שאלות</h2>
@@ -46,6 +46,7 @@ import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { UpdateQuestion } from "./updateQuestion";
 import { useUpdateQuestionByIdMutation } from "../services/adminQuestionApi";
+import { Question } from "../types/Question";
 
 
 type AdminQuestionsProps = {
@@ -55,9 +56,7 @@ type AdminQuestionsProps = {
 
 export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
   const { data, isLoading } = useGetAllQuestionsQuery();
-  const [isEdit, setIsEdit] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<any | null>(null);
-  const [updateQuestionById] = useUpdateQuestionByIdMutation();
+  const [questionToEdit, setQuestionToEdit] = useState<Question | null>(null);
   const [questionToDelete, setQuestionToDelete] = useState<string | null>(null);
 
   if (isLoading)
@@ -87,25 +86,24 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     setQuestionToDelete(idQuestion);
   };
 
-  const handleEditClick = (question: any) => {
-    setSelectedQuestion(question);
-    setIsEdit(true);
-  };
+  // const questioUpdateClick = () => {
+  //   setQuestionUpdate(!questionToEdit)
+  // }
 
-  const handleUpdateSubmit = async (id: string, formData: any) => {
-    try {
-      await updateQuestionById({ id, data: formData }).unwrap();
-      setIsEdit(false);
-      setSelectedQuestion(null);
-    } catch (err) {
-      console.error("שגיאה בעדכון השאלה:", err);
-    }
-  };
+  // const handleUpdateSubmit = async (id: string, formData: any) => {
+  //   try {
+  //     await updateQuestionById({ id, data: formData }).unwrap();
+  //     setIsEdit(false);
+  //     setSelectedQuestion(null);
+  //   } catch (err) {
+  //     console.error("שגיאה בעדכון השאלה:", err);
+  //   }
+  // };
 
   return (
     <GridContainer maxWidth="lg" className="text-center" dir="rtl">
       <Heading1 className="mb-8">ניהול שאלות</Heading1>
-      
+
       {activeQuestions.length === 0 ? (
         <div className="text-center">
           <p className="text-text-secondary text-lg">אין שאלות פעילות</p>
@@ -125,6 +123,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
 
               <div className="flex justify-center gap-4 flex-wrap">
                 <Button
+                  onClick={() => setQuestionToEdit(question)}
                   variant="outline"
                   className="bg-success hover:bg-success/90"
                   icon={
@@ -134,8 +133,13 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                   }
                 >
                   עריכה
-                </Button>
-
+                </Button >
+                {questionToEdit?.id === question.id && (
+                  <UpdateQuestion
+                    question={questionToEdit}
+                    questionSaveClick={() => setQuestionToEdit(null)}
+                  />
+                )}
                 <Button
                   variant="danger"
                   onClick={() => deleteClick(question.id)}
