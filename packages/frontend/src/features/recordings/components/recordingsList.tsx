@@ -9,16 +9,16 @@ import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
 import { useEffect, useMemo, useState } from "react";
-import { Answer } from "../types/Answer";
+import { Answer } from "../types/answer";
 import { FilteringComponents } from "./filteringComponents";
 import { SearchComponents } from "./searchComponents";
 import { SortComponents } from "./sortComponents";
-import { AiInsightsType } from "../types/AiInsightsType";
 import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
-    const userId = user?.id ?? '00000000-0000-0000-0000-000000000004';
+    // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
+    const userId = user?.id ?? '550e8400-e29b-41d4-a718-446655440000';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
 
     const { data: allInsights, error: aiError, isLoading: isAiLoading } = useGetAiInsightsQuery();
@@ -88,13 +88,9 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
             }
 
             // סינון לפי דירוג
-            console.log("allInsights:", allInsights);
-            console.log("insightsMap:", insightsMap);
-            console.log("ratingFilter:", filterCriteria.ratingFilter);
             if (filterCriteria.ratingFilter !== null) {
                 results = results.filter(ans => {
                     const rating = insightsMap.get(ans.id);
-                    console.log(`answerId: ${ans.id}, rating: ${rating}`);
                     return rating === filterCriteria.ratingFilter;
                 });
             }
@@ -243,6 +239,17 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
                         </div>
                         <AiInsightsList answerId={recording.id} />
                         <Feedbackes props={{ sharedRecordingId: recording.id, usersList: [] }} />
+                        <div className="flex items-center justify-center">
+                            {Array.from({ length: 5 }, (_, index) => {
+                                const rating = insightsMap.get(recording.id) || 0;
+                                return (
+                                    <span key={index} className={`text-yellow-500 text-2xl `}>{index < rating ? '★' : '☆'}</span>
+                                );
+                            })}
+                        </div>
+
+
+
                     </CardSimple>
                 ))}
             </div>

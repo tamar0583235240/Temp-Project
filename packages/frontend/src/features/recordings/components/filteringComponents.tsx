@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Answer } from '../types/Answer';
+import { Answer } from '../types/answer';
 import { TitleQuestions } from './question';
 import { Button } from '../../../shared/ui/button';
 import { cn } from '../../../shared/utils/cn';
@@ -57,28 +57,22 @@ export const FilteringComponents = (props: {
   const renderStars = () => {
     const selectedRating = filterCriteria.ratingFilter || 0;
     return (
-      <div className="flex gap-1 pr-2">
-        {[1, 2, 3, 4, 5].map((num) => (
-          <button
-            key={num}
-            type="button"
-            onClick={() => toggleRatingFilter(num)}
-            className="focus:outline-none"
-          >
-            <Star
-              size={20}
-              className={cn(
-                "transition-colors",
-                num <= selectedRating ? "text-yellow-400" : "text-gray-300"
-              )}
-              fill={num <= selectedRating ? "currentColor" : "none"}
-            />
-          </button>
-        ))}
-      </div>
+        <div className="flex gap-1 pr-2">
+            {[1, 2, 3, 4, 5].map((num) => (
+                <button
+                    key={num}
+                    type="button"
+                    onClick={() => toggleRatingFilter(num)}
+                    className="focus:outline-none"
+                >
+                    <span className={`text-2xl ${num <= selectedRating ? 'text-yellow-400' : 'text-gray-300'}`}>
+                        {num <= selectedRating ? '★' : '☆'}
+                    </span>
+                </button>
+            ))}
+        </div>
     );
-  };
-
+};
   return (
     <div className="fixed top-24 right-4 w-80 z-40 p-6" dir="rtl">
       {/* Header */}

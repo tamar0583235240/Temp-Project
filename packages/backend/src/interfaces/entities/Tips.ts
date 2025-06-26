@@ -8,4 +8,10 @@ export class Tips {
 
   @Column("text", { name: "content" })
   content: string;
+
+  @Column("timestamp without time zone", {
+    name: "last_sent_at",
+    nullable: true,
+  })
+  lastSentAt: Date | null;
 }
