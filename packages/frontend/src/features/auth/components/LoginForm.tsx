@@ -31,7 +31,7 @@ function LoginForm() {
       const res = await login({ email, password }).unwrap();
       setTempEmail(email);
       setShowValidation(true);
-      successfulLogin();
+      successfulLogin(res);
     } catch (err: any) {
       const message = err?.data?.message || "שגיאה בהתחברות";
       dispatch(loginFailure(message));
@@ -40,9 +40,9 @@ function LoginForm() {
     }
   };
 
-  const successfulLogin = () => {
-    if (data?.user && data?.token) {
-      dispatch(loginSuccess({ user: data.user, token: data.token }));
+  const successfulLogin = (res: any) => {
+    if (res?.user && res?.token) {
+      dispatch(loginSuccess({ user: res.user, token: res.token }));
       navigate("/");
     }
   };
