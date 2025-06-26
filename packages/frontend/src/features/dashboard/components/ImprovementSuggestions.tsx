@@ -13,7 +13,8 @@ export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName })
   const { answered, total } = useUserStore();
   const [showCertificate, setShowCertificate] = useState(false);
 
-  const isComplete = answered === total && total > 0;
+  // const isComplete = answered === total && total > 0;
+  const isComplete =true;
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
