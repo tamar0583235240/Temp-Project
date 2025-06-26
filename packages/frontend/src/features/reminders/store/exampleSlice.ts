@@ -23,7 +23,7 @@ const reminderSlice = createSlice({
       state.data.push(action.payload);
     },
     deleteItem(state, action: PayloadAction<number>) {
-      state.data = state.data.filter(items => items.id !== String(action.payload));
+      state.data = state.data.filter(items => items.id !== action.payload);
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;

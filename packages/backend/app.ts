@@ -12,9 +12,6 @@ app.use(express.json());
 app.use(cors());
 app.use('/api', exampleRouts);
 app.use('/api/tips', remindersRouts);
-// app.use(cors());
-app.use('/api/tipes', exampleRouts);
-
 app.use(cors());
 
 export default app;
