@@ -5,8 +5,7 @@ import { store } from "../shared/store/store";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  // const user = { role: "student" };
-  const isManager = store.getState().auth.user?.role === "manager";
+  const isManager: boolean = store.getState().auth.isAdmin;
   console.log(store.getState().auth.user?.role);
 
 

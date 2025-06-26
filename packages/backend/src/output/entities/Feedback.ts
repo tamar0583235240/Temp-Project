@@ -1,4 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Answers } from "./Answers";
 import { Users } from "./Users";
 import { SharedRecordings } from "./SharedRecordings";
 
@@ -20,8 +21,12 @@ export class Feedback {
   })
   createdAt: Date;
 
-  @Column("uuid", { name: "answer_code", nullable: true })
+  @Column("text", { name: "answerCode", nullable: true })
   answerCode: string | null;
+
+  @ManyToOne(() => Answers, (answers) => answers.feedbacks)
+  @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
+  answerCode2: Answers;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
