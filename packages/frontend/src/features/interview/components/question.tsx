@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
 import { useDispatch } from "react-redux";
 import { answerQuestion } from "../store/simulationSlice";
+import AnswerAI from "./AnswerAI";
 
 const Question: React.FC = () => {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ const Question: React.FC = () => {
           </button>
         </div>
       </div>
+      {/* <AnswerAI answerId={}/> */}
     </div>
   );
 };

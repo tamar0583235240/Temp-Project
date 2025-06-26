@@ -7,6 +7,7 @@ import { useEffect } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
+import AnswerAI from "../features/interview/components/AnswerAI"
 
 const InterviewPage = () => {
 
@@ -45,6 +46,7 @@ const InterviewPage = () => {
           <Question />
           <Buttons />
           <TipsComponent/>
+          {/* <AnswerAI answerId={"00000000-0000-0000-0000-000000000027"}/> */}
         </div>
       </main>
       {/* Sidebar */}
