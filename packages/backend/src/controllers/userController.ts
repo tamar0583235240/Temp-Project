@@ -32,6 +32,8 @@ export const getMe = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
   const userId = req.params.id;
+  console.log(req.params.password)
+  
   const user = await userRepository.getUserById(userId);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
@@ -42,6 +44,9 @@ export const getUserById = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password, role } = req.body;
 
+  console.log("askaflaksjflsa");
+  console.log(req.body.password);
+
   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
     return res.status(409).json({ message: 'אימייל כבר קיים' });
@@ -51,7 +56,7 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Password is required' });
   }
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
+  console.log(hashedPassword);
   const newUser: Users = {
     id: uuidv4(),
     firstName,
