@@ -9,94 +9,6 @@ import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 
 export default function AppRoutes() {
-<<<<<<< HEAD
-    return (
-        <div dir="rtl">
-            <Routes>
-                {/* Routes without sidebar */}
-                <Route path="/login" element={<LoginForm />} />
-                <Route path="/signup" element={<SignupForm />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                {/* Routes with sidebar */}
-                <Route element={<DashboardLayout />}>
-                    <Route path="/" element={<HomePage />} />
-                    <Route
-                        path="/simulation"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["student"]}>
-                                <p>Simulation</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["student"]}>
-                                <p>Dashboard</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/recordings"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["student"]}>
-                                <p>Recordings</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/shared"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["student"]}>
-                                <p>SharedRecordings</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/resources"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["student"]}>
-                                <InterviewMaterialPage></InterviewMaterialPage>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/interviewMaterialsHub"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["student"]}>
-                                <p>InterviewMaterialsHub</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/admin/questions"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["admin"]}>
-                                <p>AdminQuestions</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/admin/users"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["admin"]}>
-                                <p>AdminUsers</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/admin/resources"
-                        element={
-                            <RoleProtectedRoute allowedRoles={["admin"]}>
-                                <p>AdminResources</p>
-                            </RoleProtectedRoute>
-                        }
-                    />
-                </Route>
-            </Routes>
-        </div>
-    );
-=======
   return (
   <div dir="rtl">
     <Routes>
@@ -184,5 +96,4 @@ export default function AppRoutes() {
     </Routes>
   </div>
   );
->>>>>>> origin/group1
 }
