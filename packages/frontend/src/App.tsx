@@ -5,7 +5,6 @@ import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import ToggleButtonComponent from './features/reminders/components/ToggleButtonComponent';
 
-
 function App() {
   return (
     <MessageModalProvider>  
