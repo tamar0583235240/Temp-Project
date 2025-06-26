@@ -4,8 +4,8 @@ import { Column, Entity, Index } from "typeorm";
 @Entity("tips", { schema: "public" })
 export class Tips {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "content" })
-  content!: string;
+  content: string;
 }

@@ -4,23 +4,23 @@ import { Column, Entity, Index } from "typeorm";
 @Entity("Resource", { schema: "public" })
 export class Resource {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "title" })
-  title!: string;
+  title: string;
 
   @Column("text", { name: "type", nullable: true })
-  type!: string | null;
+  type: string | null;
 
   @Column("text", { name: "description", nullable: true })
-  description!: string | null;
+  description: string | null;
 
   @Column("text", { name: "fileurl", nullable: true })
-  fileurl!: string | null;
+  fileurl: string | null;
 
   @Column("timestamp without time zone", {
     name: "createdat",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdat!: Date;
+  createdat: Date;
 }

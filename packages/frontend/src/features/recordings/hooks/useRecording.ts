@@ -12,7 +12,7 @@ import { useUploadAnswerMutation } from '../services/recordingApi';
 export const useRecording = () => {
   const dispatch = useDispatch();
   const { currentRecording, showRecordingModal } = useSelector(
-    (state: RootState) => state.recording  );  
+    (state: RootState) => state.recording);  
   const [uploadAnswer, { isLoading }] = useUploadAnswerMutation();
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);

@@ -1,88 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useGetTipsQuery } from '../services/tipsApi';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../shared/store/store';
-import { addShownTip, resetShownTips } from "../store/tipsSlice";
-import { Tip } from '../types/tip';
-import {
-    popupContainerStyle, popupStyle, textStyle, closeButtonStyle,
-    controlsContainerStyle, buttonStyle, loaderContainerStyle, spinnerStyle,
-} from './tipsStyles';
+import { Lightbulb } from 'lucide-react';
+import { CardSimple } from '../../../shared/ui/card';
 
-export const TipsComponent: React.FC = () => {
-    const dispatch = useDispatch();
-    const shownTips = useSelector((state: RootState) => state.shownTips.shownTips);
-    const { data: tips, isLoading, error } = useGetTipsQuery();
+const TipsComponent: React.FC = () => {
+  const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
+  const currentQuestion = questions[currentIndex];
 
-    const [remainingTips, setRemainingTips] = useState<Tip[]>([]);
-    const [currentTip, setCurrentTip] = useState<Tip | null>(null);
-    const [hidden, setHidden] = useState(false);
-    const [enabled, setEnabled] = useState(true);
+  if (!currentQuestion?.tips) return null;
 
-    const shuffleArray = <T,>(array: T[]): T[] => {
-        const shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    };
-
-    useEffect(() => {
-        if (tips) {
-            const unseen = tips.filter(t => !shownTips.includes(t.id));
-            setRemainingTips(shuffleArray(unseen));
-        }
-    }, [tips, shownTips]);
-
-    useEffect(() => {
-        if (enabled && remainingTips.length === 0 && tips && tips.length > 0) {
-            dispatch(resetShownTips());
-            setTimeout(() => {
-                setRemainingTips(shuffleArray(tips));
-            }, 500);
-        }
-    }, [remainingTips, enabled, tips, dispatch]);
-
-    useEffect(() => {
-        if (!enabled || remainingTips.length === 0) return;
-
-        const interval = setInterval(() => {
-            const [nextTip, ...rest] = remainingTips;
-            setCurrentTip(nextTip);
-            dispatch(addShownTip(nextTip.id));
-            setRemainingTips(rest);
-            setHidden(false);
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, [remainingTips, enabled, dispatch]);
-
-    if (isLoading) {
-        return (
-            <div style={loaderContainerStyle}>
-                <div style={spinnerStyle}></div>
-                <p style={{ color: "#1565c0", marginTop: "8px" }}>טוען טיפים...</p>
-            </div>
-        );
-    } if (error) return <div>שגיאה בטעינת טיפים</div>;
-
-    return (
-        <>
-            {!hidden && currentTip && enabled && (
-                <div style={popupContainerStyle}>
-                    <div style={popupStyle}>
-                        <button onClick={() => setHidden(true)} style={closeButtonStyle}>×</button>
-                        <p style={textStyle}>💡 {currentTip.content}</p>
-                    </div>
-                </div>
-            )}
-
-            <div style={controlsContainerStyle}>
-                <button onClick={() => setEnabled(!enabled)} style={buttonStyle}>
-                    {enabled ? "🔕 כבה טיפים" : "🔔 הדלק טיפים"}
-                </button>
-            </div>
-        </>
-    );
+  return (
+    <CardSimple className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md p-8 w-[520px] min-h-[120px] flex flex-col gap-4 mx-auto">
+      <div className="flex items-center gap-2 mb-3">
+        <Lightbulb className="w-6 h-6 text-yellow-400" />
+        <span className="font-bold text-lg text-gray-800">טיפים לתשובה</span>
+      </div>
+      <div className="bg-sky-100 rounded-xl px-6 py-8 text-base text-[#1B3A4B] leading-relaxed flex-1 flex items-start min-h-[64px] text-right" dir="rtl">
+        <span className="w-full" dir="rtl">{currentQuestion.tips}</span>
+      </div>
+    </CardSimple>
+  );
 };
+
+export default TipsComponent;

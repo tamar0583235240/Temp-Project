@@ -8,38 +8,38 @@ import { SharedRecording } from "./SharedRecording";
 @Entity("User", { schema: "public" })
 export class User {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "firstname" })
-  firstname!: string;
+  firstname: string;
 
   @Column("text", { name: "lastname" })
-  lastname!: string;
+  lastname: string;
 
   @Column("text", { name: "email", unique: true })
-  email!: string;
+  email: string;
 
   @Column("text", { name: "phone", nullable: true })
-  phone!: string | null;
+  phone: string | null;
 
   @Column("text", { name: "role", nullable: true })
-  role!: string | null;
+  role: string | null;
 
   @Column("timestamp without time zone", {
     name: "createdat",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdat!: Date;
+  createdat: Date;
 
   @Column("boolean", { name: "isactive", default: () => "true" })
-  isactive!: boolean;
+  isactive: boolean;
 
   @OneToMany(() => Answer, (answer) => answer.user)
-  answers!: Answer[];
+  answers: Answer[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.givenbyuser)
-  feedbacks!: Feedback[];
+  feedbacks: Feedback[];
 
   @OneToMany(() => SharedRecording, (sharedRecording) => sharedRecording.owner)
-  sharedRecordings!: SharedRecording[];
+  sharedRecordings: SharedRecording[];
 }
