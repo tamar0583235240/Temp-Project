@@ -2,6 +2,7 @@ import { api } from "../../../shared/api/api";
 import { Answer } from "../types/Answer";
 import { Question } from "../types/Question";
 
+
 export const AnswerApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getAnswersByIdUser: builder.query<Answer[], string>({
@@ -15,5 +16,6 @@ export const AnswerApi = api.injectEndpoints({
         })
     })
 });
+
 
 export const { useGetAnswersByIdUserQuery , useGetQuestionByIdQuery} = AnswerApi;

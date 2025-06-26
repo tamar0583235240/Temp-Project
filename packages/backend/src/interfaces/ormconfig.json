@@ -5,8 +5,8 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "ruti",
-    "database": "",
+    "password": "TAMARg!!595",
+    "database": "lingo-prep",
     "synchronize": false,
     "entities": ["entities/*.js"]
   }
