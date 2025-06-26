@@ -32,8 +32,8 @@ const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) =
     }
   };
 
-  const handleDelete = (index: number) => {
-    console.log("כאן אמור להימחק משתתף לפי אינדקס", index);
+  const handleDelete = (email: string) => {
+    console.log("כאן אמור להימחק משתתף לפי אימייל", email);
   };
 
   const getInitial = (name?: string) => {
@@ -102,7 +102,7 @@ const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) =
                     <div className="participant-email">{p.email}</div>
                   </div>
                 </div>
-                <button onClick={() => handleDelete(i)} className="delete-button">
+                <button onClick={() => handleDelete(p.email)} className="delete-button">
                   <Trash2 />
                 </button>
               </div>

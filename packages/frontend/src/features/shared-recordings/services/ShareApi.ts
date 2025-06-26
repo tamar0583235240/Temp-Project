@@ -8,6 +8,7 @@ export const ShareApi = api.injectEndpoints({
         `shared-recordings/getSharedRecordingParticipants/${recordingId}/${userId}`,
       providesTags: ["shared"],
     }),
+
     addParticipant: builder.mutation<void, { recordingId: string; email: string }>({
       query: ({ recordingId, email }) => ({
         url: `shared-recordings/addParticipant`,
@@ -16,10 +17,21 @@ export const ShareApi = api.injectEndpoints({
       }),
       invalidatesTags: ["shared"],
     }),
+
     getPreviouslySharedEmails: builder.query<Participant[], string>({
       query: (userId) => `shared-recordings/sharedEmails/${userId}`,
     }),
+
+    deleteParticipant: builder.mutation<void, { recordingId: string; email: string }>({
+      query: ({ recordingId, email }) => ({
+        url: `shared-recordings/deleteParticipant`,
+        method: "DELETE",
+        body: { recordingId, email },
+      }),
+      invalidatesTags: ["shared"],
+    }),
+
   }),
 });
 
-export const { useGetSharedWithQuery, useAddParticipantMutation, useGetPreviouslySharedEmailsQuery } = ShareApi;
+export const { useGetSharedWithQuery, useAddParticipantMutation, useGetPreviouslySharedEmailsQuery, useDeleteParticipantMutation } = ShareApi;
