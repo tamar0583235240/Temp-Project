@@ -121,7 +121,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     if (new Date(tokenData.expires_at) < new Date()) {
-      return res.status(400).json({ message: "Token expired" });
+      return res.status(400).json({ message: "דרוש טוקן" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -131,7 +131,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
     console.error("Reset Password error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "שגיאת שרת פנימית" });
   }
 };
 
@@ -143,7 +143,7 @@ export const login = async (req: Request, res: Response) => {
     console.log("User found:", user);
     if (!user) {
       // return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
-      throw new Error("Invalid email or password");
+      throw new Error("אימייל או סיסמה שגויים");
     }
 
     const token = jwt.sign(
@@ -168,8 +168,9 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({ user, token });
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     console.error("Login error:", error);
-    return res.status(500).json({ message: "שגיאה בהתחברות" });
+    return res.status(500).json({ message: message });
   }
 };
 
