@@ -29,15 +29,17 @@ const getAllQuestions = async (): Promise<Questions[]> => {
 }
 
 
-type QuestionUpdates = Partial<Omit<Questions, 'id'>>;
 
-const updateQuestionById = async (id: string, updates: QuestionUpdates) => {
-  const fields = Object.keys(updates);
+
+const updateQuestionById = async (updates: Questions) => {
+  const { id, ...fieldsToUpdate } = updates;
+  console.log(updates)
+  console.log("njnjnjn");
+  const fields = Object.keys(fieldsToUpdate);
   if (fields.length === 0) {
     throw new Error('No fields provided for update.');
   }
-
-  const values = Object.values(updates);
+  const values = Object.values(fieldsToUpdate);
   const setString = fields
     .map((field, i) => `"${field}" = $${i + 1}`)
     .join(', ');
@@ -51,24 +53,22 @@ const updateQuestionById = async (id: string, updates: QuestionUpdates) => {
 
   try {
     const { rows } = await pool.query(query, [...values, id]);
-
     if (rows.length === 0) {
       throw new Error(`Question with id ${id} not found`);
     }
-
     return rows[0];
   } catch (error) {
     console.error('Error updating question:', error);
     throw new Error('Failed to update question');
   }
-};
+}
 
 
 
-const deleteQuestionById = async (id: string,is_active:boolean): Promise<string> => {
+const deleteQuestionById = async (id: string, is_active: boolean): Promise<string> => {
   try {
     const query = 'UPDATE questions SET is_active = $1 WHERE id = $2';
-    const values = [is_active,id];
+    const values = [is_active, id];
     await pool.query(query, values);
     return "Question deleted successfully";
   } catch (error) {
@@ -76,5 +76,5 @@ const deleteQuestionById = async (id: string,is_active:boolean): Promise<string>
     throw error;
   }
 }
-export default { getAllQuestionById, getAllQuestions, deleteQuestionById,updateQuestionById };
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById, updateQuestionById };
 

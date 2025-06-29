@@ -1,42 +1,3 @@
-// import { use, useState } from "react";
-// import { useGetAllQuestionsQuery } from "../services/adminQuestionApi"
-// import './adminQuestions.css';
-// import { UpdateQuestion } from "./updateQuestion";
-
-// type AdminQuestionsProps = {
-//   allowedRoles: string[];
-//   children: React.ReactNode; 
-// };
-
-// export const AdminQuestions : React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
-
-//   const { data, isLoading } = useGetAllQuestionsQuery();
-//   const [isEdit,setIsEdit]=useState(false);
-
-//   if (isLoading)
-//     return <div className="admin-questions-container"><h2 className="admin-questions-title">טוען...</h2></div>
-//   if (!data)
-//     return <div className="admin-questions-container"><h2 className="admin-questions-title">ישנה בעיה בטעינת השאלות</h2></div>
-//   if (data.length === 0)
-//     return <div className="admin-questions-container"><h2 className="admin-questions-title">אין שאלות</h2></div>
-
-//   return (
-//     <div className="admin-questions-container">
-//       <h2 className="admin-questions-title">ניהול שאלות</h2>
-//       {data.map((question) => (
-//         <div key={question.id} className="question-card">
-//           <div className="question-header">
-//             <h3 className="question-title">{question.title}</h3>
-//           </div>
-//           <div className="question-actions">
-//             <button className="action-button edit-button" onClick={()=>setIsEdit(true)}>עריכה</button>
-//             <button className="action-button delete-button">מחיקה</button>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   )
-// }
 import { useState } from "react";
 import { useGetAllQuestionsQuery } from "../services/adminQuestionApi";
 import { DeleteQuestion } from "./deleteQuestion";
@@ -45,7 +6,7 @@ import { GridContainer } from "../../../shared/ui/GridContainer";
 import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { UpdateQuestion } from "./updateQuestion";
-import { useUpdateQuestionByIdMutation } from "../services/adminQuestionApi";
+import { useUpdateQuestionMutation } from "../services/adminQuestionApi";
 import { Question } from "../types/Question";
 
 
@@ -86,19 +47,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     setQuestionToDelete(idQuestion);
   };
 
-  // const questioUpdateClick = () => {
-  //   setQuestionUpdate(!questionToEdit)
-  // }
 
-  // const handleUpdateSubmit = async (id: string, formData: any) => {
-  //   try {
-  //     await updateQuestionById({ id, data: formData }).unwrap();
-  //     setIsEdit(false);
-  //     setSelectedQuestion(null);
-  //   } catch (err) {
-  //     console.error("שגיאה בעדכון השאלה:", err);
-  //   }
-  // };
 
   return (
     <GridContainer maxWidth="lg" className="text-center" dir="rtl">
