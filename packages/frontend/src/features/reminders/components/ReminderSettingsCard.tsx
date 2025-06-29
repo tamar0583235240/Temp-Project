@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type OptionType = {
   id: string;
@@ -10,24 +10,46 @@ type Props = {
   title: string;
   description: string;
   reminderType: string;
+  savedOption?: string | null;
+  onOptionChange: (reminderType: string, optionId: string | null) => void;
 };
 
-export default function ReminderSettingsCard({ title, description, reminderType }: Props) {
+export default function ReminderSettingsCard({
+  title,
+  description,
+  reminderType,
+  savedOption = null,
+  onOptionChange,
+}: Props) {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(savedOption);
+
+  useEffect(() => {
+    setSelectedOption(savedOption ?? null);
+    setIsEnabled(savedOption !== null);
+  }, [savedOption]);
 
   const toggleSwitch = () => {
-    setIsEnabled(!isEnabled);
-    if (!isEnabled) setSelectedOption(null);
+    const newEnabled = !isEnabled;
+    setIsEnabled(newEnabled);
+    if (!newEnabled) {
+      setSelectedOption(null);
+      onOptionChange(reminderType, null);
+    } else {
+      onOptionChange(reminderType, selectedOption);
+    }
   };
 
-  const selectOption = (optionId: string) => setSelectedOption(optionId);
+  const selectOption = (optionId: string) => {
+    setSelectedOption(optionId);
+    onOptionChange(reminderType, optionId);
+  };
 
   const options: OptionType[] = [
     { id: 'every-two-days', text: 'כל יומיים', icon: '📅' },
     { id: 'daily', text: 'כל יום', icon: '📅' },
     { id: 'weekly', text: 'אחת לשבוע', icon: '📅' },
-    { id: 'every-three-days', text: 'אחת ל-3 ימים', icon: '📅' }
+    { id: 'every-three-days', text: 'אחת ל-3 ימים', icon: '📅' },
   ];
 
   return (
@@ -54,7 +76,7 @@ export default function ReminderSettingsCard({ title, description, reminderType 
         </button>
       </div>
 
-      {isEnabled && (
+      {isEnabled ? (
         <>
           <h4 className="text-md font-semibold text-gray-800 mt-6 mb-4 text-center">
             בחר את תדירות התזכורת שלך:
@@ -88,23 +110,21 @@ export default function ReminderSettingsCard({ title, description, reminderType 
               </div>
             ))}
           </div>
-        </>
-      )}
 
-      {!isEnabled && (
+          {selectedOption && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+              <div className="flex items-center">
+                <div className="text-green-600 ml-2">✓</div>
+                <p className="text-green-800 text-sm">
+                  נבחר: {options.find((opt) => opt.id === selectedOption)?.text}
+                </p>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
         <div className="text-center text-gray-500 mt-6">
           <p>הדלק את המתג כדי לבחור תדירות תזכורת</p>
-        </div>
-      )}
-
-      {isEnabled && selectedOption && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-          <div className="flex items-center">
-            <div className="text-green-600 ml-2">✓</div>
-            <p className="text-green-800 text-sm">
-              נבחר: {options.find((opt) => opt.id === selectedOption)?.text}
-            </p>
-          </div>
         </div>
       )}
     </div>

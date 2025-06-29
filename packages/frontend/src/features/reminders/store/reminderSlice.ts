@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import reminderType from '../types/reminderType';
+import {reminderType} from '../types/reminderType';
 
 
 interface ReminderState {
@@ -18,6 +18,9 @@ const reminderSlice = createSlice({
   reducers: {
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
+    },
+    setData(state, action: PayloadAction<reminderType[]>) {
+      state.data = action.payload;
     },
   },
 });
