@@ -4,6 +4,7 @@ import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+import { UserReminderSettings } from "./UserReminderSettings";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -63,4 +64,10 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
+  @OneToMany(
+    () => UserReminderSettings,
+    (userReminderSettings) => userReminderSettings.user
+  )
+  userReminderSettings: UserReminderSettings[];
 }

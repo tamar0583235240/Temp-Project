@@ -12,9 +12,10 @@ console.log('i am here in app');
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', exampleRouts);
 app.use('/api/interviewMaterialSub', InterviewMaterialSubRouts);
 app.use('/api/resources', resourceRouts);
+app.use('/api', exampleRouts);
+
 
 
 

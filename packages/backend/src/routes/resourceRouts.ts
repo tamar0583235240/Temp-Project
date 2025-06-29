@@ -10,17 +10,17 @@
 import express from 'express';
 import multer from 'multer';
 import {
-  getAllRecordingsController,
+
   uploadRecording
 } from '../controllers/resourceController';
 
 const router = express.Router();
 
-// הגדרת Multer לשמירה זמנית של הקבצים בתיקיית uploads
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.memoryStorage(); // ✅ שומר בזיכרון
+const upload = multer({ storage });
 
 // routes
-router.get('/', getAllRecordingsController);
+router.get('/', uploadRecording);
 
 router.post('/uploadRecord', upload.single('file'), uploadRecording);
 

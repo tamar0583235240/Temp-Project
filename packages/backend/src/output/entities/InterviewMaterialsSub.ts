@@ -20,4 +20,7 @@ export class InterviewMaterialsSub {
 
   @Column("tsvector", { name: "document_with_weights", nullable: true })
   documentWithWeights: string | null;
+
+  @Column("text", { name: "file_url", nullable: true })
+  fileUrl: string | null;
 }
