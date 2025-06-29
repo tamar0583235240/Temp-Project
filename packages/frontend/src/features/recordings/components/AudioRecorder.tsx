@@ -1,30 +1,17 @@
-// חבילות חיצוניות
 import React, { useState } from 'react';
-// ייבוא פנימי
 import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
-// סטייל
-import './AudioRecorder.css';
+import { Button } from '../../../shared/ui/button';
+import { FiMic, FiPause, FiPlay, FiTrash2, FiDownload, FiRefreshCw, FiCheck } from 'react-icons/fi';
 
-// טיפוס עזר (אם לא קיים, יש להוסיף בקובץ טיפוסים)
-interface RecordingState {
-  isRecording: boolean;
-  isPaused: boolean;
-  recordingTime: number;
-}
+import type { RecordingState, AudioRecorderProps } from '../types/Answer'; // ודא שהטיפוסים מוגדרים כאן
 
-interface AudioRecorderProps {
-  userId?: string;
-  questionId?: string;
-}
-
-const AudioRecorder: React.FC<AudioRecorderProps> = ({ 
-  userId = '00000000-0000-0000-0000-000000000000', 
-  questionId = '00000000-0000-0000-0000-000000000010' // מזהה שאלה אמיתי
+const AudioRecorder: React.FC<AudioRecorderProps> = ({
+  userId = '00000000-0000-0000-0000-000000000000',
+  questionId = '00000000-0000-0000-0000-000000000010'
 }) => {
   const {
     currentRecording,
-    showRecordingModal,
     isLoading,
     startRecording,
     pauseRecording,
@@ -40,19 +27,34 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
+  const [recordingPhase, setRecordingPhase] = useState<'idle' | 'recording' | 'paused'>('idle');
 
-  // שמירת הקלטה
+  const handleMainButtonClick = () => {
+    if (recordingPhase === 'idle') {
+      startRecording();
+      setRecordingPhase('recording');
+    } else if (recordingPhase === 'recording') {
+      pauseRecording();
+      setRecordingPhase('paused');
+    }
+  };
+
+  const handleStopRecording = () => {
+    stopRecording();
+    setRecordingPhase('idle');
+    setShowSaveModal(true);
+  };
+
   const handleSaveRecording = async () => {
     try {
       await saveRecording(userId, questionId, fileName);
       setShowSaveModal(false);
       setFileName('');
     } catch (error) {
-      console.error('Failed to save recording:', error);
+      console.error('שגיאה בשמירה:', error);
     }
   };
 
-  // הורדת הקלטה
   const downloadRecording = () => {
     if (audioBlobRef.current) {
       const url = URL.createObjectURL(audioBlobRef.current);
@@ -67,148 +69,127 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   };
 
   return (
-    <div className="audio-recorder">
-      <div className="recorder-container">
-        <h3 className="recorder-title">מערכת הקלטת תשובות</h3>
-        {/* כפתורים ראשיים */}
-        <div className="main-buttons">
-          <button
-            onClick={startRecording}
-            disabled={currentRecording.isRecording}
-            className="btn btn-record"
-          >
-            <span className="btn-icon">🎤</span>
-            <span>התחל הקלטה</span>
-          </button>
-          <button
-            disabled={true}
-            className="btn btn-upload btn-disabled"
-          >
-            <span className="btn-icon">📁</span>
-            <span>העלאת קובץ</span>
-            <div className="coming-soon">בקרוב</div>
-          </button>
-          <button
-            onClick={() => setShowSaveModal(true)}
-            disabled={!audioBlobRef.current}
-            className="btn btn-save"
-          >
-            <span className="btn-icon">💾</span>
-            <span>שמור הקלטה</span>
-          </button>
-        </div>
-        {/* נגן אם יש הקלטה */}
-        {audioBlobRef.current && (
-          <div className="audio-preview">
-            <h4>תצוגה מקדימה:</h4>
-            <audio controls className="audio-player">
-              <source src={URL.createObjectURL(audioBlobRef.current)} type="audio/wav" />
-            </audio>
-            <button onClick={downloadRecording} className="btn btn-download">
-              <span className="btn-icon">⬇️</span>
-              הורד קובץ
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* פופ-אפ הקלטה */}
-      {showRecordingModal && (
-        <div className="modal-overlay">
-          <div className="recording-modal">
-            <div className="recording-header">
-              <div className="timer">
-                {formatTime(currentRecording.recordingTime)}
-              </div>
-            </div>
-            <div className="recording-content">
-              <div className="microphone-container">
-                <div className={`microphone-icon ${currentRecording.isRecording && !currentRecording.isPaused ? 'active' : ''}`}>
-                  {currentRecording.isRecording && !currentRecording.isPaused && (
-                    <>
-                      <div className="pulse-ring ring-1"></div>
-                      <div className="pulse-ring ring-2"></div>
-                      <div className="pulse-ring ring-3"></div>
-                    </>
-                  )}
-                  <span className="mic-emoji">🎤</span>
-                </div>
-              </div>
-              <h4 className="recording-status">
-                {currentRecording.isRecording && !currentRecording.isPaused
-                  ? 'מקליט...'
-                  : currentRecording.isPaused
-                  ? 'הקלטה מושהית'
-                  : 'הקלטה הושלמה'}
-              </h4>
-              <div className="recording-controls">
-                {/* כפתור עצירה בזמן הקלטה */}
-                {currentRecording.isRecording && (
-                  <button onClick={pauseRecording} className="btn btn-pause">
-                    ⏸️ עצור הקלטה
-                  </button>
-                )}
-                {/* כפתורים אחרי עצירה */}
-                {currentRecording.isPaused && (
-                  <>
-                    {audioBlobRef.current && (
-                      <div className="audio-preview-modal">
-                        <audio controls className="audio-player-modal">
-                          <source src={URL.createObjectURL(audioBlobRef.current)} type="audio/wav" />
-                        </audio>
-                      </div>
-                    )}
-                    <div className="control-buttons">
-                      <button onClick={resumeRecording} className="btn btn-resume">
-                        ▶️ המשך
-                      </button>
-                      <button onClick={restartRecording} className="btn btn-restart">
-                        🔄 מחדש
-                      </button>
-                      <button onClick={deleteRecording} className="btn btn-delete">
-                        🗑️ מחק
-                      </button>
-                      <button onClick={stopRecording} className="btn btn-finish">
-                        ✅ סיום
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
+    <div className="space-y-4 w-full">
+      {/* כפתור התחלה / עצירה */}
+         <Button
+        fullWidth
+        size="lg"
+        variant="primary-dark"
+        onClick={handleMainButtonClick}
+        icon={recordingPhase === 'idle' ? <FiMic /> : <FiPause />}
+      >
+        {recordingPhase === 'idle' ? 'התחל הקלטה' : 'עצור הקלטה'}
+      </Button>
+      {/* זמן הקלטה */}
+    <div className="space-y-4 w-full">
+      {(recordingPhase === 'recording' || recordingPhase === 'paused') && (
+        <div className="flex flex-col items-center gap-2">
+          <div className="text-lg font-bold text-text-main">
+            {formatTime(currentRecording.recordingTime)}
           </div>
         </div>
       )}
+      </div>
+      {/* כפתורי המשך / מחק / הקלט מחדש / סיום */}
+      {recordingPhase === 'paused' && (
+        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+          <Button
+            fullWidth
+            size="md"
+            variant="primary-dark"
+            onClick={() => {
+              resumeRecording();
+              setRecordingPhase('recording');
+            }}
+            icon={<FiPlay />}
+          >
+            המשך
+          </Button>
+          <Button
+            fullWidth
+            size="md"
+            variant="outline"
+            onClick={() => {
+              restartRecording();
+              setRecordingPhase('recording');
+            }}
+            icon={<FiRefreshCw />}
+          >
+            הקלט מחדש
+          </Button>
+          <Button
+            fullWidth
+            size="md"
+            variant="danger"
+            onClick={() => {
+              deleteRecording();
+              setRecordingPhase('idle');
+            }}
+            icon={<FiTrash2 />}
+          >
+            מחק הקלטה
+          </Button>
+          <Button
+            fullWidth
+            size="md"
+            variant="primary-dark"
+            onClick={handleStopRecording}
+            icon={<FiCheck />}
+          >
+            סיום
+          </Button>
+        </div>
+      )}
 
-      {/* פופ-אפ שמירה */}
+      {/* נגן ותצוגה מקדימה */}
+      {audioBlobRef.current && (
+        <div className="space-y-2">
+          <h4 className="font-semibold text-text-main">תצוגה מקדימה:</h4>
+          <audio controls className="w-full rounded-lg border border-muted">
+            <source src={URL.createObjectURL(audioBlobRef.current)} type="audio/wav" />
+          </audio>
+          <Button
+            variant="outline"
+            size="md"
+            onClick={downloadRecording}
+            icon={<FiDownload />}
+            iconPosition="right"
+            fullWidth
+          >
+            הורד קובץ
+          </Button>
+        </div>
+      )}
+
+      {/* מודל שמירה */}
       {showSaveModal && (
-        <div className="modal-overlay">
-          <div className="save-modal">
-            <h4>שמירת הקלטה</h4>
-            <div className="save-form">
-              <label>שם הקובץ:</label>
-              <input
-                type="text"
-                value={fileName}
-                onChange={(e) => setFileName(e.target.value)}
-                placeholder="הזן שם לקובץ..."
-                className="file-name-input"
-              />
-              <div className="save-buttons">
-                <button
-                  onClick={handleSaveRecording}
-                  disabled={isLoading || !fileName.trim()}
-                  className="btn btn-confirm"
-                >
-                  {isLoading ? 'שומר...' : '💾 שמור'}
-                </button>
-                <button
-                  onClick={() => setShowSaveModal(false)}
-                  className="btn btn-cancel"
-                >
-                  ביטול
-                </button>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full space-y-4">
+            <h3 className="text-xl font-bold text-text-main">שמירת הקלטה</h3>
+            <input
+              type="text"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+              placeholder="הזן שם לקובץ..."
+              className="w-full border border-border rounded-lg px-4 py-2"
+            />
+            <div className="flex gap-4">
+              <Button
+                variant="primary-dark"
+                fullWidth
+                onClick={handleSaveRecording}
+                disabled={!fileName.trim()}
+                isLoading={isLoading}
+              >
+                שמור
+              </Button>
+              <Button
+                variant="outline"
+                fullWidth
+                onClick={() => setShowSaveModal(false)}
+              >
+                ביטול
+              </Button>
             </div>
           </div>
         </div>

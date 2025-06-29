@@ -14,3 +14,8 @@ export interface RecordingState {
   audioBlob: Blob | null;
   fileName: string;
 }
+
+export interface AudioRecorderProps {
+  userId?: string;
+  questionId?: string;
+}
