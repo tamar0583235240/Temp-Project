@@ -70,7 +70,7 @@ export default function AppRoutes() {
         <Route
           path="/admin/questions"
           element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
+            <RoleProtectedRoute allowedRoles={["manager"]}>
               <p>AdminQuestions</p>
             </RoleProtectedRoute>
           }
@@ -78,7 +78,7 @@ export default function AppRoutes() {
         <Route
           path="/admin/users"
           element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
+            <RoleProtectedRoute allowedRoles={["maneger"]}>
               <p>AdminUsers</p>
             </RoleProtectedRoute>
           }
@@ -86,7 +86,7 @@ export default function AppRoutes() {
         <Route
           path="/admin/resources"
           element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
+            <RoleProtectedRoute allowedRoles={["maneger"]}>
               <p>AdminResources</p>
             </RoleProtectedRoute>
           }
