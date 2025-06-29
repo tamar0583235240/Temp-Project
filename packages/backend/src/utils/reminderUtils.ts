@@ -12,11 +12,6 @@ export function isReminderDue(lastSentAt: string | null, frequency: string): boo
   }
 }
 
-// export const isSentToday = (lastSentAt: Date): boolean => {
-//   const now = new Date();
-//   const lastDate = new Date(lastSentAt);
-//   return now.toDateString() === lastDate.toDateString();
-// }
 export const isSentToday = (lastSentAt?: string | null): boolean => {
   if (!lastSentAt) return false;
   const now = new Date();
