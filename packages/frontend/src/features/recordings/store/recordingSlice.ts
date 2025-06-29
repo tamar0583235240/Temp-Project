@@ -3,7 +3,7 @@ import { Answer, RecordingState } from '../types/Answer';
 
 interface RecordingSliceState {
   answers: Answer[];
-  currentRecording: RecordingState;
+  currentRecording: Omit<RecordingState, 'audioBlob'>; // הסרנו audioBlob
   showRecordingModal: boolean;
   showSuccessMessage: boolean;
   loading: boolean;
@@ -15,7 +15,6 @@ const initialState: RecordingSliceState = {
     isRecording: false,
     isPaused: false,
     recordingTime: 0,
-    audioBlob: null,
     fileName: '',
   },
   showRecordingModal: false,
@@ -36,7 +35,7 @@ const recordingSlice = createSlice({
     deleteAnswer(state, action: PayloadAction<string>) {
       state.answers = state.answers.filter(answer => answer.id !== action.payload);
     },
-    setRecordingState(state, action: PayloadAction<Partial<RecordingState>>) {
+    setRecordingState(state, action: PayloadAction<Partial<Omit<RecordingState, 'audioBlob'>>>) {
       state.currentRecording = { ...state.currentRecording, ...action.payload };
     },
     setShowRecordingModal(state, action: PayloadAction<boolean>) {

@@ -111,6 +111,7 @@ export const updateAnswer = async (id: string, updates: any) => {
 };
 
 
+
 // מחיקת תשובה
 export const deleteAnswer = async (id: string) => {
   await pool.query('DELETE FROM answers WHERE id = $1;', [id]);

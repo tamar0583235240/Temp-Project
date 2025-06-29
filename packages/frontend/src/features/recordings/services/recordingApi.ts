@@ -1,5 +1,6 @@
 import { api } from "../../../shared/api/api";
 import { Answer } from "../types/Answer";
+import { UploadAnswerDto } from '../types/UploadAnswerDto';
 
 export const recordingApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -7,11 +8,12 @@ export const recordingApi = api.injectEndpoints({
       query: () => "answers",
       providesTags: ["Answer"],
     }),
-    uploadAnswer: builder.mutation<Answer, FormData>({
-      query: (formData) => ({
-        url: "answers/upload",
+    uploadAnswer: builder.mutation<Answer, UploadAnswerDto>({
+      query: (answerData) => ({
+        url: "api/answers",
         method: "POST",
-        body: formData,
+        body: answerData,
+        headers: { "Content-Type": "application/json" },
       }),
       invalidatesTags: ["Answer"],
     }),

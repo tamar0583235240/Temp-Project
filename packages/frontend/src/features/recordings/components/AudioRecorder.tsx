@@ -1,15 +1,26 @@
+// חבילות חיצוניות
 import React, { useState } from 'react';
+// ייבוא פנימי
 import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
+// סטייל
 import './AudioRecorder.css';
+
+// טיפוס עזר (אם לא קיים, יש להוסיף בקובץ טיפוסים)
+interface RecordingState {
+  isRecording: boolean;
+  isPaused: boolean;
+  recordingTime: number;
+}
+
 interface AudioRecorderProps {
   userId?: string;
   questionId?: string;
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({ 
-  userId = 'user123', 
-  questionId = 'question456' 
+  userId = '00000000-0000-0000-0000-000000000000', 
+  questionId = '00000000-0000-0000-0000-000000000010' // מזהה שאלה אמיתי
 }) => {
   const {
     currentRecording,
@@ -22,14 +33,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     deleteRecording,
     restartRecording,
     saveRecording,
-  } = useRecording();
+    audioBlobRef,
+  } = useRecording() as ReturnType<typeof useRecording> & {
+    currentRecording: RecordingState;
+  };
 
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
 
+  // שמירת הקלטה
   const handleSaveRecording = async () => {
     try {
-      await saveRecording(fileName, userId, questionId);
+      await saveRecording(userId, questionId, fileName);
       setShowSaveModal(false);
       setFileName('');
     } catch (error) {
@@ -37,9 +52,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   };
 
+  // הורדת הקלטה
   const downloadRecording = () => {
-    if (currentRecording.audioBlob) {
-      const url = URL.createObjectURL(currentRecording.audioBlob);
+    if (audioBlobRef.current) {
+      const url = URL.createObjectURL(audioBlobRef.current);
       const a = document.createElement('a');
       a.href = url;
       a.download = fileName || 'recording.wav';
@@ -54,7 +70,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     <div className="audio-recorder">
       <div className="recorder-container">
         <h3 className="recorder-title">מערכת הקלטת תשובות</h3>
-        
         {/* כפתורים ראשיים */}
         <div className="main-buttons">
           <button
@@ -65,7 +80,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             <span className="btn-icon">🎤</span>
             <span>התחל הקלטה</span>
           </button>
-
           <button
             disabled={true}
             className="btn btn-upload btn-disabled"
@@ -74,23 +88,21 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             <span>העלאת קובץ</span>
             <div className="coming-soon">בקרוב</div>
           </button>
-
           <button
             onClick={() => setShowSaveModal(true)}
-            disabled={!currentRecording.audioBlob}
+            disabled={!audioBlobRef.current}
             className="btn btn-save"
           >
             <span className="btn-icon">💾</span>
             <span>שמור הקלטה</span>
           </button>
         </div>
-
         {/* נגן אם יש הקלטה */}
-        {currentRecording.audioBlob && (
+        {audioBlobRef.current && (
           <div className="audio-preview">
             <h4>תצוגה מקדימה:</h4>
             <audio controls className="audio-player">
-              <source src={URL.createObjectURL(currentRecording.audioBlob)} type="audio/wav" />
+              <source src={URL.createObjectURL(audioBlobRef.current)} type="audio/wav" />
             </audio>
             <button onClick={downloadRecording} className="btn btn-download">
               <span className="btn-icon">⬇️</span>
@@ -109,7 +121,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                 {formatTime(currentRecording.recordingTime)}
               </div>
             </div>
-
             <div className="recording-content">
               <div className="microphone-container">
                 <div className={`microphone-icon ${currentRecording.isRecording && !currentRecording.isPaused ? 'active' : ''}`}>
@@ -123,15 +134,13 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                   <span className="mic-emoji">🎤</span>
                 </div>
               </div>
-
               <h4 className="recording-status">
-                {currentRecording.isRecording && !currentRecording.isPaused 
-                  ? 'מקליט...' 
-                  : currentRecording.isPaused 
-                  ? 'הקלטה מושהית' 
+                {currentRecording.isRecording && !currentRecording.isPaused
+                  ? 'מקליט...'
+                  : currentRecording.isPaused
+                  ? 'הקלטה מושהית'
                   : 'הקלטה הושלמה'}
               </h4>
-
               <div className="recording-controls">
                 {/* כפתור עצירה בזמן הקלטה */}
                 {currentRecording.isRecording && (
@@ -139,18 +148,16 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                     ⏸️ עצור הקלטה
                   </button>
                 )}
-
                 {/* כפתורים אחרי עצירה */}
                 {currentRecording.isPaused && (
                   <>
-                    {currentRecording.audioBlob && (
+                    {audioBlobRef.current && (
                       <div className="audio-preview-modal">
                         <audio controls className="audio-player-modal">
-                          <source src={URL.createObjectURL(currentRecording.audioBlob)} type="audio/wav" />
+                          <source src={URL.createObjectURL(audioBlobRef.current)} type="audio/wav" />
                         </audio>
                       </div>
                     )}
-                    
                     <div className="control-buttons">
                       <button onClick={resumeRecording} className="btn btn-resume">
                         ▶️ המשך

@@ -1,15 +1,15 @@
-import express, { Application } from 'express';
-import cors from 'cors';
-import answerRoutes from './routes/answerRouts' 
+// import express, { Application } from 'express';
+// import cors from 'cors';
+// import answerRoutes from './routes/answerRouts' 
 
 
-const app: Application = express();
-app.use(cors());
-app.use(express.json());
-app.use('/api/answers', answerRoutes);
+// const app: Application = express();
+// app.use(cors());
+// app.use(express.json());
+// app.use('/api/answers', answerRoutes);
 
-app.get('/test', (req, res) => res.send('Test route works'));
+// app.get('/test', (req, res) => res.send('Test route works'));
 
 
-export default app;
+// export default app;
 
