@@ -6,6 +6,7 @@ import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
 // import {supabase} from './src/config/dbConnection';
+import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -31,7 +32,10 @@ app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
 
-app.use(cors());
+app.use('/admin', interviewMaterialsRoutes);
+
+app.use('/uploads/files', express.static('uploads/files'));
+app.use('/uploads/thumbnails', express.static('uploads/thumbnails'));
 
 
 export default app;

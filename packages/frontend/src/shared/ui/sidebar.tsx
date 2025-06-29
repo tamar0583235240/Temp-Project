@@ -4,7 +4,6 @@ import { cn } from "../utils/cn";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
-
 interface NavItem {
   label: string;
   href: string;
@@ -12,16 +11,17 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Simulation", href: "/simulation" },
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "My Recordings", href: "/recordings" },
-  { label: "Shared Recordings", href: "/shared" },
-  { label: "Resources", href: "/resources" },
-  { label: "Admin", href: "", isSectionTitle: true },
-  { label: "Manage Questions", href: "/admin/questions" },
-  { label: "Manage Users", href: "/admin/users" },
-  { label: "Manage Resources", href: "/admin/resources" },
+  { label: "דף הבית", href: "/" },
+  { label: "סימולציה", href: "/simulation" },
+  { label: "לוח בקרה", href: "/dashboard" },
+  { label: "ההקלטות שלי", href: "/recordings" },
+  { label: "הקלטות משותפות", href: "/shared" },
+  { label: "משאבים", href: "/resources" },
+  { label: "ניהול", href: "", isSectionTitle: true },
+  { label: "ניהול שאלות", href: "/admin/questions" },
+  { label: "ניהול משתמשים", href: "/admin/users" },
+  { label: "ניהול משאבים", href: "/admin/resources" },
+  { label: "ניהול חומרים", href: "/admin/interview-materials" },
 ];
 
 const SidebarNavigation = () => {
@@ -32,7 +32,7 @@ const SidebarNavigation = () => {
       className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right"
       dir="rtl"
     >
-      {/* Header */}
+      {/* כותרת צד */}
       <div className="flex items-center justify-start gap-2 mb-6">
         <div className="bg-primary text-white p-2 rounded-md">
           <FaGraduationCap />
@@ -40,7 +40,7 @@ const SidebarNavigation = () => {
         <h1 className="text-xl font-bold text-text-main">Interview Pro</h1>
       </div>
 
-      {/* Navigation */}
+      {/* ניווט */}
       <nav className="flex flex-col gap-2">
         {navItems.map(({ label, href, isSectionTitle }) =>
           isSectionTitle ? (
