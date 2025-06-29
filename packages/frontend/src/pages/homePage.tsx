@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 
+
 const HomePage = () => {
   const navigate = useNavigate();
   const user = { role: 'student' }
   const isManager = user?.role === 'manager'
-
   return (
     <div dir="rtl">
       <div>
@@ -44,5 +44,4 @@ const HomePage = () => {
     </div>
   )
 }
-
 export default HomePage

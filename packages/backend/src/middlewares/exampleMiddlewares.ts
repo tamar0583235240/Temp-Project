@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 
-//#region example for implemantaion Middleware
 export const exampleMiddleware = (req: Request, res: Response, next: NextFunction) => {
     try {
         const timestamp = new Date().toISOString();
@@ -15,4 +14,3 @@ export const exampleMiddleware = (req: Request, res: Response, next: NextFunctio
         res.status(500).json({ message: "Internal Server Error in middleware" });
     }
 };
-//#endregion
