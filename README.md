@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS items (
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_items_type ON items(type);
-CREATE INDEX IF NOT EXISTS idx_items_created_at ON items(created_at);
+CREATE INDEX IF NOT EXISTS createdat ON items(createdat);
 
 -- Enable Row Level Security
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;
