@@ -30,8 +30,7 @@ const SidebarNavigation = () => {
   const location = useLocation();
 
   return (
-    <aside
-      className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right"
+    <aside className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right overflow-y-auto"
       dir="rtl"
     >
       {/* Header */}
