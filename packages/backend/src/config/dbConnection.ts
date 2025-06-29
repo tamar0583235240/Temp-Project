@@ -1,5 +1,7 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
+
 dotenv.config();
 
 console.log('Database user:', process.env.DB_USER);
@@ -18,3 +20,4 @@ const pool = new Pool({
 
 console.log('Database connection pool created');
 export { pool };
+

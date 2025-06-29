@@ -5,17 +5,8 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-<<<<<<< HEAD
     "password": "TAMARg!!595",
-    "database": "lingo-prep",
-=======
-<<<<<<< HEAD
-    "password": "214787673",
-=======
-    "password": "rut1558",
->>>>>>> 8d7d8a21a7e51e0e565bee46575e3ba71e17593d
     "database": "",
->>>>>>> origin/TamarBiton
     "synchronize": false,
     "entities": ["entities/*.js"]
   }

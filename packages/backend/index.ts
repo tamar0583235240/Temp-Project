@@ -1,10 +1,6 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
-console.log('SUPABASE_URL:', process.env.SUPABASE_URL,'index');
-console.log('SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY);
-
 import app from './app';
+dotenv.config();
 
 const PORT = process.env.PORT || 5001;
 
