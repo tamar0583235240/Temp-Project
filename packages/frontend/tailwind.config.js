@@ -12,8 +12,6 @@ module.exports = {
         danger: "#E53E3E",
         "text-main": "#1F2937", // gray-800
         "text-secondary": "#64748B", // slate-500
-
-
           background: "var(--color-background)",
           text: "var(--color-text)",
           "secondary-text": "var(--color-secondary-text)",

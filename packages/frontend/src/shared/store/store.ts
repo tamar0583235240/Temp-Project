@@ -2,9 +2,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
 import exampleSlice from '../../features/exampleFeatures/store/exampleSlice'
+import { interviewMaterialApi } from "../../features/knowledge-base/services/interviewMaterialApi";
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
+    [interviewMaterialApi.reducerPath]: interviewMaterialApi.reducer,
     example: exampleSlice,
   },
   middleware: (getDefaultMiddleware) =>
