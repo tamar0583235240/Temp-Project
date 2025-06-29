@@ -11,3 +11,23 @@ export function isReminderDue(lastSentAt: string | null, frequency: string): boo
     default: return false;
   }
 }
+
+// export const isSentToday = (lastSentAt: Date): boolean => {
+//   const now = new Date();
+//   const lastDate = new Date(lastSentAt);
+//   return now.toDateString() === lastDate.toDateString();
+// }
+export const isSentToday = (lastSentAt?: string | null): boolean => {
+  if (!lastSentAt) return false;
+  const now = new Date();
+  const lastDate = new Date(lastSentAt);
+  return now.toDateString() === lastDate.toDateString();
+}
+
+export const isEarlier = (dateA: string | null, dateB: string | null): boolean => {
+  if (!dateA) return true; // אם אין תאריך A – נחשב כיותר ישן
+  if (!dateB) return false; // אם אין תאריך B – A בטוח לא ישן יותר
+  return new Date(dateA).getTime() < new Date(dateB).getTime();
+}
+
+

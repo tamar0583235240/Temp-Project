@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import reminderType from '../types/reminderType';
+import reminderType from '../types/tipType';
 
 
 interface ReminderState {
@@ -23,7 +23,7 @@ const reminderSlice = createSlice({
       state.data.push(action.payload);
     },
     deleteItem(state, action: PayloadAction<number>) {
-      state.data = state.data.filter(items => items.id !== action.payload);
+      state.data = state.data.filter(items => items.id !== (action.payload).toString());
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;

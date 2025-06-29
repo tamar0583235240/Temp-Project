@@ -65,13 +65,16 @@ import React from 'react';
 import { useGetRemindersQuery } from '../services/remindersApi';
 import { FaQuestionCircle, FaLightbulb, FaHeart } from 'react-icons/fa';
 
+
 const ReminderComponent: React.FC = () => {
   const { data: reminders, isLoading, error } = useGetRemindersQuery();
+  console.log("reminders:", reminders);
+
 
 
   if (isLoading) return <p>טוען טיפים...</p>;
   if (error) return <p>שגיאה בטעינת טיפים</p>;
-  if (reminders?.length == 0) return <p>אין טיפים :(</p>;
+  if (!reminders || reminders.length === 0) return <p>אין טיפים :(</p>;
 
   const renderIcon = (text: string) => {
     if (text.includes('טיפ') || text.includes('שתה')) return <FaLightbulb className="text-yellow-500" />;
@@ -93,15 +96,16 @@ const ReminderComponent: React.FC = () => {
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">תזכורות אישיות</h2>
       <ul className="space-y-4">
-        {reminders?.map((reminder) => (
+        {reminders?.map((tip) => (
           <li
-            key={reminder.id}
+            key={`${tip.id}-${tip.content}`}
             className="flex items-center gap-4 p-4 border rounded-lg shadow-sm bg-white"
           >
-            <div className="text-2xl">{renderIcon(reminder.content)}</div>
+            <div className="text-2xl">{renderIcon(tip.content)}</div>
             <div className="flex-1">
-              <p className="font-medium">{reminder.content}</p>
-              <p className="text-sm text-gray-600">{formatFrequency(reminder.user.user_reminder_settings.frequency)}</p>
+              <p className="font-medium">{tip.content}</p>
+              <p className="text-sm text-gray-600">{formatFrequency(tip.user?.user_reminder_settings?.frequency)}</p>
+              {/* <p className="text-sm text-gray-600">{formatFrequency(tip.user.user_reminder_settings.frequency)}</p> */}
             </div>
           </li>
         ))}

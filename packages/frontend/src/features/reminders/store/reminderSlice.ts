@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import reminderType from '../types/reminderType';
+import reminderType from '../types/tipType';
 
 
 interface ReminderState {
