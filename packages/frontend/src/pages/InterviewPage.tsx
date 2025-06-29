@@ -7,6 +7,7 @@ import { useEffect } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
+// import Status from "../features/interview/components/status"
 
 const InterviewPage = () => {
 
@@ -49,6 +50,7 @@ const InterviewPage = () => {
       </button> */}
         <div className="w-full max-w-2xl space-y-8">
           <Question />
+
           <Buttons />
           <TipsComponent/>
         </div>

@@ -3,6 +3,7 @@ import cors from 'cors';
 // import exampleRouts from './src/routes/exampleRouts';
 import "reflect-metadata";
 import questionRoutes from './src/routes/questionRoutes';
+import statusRoutes from '../backend/src/routes/statusRouts';
 
 const app: Application = express();
 console.log('i am here in app');
@@ -17,6 +18,7 @@ app.use(express.json());
 // app.use('/api', exampleRoutes);
 app.use('/api/simulation', questionRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api/status', statusRoutes);
 
 
 export default app;
