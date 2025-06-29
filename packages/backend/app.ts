@@ -9,13 +9,19 @@ import questionRoute from './src/routes/questionRouts';
 
 const app: Application = express();
 console.log('i am here in app');
+
 app.use(express.json());
 app.use(cors());
 app.use('/api/feedback', feedbackRouter)
 app.use('/api/ai-insights', AiInsightsRouter)
 app.use('/api/shared-recordings', sharedRecrdingRouter)
 app.use('/answers', answerRouts);
-app.use('/question', questionRoute); 
+app.use('/question', questionRoute);
+// ----------בדיקה
+app.post('/test', (req, res) => {
+  console.log('>>> BODY RECEIVED:', req.body);
+  res.send('ok');
+}); 
 
 export default app
 // -----------------------------------------------------------------------

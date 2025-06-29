@@ -24,6 +24,7 @@ export const getRecordingDetails = async (req: Request, res: Response) => {
 
 export const createFeedback = async (req: Request, res: Response) => {
   try {
+    console.log('BODY RECEIVED:', req.body);
     const { sharedRecordingId, comment, rating } = req.body;
 
     // בדיקת קלט בסיסית
