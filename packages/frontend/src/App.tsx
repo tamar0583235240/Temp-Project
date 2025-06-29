@@ -11,10 +11,6 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 
 
-
-
-
-
 function App() {
   const dispatch = useAppDispatch();
   const [refreshTokenTrigger] = useRefreshTokenMutation();
