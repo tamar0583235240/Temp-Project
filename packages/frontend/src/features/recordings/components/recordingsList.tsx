@@ -45,6 +45,19 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
     });
     const [sortOption, setSortOption] = useState('latest');
     const [displayedAnswers, setDisplayedAnswers] = useState<Answer[]>([]);
+    const [expandedRecordings, setExpandedRecordings] = useState<Set<string>>(new Set());
+
+    const toggleRecording = (recordingId: string) => {
+        setExpandedRecordings(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(recordingId)) {
+                newSet.delete(recordingId);
+            } else {
+                newSet.add(recordingId);
+            }
+            return newSet;
+        });
+    };
 
     useEffect(() => {
         if (!data) return;
@@ -95,10 +108,6 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
                 });
             }
 
-
-
-
-
             // מיון לפי אופציה
             results.sort((a, b) => {
                 switch (sortOption) {
@@ -148,112 +157,131 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
             <SortComponents sortOption={sortOption} setSortOption={setSortOption} />
 
             <div className="space-y-4">
-                {displayedAnswers.map((recording, index) => (
-                    <CardSimple
-                        key={recording.id}
-                        className="w-full max-w-2xl mx-auto overflow-hidden hover:shadow-lg transition-shadow
-                                   xl:max-w-3xl xl:w-4/5
-                                   lg:max-w-2xl lg:w-4/5  
-                                   md:max-w-xl md:w-4/5
-                                   sm:max-w-lg sm:w-4/5
-                                   max-sm:w-11/12 max-sm:max-w-sm"
-                    >
-                        <div className="bg-primary-dark text-white py-3 px-4 -m-4 mb-4 flex flex-row justify-between items-center
-                                       xl:px-16 xl:py-3.5
-                                       lg:px-12 lg:py-3
-                                       md:px-8 md:py-3 md:flex-row
-                                       sm:px-6 sm:py-3 sm:flex-col sm:gap-3 sm:text-center
-                                       max-sm:px-4 max-sm:py-2.5 max-sm:flex-col max-sm:gap-2 max-sm:text-center">
+                {displayedAnswers.map((recording, index) => {
+                    const isExpanded = expandedRecordings.has(recording.id);
+                    
+                    return (
+                        <CardSimple
+                            key={recording.id}
+                            className="w-full max-w-2xl mx-auto overflow-hidden hover:shadow-lg transition-shadow
+                                       xl:max-w-3xl xl:w-4/5
+                                       lg:max-w-2xl lg:w-4/5  
+                                       md:max-w-xl md:w-4/5
+                                       sm:max-w-lg sm:w-4/5
+                                       max-sm:w-11/12 max-sm:max-w-sm"
+                        >
+                            <div className="bg-primary-dark text-white py-3 px-4 -m-4 mb-4 flex flex-row justify-between items-center
+                                           xl:px-16 xl:py-3.5
+                                           lg:px-12 lg:py-3
+                                           md:px-8 md:py-3 md:flex-row
+                                           sm:px-6 sm:py-3 sm:flex-col sm:gap-3 sm:text-center
+                                           max-sm:px-4 max-sm:py-2.5 max-sm:flex-col max-sm:gap-2 max-sm:text-center">
 
-                            <div className="flex items-center gap-3">
-                                <span className="text-lg font-bold
-                                               lg:text-xl
-                                               md:text-lg
-                                               sm:text-base
-                                               max-sm:text-sm">
-                                    מענה לשאלה:
-                                </span>
-                                <div className="text-lg font-bold
-                                               lg:text-xl
-                                               md:text-lg
-                                               sm:text-base
-                                               max-sm:text-sm">
-                                    <TitleQuestions data={recording.question_id} />
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => toggleRecording(recording.id)}
+                                        className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                                    >
+                                        <svg
+                                            className={`w-5 h-5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    <span className="text-lg font-bold
+                                                   lg:text-xl
+                                                   md:text-lg
+                                                   sm:text-base
+                                                   max-sm:text-sm">
+                                        מענה לשאלה:
+                                    </span>
+                                    <div className="text-lg font-bold
+                                                   lg:text-xl
+                                                   md:text-lg
+                                                   sm:text-base
+                                                   max-sm:text-sm">
+                                        <TitleQuestions data={recording.question_id} />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <a href={recording.file_url} download>
+                                        <Button
+                                            variant="transparent"
+                                            size="sm"
+                                            className="bg-white/20 border border-white/30 text-white hover:bg-white/30 hover:border-white/50 transition-all
+                                                      sm:text-xs sm:px-3 sm:py-1.5
+                                                      max-sm:text-xs max-sm:px-2 max-sm:py-1"
+                                            icon={
+                                                <svg className="w-6 h-6 sm:w-5 sm:h-5 max-sm:w-4 max-sm:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 16L7 11L8.4 9.6L11 12.2V4H13V12.2L15.6 9.6L17 11L12 16Z" fill="currentColor" />
+                                                    <path d="M5 20V18H19V20H5Z" fill="currentColor" />
+                                                </svg>
+                                            }
+                                            iconPosition="right"
+                                        >
+                                            הורד הקלטה
+                                        </Button>
+                                    </a>
                                 </div>
                             </div>
 
-                            <div>
-                                <a href={recording.file_url} download>
-                                    <Button
-                                        variant="transparent"
-                                        size="sm"
-                                        className="bg-white/20 border border-white/30 text-white hover:bg-white/30 hover:border-white/50 transition-all
-                                                  sm:text-xs sm:px-3 sm:py-1.5
-                                                  max-sm:text-xs max-sm:px-2 max-sm:py-1"
-                                        icon={
-                                            <svg className="w-6 h-6 sm:w-5 sm:h-5 max-sm:w-4 max-sm:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 16L7 11L8.4 9.6L11 12.2V4H13V12.2L15.6 9.6L17 11L12 16Z" fill="currentColor" />
-                                                <path d="M5 20V18H19V20H5Z" fill="currentColor" />
-                                            </svg>
-                                        }
-                                        iconPosition="right"
-                                    >
-                                        הורד הקלטה
-                                    </Button>
-                                </a>
-                            </div>
-                        </div>
+                            {isExpanded && (
+                                <div className="transition-all duration-300 ease-in-out">
+                                    <div className="grid grid-cols-1 gap-4 items-center py-2 px-4 border-t border-muted
+                                                   xl:px-16 xl:py-3
+                                                   lg:px-12 lg:py-2.5
+                                                   md:px-8 md:py-2
+                                                   sm:px-6 sm:py-2
+                                                   max-sm:px-4 max-sm:py-2">
+                                        <div className="flex items-center justify-center gap-2 whitespace-nowrap">
+                                            <span className="text-sm text-text-secondary font-medium">תאריך הגשה:</span>
+                                            <span className="text-sm text-text-main font-semibold bg-muted px-2 py-1 rounded-md">
+                                                {new Date(recording.submitted_at).toLocaleDateString('he-IL')}
+                                            </span>
+                                        </div>
+                                    </div>
 
-                        <div className="grid grid-cols-1 gap-4 items-center py-2 px-4 border-t border-muted
-                                       xl:px-16 xl:py-3
-                                       lg:px-12 lg:py-2.5
-                                       md:px-8 md:py-2
-                                       sm:px-6 sm:py-2
-                                       max-sm:px-4 max-sm:py-2">
-                            <div className="flex items-center justify-center gap-2 whitespace-nowrap">
-                                <span className="text-sm text-text-secondary font-medium">תאריך הגשה:</span>
-                                <span className="text-sm text-text-main font-semibold bg-muted px-2 py-1 rounded-md">
-                                    {new Date(recording.submitted_at).toLocaleDateString('he-IL')}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center items-center py-2 px-4 border-t border-muted
-                                       xl:px-16 xl:py-3
-                                       lg:px-12 lg:py-2.5
-                                       md:px-8 md:py-2
-                                       sm:px-6 sm:py-2
-                                       max-sm:px-4 max-sm:py-2">
-                            <audio
-                                className="w-full max-w-2xl h-8 outline-none
-                                          xl:w-4/5
-                                          lg:w-11/12
-                                          md:w-full
-                                          sm:w-full sm:h-8
-                                          max-sm:w-full max-sm:h-8"
-                                controls
-                            >
-                                <source src={recording.file_url} type="audio/mpeg" />
-                                הדפדפן שלך לא תומך בנגן האודיو
-                            </audio>
-                        </div>
-                        <AiInsightsList answerId={recording.id} />
-                        <Feedbackes props={{ sharedRecordingId: recording.id, usersList: [] }} />
-                        <div className="flex items-center justify-center">
-                            {Array.from({ length: 5 }, (_, index) => {
-                                const rating = insightsMap.get(recording.id) || 0;
-                                return (
-                                    <span key={index} className={`text-yellow-500 text-2xl `}>{index < rating ? '★' : '☆'}</span>
-                                );
-                            })}
-                        </div>
-
-
-
-                    </CardSimple>
-                ))}
+                                    <div className="flex justify-center items-center py-2 px-4 border-t border-muted
+                                                   xl:px-16 xl:py-3
+                                                   lg:px-12 lg:py-2.5
+                                                   md:px-8 md:py-2
+                                                   sm:px-6 sm:py-2
+                                                   max-sm:px-4 max-sm:py-2">
+                                        <audio
+                                            className="w-full max-w-2xl h-8 outline-none
+                                                      xl:w-4/5
+                                                      lg:w-11/12
+                                                      md:w-full
+                                                      sm:w-full sm:h-8
+                                                      max-sm:w-full max-sm:h-8"
+                                            controls
+                                        >
+                                            <source src={recording.file_url} type="audio/mpeg" />
+                                            הדפדפן שלך לא תומך בנגן האודיו
+                                        </audio>
+                                    </div>
+                                    
+                                    <AiInsightsList answerId={recording.id} />
+                                    <Feedbackes props={{ sharedRecordingId: recording.id, usersList: [] }} />
+                                    
+                                    <div className="flex items-center justify-center pb-4">
+                                        {Array.from({ length: 5 }, (_, index) => {
+                                            const rating = insightsMap.get(recording.id) || 0;
+                                            return (
+                                                <span key={index} className={`text-yellow-500 text-2xl `}>{index < rating ? '★' : '☆'}</span>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </CardSimple>
+                    );
+                })}
             </div>
         </GridContainer>
     );
 };
-
