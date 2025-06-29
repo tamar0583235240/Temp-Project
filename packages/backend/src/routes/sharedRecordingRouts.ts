@@ -4,43 +4,25 @@ import {
   getRecordingDetails,
   createFeedback,
   updateFeedback
-} from '../controllers/sharedRecordingController'
+} from '../controllers/sharedRecordingController';
+import { sharedRecordingMiddleware } from '../middlewares/sharedRecordingMiddleware';
 
 const router = Router();
 
+// מפעיל את המידלוואר על כל הראוטים בקובץ הזה
+router.use(sharedRecordingMiddleware);
+
+// בקשה לכל ההקלטות ששיתפו עם משתמש
 router.get('/:userId', getSharedRecordingsByUser);
+
+// בקשה לפרטי הקלטה מסוימת לפי ID
 router.get('/details/:recordingId', getRecordingDetails);
+
+// שליחת פידבק חדש
 router.post('/feedback', createFeedback);
+
+// עדכון פידבק קיים
 router.put('/feedback/:id', updateFeedback);
 
-export default router;   
-//---------------------------------------------------------------------    //  
-
-// import express from 'express';
-// import { getSharedRecordingsForUser } from '../controllers/sharedRecordingController';
-// const router = express.Router();
-
-// router.get('/shared-recordings/:userId', getSharedRecordingsForUser);
-
-// // ✅ נתיב חדש לקליטת פידבק מהקליינט
-// router.post('/feedback', async (req, res) => {
-//   const { userId, recordingId, comment, rating } = req.body;
-
-//   if (!userId || !recordingId || rating == null) {
-//     return res.status(400).json({ message: 'חסרים שדות נדרשים' });
-//   }
-
-//   try {
-//     // כאן אפשר לשמור למסד נתונים / Supabase
-//     console.log('📥 פידבק שהתקבל:', { userId, recordingId, comment, rating });
-
+export default router;
   
-
-//     res.status(200).json({ message: 'Feedback saved' });
-//   } catch (error) {
-//     console.error('❌ שגיאה בשמירת פידבק:', error);
-//     res.status(500).json({ message: 'שגיאה בשרת' });
-//   }
-// });
-
-// export default router;

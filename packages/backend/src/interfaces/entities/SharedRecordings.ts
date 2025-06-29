@@ -19,6 +19,18 @@ export class SharedRecordings {
   @Column("text", { name: "shared_with", array: true })
   sharedWith: string[];
 
+  @Column("uuid", { name: "question_id" })
+  questionId: string;
+
+  @Column("timestamp", { name: "date" })
+  date: Date;
+
+  @Column("text", { name: "audio_url", nullable: true })
+  audioUrl: string | null;
+
+  @Column("text", { name: "ai_summary", nullable: true })
+  aiSummary: string | null;
+
   @OneToMany(() => Feedback, (feedback) => feedback.sharedRecording)
   feedbacks: Feedback[];
 
