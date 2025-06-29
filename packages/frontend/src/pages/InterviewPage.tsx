@@ -7,6 +7,7 @@ import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
 import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper"
 import Buttons from "../features/interview/components/buttons"
+import AudioRecorder from "../features/recordings/components/AudioRecorder"
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ const InterviewPage = () => {
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
         <div className="w-full max-w-2xl space-y-8">
           <Question />
+          <AudioRecorder />
           <Buttons onShowAnalysis={() => setShowAnalysis(true)} analysisVisible={showAnalysis} />
           {showAnalysis && <AnalysisStepWrapper />}
         </div>
