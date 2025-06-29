@@ -9,6 +9,8 @@ import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
+import questionRoute from './src/routes/questionRouts';
+import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
 // import {supabase} from './src/config/dbConnection';
 
 const corsOptions = {
@@ -16,9 +18,7 @@ const corsOptions = {
   credentials: true,
 };
 dotenv.config();
-// import exampleRouts from './src/routes/exampleRouts';
-import questionRoute from './src/routes/questionRouts';
-import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
+
 
 
 
