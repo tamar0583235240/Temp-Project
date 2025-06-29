@@ -4,6 +4,7 @@ import AppRoutes from './shared/routes/appRoutes'
 import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import RemindersPage from './pages/remindersPage';
+// import TimeQuestionButton from './features/reminders/components/TimeQuestionButton';
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <MessageModalProvider>
       <BrowserRouter>
         <RemindersPage />
+        {/* <TimeQuestionButton /> */}
         <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>

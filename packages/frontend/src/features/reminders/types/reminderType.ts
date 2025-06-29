@@ -1,2 +1,6 @@
-import {Reminder} from "../../../../../backend/src/interfaces/reminderInterfaces";
-export interface reminder extends Reminder  { }
+export interface reminderType  {
+    frequency:string
+    is_enabled:boolean
+    created_at :string
+    user_id:string
+ }

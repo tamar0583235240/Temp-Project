@@ -16,20 +16,14 @@ const reminderSlice = createSlice({
   name: 'reminder',
   initialState,
   reducers: {
-    setItems(state, action: PayloadAction<reminderType[]>) {
-      state.data = action.payload;
-    },
-    addItem(state, action: PayloadAction<reminderType>) {
-      state.data.push(action.payload);
-    },
-    deleteItem(state, action: PayloadAction<number>) {
-      state.data = state.data.filter(items => items.user_id !== action.payload.toString());
-    },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
+    },
+    setData(state, action: PayloadAction<reminderType[]>) {
+      state.data = action.payload;
     },
   },
 });
 
-export const { setItems, addItem, deleteItem, setLoading } = reminderSlice.actions;
+export const { setLoading } = reminderSlice.actions;
 export default reminderSlice.reducer;
