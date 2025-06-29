@@ -74,7 +74,7 @@ export const FilteringComponents = (props: {
     );
 };
   return (
-    <div className="fixed top-24 right-4 w-80 z-40 p-6" dir="rtl">
+    <div className="fixed top-24 right-4 w-80 z-40 p-6 max-h-[calc(100vh-120px)] overflow-y-auto" dir="rtl">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-text-main">סינון</h2>
@@ -195,6 +195,3 @@ export const FilteringComponents = (props: {
     </div>
   );
 };
-
-
-
