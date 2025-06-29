@@ -13,5 +13,7 @@ app.use(cors());
 app.use('/api', exampleRouts);
 app.use('/api', remindersRouts);
 app.use(cors());
-
+app.use('/api/reminders', remindersRouts);
 export default app;
+
+
