@@ -1,22 +1,20 @@
-// import {supabase} from '../config/dbConnection';
-// import { exampleInterface } from "../interfaces/exampleInterface";
+import { pool } from '../config/dbConnection'; 
+import { exampleInterface } from "../interfaces/exampleInterface";
 
-// const getAllExamples = async (): Promise<exampleInterface[]> => {
-//   try {
-//     const { data, error } = await supabase
-//       .from("examples")
-//       .select("exampleField1, exampleField2, exampleField3");
+const getAllExamples = async (): Promise<exampleInterface[]> => {
+  try {
+    const query = `
+      SELECT exampleField1, exampleField2, exampleField3
+      FROM examples
+    `;
 
-//     if (error) {
-//       throw error;
-//     }
+    const result = await pool.query(query);
+    return result.rows as exampleInterface[];
 
-//     return data as exampleInterface[];
-//   } catch (error) {
-//     console.error("Error fetching examples from Supabase:", error);
-//     throw error;
-//   }
-// };
+  } catch (error) {
+    console.error("Error fetching examples from PostgreSQL:", error);
+    throw error;
+  }
+};
 
-// export default { getAllExamples };
-
+export default { getAllExamples };

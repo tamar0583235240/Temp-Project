@@ -1,100 +1,90 @@
-// import { useGetAIInsightsQuery } from "../store/aiInsightApi";
-// import { Lightbulb, CheckCircle } from "lucide-react";
+import React, { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { Download, Printer } from "lucide-react";
+import { useUserStore } from "../store/progressSlice";
 
-// export const ImprovementSuggestions = () => {
-//   const { data, error, isLoading } = useGetAIInsightsQuery();
+export const ImprovementSuggestions: React.FC = () => {
+  const certificateRef = useRef<HTMLDivElement>(null);
+  const { answered, total, fullName } = useUserStore();
+  const [showCertificate, setShowCertificate] = useState(false);
 
-//   if (isLoading) {
-//     return <div className="text-center text-blue-500 text-lg">טוען הצעות לשיפור...</div>;
-//   }
+  const isComplete = true;
 
-//   if (error) {
-//     return <div className="text-center text-red-500 text-lg">אירעה שגיאה בעת שליפת הנתונים</div>;
-//   }
+  const handleDownload = async () => {
+    if (!certificateRef.current) return;
+    const canvas = await html2canvas(certificateRef.current);
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [canvas.width, canvas.height],
+    });
+    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+    pdf.save("certificate.pdf");
+  };
 
-//   return (
-//     <div className="max-w-3xl mx-auto p-6" dir="rtl">
-//       <h2 className="text-2xl font-semibold text-center mb-6 flex items-center justify-center gap-2">
-//         הצעות לשיפור מה-AI
-//         <Lightbulb className="w-6 h-6 text-yellow-500" />
-//       </h2>
-//       <div className="space-y-4">
-//         {data?.map((item) => (
-//           <div
-//             key={item.id}
-//             className="flex items-start gap-3 border rounded-lg p-4 shadow-sm bg-white hover:shadow-md transition"
-//           >
-//             <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
-//             <p className="text-gray-800 leading-relaxed text-right">
-//               {item.improvements}
-//             </p>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// import { useGetAIInsightsQuery } from "../store/aiInsightApi";
-// import { Lightbulb, CheckCircle } from "lucide-react";
-
-// export const ImprovementSuggestions = () => {
-//   const { data, error, isLoading } = useGetAIInsightsQuery();
-
-//   if (isLoading) {
-//     return <div className="text-center text-blue-500 text-lg">טוען הצעות לשיפור...</div>;
-//   }
-
-//   if (error) {
-//     return <div className="text-center text-red-500 text-lg">אירעה שגיאה בעת שליפת הנתונים</div>;
-//   }
-
-//   return (
-//     <div
-//       className="bg-white rounded-xl shadow-md p-6 max-w-3xl mx-auto flex flex-col gap-4"
-//       style={{ direction: 'rtl', textAlign: 'right' }}
-//     >
-//       <div className="flex items-center justify-center gap-2 text-center">
-//         <Lightbulb className="w-6 h-6 text-yellow-500" />
-//         <h2 className="text-lg font-semibold">הצעות לשיפור מה-AI</h2>
-//       </div>
-
-//       {data?.map((item) => (
-//         <div
-//           key={item.id}
-//           className="flex items-start gap-3 border rounded-lg p-4 shadow-sm bg-gray-50 hover:shadow-md transition"
-//         >
-//           <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
-//           <p className="text-gray-800 leading-relaxed text-sm">
-//             {item.improvements}
-//           </p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-import { useGetAIInsightsQuery } from "../store/aiInsightApi";
-import { Lightbulb, CheckCircle } from "lucide-react";
-
-export const ImprovementSuggestions = () => {
-  const { data, error, isLoading } = useGetAIInsightsQuery();
-
-  if (isLoading) return <div className="text-center text-blue-500 text-lg">טוען הצעות לשיפור...</div>;
-  if (error) return <div className="text-center text-red-500 text-lg">אירעה שגיאה בעת שליפת הנתונים</div>;
+  const handlePrint = () => {
+    if (!certificateRef.current) return;
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head><title>הדפסת תעודה</title></head>
+        <body dir="rtl" onload="window.print(); window.close();">
+          ${certificateRef.current.outerHTML}
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 max-w-3xl mx-auto flex flex-col gap-4" dir="rtl">
-      <div className="flex items-center justify-center gap-2 mb-4">
-        <Lightbulb className="w-6 h-6 text-yellow-400" />
-        <h2 className="text-lg font-semibold text-primary-text">הצעות לשיפור מה-AI</h2>
-      </div>
+    <div className="flex flex-col items-center gap-6 mt-10">
+      {/* כפתור הצגת תעודה */}
+      {isComplete && !showCertificate && (
+        <button
+          onClick={() => setShowCertificate(true)}
+          className="py-2 px-5 rounded font-bold text-white bg-yellow-500 hover:bg-yellow-600 transition"
+        >
+          הצג תעודה
+        </button>
+      )}
 
-      {data?.map(item => (
-        <div key={item.id} className="flex items-start gap-3 border rounded-lg p-4 shadow-sm bg-gray-50 hover:shadow-md transition">
-          <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
-          <p className="text-gray-800 leading-relaxed text-sm">{item.improvements}</p>
+      {/* תעודה */}
+      {showCertificate && (
+        <div
+          ref={certificateRef}
+          className="border-4 border-yellow-500 bg-white p-10 rounded-xl shadow-2xl w-[700px] text-center relative"
+        >
+          <button
+            onClick={handleDownload}
+            title="הורד תעודה"
+            className="absolute top-4 right-4 text-gray-600 hover:text-green-600"
+          >
+            <Download size={24} />
+          </button>
+
+          <button
+            onClick={handlePrint}
+            title="הדפס תעודה"
+            className="absolute top-4 right-14 text-gray-600 hover:text-blue-600"
+          >
+            <Printer size={24} />
+          </button>
+
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">תעודת הצטיינות</h1>
+          <p className="text-lg text-gray-700 mb-6">מוענקת ל־</p>
+          <h2 className="text-2xl font-semibold text-green-700 mb-6">{fullName}</h2>
+          <p className="text-gray-600 text-md">
+            על הישגים יוצאי דופן, התמדה ומצוינות בלימודים. אנו מוקירים אותך ומאחלים המשך הצלחה.
+          </p>
+          <div className="mt-10 flex justify-between text-sm text-gray-500 px-4">
+            <div>חתימה</div>
+            <div>{new Date().toLocaleDateString("he-IL")}</div>
+          </div>
         </div>
-      ))}
+      )}
     </div>
   );
 };

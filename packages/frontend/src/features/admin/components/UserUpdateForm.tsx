@@ -1,30 +1,9 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { user } from '../types/userTypes';
+import { userSchema, UserFormFields } from '../validation/userSchema';
 
-// 1. נגדיר את הטיפוס לפי מה שמצפה yup ו-TS, עם phone שיכול להיות string | undefined | null
-type UserFormFields = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string | null;
-  password: string;
-  role: 'student' | 'manager';
-};
-
-// 2. נגדיר סכמה שתאפשר phone להיות string, undefined או null
-const schema: yup.ObjectSchema<UserFormFields> = yup.object({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  phone: yup.string().nullable().notRequired().matches(/^\d*$/, 'Phone number must contain only digits'),
-  password: yup.string().matches(/^(?=.*[A-Za-z\u0590-\u05FF])(?=.*\d)[A-Za-z\u0590-\u05FF\d]{6,}$/, 'Password must include letters (English or Hebrew) and numbers, at least 6 characters').required('Password is required'),
-  role: yup.mixed<UserFormFields['role']>().oneOf(['student', 'manager'], 'Invalid role').required('Role is required'),
-});
-
-// 3. רכיב הטופס
 interface Props {
   user: user;
   onSubmit: (data: Partial<user>) => Promise<void>;
@@ -40,21 +19,19 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: user.phone ?? null, // מתאימים ל-null
+      phone: user.phone ?? '',
       password: user.password,
-      role: (user.role as UserFormFields['role']) || 'student', // המרה בטוחה
+      role: user.role === 'manager' ? 'manager' : 'student',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(userSchema),
     mode: 'onChange',
   });
 
   const submitAndClose: SubmitHandler<UserFormFields> = async (data) => {
-    // 4. הופכים את המידע לטיפוס Partial<user> עם תיאום תפקיד
     const preparedData: Partial<user> = {
       ...user,
       ...data,
-      role: data.role === 'manager' ? 'manager' : data.role, // אפשר כאן עוד התאמות לפי טיפוס user שלך
-      phone: data.phone === null ? undefined : data.phone, // כדי למנוע null במקום undefined
+      phone: data.phone === '' ? undefined : data.phone,
     };
 
     await onSubmit(preparedData);
@@ -62,39 +39,35 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitAndClose)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 300 }}>
-      <input {...register('firstName')} placeholder="שם פרטי" />
-      {errors.firstName && <span style={{ color: 'red' }}>{errors.firstName.message}</span>}
+    <form
+      onSubmit={handleSubmit(submitAndClose)}
+      className="flex flex-col gap-4 min-w-[300px]"
+    >
+      <input {...register('firstName')} placeholder="שם פרטי" className="input" />
+      {errors.firstName && <span className="text-red-600 text-sm">{errors.firstName.message}</span>}
 
-      <input {...register('lastName')} placeholder="שם משפחה" />
-      {errors.lastName && <span style={{ color: 'red' }}>{errors.lastName.message}</span>}
+      <input {...register('lastName')} placeholder="שם משפחה" className="input" />
+      {errors.lastName && <span className="text-red-600 text-sm">{errors.lastName.message}</span>}
 
-      <input {...register('email')} placeholder="אימייל" />
-      {errors.email && <span style={{ color: 'red' }}>{errors.email.message}</span>}
+      <input {...register('email')} placeholder="אימייל" className="input" />
+      {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
 
-      <input {...register('phone')} placeholder="טלפון" />
-      {errors.phone && <span style={{ color: 'red' }}>{errors.phone.message}</span>}
+      <input {...register('phone')} placeholder="טלפון" className="input" />
+      {errors.phone && <span className="text-red-600 text-sm">{errors.phone.message}</span>}
 
-      <input {...register('password')} type="text" placeholder="סיסמא" />
-      {errors.password && <span style={{ color: 'red' }}>{errors.password.message}</span>}
+      <input {...register('password')} type="text" placeholder="סיסמא" className="input" />
+      {errors.password && <span className="text-red-600 text-sm">{errors.password.message}</span>}
 
-      <select {...register('role')}>
+      <select {...register('role')} className="input">
         <option value="">בחר תפקיד</option>
         <option value="student">תלמיד</option>
         <option value="manager">מנהל</option>
       </select>
-      {errors.role && <span style={{ color: 'red' }}>{errors.role.message}</span>}
+      {errors.role && <span className="text-red-600 text-sm">{errors.role.message}</span>}
 
       <button
         type="submit"
-        style={{
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '0.5rem 1rem',
-          borderRadius: '6px',
-          cursor: 'pointer',
-        }}
+        className="bg-primary text-white py-2 rounded-md hover:bg-primary/90 transition"
       >
         שמירה
       </button>
