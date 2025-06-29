@@ -17,11 +17,9 @@ import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
-    // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
-    const userId = user?.id ?? '550e8400-e29b-41d4-a718-446655440000';
+    const userId = user?.id ?? '';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
-
-    const { data: allInsights, error: aiError, isLoading: isAiLoading } = useGetAiInsightsQuery();
+    const { data: allInsights } = useGetAiInsightsQuery();
 
     const insightsMap = useMemo(() => {
         const map = new Map<string, number>();

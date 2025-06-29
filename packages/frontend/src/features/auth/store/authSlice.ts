@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../types/User";
+import { authApi } from "../../../shared/api/authApi";
+import { User } from "../types/types";
 
 interface AuthState {
   user: User | null;
@@ -47,6 +48,33 @@ const authSlice = createSlice({
       state.error = null;
       state.isAdmin = false; 
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      authApi.endpoints.refreshToken.matchPending,
+      (state) => {
+        state.loading = true;
+        state.error = null;
+      }
+    );
+    builder.addMatcher(
+      authApi.endpoints.refreshToken.matchFulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.loggedIn = true;
+        state.isAdmin = action.payload.user.role === "manager";
+        state.error = null;
+      }
+    );
+    builder.addMatcher(
+      authApi.endpoints.refreshToken.matchRejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = "Failed to refresh token";
+      }
+    );
   },
 });
 
