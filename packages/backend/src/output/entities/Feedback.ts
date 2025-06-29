@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Answers } from "./Answers";
 import { Users } from "./Users";
 import { SharedRecordings } from "./SharedRecordings";
-import { Answers } from "./Answers"; // הוספת הייבוא החסר
 
 @Index("feedback_pkey", ["id"], { unique: true })
 @Entity("feedback", { schema: "public" })
@@ -21,9 +21,12 @@ export class Feedback {
   })
   createdAt: Date;
 
+  @Column("text", { name: "answerCode", nullable: true })
+  answerCode: string | null;
+
   @ManyToOne(() => Answers, (answers) => answers.feedbacks)
   @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
-  answerCode: Answers;
+  answerCode2: Answers;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
