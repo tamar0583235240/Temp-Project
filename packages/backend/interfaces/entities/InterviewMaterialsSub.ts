@@ -10,12 +10,11 @@ export class InterviewMaterialsSub {
   title: string;
 
   @Column("text", { name: "thumbnail" })
-  thumbnail: string | null;
+  thumbnail: string;
 
   @Column("text", { name: "short_description", nullable: true })
-  shortDescription: string;
+  shortDescription: string | null;
 
-  
-  @Column("text", { name: "file_url", nullable: true })
+  @Column("text", { name: "file_url" })
   fileUrl: string;
 }

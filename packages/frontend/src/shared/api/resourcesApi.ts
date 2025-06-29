@@ -4,7 +4,7 @@ export const resourceApi = api.injectEndpoints({
   endpoints: (build) => ({
     createResource: build.mutation<void, FormData>({
       query: (formData) => ({
-        url: "api/resources", 
+        url: "/resources", 
         method: "POST",
         body: formData,
       }),

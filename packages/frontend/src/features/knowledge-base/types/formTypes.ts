@@ -1,6 +1,6 @@
 export type InterviewMaterialsSubFormData = {
   title: string;
   shortDescription: string;
-  thumbnail?: string | null;
+  thumbnail?: FileList | null;
   file?: FileList;
 };

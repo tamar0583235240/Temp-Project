@@ -6,6 +6,8 @@ import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
+import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
+import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
 
 export default function AppRoutes() {
   return (
@@ -87,7 +89,8 @@ export default function AppRoutes() {
           path="/admin/resources"
           element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
-              <p>AdminResources</p>
+              {/* <p>AdminResources</p> */}
+              <InterviewMaterialPage />
             </RoleProtectedRoute>
           }
         />
