@@ -1,11 +1,21 @@
 import express, { Application } from 'express';
 import cors from 'cors';
+import exampleRouts from './src/routes/exampleRouts';
+import resourceRouts from '../backend/src/routes/resourceRouts'
+import dotenv from 'dotenv';
+
+dotenv.config();
 // import exampleRouts from './src/routes/exampleRouts';
 import "reflect-metadata";
 import questionRoutes from './src/routes/questionRoutes';
 
 const app: Application = express();
 console.log('i am here in app');
+app.use(express.json());
+app.use('/api', exampleRouts);
+app.use('/api', resourceRouts);
+
+
 app.use(cors());
 
 // Middleware
@@ -20,3 +30,7 @@ app.use('/api/questions', questionRoutes);
 
 
 export default app;
+
+
+
+
