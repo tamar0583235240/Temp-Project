@@ -14,7 +14,7 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
 
 export const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const { title, short_description } = req.body;
+    const { title, shortDescription } = req.body;
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     try {
@@ -25,10 +25,10 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
             return;
         }
 
-        console.log('Existing Material Sub file:', existingMaterialSub.file_url);
+        console.log('Existing Material Sub file:', existingMaterialSub.fileUrl);
         
         let updatedThumbnail = existingMaterialSub.thumbnail;
-        let updatedFileUrl = existingMaterialSub.file_url;
+        let updatedFileUrl = existingMaterialSub.fileUrl;
 
         if (files?.thumbnail?.[0]) {
             const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
@@ -37,7 +37,7 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
             updatedThumbnail = thumbnailResult.secure_url;
         }
         if (files?.file?.[0]) {
-            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+            const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
             if (match && match[1]) { await deleteFileFromCloudinary(match[1]); }
             const fileResult = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
             updatedFileUrl = fileResult.secure_url;
@@ -46,7 +46,7 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
         const updatedInterviewMaterialSub = await InterviewMaterialSubRepository.updateInterviewMaterialSub(
             id,
             title || existingMaterialSub.title,
-            short_description || existingMaterialSub.short_description,
+            shortDescription || existingMaterialSub.shortDescription,
             updatedThumbnail,
             updatedFileUrl
         );
@@ -81,7 +81,7 @@ export const addInterviewMaterialSub = async (req: Request, res: Response): Prom
             req.body.title,
             thumbnail ?? '',
             result.secure_url,
-            req.body.short_description
+            req.body.shortDescription
         );
         if (!resultData) {
             res.status(500).json({ message: 'Failed to save file data' });
@@ -97,5 +97,3 @@ export const addInterviewMaterialSub = async (req: Request, res: Response): Prom
         res.status(500).json({ message: 'Server error', error: err });
     }
 };
-
-
