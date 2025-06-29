@@ -13,7 +13,7 @@ export default function RemindersPage() {
   });
 
   const [saveUserReminderSettings] = useSaveUserReminderSettingsMutation();
-  const userId = "1111"; // הנחה שהמשתמש מחובר
+  const userId = "63b3ab3c-e4d7-485d-ba3e-36748208835e"; // הנחה שהמשתמש מחובר
 
   const handleOptionChange = (reminderType: string, optionId: string | null) => {
     setSelections((prev) => ({
