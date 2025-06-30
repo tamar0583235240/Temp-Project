@@ -1,16 +1,10 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import SidebarNavigation from "./sidebar";
-import { Button } from "./button";
+import { Outlet, useLocation } from "react-router-dom";
 import HomeButton from "../components/HomeButton";
-import { useState } from "react";
-import { ExitButton } from "../../features/auth/components/ExitButton";
 import UserMenu from "../components/UserMenu";
-import { Grid } from "./grid";
 
 const DashboardLayout = () => {
-  const navigate = useNavigate();
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const isHomePage = location.pathname === "/home";
 
   return (
     <div className="flex h-screen">

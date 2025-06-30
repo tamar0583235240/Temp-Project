@@ -9,6 +9,8 @@ import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
+import ProfilePage from "../../pages/ProfilePage";
+import SettingsPage from "../../pages/SettingsPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -28,6 +30,14 @@ export default function AppRoutes() {
         {/* Routes with header */}
         <Route path="/home" element={<HomePage />} />
         <Route element={<DashboardLayout />}>
+          <Route path="/profile" element={
+            <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <ProfilePage />
+            </RoleProtectedRoute>} />
+          <Route path="settings" element={
+            <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <SettingsPage />
+            </RoleProtectedRoute>} />
           <Route
             path="/simulation"
             element={

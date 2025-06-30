@@ -3,6 +3,7 @@ import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
 import { useSelector } from "react-redux";
 import React from "react";
+import { ExitButton } from "../../features/auth/components/ExitButton";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
@@ -20,10 +21,10 @@ const navItems: NavItem[] = [
   { label: "My Recordings", href: "/recordings" },
   { label: "Shared Recordings", href: "/shared" },
   { label: "Resources", href: "/resources" },
-  { label: "Admin", href: "", isSectionTitle: true , adminOnly: true},
-  { label: "Manage Questions", href: "/manager/questions" , adminOnly: true},
-  { label: "Manage Users", href: "/manager/users" , adminOnly: true},
-  { label: "Manage Resources", href: "/manager/resources" , adminOnly: true},
+  { label: "Admin", href: "", isSectionTitle: true, adminOnly: true },
+  { label: "Manage Questions", href: "/manager/questions", adminOnly: true },
+  { label: "Manage Users", href: "/manager/users", adminOnly: true },
+  { label: "Manage Resources", href: "/manager/resources", adminOnly: true },
 ];
 
 const SidebarNavigation = () => {
@@ -73,6 +74,7 @@ const SidebarNavigation = () => {
             )
           )}
       </nav>
+      <ExitButton />
     </aside>
   );
 };
