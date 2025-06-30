@@ -1,7 +1,7 @@
 import * as FaIcons from "react-icons/fa";
 import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
-import React from "react";
+import { useSelector } from "react-redux";import React from "react";
 import { ExitButton } from "../../features/auth/components/ExitButton";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
@@ -11,10 +11,10 @@ interface NavItem {
   label: string;
   href: string;
   isSectionTitle?: boolean;
+  adminOnly?: boolean;
 }
 
 const navItems: NavItem[] = [
-  { label: "Home", href: "/" },
   { label: "Simulation", href: "/simulation" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "My Recordings", href: "/recordings" },
@@ -28,6 +28,10 @@ const navItems: NavItem[] = [
 
 const SidebarNavigation = () => {
   const location = useLocation();
+  const isAdmin =
+    useSelector(
+      (state: { auth: { isAdmin: boolean } }) => state.auth.isAdmin
+    );
 
   return (
     <aside
@@ -44,31 +48,32 @@ const SidebarNavigation = () => {
 
       {/* Navigation */}
       <nav className="flex flex-col gap-2">
-        {navItems.map(({ label, href, isSectionTitle }) =>
-          isSectionTitle ? (
-            <div
-              key={label}
-              className="pl-4 pr-2 py-2 text-text-secondary text-sm font-semibold"
-            >
-              {label}
-            </div>
-          ) : (
-            <NavLink
-              key={label}
-              to={href}
-              className={({ isActive }) =>
-                cn(
-                  "block px-4 py-2 rounded-md text-sm font-medium transition",
-                  isActive || location.pathname === href
-                    ? "bg-primary text-white"
-                    : "text-text-main hover:bg-primary/10"
-                )
-              }
-            >
-              {label}
-            </NavLink>
-          )
-        )}
+        {navItems.filter(item => !item.adminOnly || (item.adminOnly && isAdmin))
+          .map(({ label, href, isSectionTitle }) =>
+            isSectionTitle ? (
+              <div
+                key={label}
+                className="pl-4 pr-2 py-6 text-text-secondary text-lg font-semibold "
+              >
+                {label}
+              </div>
+            ) : (
+              <NavLink
+                key={label}
+                to={href}
+                className={({ isActive }) =>
+                  cn(
+                    "block px-4 py-3 rounded-md text-l font-medium transition",
+                    isActive || location.pathname === href
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary/10"
+                  )
+                }
+              >
+                {label}
+              </NavLink>
+            )
+          )}
       </nav>
     
       <ExitButton />
