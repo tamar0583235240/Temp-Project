@@ -14,16 +14,16 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Simulation", href: "/simulation" },
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "My Recordings", href: "/recordings" },
-  { label: "Shared Recordings", href: "/shared" },
-  { label: "Resources", href: "/resources" },
-  { label: "Admin", href: "", isSectionTitle: true },
-  { label: "Manage Questions", href: "/admin/questions" },
-  { label: "Manage Users", href: "/admin/users" },
-  { label: "Manage Resources", href: "/admin/resources" },
+  { label: "בית", href: "/" },
+  { label: "סימולציה", href: "/simulation" },
+  { label: "דשבורד", href: "/dashboard" },
+  { label: "ההקלטות שלי", href: "/recordings" },
+  { label: "הקלטות משותפות", href: "/shared" },
+  { label: "משאבים", href: "/resources" },
+  { label: "ניהול", href: "", isSectionTitle: true },
+  { label: "ניהול שאלות", href: "/admin/questions" },
+  { label: "ניהול משתמשים", href: "/admin/users" },
+  { label: "ניהול משאבים", href: "/admin/resources" },
 ];
 
 const SidebarNavigation = () => {
@@ -70,8 +70,6 @@ const SidebarNavigation = () => {
           )
         )}
       </nav>
-    
-      <ExitButton />
     </aside>
   );
 };

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useLoginMutation } from '../../../shared/api/authApi';
-import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
-import { loginSuccess, loginStart, loginFailure } from '../store/authSlice';
-import GoogleLoginButton from './GoogleAuthButton';
-import CodeVerificationScreen from './CodeVerificationScreen';
-import { useNavigate } from 'react-router-dom';
-import { CardSimple } from '../../../shared/ui/card';
-import { Input } from '../../../shared/ui/input';
-import { Button } from '../../../shared/ui/button';
+import React, { useState } from "react";
+import { useLoginMutation } from "../../../shared/api/authApi";
+import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
+import { loginSuccess, loginStart, loginFailure } from "../store/authSlice";
+import GoogleLoginButton from "./GoogleAuthButton";
+import CodeVerificationScreen from "./CodeVerificationScreen";
+import { useNavigate } from "react-router-dom";
+import { CardSimple } from "../../../shared/ui/card";
+import { Input } from "../../../shared/ui/input";
+import { Button } from "../../../shared/ui/button";
 
 function LoginForm() {
   const dispatch = useAppDispatch();
@@ -66,14 +66,15 @@ function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <label>
+          <div className="flex items-center space-x-2">
             <Input
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
+              id="remember"
             />
-            זכור אותי
-          </label>
+            <label htmlFor="remember">זכור אותי</label>
+          </div>
           <Button type="submit" disabled={isLoading}>
             {isLoading ? "מתחבר..." : "התחבר"}
           </Button>
@@ -93,9 +94,8 @@ function LoginForm() {
           </div>
 
           <p className="mt-4 text-center">
-          <a  href="/signup" >עדיין לא רשום? הרשם</a> 
+            <a href="/signup">עדיין לא רשום? הרשם</a>
           </p>
-
         </form>
       </CardSimple>
     </div>
