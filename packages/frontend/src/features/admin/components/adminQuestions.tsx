@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetAllQuestionsQuery } from "../services/adminQuestionApi";
 import { DeleteQuestion } from "./deleteQuestion";
 import { Button } from "../../../shared/ui/button";
@@ -9,6 +9,7 @@ import { UpdateQuestion } from "./updateQuestion";
 import { useUpdateQuestionMutation } from "../services/adminQuestionApi";
 import { Question } from "../types/Question";
 import { AddQuestion } from "./addQuestion";
+import { SearchComponents } from "./searchComponents";
 
 
 type AdminQuestionsProps = {
@@ -20,6 +21,18 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
   const { data, isLoading } = useGetAllQuestionsQuery();
   const [questionToEdit, setQuestionToEdit] = useState<Question | null>(null);
   const [questionToDelete, setQuestionToDelete] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const results = searchText.trim()
+      ? data.filter(q => q.title.toLowerCase().includes(searchText.toLowerCase()))
+      : data;
+
+    setFilteredQuestions(results);
+  }, [searchText, data]);
 
   if (isLoading)
     return (
@@ -34,6 +47,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     );
 
   if (!data)
+
     return (
       <div className="min-h-screen bg-[--color-background]" dir="rtl">
         <GridContainer className="py-12">
@@ -66,13 +80,25 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
         </GridContainer>
       </div>
     );
-console.log(data);
+  console.log(data);
 
-  const activeQuestions = data.filter(question => question.is_active === true);
+
+
+
+
+  const activeQuestions = filteredQuestions
+    .filter(question => question.is_active === true)
+    .sort((a, b) => {
+      const numA = parseInt(a.id.split('-').pop() || '0', 10);
+      const numB = parseInt(b.id.split('-').pop() || '0', 10);
+      return numA - numB;
+    });
 
   const deleteClick = (idQuestion: string) => {
     setQuestionToDelete(idQuestion);
   };
+
+
 
 
 
@@ -83,21 +109,34 @@ console.log(data);
           <div className="text-center">
             <Heading1 className="text-[--color-text] mb-2">ניהול שאלות</Heading1>
           </div>
+          <SearchComponents searchText={searchText} setSearchText={setSearchText} />
           <AddQuestion></AddQuestion>
         </GridContainer>
       </div>
 
       <GridContainer className="py-8">
         {activeQuestions.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 bg-accent/20 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+          searchText.trim() ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-[--color-secondary-text]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-[--color-text] mb-2">לא נמצאו שאלות</h3>
+              <p className="text-[--color-secondary-text]">לא נמצאו שאלות התואמות לחיפוש "{searchText}".</p>
             </div>
-            <h3 className="text-lg font-medium text-[--color-text] mb-2">אין שאלות פעילות</h3>
-            <p className="text-[--color-secondary-text]">כל השאלות במערכת כרגע מוגדרות כלא פעילות.</p>
-          </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 bg-accent/20 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-[--color-text] mb-2">אין שאלות פעילות</h3>
+              <p className="text-[--color-secondary-text]">כל השאלות במערכת כרגע מוגדרות כלא פעילות.</p>
+            </div>
+          )
         ) : (
           <div className="space-y-4 max-w-4xl mx-auto">
             {activeQuestions.map((question, index) => (
@@ -133,11 +172,11 @@ console.log(data);
                     עריכה
                   </Button>
                   {questionToEdit?.id === question.id && (
-                  <UpdateQuestion
-                    question={questionToEdit}
-                    questionSaveClick={() => setQuestionToEdit(null)}
-                  />
-                )}
+                    <UpdateQuestion
+                      question={questionToEdit}
+                      questionSaveClick={() => setQuestionToEdit(null)}
+                    />
+                  )}
                   <Button
                     variant="danger"
                     size="sm"
@@ -158,9 +197,9 @@ console.log(data);
         )}
 
         {questionToDelete && (
-          <DeleteQuestion 
-            id={questionToDelete} 
-            onClose={() => setQuestionToDelete(null)} 
+          <DeleteQuestion
+            id={questionToDelete}
+            onClose={() => setQuestionToDelete(null)}
           />
         )}
       </GridContainer>

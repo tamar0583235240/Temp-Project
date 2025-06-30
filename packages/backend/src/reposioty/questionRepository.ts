@@ -70,13 +70,13 @@ const updateQuestionById = async (updates: Questions) => {
   }
   const values = Object.values(fieldsToUpdate);
   const setString = fields
-    .map((field, i) => `"${field}" = $${i + 1}`)
+    .map((field, i) => `"${field}" = $${i+1}`)
     .join(', ');
 
   const query = `
     UPDATE questions
     SET ${setString}
-    WHERE id = $${fields.length + 1}
+    WHERE id = $${fields.length+1}
     RETURNING *;
   `;
 
