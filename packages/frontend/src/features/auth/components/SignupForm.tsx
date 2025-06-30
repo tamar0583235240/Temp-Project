@@ -69,7 +69,7 @@ const SignupForm = () => {
       if (res.ok) {
         setMessage('ההרשמה הושלמה בהצלחה!');
         dispatch(loginSuccess(data)); // מחובר אוטומטית
-        navigate("/home"); // מעבר לדף הבית
+        navigate("/"); // מעבר לדף הבית
       } else {
         setMessage(data.message || 'קוד לא תקין, נסה שנית.');
       }

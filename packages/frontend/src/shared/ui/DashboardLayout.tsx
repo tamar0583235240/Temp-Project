@@ -10,7 +10,7 @@ import { Grid } from "./grid";
 const DashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isHomePage = location.pathname === "/home";
+  const isHomePage = location.pathname === "/";
 
   return (
     <div className="flex h-screen">

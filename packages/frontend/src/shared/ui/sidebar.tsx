@@ -21,10 +21,10 @@ const navItems: NavItem[] = [
   { label: "ההקלטות שלי", href: "/recordings" },
   { label: "הקלטות משותפות", href: "/shared" },
   { label: "משאבים", href: "/resources" },
-  { label: "ניהול", href: "", isSectionTitle: true },
-  { label: "ניהול שאלות", href: "/admin/questions" },
-  { label: "ניהול משתמשים", href: "/admin/users" },
-  { label: "ניהול משאבים", href: "/admin/resources" },
+  { label: "ניהול", href: "", isSectionTitle: true, adminOnly: true },
+  { label: "ניהול שאלות", href: "/admin/questions", adminOnly: true },
+  { label: "ניהול משתמשים", href: "/admin/users", adminOnly: true },
+  { label: "ניהול משאבים", href: "/admin/resources", adminOnly: true },
 ];
 
 const SidebarNavigation = () => {
