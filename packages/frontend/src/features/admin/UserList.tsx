@@ -43,11 +43,12 @@ const UserList = () => {
 
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
-      title: 'אתה בטוח?',
-      text: 'המשתמש ימחק לצמיתות!',
+      title: '?אתה בטוח',
+      text: '!המשתמש ימחק לצמיתות',
       icon: 'warning',
+      iconColor: '#64748B', 
       showCancelButton: true,
-      confirmButtonText: 'כן, מחק!',
+      confirmButtonText: '!כן, מחק',
       cancelButtonText: 'בטל',
       confirmButtonColor: '#00B894'
     });
@@ -56,9 +57,10 @@ if (result.isConfirmed) {
   try {
     await deleteUser(id).unwrap();
     Swal.fire({
-      title: 'נמחק!',
-      text: 'המשתמש נמחק בהצלחה.',
+      title: '!נמחק',
+      text: 'המשתמש נמחק בהצלחה',
       icon: 'success',
+      iconColor: '#64748B', 
       confirmButtonColor: '#00B894', 
     });
   } catch {
@@ -66,6 +68,7 @@ if (result.isConfirmed) {
       title: 'שגיאה',
       text: 'אירעה שגיאה במחיקה',
       icon: 'error',
+      iconColor: '#64748B', 
       confirmButtonColor: '#64748B', 
     });
   }
@@ -90,13 +93,25 @@ if (result.isConfirmed) {
 
   const handleUpdate = async (data: Partial<user>) => {
     if (!data.id) return;
-    try {
-      await updateUser({ id: data.id, data }).unwrap();
-      Swal.fire('עודכן!', 'הפרטים עודכנו בהצלחה.', 'success');
-    } catch {
-      Swal.fire('שגיאה', 'אירעה שגיאה בעדכון', 'error');
-    }
-  };
+try {
+  await updateUser({ id: data.id, data }).unwrap();
+  Swal.fire({
+    title: '!עודכן',
+    text: 'הפרטים עודכנו בהצלחה',
+    icon: 'success',
+    iconColor: '#64748B', // כאן הוספתי
+    confirmButtonColor: '#00B894', // לדוגמה ירוק מותאם
+  });
+} catch {
+  Swal.fire({
+    title: 'שגיאה',
+    text: 'אירעה שגיאה בעדכון',
+    icon: 'error',
+    iconColor: '#64748B', // גם כאן אם תרצי
+    confirmButtonColor: '#e74c3c', // לדוגמה אדום מותאם
+  });
+}
+}
 
   return (
     <div className="max-w-7xl mx-auto my-8 px-4">
@@ -131,9 +146,12 @@ if (result.isConfirmed) {
       </div>
 
       {isLoading ? (
-        <p className="text-center">טוען...</p>
+        <p className="text-center">...טוען</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+ <div
+  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+  style={{ direction: 'rtl' }}
+>
           {filteredUsers.map((user) => (
             <UserCard
               key={user.id}

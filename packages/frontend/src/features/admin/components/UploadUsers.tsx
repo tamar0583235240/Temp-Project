@@ -10,14 +10,15 @@ export const UploadUsers = () => {
       const file = e.target.files[0];
 
       const confirmResult = await Swal.fire({
-        title: "האם לעדכן משתמשים?",
+        title: "?האם לעדכן משתמשים",
         text: "הפעולה תעלה את המשתמשים מהקובץ למערכת",
         icon: "question",
+        iconColor: '#64748B', 
         showCancelButton: true,
         confirmButtonText: "כן, עדכן",
         cancelButtonText: "ביטול",
-        confirmButtonColor: "#00B894", // ירוק
-        cancelButtonColor: "#64748B", // אפור כהה
+        confirmButtonColor: "#00B894", 
+        cancelButtonColor: "#64748B",
       });
 
       if (confirmResult.isConfirmed) {
@@ -33,7 +34,7 @@ export const UploadUsers = () => {
 
         try {
           await upload(file);
-          Swal.fire("הצלחה", "המשתמשים הועלו בהצלחה!", "success");
+          Swal.fire("הצלחה", "!המשתמשים הועלו בהצלחה", "success");
         } catch (err: any) {
           Swal.fire("שגיאה", err.message || "אירעה שגיאה בהעלאת המשתמשים", "error");
         }

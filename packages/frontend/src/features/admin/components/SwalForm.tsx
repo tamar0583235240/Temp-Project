@@ -35,24 +35,28 @@ const SwalForm = () => {
       await createUser(fullUser).unwrap();
       Swal.close();
       Swal.fire({
-  title: 'נוסף!',
+  title: '!נוסף',
   text: 'המשתמש נוסף בהצלחה',
   icon: 'success',
-  confirmButtonColor: '#00B894', // ירוק Tailwind green-500
+  iconColor: '#64748B', 
+  confirmButtonColor: '#00B894', 
 });
 
       reset();
     } catch (err: any) {
-      console.error('שגיאה מהשרת:', err);
+      console.error(':שגיאה מהשרת', err);
 
       Swal.fire({
         icon: 'error',
+          iconColor: '#64748B', 
         title: 'שגיאה',
         text:
           err?.data?.error ||
           err?.error ||
           err?.message ||
           'אירעה שגיאה בעת הוספת המשתמש',
+            confirmButtonColor: '#00B894', 
+
       });
     }
   };
