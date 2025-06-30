@@ -7,20 +7,41 @@ import {
   getAnswerById,
 } from '../reposioty/answerRepository';
 
+
 export const createAnswerController = async (req: Request, res: Response) => {
   const userId = req.body.userId || req.body.user_id;
   const questionId = req.body.questionId || req.body.question_id;
   const fileUrl = req.body.fileUrl;
+  const amountFeedbacks = req.body.amountFeedbacks;
+  const answerFileName = req.body.answerFileName;
 
-  if (!userId || !questionId || !fileUrl) {
-    console.error('❌ Missing fields:', { userId, questionId, fileUrl });
+  if (!userId || !questionId || !fileUrl || amountFeedbacks === undefined || !answerFileName) {
+    console.error('❌ Missing fields:', {
+      userId,
+      questionId,
+      fileUrl,
+      amountFeedbacks,
+      answerFileName
+    });
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  console.log('✅ Creating answer with:', { userId, questionId, fileUrl });
+  console.log('✅ Creating answer with:', {
+    userId,
+    questionId,
+    fileUrl,
+    amountFeedbacks,
+    answerFileName
+  });
 
   try {
-    const newAnswer = await createAnswer(userId, questionId, fileUrl);
+    const newAnswer = await createAnswer(
+      userId,
+      questionId,
+      fileUrl,
+      amountFeedbacks,
+      answerFileName
+    );
     res.json(newAnswer);
   } catch (error: any) {
     console.error('❌ Error creating answer:', error.message || error);
@@ -85,3 +106,11 @@ export const deleteAnswerController = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
+
+
+
+

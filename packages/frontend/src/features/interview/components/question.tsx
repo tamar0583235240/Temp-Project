@@ -1,25 +1,20 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../shared/store/store";
-import { useDispatch } from "react-redux";
 import { answerQuestion, nextQuestion, resetQuestion } from "../store/simulationSlice";
-import { Bot, Brain, RotateCcw, Sparkles } from "lucide-react";
-
-import AnswerAI from "./AnswerAI";
-import { Button } from "../../../shared/ui/button";
+import { Bot, RotateCcw, Sparkles } from "lucide-react";
+import AudioRecorder from "../../recordings/components/AudioRecorder";
 
 const Question: React.FC = () => {
-  
   const dispatch = useDispatch();
   const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
-  
-  const handleTextChange = (value: string) => {
-    dispatch(answerQuestion({ index: currentIndex, answer: value }));
-  };
 
-  const handleReset = () => {
-      dispatch(resetQuestion(currentIndex));
-    };
+  // const handleTextChange = (value: string) => {
+  //   dispatch(answerQuestion({ index: currentIndex, answer: value }));
+  // };
+  // const handleReset = () => {
+  //   dispatch(resetQuestion(currentIndex));
+  // };
 
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
 
@@ -34,18 +29,14 @@ const Question: React.FC = () => {
         <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
           {currentQuestion.content}
         </div>
-
-        
-        
-      {/* אולי נשתמש בהמשך */}
-      {/* {currentQuestion.question_type === "open" ? (
-        <textarea
-          className="w-full min-h-[80px] rounded-md border border-[--color-border] p-3 text-base focus:ring-[--color-primary] focus:border-[--color-primary] bg-[#f7fafc] mb-6"
-          value={currentQuestion.answer ?? ""}
-          onChange={(e) => handleTextChange(e.target.value)}
-          placeholder="הקלד/י את תשובתך כאן..."
-          dir="rtl"
-        />
+        {/* {currentQuestion.question_type === "open" ? (
+          <textarea
+            className="w-full min-h-[80px] rounded-md border border-[--color-border] p-3 text-base focus:ring-[--color-primary] focus:border-[--color-primary] bg-[#f7fafc] mb-6"
+            value={currentQuestion.answer ?? ""}
+            onChange={(e) => handleTextChange(e.target.value)}
+            placeholder="הקלד/י את תשובתך כאן..."
+            dir="rtl"
+          />
         ) : (
           <div className="flex flex-col gap-3 mb-6">
             {currentQuestion.options?.map((option, i) => (
@@ -63,46 +54,26 @@ const Question: React.FC = () => {
             ))}
           </div>
         )} */}
-        <div className="flex gap-4 mt-2 mb-2 w-full">
-          <button
-            className="w-1/2 bg-[--color-primary] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[--color-primary-dark] transition text-lg flex items-center justify-center"
-            // onClick={() => handleTextChange(currentQuestion.answer ?? "")}
-          >
-            התחל הקלטה
-          </button>
-          <button
-            className="w-1/2 border border-[--color-border] bg-white text-[--color-text] px-6 py-3 rounded-lg font-semibold hover:bg-[--color-background] transition text-lg flex items-center justify-center gap-2"
-          >
-            העלה קובץ
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
-            </svg>
-          </button>
-        </div>
-      {/* <Button/> */}
+       <div className="flex gap-4 w-full">
+  {/* כפתור העלאת קובץ */}
+  <div className="w-1/2">
+    <button
+      className="w-full border border-[--color-border] bg-white text-[--color-text] px-6 py-3 rounded-lg font-semibold hover:bg-[--color-background] transition text-lg flex items-center justify-center gap-2"
+    >
+      העלה קובץ
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
+      </svg>
+    </button>
+  </div>
 
-      {/* <div className="flex gap-2">
-      <button
-        className="bg-danger text-white px-6 py-2 rounded-lg font-semibold hover:bg-danger/90 transition"
-        onClick={handleReset}
-      >
-        איפוס תשובה
-        <RotateCcw size={20} />
-      </button>
-      <button
-                className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
-                onClick={() => {
-                  handleTextChange(currentQuestion.answer ?? "");
-                  setTimeout(() => dispatch(nextQuestion()), 300);
-                }}
-              >
-                ניתוח AI
-                <Sparkles/>
-                <Bot/>
-              </button>
-          </div> */}
+  {/* קומפוננטת ההקלטה */}
+  <div className="w-1/2">
+    <AudioRecorder />
+  </div>
+</div>
+
       </div>
-      
     </div>
   );
 };
