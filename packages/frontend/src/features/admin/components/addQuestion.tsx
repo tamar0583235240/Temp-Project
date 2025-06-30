@@ -75,18 +75,18 @@ export const AddQuestion = () => {
                         <CardSimple className="m-0 border-0 shadow-none">
                             {/* כותרת המודל */}
                             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+                                <div className="flex items-center gap-3">
+                                    <IconWrapper color="primary-dark" size="lg">
+                                        <FileQuestion size={24} />
+                                    </IconWrapper>
+                                    <Heading1 className="text-2xl">הוספת שאלה למאגר</Heading1>
+                                </div>
                                 <Button
                                     onClick={() => setIsModalOpen(false)}
                                     variant="ghost"
                                     size="sm"
                                     icon={<X size={20} />}
                                 />
-                                <div className="flex items-center gap-3">
-                                    <Heading1 className="text-2xl">הוספת שאלה למאגר</Heading1>
-                                    <IconWrapper color="primary-dark" size="lg">
-                                        <FileQuestion size={24} />
-                                    </IconWrapper>
-                                </div>
                             </div>
 
                             {/* טופס הוספת שאלה */}
@@ -233,4 +233,3 @@ export const AddQuestion = () => {
         </>
     )
 }
-
