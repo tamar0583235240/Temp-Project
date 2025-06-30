@@ -44,7 +44,7 @@ const HomePage = () => {
           </div>
 
           <img
-            src="\ffice.webp"
+            src="\landingPageImages\1.jpg"
             alt="משרד מודרני"
             className="w-full max-w-md rounded-xl shadow-md"
           />
