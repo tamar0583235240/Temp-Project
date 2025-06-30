@@ -1,8 +1,8 @@
 import * as FaIcons from "react-icons/fa";
 import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
-import { useSelector } from "react-redux";import React from "react";
-import { ExitButton } from "../../features/auth/components/ExitButton";
+import { useSelector } from "react-redux";
+import React from "react";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
