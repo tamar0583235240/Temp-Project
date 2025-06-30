@@ -11,7 +11,7 @@ import { SearchComponents } from "./searchComponents";
 import ShareDialog from "../../shared-recordings/components/ShareDialog";
 import ShareButton from "../../shared-recordings/components/ShareButton";
 import './RecordingsList.css';
-import { Answer } from "../types/Answer";
+import { Answer } from "../types/answer";
 
 const RecordingsList = () => {
   const user = useSelector((state: RootState) => state.auth.user);

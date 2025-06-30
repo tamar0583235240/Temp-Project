@@ -1,6 +1,6 @@
 import { api } from "../../../shared/api/api";
 import { Question } from "../types/Question";
-import { Answer } from "../types/Answer";
+import { Answer } from "../types/answer";
 
 export const AnswerApi = api.injectEndpoints({
     endpoints: (builder) => ({
