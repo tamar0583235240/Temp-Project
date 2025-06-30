@@ -14,7 +14,7 @@ const DashboardLayout = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="fixed top-4 left-4 flex items-center gap-2 z-50">
+      <div className="fixed top-4 left-6 flex items-center gap-2 z-50">
         <HomeButton />
         <UserMenu />
       </div>
