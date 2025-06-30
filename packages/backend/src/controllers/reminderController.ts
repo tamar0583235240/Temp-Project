@@ -8,9 +8,6 @@ export const reminderController = async (req: Request, res: Response) => {
   try {
     const allReminders = await reminderRepository.getDueReminders();
 
-    // Map לפי user_id כדי לשמור רק טיפ אחד לכל משתמש (אם זה הכוונה)
-    // אם רוצים את כל הטיפים - אפשר גם לוותר על זה ולהציג את כולם
-    // כאן אני שומר רק טיפ אחד למשתמש כמו בקוד שלך, אפשר לשנות לפי צורך
     const selectedPerUser = new Map<string, any>();
 
     for (const reminder of allReminders) {
@@ -18,18 +15,19 @@ export const reminderController = async (req: Request, res: Response) => {
       const frequency = user?.user_reminder_settings?.frequency;
       if (!frequency) continue;
 
-      // להראות את הטיפ כל היום לאחר שנשלח, או אם לא נשלח מעולם
-      if (!last_sent_at || isSentToday(last_sent_at) || isReminderDue(last_sent_at, frequency)) {
-        if (!selectedPerUser.has(user_id)) {
-          selectedPerUser.set(user_id, reminder);
-        }
+      // מציגים את הטיפ לכל משתמש פעם אחת
+      if (!selectedPerUser.has(user_id)) {
+        selectedPerUser.set(user_id, reminder);
       }
     }
 
     const remindersToShow = Array.from(selectedPerUser.values());
 
-    // רק טיפים שטרם נשלחו היום יעדכנו את last_sent_at
-    const remindersToUpdate = remindersToShow.filter(r => !isSentToday(r.last_sent_at));
+    // רק טיפים שלא נשלחו היום ושכבר הגיע הזמן לשלוח לפי התדירות יעודכנו
+    const remindersToUpdate = remindersToShow.filter(r => 
+      !isSentToday(r.last_sent_at) &&
+      isReminderDue(r.last_sent_at, r.user.user_reminder_settings.frequency)
+    );
 
     for (const reminder of remindersToUpdate) {
       await pool.query(
@@ -48,3 +46,4 @@ export const reminderController = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'שגיאה בשרת' });
   }
 };
+

@@ -1,9 +1,12 @@
 import React from 'react';
 import ReminderSettingsCard from '../features/reminders/components/ReminderSettingsCard';
+import ReminderComponent from '../features/reminders/components/remindersComponents';
 
 export default function RemindersPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <ReminderComponent />
+
       <div className="max-w-md mx-auto">
         <ReminderSettingsCard
           title="תרגול שאלות מקצועיות"
