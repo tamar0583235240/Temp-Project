@@ -1,6 +1,5 @@
 import { pool } from '../config/dbConnection';
 
-// src/reposioty/reminderRepository.ts
 async function getDueReminders() {
   const query = `
     SELECT 

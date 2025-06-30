@@ -5,11 +5,10 @@ import { FaQuestionCircle, FaLightbulb, FaHeart } from 'react-icons/fa';
 
 const ReminderComponent: React.FC = () => {
   const { data: reminders, isLoading, error } = useGetRemindersQuery();
-
   if (isLoading) return <p>טוען טיפים...</p>;
   if (error) return <p>שגיאה בטעינת טיפים</p>;
   if (!reminders || (!Array.isArray(reminders) && "message" in reminders)) {
-    return <p> אין טיפים / תזכורות זמינים :( </p>;
+    return <p> אין טיפים זמינים :( </p>;
   }
 
 
@@ -42,7 +41,6 @@ const ReminderComponent: React.FC = () => {
             <div className="flex-1">
               <p className="font-medium">{tip.content}</p>
               <p className="text-sm text-gray-600">{formatFrequency(tip.user?.user_reminder_settings?.frequency)}</p>
-              {/* <p className="text-sm text-gray-600">{formatFrequency(tip.user.user_reminder_settings.frequency)}</p> */}
             </div>
           </li>
         ))}
