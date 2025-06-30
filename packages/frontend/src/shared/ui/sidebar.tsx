@@ -36,7 +36,7 @@ const SidebarNavigation = () => {
 
   return (
     <aside
-      className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right"
+      className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right fixed top-0 right-0 overflow-y-auto"
       dir="rtl"
     >
       {/* Header */}

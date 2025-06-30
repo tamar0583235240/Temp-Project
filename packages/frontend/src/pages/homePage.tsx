@@ -22,7 +22,7 @@ const HomePage = () => {
     <div className="flex h-screen">
       <SidebarNavigation />
 
-      <div className="flex-1 ">
+      <div className="flex-1 mr-64">
         {/* Hero Section */}
         <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-[--color-bg] p-6 md:p-20 gap-8">
           <div className="text-right max-w-xl space-y-6">
