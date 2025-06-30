@@ -55,8 +55,6 @@ export const CreateInterviewMaterialsSubForm = ({
   });
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [selectedThumbnailName, setSelectedThumbnailName] = useState<string | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   const onValid = (data: any) => {
     const formData = new FormData();
@@ -71,10 +69,8 @@ export const CreateInterviewMaterialsSubForm = ({
 
     onSubmit(formData);
     setShowSuccessMessage(true);
-    reset();
-    setSelectedThumbnailName(null);
-    setSelectedFileName(null);
-    setTimeout(() => setShowSuccessMessage(false), 4000);
+    reset(); 
+    setTimeout(() => setShowSuccessMessage(false), 4000); 
   };
 
   return (
@@ -88,8 +84,6 @@ export const CreateInterviewMaterialsSubForm = ({
           הפריט נוסף בהצלחה!
         </p>
       )}
-
-      {/* כותרת */}
       <div>
         <label className="block mb-1 font-semibold text-sm text-text-main" htmlFor="title">
           כותרת
@@ -97,8 +91,6 @@ export const CreateInterviewMaterialsSubForm = ({
         <Input id="title" {...register("title")} aria-invalid={!!errors.title} />
         {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>}
       </div>
-
-      {/* תיאור קצר */}
       <div>
         <label
           className="block mb-1 font-semibold text-sm text-text-main"
@@ -119,69 +111,31 @@ export const CreateInterviewMaterialsSubForm = ({
           <p className="text-sm text-red-600 mt-1">{errors.shortDescription.message}</p>
         )}
       </div>
-
-      {/* העלאת תמונה ממוזערת */}
       <div>
         <label className="block mb-1 font-semibold text-sm text-text-main" htmlFor="thumbnail">
           תמונה ממוזערת (אופציונלי)
         </label>
-        <div className="relative w-full">
-          <input
-            id="thumbnail"
-            type="file"
-            accept="image/*"
-            {...register("thumbnail")}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              setSelectedThumbnailName(file?.name || null);
-            }}
-            className="hidden"
-          />
-          <label
-            htmlFor="thumbnail"
-            className="inline-block cursor-pointer bg-muted text-muted-foreground hover:bg-muted/80 text-sm font-medium py-2 px-4 rounded-md border border-gray-300 w-full text-center"
-          >
-            בחרי תמונה
-          </label>
-          {selectedThumbnailName && (
-            <p className="text-sm text-gray-600 mt-1">📁 {selectedThumbnailName}</p>
-          )}
-        </div>
-        {errors.thumbnail && (
-          <p className="text-sm text-red-600 mt-1">{errors.thumbnail.message}</p>
-        )}
+        <input
+          id="thumbnail"
+          type="file"
+          accept="image/*"
+          {...register("thumbnail")}
+          className="w-full text-sm"
+        />
+        {errors.thumbnail && <p className="text-sm text-red-600 mt-1">{errors.thumbnail.message}</p>}
       </div>
-
-      {/* העלאת קובץ */}
       <div>
         <label className="block mb-1 font-semibold text-sm text-text-main" htmlFor="file">
           צרף קובץ (PDF, Word, אודיו וכו’)
         </label>
-        <div className="relative w-full">
-          <input
-            id="file"
-            type="file"
-            {...register("file")}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              setSelectedFileName(file?.name || null);
-            }}
-            className="hidden"
-          />
-          <label
-            htmlFor="file"
-            className="inline-block cursor-pointer bg-muted text-muted-foreground hover:bg-muted/80 text-sm font-medium py-2 px-4 rounded-md border border-gray-300 w-full text-center"
-          >
-            בחרי קובץ
-          </label>
-          {selectedFileName && (
-            <p className="text-sm text-gray-600 mt-1">📁 {selectedFileName}</p>
-          )}
-        </div>
+        <input
+          id="file"
+          type="file"
+          {...register("file")}
+          className="w-full text-sm"
+        />
         {errors.file && <p className="text-sm text-red-600 mt-1">{errors.file.message}</p>}
       </div>
-
-      {/* כפתורי שליחה וביטול */}
       <div className="flex gap-4">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
           {isSubmitting ? "שולח..." : "שמור"}
