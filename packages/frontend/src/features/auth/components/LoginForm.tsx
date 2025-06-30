@@ -3,7 +3,6 @@ import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
 import { loginSuccess, loginStart, loginFailure } from '../store/authSlice';
 import GoogleLoginButton from './GoogleAuthButton';
-import CodeVerificationScreen from './CodeVerificationScreen';
 import { useNavigate } from 'react-router-dom';
 import { CardSimple } from '../../../shared/ui/card';
 import { Input } from '../../../shared/ui/input';
