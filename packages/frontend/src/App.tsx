@@ -1,12 +1,11 @@
+import './App.css';
+import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
 
-import "./App.css";
-import { MessageModalProvider } from "./shared/ui/MessageModalContext";
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
-
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
 
 function App() {

@@ -20,10 +20,10 @@ const navItems: NavItem[] = [
   { label: "My Recordings", href: "/recordings" },
   { label: "Shared Recordings", href: "/shared" },
   { label: "Resources", href: "/resources" },
-  { label: "Admin", href: "", isSectionTitle: true, adminOnly: true },
-  { label: "Manage Questions", href: "/admin/questions", },
-  { label: "Manage Users", href: "/admin/users", adminOnly: true },
-  { label: "Manage Resources", href: "/admin/resources", adminOnly: true },
+  { label: "Admin", href: "", isSectionTitle: true },
+  { label: "Manage Questions", href: "/manager/questions" },
+  { label: "Manage Users", href: "/manager/users" },
+  { label: "Manage Resources", href: "/manager/resources" },
 ];
 
 const SidebarNavigation = () => {
