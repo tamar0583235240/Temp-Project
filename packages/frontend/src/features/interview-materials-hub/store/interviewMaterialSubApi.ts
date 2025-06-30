@@ -4,7 +4,7 @@ import { interview_materials_subType } from '../types/interview_materials_subTyp
 
 export const interviewMaterialSubApi = createApi({
   reducerPath: 'interviewMaterialSubApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3051/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3030/api/' }),
   tagTypes: ['InterviewMaterialSub'],
   endpoints: (builder) => ({
     // 1. Get all materials
@@ -18,10 +18,17 @@ export const interviewMaterialSubApi = createApi({
       query: (searchTerm) =>
         `interviewMaterialSub/search?q=${encodeURIComponent(searchTerm)}`,
     }),
+    updateDownloadsCount: builder.mutation<void, { id: string }>({
+  query: ({ id }) => ({
+    url: `/interviewMaterialSub/${id}`,
+    method: "PATCH",
+  }),
+}),
   }),
 });
 
 export const {
   useGetAllMaterialsQuery,
   useSearchMaterialsQuery,
+  useUpdateDownloadsCountMutation
 } = interviewMaterialSubApi;

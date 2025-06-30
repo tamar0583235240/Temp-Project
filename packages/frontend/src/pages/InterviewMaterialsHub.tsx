@@ -59,7 +59,6 @@ const InterviewMaterialsHub: React.FC = () => {
   return (
     <div className="px-4 py-6">
       <h1 className="text-2xl font-bold mb-4">🎯 חיפוש חומרי ריאיונות</h1>
-
       <SearchBox
         query={query}
         setQuery={setQuery}
@@ -70,7 +69,6 @@ const InterviewMaterialsHub: React.FC = () => {
           setDebouncedQuery(query.trim());
         }}
       />
-
       <DownloadCard />
     </div>
   );

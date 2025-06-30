@@ -1,9 +1,11 @@
 import React from 'react';
 import { interview_materials_subType } from '../types/interview_materials_subType';
-import { useGetAllMaterialsQuery } from '../store/interviewMaterialSubApi';
+import { useGetAllMaterialsQuery,useUpdateDownloadsCountMutation } from '../store/interviewMaterialSubApi';
 
 const DownloadCard: React.FC = () => {
   const { data: files = [], isLoading, isError } = useGetAllMaterialsQuery();
+    const [incrementDownloadCount] = useUpdateDownloadsCountMutation();
+const id:string="1"
 console.log('files', files);
 console.log("tamiiii");
 
@@ -16,6 +18,7 @@ console.log("tamiiii");
   };
 
   const handleDownload = (fileUrl: string) => {
+
     if (!fileUrl) {
       alert('הקובץ לא זמין להורדה');
       return;
@@ -24,6 +27,8 @@ console.log("tamiiii");
     link.href = fileUrl;
     link.download = fileUrl.split('/').pop() || 'download';
     link.click();
+    incrementDownloadCount({ id }); // עדכון ב־DB
+
   };
 
   if (isLoading) return <p>טוען קבצים...</p>;

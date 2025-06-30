@@ -23,7 +23,7 @@ const HomePage = () => {
         <div onClick={() => { navigate('/shared') }}>
           <button>shared</button>
         </div>
-          <div onClick={() => { navigate('/InterviewMaterialsHub') }}>
+          <div onClick={() => { navigate('/interviewMaterialsHub') }}>
           <button>InterviewMaterialsHub</button>
         </div>
       </div>

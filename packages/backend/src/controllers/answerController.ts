@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import { Request, Response } from 'express';
 
 
-=======
 import { Request, Response } from "express";
 import { pool } from "../config/dbConnection";
 import { validate as isUuid } from "uuid";  
@@ -48,4 +45,3 @@ export const getProgressStats = async (req: Request, res: Response) => {
     res.status(500).json({ error: "אירעה שגיאה בעת שליפת סטטיסטיקות ההתקדמות" });
   }
 };
->>>>>>> c5a53020e0f4b61e85d00beade7884b0f66120e1

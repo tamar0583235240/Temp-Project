@@ -101,3 +101,20 @@ export const searchMterials=async(req: Request, res: Response)=>{
   }
 }
 
+export const incrementDownloadCount = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query(
+      `UPDATE interview_materials_sub
+       SET downloads_count = downloads_count + 1
+       WHERE id = $1`,
+      [id]
+    );
+
+    res.status(200).json({ message: "Download count updated" });
+  } catch (err) {
+    console.error("שגיאה בעדכון downloads_count", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
