@@ -16,6 +16,8 @@ export const UploadUsers = () => {
         showCancelButton: true,
         confirmButtonText: "כן, עדכן",
         cancelButtonText: "ביטול",
+        confirmButtonColor: "#00B894", // ירוק
+        cancelButtonColor: "#64748B", // אפור כהה
       });
 
       if (confirmResult.isConfirmed) {

@@ -34,7 +34,13 @@ const SwalForm = () => {
     try {
       await createUser(fullUser).unwrap();
       Swal.close();
-      Swal.fire('נוסף!', 'המשתמש נוסף בהצלחה', 'success');
+      Swal.fire({
+  title: 'נוסף!',
+  text: 'המשתמש נוסף בהצלחה',
+  icon: 'success',
+  confirmButtonColor: '#00B894', // ירוק Tailwind green-500
+});
+
       reset();
     } catch (err: any) {
       console.error('שגיאה מהשרת:', err);
@@ -53,27 +59,27 @@ const SwalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 p-2">
-      <input {...register('firstName')} placeholder="שם פרטי" />
-      <span className="text-red-600 text-sm">{errors.firstName?.message}</span>
+     <input {...register('firstName')} placeholder="שם פרטי" className="text-right" />
+<span className="text-red-600 text-sm">{errors.firstName?.message}</span>
 
-      <input {...register('lastName')} placeholder="שם משפחה" />
-      <span className="text-red-600 text-sm">{errors.lastName?.message}</span>
+<input {...register('lastName')} placeholder="שם משפחה" className="text-right" />
+<span className="text-red-600 text-sm">{errors.lastName?.message}</span>
 
-      <input {...register('email')} placeholder="אימייל" />
-      <span className="text-red-600 text-sm">{errors.email?.message}</span>
+<input {...register('email')} placeholder="אימייל" className="text-right" />
+<span className="text-red-600 text-sm">{errors.email?.message}</span>
 
-      <input {...register('password')} placeholder="סיסמה" type="password" />
-      <span className="text-red-600 text-sm">{errors.password?.message}</span>
+<input {...register('password')} placeholder="סיסמה" type="password" className="text-right" />
+<span className="text-red-600 text-sm">{errors.password?.message}</span>
 
-      <input {...register('phone')} placeholder="טלפון" />
-      <span className="text-red-600 text-sm">{errors.phone?.message}</span>
+<input {...register('phone')} placeholder="טלפון" className="text-right" />
+<span className="text-red-600 text-sm">{errors.phone?.message}</span>
 
-      <select {...register('role')}>
-        <option value="">בחר תפקיד</option>
-        <option value="student">תלמיד</option>
-        <option value="manager">מנהל</option>
-      </select>
-      <span className="text-red-600 text-sm">{errors.role?.message}</span>
+<select {...register('role')} className="text-right">
+  <option value="">בחר תפקיד</option>
+  <option value="student">תלמיד</option>
+  <option value="manager">מנהל</option>
+</select>
+<span className="text-red-600 text-sm">{errors.role?.message}</span>
 
       <button
         type="submit"
