@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Download, Printer } from "lucide-react";
 import { Button } from "../../../shared/ui/button";
-
 
 interface CertificateProps {
   fullName: string;
@@ -11,7 +10,6 @@ interface CertificateProps {
 
 export const Certificate: React.FC<CertificateProps> = ({ fullName }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
-  const [showCertificate, setShowCertificate] = useState(false);
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
@@ -42,44 +40,49 @@ export const Certificate: React.FC<CertificateProps> = ({ fullName }) => {
   };
 
   return (
-    <>
-      {!showCertificate && (
-        <div className="flex justify-center">
-          {/* <Button variant="primary-dark" size="lg" onClick={() => setShowCertificate(true)}>
-            התעודה שלי
-          </Button> */}
-          <Button variant="primary-dark" size="lg" onClick={() => setShowCertificate(true)}>
-            התעודה שלי
-          </Button>
+    <div
+      ref={certificateRef}
+      className="relative max-w-3xl mx-auto py-12 px-10 rounded-[28px] border border-[--color-primary]/30 bg-[--color-background] text-center space-y-5 shadow-2xl cursor-default"
+    >
+      {/* כפתורים בצד שמאל למעלה */}
+      <div
+        className="absolute top-4 left-4 flex gap-2"
+        onClick={(e) => e.stopPropagation()} // מונע סגירה מהכפתורים
+      >
+        <Button
+          icon={<Download size={16} />}
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDownload();
+          }}
+        />
+        <Button
+          icon={<Printer size={16} />}
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handlePrint();
+          }}
+        />
+      </div>
 
-        </div>
-      )}
+      {/* כותרת */}
+      <h1 className="text-3xl font-bold text-[--color-primary-dark] mb-1">
+        תעודת מוכנות לראיון
+      </h1>
+      <p className="text-base text-[--color-secondary-text]">מוענקת ל־</p>
+      <h2 className="text-2xl font-semibold text-[--color-primary]">{fullName}</h2>
 
-      {showCertificate && (
-        <div
-          ref={certificateRef}
-          className="relative max-w-3xl mx-auto p-8 rounded-xl border border-[--color-primary]/30 bg-[--color-background] text-center space-y-6 shadow-lg"
-        >
-          <div className="absolute top-4 left-4 flex gap-2">
-            <Button icon={<Download size={16} />} size="sm" onClick={handleDownload} />
-            <Button icon={<Printer size={16} />} size="sm" onClick={handlePrint} />
-          </div>
+      {/* תיאור */}
+      <p className="text-[--color-text] text-sm leading-relaxed max-w-prose mx-auto">
+        על הישגים יוצאי דופן, התמדה וחתירה למצוינות. אנו מוקירים את הדרך שעשית, מעריכים את תרומתך ומברכים אותך להמשך הצלחה.
+      </p>
 
-          <h1 className="text-3xl font-bold text-[--color-primary-dark] mb-2">
-            תעודת הצטיינות
-          </h1>
-          <p className="text-lg text-[--color-text]">מוענקת ל־</p>
-          <h2 className="text-xl font-semibold text-[--color-primary]">{fullName}</h2>
-          <p className="text-[--color-secondary-text] mt-4 leading-relaxed">
-            על הישגים יוצאי דופן, התמדה ומצוינות בלימודים. אנו מוקירים אותך ומאחלים המשך הצלחה.
-          </p>
-
-          <div className="mt-8 flex justify-between text-sm text-[--color-secondary-text] px-6">
-            <span>חתימה</span>
-            <span>{new Date().toLocaleDateString("he-IL")}</span>
-          </div>
-        </div>
-      )}
-    </>
+      {/* חתימה ותאריך */}
+      <div className="mt-6 flex justify-between text-sm text-[--color-secondary-text] px-6">
+        <span>{new Date().toLocaleDateString("he-IL")}</span>
+      </div>
+    </div>
   );
 };

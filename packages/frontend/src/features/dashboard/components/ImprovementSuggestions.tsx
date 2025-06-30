@@ -21,7 +21,7 @@ export const ImprovementSuggestions = () => {
       >
         <ul className="space-y-4">
           {data.map((item) => (
-            <li key={item.id} className="flex items-center gap-3 text-[--color-text]">
+            <li key={item.id} className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg">
               <span>{item.improvements}</span>
             </li>
           ))}

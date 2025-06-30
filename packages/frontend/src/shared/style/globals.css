@@ -13,11 +13,6 @@
     --color-background: #F7FAFC;
     --font-hand: 'Fredoka', sans-serif;
   }
-
-  body {
-    @apply bg-[--color-background] text-[--color-text];
-    font-family: 'Inter', sans-serif;
-  }
 }
 
 /* הוספת utility מותאם אישית ל־scrollbar */
