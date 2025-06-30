@@ -18,7 +18,6 @@ app.use(express.json());
 // app.use('/api', resourceRouts);
 
 
-app.use(cors());
 
 // Middleware
 app.use(cors());
@@ -26,7 +25,7 @@ app.use(express.json());
 // app.use('/api', exampleRouts);
 
 // Routes
-// app.use('/api', exampleRoutes);
+app.use('/api', resourceRouts);
 app.use('/api/simulation', questionRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/answers', answerRoutes);
