@@ -1,3 +1,4 @@
+// src/features/auth/LoginForm.tsx
 import React, { useState } from 'react';
 import { useLoginMutation } from '../../../shared/api/authApi';
 import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
@@ -42,7 +43,7 @@ function LoginForm() {
   const successfulLogin = (res: any) => {
     if (res?.user && res?.token) {
       dispatch(loginSuccess({ user: res.user, token: res.token }));
-      navigate("/");
+      navigate("/home");
     }
   };
 

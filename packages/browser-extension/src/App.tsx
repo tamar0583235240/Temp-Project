@@ -2,16 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import LoginForm from './components/loginForm'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div>
-      <h1>בדיקת API</h1>
-      
+      <LoginForm />
     </div>
-  );
+  )
 }
 
 export default App
