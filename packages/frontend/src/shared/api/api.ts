@@ -1,22 +1,38 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import reminderType from "../../features/reminders/types/reminderType"
+import reminderType from "../../features/reminders/types/reminderType";
 
 export const api = createApi({
-    baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:5000/",
+  reducerPath: "api", 
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5000/api/", 
+  }),
+  tagTypes: ["Reminders"],
 
-    }),
-    // reducerPath: "api",
-    // tagTypes: ["Item"],
-    // endpoints: () => ({}),
-     tagTypes: ["Reminders"],
   endpoints: (builder) => ({
+    
     getReminders: builder.query<reminderType[], void>({
-      query: () => "tips", // יוצר GET ל: /api/tips
+      query: () => "tips",
       providesTags: ["Reminders"],
+    }),
+
+    saveUserReminderSettings: builder.mutation<
+      void,
+      {
+        userId: string;
+        settings: Record<string, string>;
+      }
+    >({
+      query: ({ userId, settings }) => ({
+        url: "reminders/settings", 
+        method: "POST",
+        body: { userId, settings },
+      }),
+      invalidatesTags: ["Reminders"], 
     }),
   }),
 });
 
-
-export const { useGetRemindersQuery } = api;
+export const {
+  useGetRemindersQuery,
+  useSaveUserReminderSettingsMutation,
+} = api;

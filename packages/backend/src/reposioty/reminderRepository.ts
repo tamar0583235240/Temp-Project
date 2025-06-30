@@ -28,7 +28,37 @@ JOIN user_reminder_settings s ON u.id = s.user_id
   }));
 }
 
+const saveUserReminderSettings = async (settings: any[]) => {
+  const query = `
+    INSERT INTO user_reminder_settings (user_id, frequency)
+    VALUES ($1, $2)
+    ON CONFLICT (user_id) DO UPDATE SET frequency = EXCLUDED.frequency
+    RETURNING *;
+  `;
+
+  const results = [];
+  for (const setting of settings) {
+    const { user_id, frequency } = setting;
+    const { rows } = await pool.query(query, [user_id, frequency]);
+    results.push(rows[0]);
+  }
+  return results;
+}
+
 export default {
   getDueReminders,
+  saveUserReminderSettings,
 };
 
+
+
+
+
+
+
+
+
+
+
+
+ 
