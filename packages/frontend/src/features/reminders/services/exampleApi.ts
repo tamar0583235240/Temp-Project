@@ -1,6 +1,6 @@
 
 import { api } from "../../../shared/api/api";
-import {reminderType} from "../types/reminderType";
+import reminderType from "../types/reminderType";
 
 export const remainderApi = api.injectEndpoints({
   endpoints: (builder) => ({

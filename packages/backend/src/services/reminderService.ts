@@ -1,9 +1,6 @@
 
-import {pool} from '../config/dbConnection'; // נניח שיש לך מודול db שמייצא את pool     
-// נניח שיש לך מודול db שמייצא את pool  
-   // הקשר למסד הנתונים
+import {pool} from '../config/dbConnection';      
 
-// מיפוי: FE שלח תדירויות כמו 'every-three-days' אבל ב־DB צריך ENUM: 'every_3_days'
 const frequencyMap: Record<string, string> = {
   'daily': 'daily',
   'every-two-days': 'every_2_days',
@@ -30,7 +27,6 @@ export const saveReminderSettingsForUser = async (
 
       if (!dbType || !dbFreq) continue;
 
-      // UPSERT
       await client.query(
         `
         INSERT INTO user_reminder_settings (user_id, type, frequency, is_enabled)

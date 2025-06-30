@@ -27,6 +27,7 @@ JOIN user_reminder_settings s ON u.id = s.user_id
     }
   }));
 }
+
 const saveUserReminderSettings = async (settings: any[]) => {
   const query = `
     INSERT INTO user_reminder_settings (user_id, frequency)
@@ -44,11 +45,20 @@ const saveUserReminderSettings = async (settings: any[]) => {
   return results;
 }
 
-
-
 export default {
   getDueReminders,
-  saveUserReminderSettings
+  saveUserReminderSettings,
 };
+
+
+
+
+
+
+
+
+
+
+
 
  

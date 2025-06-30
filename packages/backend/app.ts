@@ -11,9 +11,9 @@ console.log('i am here in app');
 app.use(express.json());
 app.use(cors());
 app.use('/api', exampleRouts);
-app.use('/api', remindersRouts);
-app.use(cors());
+app.use('/api/tips', remindersRouts);
 app.use('/api/reminders', remindersRouts);
+
+app.use(cors());
+
 export default app;
-
-
