@@ -68,9 +68,6 @@ import { FaQuestionCircle, FaLightbulb, FaHeart } from 'react-icons/fa';
 
 const ReminderComponent: React.FC = () => {
   const { data: reminders, isLoading, error } = useGetRemindersQuery();
-  console.log("reminders:", reminders);
-
-
 
   if (isLoading) return <p>טוען טיפים...</p>;
   if (error) return <p>שגיאה בטעינת טיפים</p>;
