@@ -9,6 +9,7 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
+import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("answers_pkey", ["id"], { unique: true })
@@ -38,6 +39,9 @@ export class Answers {
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
+
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode2)
+  feedbacks: Feedback[];
 
   @OneToMany(
     () => SharedRecordings,

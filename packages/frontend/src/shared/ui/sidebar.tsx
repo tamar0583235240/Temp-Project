@@ -1,6 +1,8 @@
 import * as FaIcons from "react-icons/fa";
 import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
+import React from "react";
+import { ExitButton } from "../../features/auth/components/ExitButton";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
@@ -19,9 +21,9 @@ const navItems: NavItem[] = [
   { label: "Shared Recordings", href: "/shared" },
   { label: "Resources", href: "/resources" },
   { label: "Admin", href: "", isSectionTitle: true },
-  { label: "Manage Questions", href: "/admin/questions" },
-  { label: "Manage Users", href: "/admin/users" },
-  { label: "Manage Resources", href: "/admin/resources" },
+  { label: "Manage Questions", href: "/manager/questions" },
+  { label: "Manage Users", href: "/manager/users" },
+  { label: "Manage Resources", href: "/manager/resources" },
 ];
 
 const SidebarNavigation = () => {
@@ -68,6 +70,8 @@ const SidebarNavigation = () => {
           )
         )}
       </nav>
+    
+      <ExitButton />
     </aside>
   );
 };

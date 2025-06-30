@@ -3,11 +3,11 @@ import { CreateInterviewMaterialsSubForm } from "./CreateInterviewMaterialsSubFo
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
 import { Plus } from "lucide-react"; 
-import { useCreateResourceMutation } from "../../../shared/api/resourcesApi";
+import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialsSubApi";
 
 const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateResourceMutation();
+  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialSubMutation();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);

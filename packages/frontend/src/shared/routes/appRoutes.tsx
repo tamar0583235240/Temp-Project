@@ -24,7 +24,7 @@ export default function AppRoutes() {
         <Route
           path="/simulation"
           element={
-            <RoleProtectedRoute allowedRoles={["student"]}>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <p>Simulation</p>
             </RoleProtectedRoute>
           }
@@ -32,7 +32,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard"
           element={
-            <RoleProtectedRoute allowedRoles={["student"]}>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <p>Dashboard</p>
             </RoleProtectedRoute>
           }
@@ -40,7 +40,7 @@ export default function AppRoutes() {
         <Route
           path="/recordings"
           element={
-            <RoleProtectedRoute allowedRoles={["student"]}>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <p>Recordings</p>
             </RoleProtectedRoute>
           }
@@ -48,7 +48,7 @@ export default function AppRoutes() {
         <Route
           path="/shared"
           element={
-            <RoleProtectedRoute allowedRoles={["student"]}>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <p>SharedRecordings</p>
             </RoleProtectedRoute>
           }
@@ -56,7 +56,7 @@ export default function AppRoutes() {
         <Route
           path="/resources"
           element={
-            <RoleProtectedRoute allowedRoles={["student"]}>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <p>Resources</p>
             </RoleProtectedRoute>
           }
@@ -64,7 +64,7 @@ export default function AppRoutes() {
         <Route
           path="/interviewMaterialsHub"
           element={
-            <RoleProtectedRoute allowedRoles={["student"]}>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <p>InterviewMaterialsHub</p>
             </RoleProtectedRoute>
           }
@@ -78,17 +78,17 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/admin/users"
+          path="/manager/users"
           element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
+            <RoleProtectedRoute allowedRoles={["manager"]}>
               <p>AdminUsers</p>
             </RoleProtectedRoute>
           }
         />
         <Route
-          path="/admin/resources"
+          path="/manager/resources"
           element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
+            <RoleProtectedRoute allowedRoles={["manager"]}>
               {/* <p>AdminResources</p> */}
               <InterviewMaterialPage />
             </RoleProtectedRoute>
