@@ -1,22 +1,26 @@
 import { useDispatch, useSelector } from "react-redux"
-import Question from "../features/interview/components/question"
-import Sidebar from "../features/interview/components/sidebar"
 import { useEffect, useState } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
 import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper"
 import Buttons from "../features/interview/components/buttons"
-import AudioRecorder from "../features/recordings/components/AudioRecorder"
+import Sidebar from "../features/interview/components/sidebar"
+import Question from "../features/interview/components/question"
 import AnswerAI from "../features/interview/components/AnswerAI"
 import TipsComponent from "../features/interview/components/tipsComponent"
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, isLoading, error } = useGetAllQuestionsQuery();
+  const { data } = useGetAllQuestionsQuery();
+
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [lastQuestionIndex, setLastQuestionIndex] = useState<number | null>(null);
+  const [showTips, setShowTips] = useState(false);
+  const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
+
+  const currentIndex = useSelector((state: any) => state.simulation.currentIndex);
 
   useEffect(() => {
     if (data) {
@@ -37,39 +41,37 @@ const InterviewPage = () => {
     }
   }, [data, dispatch]);
 
-  // reset analysis when question changes
   useEffect(() => {
     if (lastQuestionIndex !== null && lastQuestionIndex !== undefined) {
       setShowAnalysis(false);
+      setShowTips(false);
+      setAnswerIdForAI(null);
     }
   }, [lastQuestionIndex]);
 
-  // get currentIndex from redux
-  const currentIndex = useSelector((state: any) => state.simulation.currentIndex);
   useEffect(() => {
     setLastQuestionIndex(currentIndex);
   }, [currentIndex]);
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
-      {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
         <div className="w-full max-w-2xl space-y-8">
-          <Question />
-          {/* <AudioRecorder /> */}
+          <Question
+            onFinishRecording={() => setShowTips(true)}
+            onAnswerSaved={(id) => setAnswerIdForAI(id)}
+          />
+          {showTips && <TipsComponent />}
+          {answerIdForAI && <AnswerAI answerId={answerIdForAI} />}
           <Buttons onShowAnalysis={() => setShowAnalysis(true)} analysisVisible={showAnalysis} />
-          {/* <Buttons /> */}
-          {/* <TipsComponent/> */}
-          {/* <AnswerAI answerId={"00000000-0000-0000-0000-000000000027"}/> */}
           {showAnalysis && <AnalysisStepWrapper />}
         </div>
       </main>
-      {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
         <Sidebar />
       </aside>
     </div>
-  )
-}
+  );
+};
 
 export default InterviewPage;

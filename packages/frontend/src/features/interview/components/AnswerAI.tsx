@@ -1,32 +1,31 @@
 import { useFeedbackAnalysis } from "../hooks/useFeedbackAnalysis";
 import FeedbackDisplay from "./FeedbackDisplay";
+import MagicLoader from "./MagicLoader";
 
-const DEMO_ANALYSIS = {
-  score: 5,
-  summary: "מענה מצוין! ענית בצורה מקצועית וברורה.",
-  positives: ["הצגת מחקר מעמיק", "הדגשת ערכים", "ניסוח רהוט"],
-  improvements: ["להוסיף דוגמה אישית", "להדגיש תרומה ייחודית"],
-  aiComment: "המשך כך!",
-};
 
 const AnswerAI = ({ answerId }: { answerId: string }) => {
-  // const { analysis, loading } = useFeedbackAnalysis(answerId);
-  // דמו בלבד:
-  const analysis = DEMO_ANALYSIS;
-  const loading = false;
+  const { analysis, loading, error } = useFeedbackAnalysis(answerId);
+
+  if (loading) return <MagicLoader />;  // <-- כאן מציגים טעינה
+
+  if (error) return (
+    <p className="text-red-600 text-center p-4 rounded-xl bg-red-100 border border-red-300 mt-4">
+      אירעה שגיאה בעת ניתוח התשובה.
+    </p>
+  );
+
+  if (!analysis) return (
+    <p className="text-gray-600 text-center p-4 mt-4">
+      לא התקבלה תוצאה מה־AI.
+    </p>
+  );
 
   return (
-    <div className="min-h-[180px] p-6 bg-white w-full rounded-2xl shadow-md">
-      {/* {loading ? (
-        <MagicLoader />
-      ) : analysis ? ( */}
-      {analysis ? (
-        <FeedbackDisplay analysis={analysis} />
-      ) : (
-        <p className="text-red-500 text-center">לא התקבלה תוצאה.</p>
-      )}
+    <div className="min-h-[180px] p-6 bg-white w-full rounded-2xl shadow-md mt-4">
+      <FeedbackDisplay analysis={analysis} />
     </div>
   );
 };
+
 
 export default AnswerAI;

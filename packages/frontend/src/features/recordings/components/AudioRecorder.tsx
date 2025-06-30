@@ -4,12 +4,23 @@ import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
 import { FiMic, FiPause, FiPlay, FiTrash2, FiDownload, FiRefreshCw, FiCheck, FiRotateCcw } from 'react-icons/fi';
 
-import type { RecordingState, AudioRecorderProps } from '../types/Answer'; // ודא שהטיפוסים מוגדרים כאן
+import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
+import TipsComponent from '../../interview/components/tipsComponent';
+import AnswerAI from '../../interview/components/AnswerAI';
+
+type AudioRecorderProps = {
+  userId?: string;
+  questionId?: string;
+  onFinish?: () => void;
+  onSaveSuccess?: (answerId: string) => void;
+};
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   userId = '00000000-0000-0000-0000-000000000001',
-  questionId = '00000000-0000-0000-0000-000000000010'
+  questionId = '00000000-0000-0000-0000-000000000010',
+  onFinish,
+  onSaveSuccess
 }) => {
   const {
     currentRecording,
@@ -31,6 +42,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [recordingPhase, setRecordingPhase] = useState<'idle' | 'recording' | 'paused'>('idle');
   const [isRecordDisabled, setIsRecordDisabled] = useState(false);
 
+
   const handleMainButtonClick = () => {
     if (recordingPhase === 'idle') {
       startRecording();
@@ -44,19 +56,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setRecordingPhase('recording');
     }
   };
-
-  const handleStopRecording = () => {
-    stopRecording();
-    setRecordingPhase('idle');
-    setIsRecordDisabled(true);
-    // setShowSaveModal(true);
-  };
+const handleStopRecording = () => {
+  stopRecording();
+  setRecordingPhase('idle');
+  setIsRecordDisabled(true);
+  onFinish?.(); // מודיע לדף הראשי שסיימנו הקלטה
+};
 
   const handleSaveRecording = async () => {
     try {
-      await saveRecording(userId, questionId, fileName);
+      const result = await saveRecording(userId, questionId, fileName);
       setShowSaveModal(false);
       setFileName('');
+      onSaveSuccess?.(result?.id || 'demo-id'); // מודיע לדף הראשי על תשובה חדשה
     } catch (error) {
       console.error('שגיאה בשמירה:', error);
     }
@@ -78,14 +90,13 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   return (
     <div className="space-y-4 w-full">
       {/* כפתור התחלה / עצירה */}
-    <RecordButton
-      state={recordingPhase}
-      onClick={handleMainButtonClick}
-      disabled={isRecordDisabled}
-    />
+      <RecordButton
+        state={recordingPhase}
+        onClick={handleMainButtonClick}
+        disabled={isRecordDisabled}
+      />
 
-    {/* זמן הקלטה */}
-  <div className="space-y-4 w-full">
+      {/* זמן הקלטה */}
       {(recordingPhase === 'recording' || recordingPhase === 'paused') && (
         <div className="flex flex-col items-center gap-2">
           <div className="text-lg font-bold text-text-main">
@@ -93,8 +104,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           </div>
         </div>
       )}
-      </div>
-      {/* כפתורי המשך / מחק / הקלט מחדש / סיום */}
+
+      {/* כפתורי שליטה בהקלטה */}
       {recordingPhase === 'paused' && (
         <div className="grid grid-cols-2 gap-2">
           <Button
@@ -152,7 +163,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         </div>
       )}
 
-      {/* נגן ותצוגה מקדימה + כפתור שמור */}
+      {/* נגן + אפשרויות שמירה והורדה */}
       {audioBlobRef.current && (
         <div className="space-y-2">
           <h4 className="font-semibold text-text-main">תצוגה מקדימה:</h4>
@@ -183,6 +194,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         </div>
       )}
 
+
       {/* מודל שמירה */}
       {showSaveModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -202,7 +214,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
                 onClick={handleSaveRecording}
                 disabled={!fileName.trim()}
                 isLoading={isLoading}
-
               >
                 שמור
               </Button>
