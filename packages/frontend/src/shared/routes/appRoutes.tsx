@@ -5,14 +5,10 @@ import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
+import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
-import ProtectedRoute from "../components/ProtectedRoute"; // 👈 יצטרך להיות אצלך
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
-import ProfilePage from "../../pages/ProfilePage";
-import SettingsPage from "../../pages/SettingsPage";
-import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
-import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -20,106 +16,87 @@ export default function AppRoutes() {
   return (
     <div dir="rtl">
       <Routes>
-        {/* Public routes */}
+        {/* Routes without sidebar */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* Protected routes */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <DashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/profile"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <ProfilePage/>
-              </RoleProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <SettingsPage/>
-              </RoleProtectedRoute>
-            }
-          />
+        <Route path="/reset-password" element={
+          <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+            <ResetPassword />
+          </RoleProtectedRoute>} />
+        {/* Routes with header */}
+        <Route path="/home" element={<HomePage />} />
+        <Route element={<DashboardLayout />}>
           <Route
             path="/simulation"
             element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>סימולציה</p>
+              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+                <p>Simulation</p>
               </RoleProtectedRoute>
             }
           />
           <Route
             path="/dashboard"
             element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>דשבורד</p>
+              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+                <p>Dashboard</p>
               </RoleProtectedRoute>
             }
           />
           <Route
             path="/recordings"
             element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>הקלטות</p>
+              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+                <p>Recordings</p>
               </RoleProtectedRoute>
             }
           />
           <Route
             path="/shared"
             element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>שיתוף הקלטות</p>
+              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+                <p>SharedRecordings</p>
               </RoleProtectedRoute>
             }
           />
           <Route
             path="/resources"
             element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>משאבים</p>
+              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+                <p>Resources</p>
               </RoleProtectedRoute>
             }
           />
           <Route
             path="/interviewMaterialsHub"
             element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
                 <p>InterviewMaterialsHub</p>
               </RoleProtectedRoute>
             }
           />
           <Route
-            path="/admin/questions"
+            path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>ניהול שאלות</p>
+                <p>AdminQuestions</p>
               </RoleProtectedRoute>
             }
           />
           <Route
-            path="/admin/users"
+            path="/manager/users"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>ניהול משתמשים</p>
+                <p>AdminUsers</p>
               </RoleProtectedRoute>
             }
           />
           <Route
-            path="/admin/resources"
+            path="/manager/resources"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>ניהול משאבים</p>
+                <p>AdminResources</p>
               </RoleProtectedRoute>
             }
           />

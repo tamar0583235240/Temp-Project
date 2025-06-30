@@ -15,16 +15,15 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "בית", href: "/" },
-  { label: "סימולציה", href: "/simulation" },
-  { label: "דשבורד", href: "/dashboard" },
-  { label: "ההקלטות שלי", href: "/recordings" },
-  { label: "הקלטות משותפות", href: "/shared" },
-  { label: "משאבים", href: "/resources" },
-  { label: "ניהול", href: "", isSectionTitle: true, adminOnly: true },
-  { label: "ניהול שאלות", href: "/admin/questions", adminOnly: true },
-  { label: "ניהול משתמשים", href: "/admin/users", adminOnly: true },
-  { label: "ניהול משאבים", href: "/admin/resources", adminOnly: true },
+  { label: "Simulation", href: "/simulation" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "My Recordings", href: "/recordings" },
+  { label: "Shared Recordings", href: "/shared" },
+  { label: "Resources", href: "/resources" },
+  { label: "Admin", href: "", isSectionTitle: true , adminOnly: true},
+  { label: "Manage Questions", href: "/manager/questions" , adminOnly: true},
+  { label: "Manage Users", href: "/manager/users" , adminOnly: true},
+  { label: "Manage Resources", href: "/manager/resources" , adminOnly: true},
 ];
 
 const SidebarNavigation = () => {
@@ -39,7 +38,6 @@ const SidebarNavigation = () => {
       className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right fixed top-0 right-0 overflow-y-auto"
       dir="rtl"
     >
-      {/* Header */}
       <div className="flex items-center justify-start gap-2 mb-6">
         <div className="bg-primary text-white p-2 rounded-md">
           <FaGraduationCap />
@@ -47,7 +45,6 @@ const SidebarNavigation = () => {
         <h1 className="text-xl font-bold text-text-main">Interview Pro</h1>
       </div>
 
-      {/* Navigation */}
       <nav className="flex flex-col gap-2">
         {navItems.filter(item => !item.adminOnly || (item.adminOnly && isAdmin))
           .map(({ label, href, isSectionTitle }) =>
