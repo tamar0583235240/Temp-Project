@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import reminderRepository from '../reposioty/reminderRepository';
-import { isReminderDue } from '../utils/reminderUtils';
+import { isReminderDue, isSentToday } from '../utils/reminderUtils';
 import { saveReminderSettingsForUser } from '../services/reminderService';
+import { pool } from '../config/dbConnection';
+
 
 
 export const reminderController = async (req: Request, res: Response) => {
@@ -24,7 +26,7 @@ export const reminderController = async (req: Request, res: Response) => {
     const remindersToShow = Array.from(selectedPerUser.values());
 
     // רק טיפים שלא נשלחו היום ושכבר הגיע הזמן לשלוח לפי התדירות יעודכנו
-    const remindersToUpdate = remindersToShow.filter(r => 
+    const remindersToUpdate = remindersToShow.filter(r =>
       !isSentToday(r.last_sent_at) &&
       isReminderDue(r.last_sent_at, r.user.user_reminder_settings.frequency)
     );
@@ -48,7 +50,7 @@ export const reminderController = async (req: Request, res: Response) => {
 }
 
 export const saveUserReminderSettings = async (req: Request, res: Response) => {
-   try {
+  try {
     const { userId, settings } = req.body;
 
     if (!userId || !settings) {
