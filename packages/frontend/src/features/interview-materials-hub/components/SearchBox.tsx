@@ -1,65 +1,61 @@
+"use client"
 
-import React from "react";
-import { interview_materials_subType } from "../types/interview_materials_subType";
+import type React from "react"
+import { Search } from "lucide-react"
+import { Button } from "../../../shared/ui/button"
+import { GridContainer } from "../../../shared/ui/GridContainer"
+import { IconWrapper } from "../../../shared/ui/IconWrapper"
 
 type Props = {
-  query: string;
-  setQuery: (value: string) => void;
-  onSearch: (e: React.FormEvent) => void;
-  loading: boolean;
-  results: interview_materials_subType[];
-};
+  query: string
+  setQuery: (value: string) => void
+  onSearch: (e: React.FormEvent) => void
+  loading: boolean
+}
 
-const SearchBox: React.FC<Props> = ({ query, setQuery, onSearch, loading, results }) => {
-  console.log("laliiiii");
-
+const SearchBox: React.FC<Props> = ({ query, setQuery, onSearch, loading }) => {
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <form onSubmit={onSearch}>
-        <div className="relative">
-          <input
-            type="search"
-            placeholder="חפש לפי כותרת או תיאור..."
-              aria-label="חיפוש חומרי ריאיונות"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg py-3 pl-4 pr-12 text-text-main placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary-dark transition duration-200 ease-in-out"
-          />
-          <button
-            type="submit"
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-primary hover:text-primary-dark"
-           aria-label="חפש"
-          >
-            🔍
-          </button>
+    <div className="bg-gradient-to-br from-white via-primary/5 to-secondary/5 shadow-sm border-b">
+      <GridContainer maxWidth="xl" mt="mt-0" mb="mb-0" padding="px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-8">
+          <IconWrapper size="lg" color="primary-dark" className="mb-4 mx-auto">
+            <span className="text-2xl">🎯</span>
+          </IconWrapper>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-4">
+            מרכז חומרי ריאיונות
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            פלטפורמה מתקדמת לחיפוש וניהול חומרי ריאיונות. מצא בקלות את החומרים המתאימים לצרכים שלך
+          </p>
         </div>
-      </form>
 
-      {loading && <p className="mt-4 text-sm text-gray-500">טוען תוצאות...</p>}
-
-      {!loading && results.length > 0 && (
-        <div className="mt-6 space-y-4">
-          {results.map((item) => (
-            <div key={item.id} className="flex gap-4 border p-4 rounded-lg shadow-sm bg-white">
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                className="w-24 h-24 object-cover rounded-md border"
+        {/* Search Section */}
+        <div className="max-w-2xl mx-auto">
+          <form onSubmit={onSearch} className="relative">
+            <div className="relative">
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="חפש לפי כותרת או תיאור..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full pr-12 pl-4 py-3 text-lg border-2 border-gray-200 focus:border-primary rounded-xl focus:outline-none"
               />
-              <div>
-                <h2 className="text-lg font-semibold text-primary">{item.title}</h2>
-                <p className="text-sm text-text-secondary mt-1">{item.short_description}</p>
-              </div>
             </div>
-          ))}
+            <Button
+              type="submit"
+              variant="primary-dark"
+              size="md"
+              isLoading={loading}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2"
+            >
+              חפש
+            </Button>
+          </form>
         </div>
-      )}
-
-      {!loading && results.length === 0 && query.trim() !== '' && (
-        <p className="mt-6 text-sm text-gray-500">לא נמצאו תוצאות 🙁</p>
-      )}
+      </GridContainer>
     </div>
-  );
-};
+  )
+}
 
-export default SearchBox;
+export default SearchBox

@@ -20,7 +20,7 @@ describe('בדיקות ל־InterviewMaterialSub Controller', () => {
       {
         id: 1,
         title: 'מבני נתונים',
-        category_id: 3,
+        short_description: '  תרגול על BFS ',
         created_at: new Date().toISOString()
       },
     ];

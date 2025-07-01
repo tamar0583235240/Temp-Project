@@ -20,18 +20,6 @@ const searchFiles = async (queryText: string): Promise<InterviewMaterialSub[]> =
     if (!smartQuery) return [];
 console.log("yess");
 
-//     // שלב 1 – ניסיון חיפוש פשוט כמו שהוא
-// let results = await pool.query(
-//   `SELECT id, title, thumbnail, short_description,
-//           ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
-//    FROM interview_materials_sub
-//    WHERE document_with_weights @@ to_tsquery('simple', $1)
-//    ORDER BY rank DESC
-//    LIMIT 20`,
-//   [smartQuery]
-// );
-
-//   if (results.rowCount!=null&&results.rowCount > 0) return results.rows;
 
 // שלב 2 – fallback לחיפוש פשוט
 let results = await pool.query(
