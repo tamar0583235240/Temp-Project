@@ -24,9 +24,9 @@ import SimulationPage from './pages/InterviewPage'; // או השם המדויק 
 
 function App() {
   return (
-    <div className="App">
-      <SimulationPage />
-    </div>
+    // <div className="App">
+    //   <SimulationPage />
+    // </div>
     <BrowserRouter>
       <div className="App">
         <header className="App-header">

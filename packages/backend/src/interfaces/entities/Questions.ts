@@ -5,26 +5,26 @@ import { Answers } from "./Answers";
 @Entity("questions", { schema: "public" })
 export class Questions {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "title" })
-  title!: string;
+  title: string;
 
   @Column("text", { name: "content" })
-  content!: string;
+  content: string;
 
   @Column("text", { name: "category" })
-  category!: string;
+  category: string;
 
   @Column("text", { name: "tips" })
-  tips!: string;
+  tips: string;
 
   @Column("text", { name: "ai_guidance" })
-  aiGuidance!: string;
+  aiGuidance: string;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
-  isActive!: boolean;
+  isActive: boolean;
 
   @OneToMany(() => Answers, (answers) => answers.question)
-  answers!: Answers[];
+  answers: Answers[];
 }

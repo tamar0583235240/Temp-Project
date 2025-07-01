@@ -8,19 +8,19 @@ export class PasswordResetTokens {
   @Column("uuid", {
     primary: true,
     name: "id",
-    default: () => "uuid_generate_v4()",
+    default: () => "gen_random_uuid()",
   })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "token", unique: true })
-  token!: string;
+  token: string;
 
   @Column("timestamp without time zone", { name: "expires_at" })
-  expiresAt!: Date;
+  expiresAt: Date;
 
   @ManyToOne(() => Users, (users) => users.passwordResetTokens, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user!: Users;
+  user: Users;
 }
