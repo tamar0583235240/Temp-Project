@@ -20,15 +20,9 @@ export class Feedback {
     default: () => "now()",
   })
   createdAt: Date;
-
   @ManyToOne(() => Answers, (answers) => answers.feedbacks)
   @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
   answerCode: Answers;
-
-  @ManyToOne(() => Answers, (answers) => answers.feedbacks2)
-  @JoinColumn([{ name: "answer_id", referencedColumnName: "id" }])
-  answer: Answers;
-
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
   givenByUser: Users;
