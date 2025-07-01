@@ -161,8 +161,8 @@ export const useRecording = () => {
       const uploadRes = await uploadRecording(formData).unwrap();
       fileUrl = uploadRes.url;
     } catch (e) {
-      alert('שגיאה בהעלאת הקלטה לשרת');
-      return;
+      // במקום alert, נזרוק שגיאה עם הודעה ברורה
+      throw new Error('שגיאה בהעלאת הקלטה לשרת');
     }
 
     //  שליחת תשובה עם ה-URL
