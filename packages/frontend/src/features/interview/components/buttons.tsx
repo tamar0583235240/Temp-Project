@@ -25,10 +25,7 @@ const Buttons: React.FC<ButtonsProps> = ({ onShowAnalysis, analysisVisible }) =>
     dispatch(resetQuestion(currentIndex));
   };
 
-  const handleSubmit = () => {
-    handleTextChange(currentQuestion.answer ?? "");
-    navigate("/summary");
-  };
+
 
   return (
     <div className="flex flex-col items-center gap-4 mt-4">

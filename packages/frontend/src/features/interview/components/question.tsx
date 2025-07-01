@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
 import AudioRecorder from "../../recordings/components/AudioRecorder";
 
+
 type QuestionProps = {
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
@@ -50,6 +51,7 @@ const Question: React.FC<QuestionProps> = ({
             />
           </div>
         </div>
+        
       </div>
     </div>
   );

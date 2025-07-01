@@ -3,14 +3,13 @@ import { useEffect, useState } from "react";
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi";
 import { setQuestions } from "../features/interview/store/simulationSlice";
 import { useNavigate } from "react-router-dom";
-import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
-// import Buttons from "../features/interview/components/buttons";
 import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
 import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
 import MagicLoader from "../features/interview/components/MagicLoader"; // אם יש לך
-// import EndSurvey from "../features/interview/components/endSurvey";
+import EndSurvey from "../features/interview/components/EndSurvey";
+
 const InterviewPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,9 +83,6 @@ const InterviewPage = () => {
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
-          {/* <EndSurvey/> */}
-          {/* <Buttons onShowAnalysis={() => setShowAnalysis(true)} analysisVisible={showAnalysis} />
-          {showAnalysis && <AnalysisStepWrapper />} */}
         </div>
       </main>
 
