@@ -66,7 +66,7 @@ const Question: React.FC<QuestionProps> = ({
         />
       )}
       <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl">
-        <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right relative">
+        <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
               שאלה {currentIndex + 1}
@@ -103,12 +103,7 @@ const Question: React.FC<QuestionProps> = ({
                   <div className="flex items-center gap-2 w-full justify-center">
                     <button
                       className="p-1 text-red-500 hover:text-red-700 order-1"
-                      onClick={() => {
-                        setSelectedFile(null);
-                        setShowFileActions(false);
-                        setIsUploading(false);
-                        if (fileInputRef.current) fileInputRef.current.value = "";
-                      }}
+                      onClick={handleReupload}
                       title="מחק קובץ"
                       style={{ marginLeft: 4 }}
                     >
@@ -178,6 +173,7 @@ const Question: React.FC<QuestionProps> = ({
                 />
               )}
             </div>
+
             {/* הקלטה */}
             <div className="w-1/2">
               <AudioRecorder

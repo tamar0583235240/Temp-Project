@@ -20,7 +20,7 @@ export default function AnalysisStep({ answerId }: AnalysisStepProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setStep('showTipsAndAnswer');
-    }, 2200); // זמן טעינה (2.2 שניות)
+    }, 4000); // זמן טעינה (2.2 שניות)
     return () => clearTimeout(timer);
   }, []);
 

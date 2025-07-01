@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../shared/store/store';
 import { 
@@ -22,6 +22,7 @@ export const useRecording = () => {
   const chunksRef = useRef<BlobPart[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioBlobRef = useRef<Blob | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
   // טיימר להקלטה
   
@@ -49,6 +50,7 @@ export const useRecording = () => {
     if (audioBlobRef.current) {
       deleteRecording();
     }
+    setAudioBlob(null); // איפוס גם ב-state
     
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -63,6 +65,7 @@ export const useRecording = () => {
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
         audioBlobRef.current = blob;
+        setAudioBlob(blob); // עדכן state כדי לגרום לרינדור
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -86,8 +89,7 @@ export const useRecording = () => {
         isPaused: true, 
         isRecording: false 
       }));
-      // איפוס Blob כאשר עוצרים
-      audioBlobRef.current = null;
+      // אל תאפס כאן את audioBlobRef.current!
     }
   };
 
@@ -121,6 +123,7 @@ export const useRecording = () => {
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     audioBlobRef.current = null;
+    setAudioBlob(null); // איפוס גם ב-state
     
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -176,6 +179,7 @@ export const useRecording = () => {
       dispatch(addAnswer(result));
       dispatch(resetRecording());
       audioBlobRef.current = null; // איפוס ה-Blob אחרי שמירה
+      setAudioBlob(null); // איפוס גם ב-state
       return result;
     } catch (error) {
       console.error('שגיאה בשמירת ההקלטה:', error);
@@ -195,5 +199,6 @@ export const useRecording = () => {
     restartRecording,
     saveRecording,
     audioBlobRef,
+    audioBlob, // הוסף את זה להחזרה
   };
 };

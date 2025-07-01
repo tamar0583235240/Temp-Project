@@ -1,4 +1,4 @@
-interface DemoAnalysis {
+export interface DemoAnalysis {
   score: number;
   summary: string;
   positives: string[];
