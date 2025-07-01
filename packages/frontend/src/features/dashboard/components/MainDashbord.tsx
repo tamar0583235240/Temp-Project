@@ -11,9 +11,8 @@ import type { RootState } from '../../../shared/store/store'
 
 export const MainDashbord = () => {
 
-  // const userId = useUserStore((state) => state.userId) || "66b74e9b-b7e3-4666-882e-b577badf9a5d";
 
-  const userName = useSelector((state: RootState) => state.auth?.user?.firstName ?? "אורח");
+  const userName = useSelector((state: RootState) => state.auth?.user?.firstName !);
 
   return (
     <Provider store={store}>
