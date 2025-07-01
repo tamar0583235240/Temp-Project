@@ -1,97 +1,57 @@
-import React, { useRef, useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { Download, Printer } from "lucide-react";
+import React, { useEffect } from "react";
+import { BarChart2 } from "lucide-react";
+import { useGetProgressStatsQuery } from "../../../shared/api/api";
 import { useUserStore } from "../store/progressSlice";
 
-interface ImprovementSuggestionsProps {
-  fullName?: string;
-}
+const ProgressStats: React.FC = () => {
+  const userId = useUserStore((state) => state.userId) || "00000000-0000-0000-0000-000000000000";
+  const setAnswered = useUserStore((state) => state.setAnswered);
+  const setTotal = useUserStore((state) => state.setTotal);
 
-export const ImprovementSuggestions: React.FC<ImprovementSuggestionsProps> = ({ fullName }) => {
-  const certificateRef = useRef<HTMLDivElement>(null);
-  const { answered, total, fullName: storeFullName } = useUserStore();
-  const [showCertificate, setShowCertificate] = useState(false);
+  const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
+    skip: !userId,
+  });
 
-  const displayName = fullName ?? storeFullName !;
+  useEffect(() => {
+    if (data) {
+      setAnswered(data.answeredQuestions);
+      setTotal(data.totalQuestions);
+    }
+  }, [data, setAnswered, setTotal]);
 
-  // const isComplete = answered === total && total > 0;
-  const isComplete = true;
+  if (!userId) return <p>אנא התחבר</p>;
+  if (isLoading) return <p>טוען נתונים...</p>;
+  if (isError) return <p>שגיאה בטעינת נתונים</p>;
 
-  const handleDownload = async () => {
-    if (!certificateRef.current) return;
-    const canvas = await html2canvas(certificateRef.current);
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      orientation: "landscape",
-      unit: "px",
-      format: [canvas.width, canvas.height],
-    });
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-    pdf.save("certificate.pdf");
-  };
-
-  const handlePrint = () => {
-    if (!certificateRef.current) return;
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
-    printWindow.document.write(`
-      <html>
-        <head><title>הדפסת תעודה</title></head>
-        <body dir="rtl" onload="window.print(); window.close();">
-          ${certificateRef.current.outerHTML}
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-  };
+  const total = data?.totalQuestions ?? 0;
+  const answered = data?.answeredQuestions ?? 0;
+  const percentage = total ? (answered / total) * 100 : 0;
 
   return (
-    <div className="flex flex-col items-center gap-6 mt-10">
-      {/* כפתור הצגת תעודה */}
-      {isComplete && !showCertificate && (
-        <button
-          onClick={() => setShowCertificate(true)}
-          className="py-2 px-5 rounded font-bold text-white bg-yellow-500 hover:bg-yellow-600 transition"
-        >
-          הצג תעודה
-        </button>
-      )}
-
-      {/* תעודה */}
-      {showCertificate && (
-        <div
-          ref={certificateRef}
-          className="border-4 border-yellow-500 bg-white p-10 rounded-xl shadow-2xl w-[700px] text-center relative"
-        >
-          <button
-            onClick={handleDownload}
-            title="הורד תעודה"
-            className="absolute top-4 right-4 text-gray-600 hover:text-green-600"
-          >
-            <Download size={24} />
-          </button>
-
-          <button
-            onClick={handlePrint}
-            title="הדפס תעודה"
-            className="absolute top-4 right-14 text-gray-600 hover:text-blue-600"
-          >
-            <Printer size={24} />
-          </button>
-
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">תעודת הצטיינות</h1>
-          <p className="text-lg text-gray-700 mb-6">מוענקת ל־</p>
-          <h2 className="text-2xl font-semibold text-green-700 mb-6">{displayName}</h2>
-          <p className="text-gray-600 text-md">
-            על הישגים יוצאי דופן, התמדה ומצוינות בלימודים. אנו מוקירים אותך ומאחלים המשך הצלחה.
-          </p>
-          <div className="mt-10 flex justify-between text-sm text-gray-500 px-4">
-            <div>חתימה</div>
-            <div>{new Date().toLocaleDateString("he-IL")}</div>
-          </div>
+    <section className="relative mx-auto max-w-md text-center p-6 bg-gradient-to-tr from-[--color-primary]/10 via-white to-[--color-primary]/20 rounded-3xl shadow-md">
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex items-center gap-2 text-[--color-text]">
+          <BarChart2 size={24} />
+          <h2 className="text-xl font-bold">התקדמות כללית</h2>
         </div>
-      )}
-    </div>
+
+        <div className="font-semibold text-[--color-text]">
+          {answered} / {total} שאלות הושלמו
+        </div>
+
+        <div className="w-full h-4 bg-[--color-border] rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[--color-primary] transition-all duration-700"
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+
+        <div className="text-sm text-[--color-secondary-text]">
+          הושלמו {percentage.toFixed(1)}% מתוך כלל השאלות
+        </div>
+      </div>
+    </section>
   );
 };
+
+export default ProgressStats;
