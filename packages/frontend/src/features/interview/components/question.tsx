@@ -176,7 +176,7 @@ const Question: React.FC<QuestionProps> = ({
         </div>
       </div>
       {/* הטיפ יוצג מתחת לכל הקומפוננטה */}
-      {selectedFile && showFileActions && !isUploading && (
+      {selectedFile && showFileActions && isUploading && (
         <div className="w-full flex justify-center mt-4">
           <TipsComponent />
         </div>
