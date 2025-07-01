@@ -3,97 +3,129 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
-import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
+import LandingPage from "../../pages/LandingPage";
+import LoginPage from "../../pages/LoginPage";
+import { RootState } from "../store/store";
+import { useSelector } from "react-redux";
+import ProfilePage from "../../pages/ProfilePage";
+import SettingsPage from "../../pages/SettingsPage";
+import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
 
 export default function AppRoutes() {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isLogin = !!user;
   return (
-  <div dir="rtl">
-    <Routes>
-      {/* Routes without sidebar */}
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/signup" element={<SignupForm />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      {/* Routes with sidebar */}
-      <Route element={<DashboardLayout />}>
-        <Route path="/" element={<HomePage />} />
+    <div dir="rtl">
+      <Routes>
+        {/* Routes without sidebar */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
-          path="/simulation"
+          path="/reset-password"
           element={
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <p>Simulation</p>
+            <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+              <ResetPassword />
             </RoleProtectedRoute>
           }
         />
-        <Route
-          path="/dashboard"
-          element={
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <p>Dashboard</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/recordings"
-          element={
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <p>Recordings</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/shared"
-          element={
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <p>SharedRecordings</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/resources"
-          element={
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <p>Resources</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/interviewMaterialsHub"
-          element={
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <p>InterviewMaterialsHub</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/questions"
-          element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
-              <p>AdminQuestions</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
-              <p>AdminUsers</p>
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/resources"
-          element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
-              <p>AdminResources</p>
-            </RoleProtectedRoute>
-          }
-        />
-      </Route>
-    </Routes>
-  </div>
+        {/* Routes with header */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route
+            path="/profile"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfilePage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <SettingsPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/simulation"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <p>Simulation</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <p>Dashboard</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/recordings"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <p>Recordings</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/shared"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <p>SharedRecordings</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/resources"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <InterviewMaterialPage/>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/interviewMaterialsHub"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <p>InterviewMaterialsHub</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/questions"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>AdminQuestions</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/users"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>AdminUsers</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/resources"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>AdminResources</p>
+              </RoleProtectedRoute>
+            }
+          />
+        </Route>
+      </Routes>
+    </div>
   );
 }

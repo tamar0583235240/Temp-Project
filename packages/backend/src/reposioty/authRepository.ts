@@ -36,7 +36,7 @@ const signup = async (userData: Users): Promise<Users> => {
 
     return (res.rows[0] as Users) || null;
   } catch (error) {
-    console.error("Error creating user in DB:", error);
+    console.error("Error creating user in local DB:", error);
     throw error;
   }
 };

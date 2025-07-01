@@ -2,12 +2,10 @@ import { useState } from 'react';
 
 import { ProgressButton } from './ProgressButton';
 import { ProgressStats } from './ProgressStats';
-import { useMockProgress } from '../hooks/useMockProgress';
 
 export const OverlayPopup = () => {
   const [open, setOpen] = useState(false);
-  const pd = useMockProgress(); // או מידע אמיתי
-
+const pd={total: 40, completed: 22}; // Mock data, replace with actual progress data
   return (
     <>
       <ProgressButton onClick={() => setOpen(!open)} />

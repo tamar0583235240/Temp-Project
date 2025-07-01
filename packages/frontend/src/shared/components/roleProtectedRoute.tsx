@@ -9,7 +9,7 @@ interface Props {
   allowedRoles: string[];
 }
 
-export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Element {
+export function RoleProtectedRoute({ children, allowedRoles}: Props): JSX.Element {
   const user: User|null = useSelector((state: RootState) => state.auth.user);
   if (!user || !allowedRoles.includes(user.role)) {
     return <Navigate to="/login" replace />;
