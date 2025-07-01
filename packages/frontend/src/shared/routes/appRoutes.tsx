@@ -7,8 +7,7 @@ import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
-import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
-
+import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -90,7 +89,7 @@ export default function AppRoutes() {
             path="/manager/resources"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <InterviewMaterialPage />
+                <InterviewMaterialsHub />
               </RoleProtectedRoute>
             }
           />
