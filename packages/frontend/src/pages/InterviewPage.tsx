@@ -8,7 +8,7 @@ import Question from "../features/interview/components/question";
 import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
 import MagicLoader from "../features/interview/components/MagicLoader"; // אם יש לך
-import EndSurvey from "../features/interview/components/EndSurvey";
+import EndSurvey from "../features/interview/components/endSurvey";
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
@@ -83,7 +83,11 @@ const InterviewPage = () => {
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
+          <EndSurvey/>
         </div>
+
+        
+
       </main>
 
       {/* Sidebar */}
