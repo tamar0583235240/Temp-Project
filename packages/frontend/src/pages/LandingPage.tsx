@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "../shared/ui/button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Heading1, Paragraph } from "../shared/ui/typography";
