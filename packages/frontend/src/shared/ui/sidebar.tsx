@@ -21,6 +21,7 @@ const navItems: NavItem[] = [
   { label: "My Recordings", href: "/recordings" },
   { label: "Shared Recordings", href: "/shared" },
   { label: "Resources", href: "/resources" },
+  { label: "Interview Materials Hub", href:"/interviewMaterialsHub"},
   { label: "Admin", href: "", isSectionTitle: true, adminOnly: true },
   { label: "Manage Questions", href: "/manager/questions", adminOnly: true },
   { label: "Manage Users", href: "/manager/users", adminOnly: true },

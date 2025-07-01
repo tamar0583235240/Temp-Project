@@ -3,10 +3,11 @@ import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './shared/routes/appRoutes';
 
-import { MessageModalProvider } from './shared/ui/MessageModalContext';
+// import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
+import { MessageModalProvider } from './shared/ui/MessageModalContext';
 
 function App() {
   const dispatch = useAppDispatch();
