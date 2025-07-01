@@ -174,6 +174,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+
 // רענון טוקן
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
@@ -363,7 +364,7 @@ const client = new OAuth2Client();
 
 export const authWithGoogle = async (req: Request, res: Response) => {
   try {
-    const { payload } = req.body;
+    const { payload, rememberMe } = req.body;
     if (!payload?.credential) {
       return res.status(400).json({ message: "Missing Google credential" });
     }
@@ -394,12 +395,32 @@ export const authWithGoogle = async (req: Request, res: Response) => {
         password: "",
         created_at: new Date(),
       });
-    }
-    else {
+    } else {
       await userRepository.updateActiveUser(user.id);
     }
 
-    return res.status(200).json({ user });
+    const token = jwt.sign(
+      { id: user!.id, email: user!.email, role: user!.role },
+      JWT_SECRET,
+      { expiresIn: rememberMe ? "7d" : "1h" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user!.id, email: user!.email, role: user!.role },
+      REFRESH_SECRET,
+      { expiresIn: rememberMe ? "7d" : "2h" }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({ user, token });
+
   } catch (err) {
     console.error("Google Auth error:", err);
     return res.status(500).json({ message: "Google authentication failed" });
