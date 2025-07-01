@@ -7,6 +7,7 @@ import { useEffect } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
+import AnswerAI from "../features/interview/components/AnswerAI"
 
 const InterviewPage = () => {
 
@@ -45,11 +46,13 @@ const InterviewPage = () => {
           <Question />
           <Buttons />
           <TipsComponent/>
+          <AnswerAI />
         </div>
       </main>
       {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
         <Sidebar />
+        
       </aside>
     </div>
   )
