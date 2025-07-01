@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "WIT Extension",
+  "version": "1.0.0",
+  "description": "תוסף להצגת התקדמות והטיפים במערכת WIT",
+  "icons": {
+    "16": "public/icon16.png",
+    "48": "public/icon48.png",
+    "128": "public/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "public/icon16.png",
+      "48": "public/icon48.png",
+      "128": "public/icon128.png"
+    }
+  },
+  "permissions": [
+    "storage",
+    "identity"           
+  ],
+  "host_permissions": [
+    "http://localhost:5000/*" 
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

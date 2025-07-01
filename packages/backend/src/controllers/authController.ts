@@ -11,8 +11,6 @@ import authRepository from '../reposioty/authRepository';
 import { sendResetEmail, sendVerificationCodeEmail } from '../utils/emailSender';
 
 
-const SALT_ROUNDS = 10;
-
 type CodeData = { code: string, expiresAt: number };
 const codesPerEmail = new Map<string, CodeData>();//שמירת הקודים לפי המיילים שאליהם נשלחו
 // ניקוי המפות שפג תוקפן -כל שעה
@@ -204,8 +202,6 @@ export const requestSignup = async (req: Request, res: Response) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
 
-  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
   // שמירת פרטי המשתמש והקוד זמנית
   pendingSignups.set(email, {
     userData: {
@@ -214,7 +210,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       lastName,
       email,
       phone,
-      password: hashedPassword,
+      password,
       role: 'student',
       isActive: true,
       answers: [],
@@ -270,7 +266,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 };
 
 
-//הרשמה
+// הרשמה
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 

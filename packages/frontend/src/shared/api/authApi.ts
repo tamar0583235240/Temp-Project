@@ -1,5 +1,7 @@
 import { api } from './api';
 import { User } from '../../features/auth/types/types';
+import { logout } from '../../features/auth/store/authSlice';
+
 interface LoginRequest {
   email: string;
   password: string;
@@ -42,8 +44,15 @@ export const authApi = api.injectEndpoints({
         credentials: 'include', // חשוב כדי לשלוח cookie
       }),
     }),
-
+    logout: builder.mutation<void, User>({
+      query: (user) => ({
+        url: '/auth/logout',
+        method: 'POST',
+        body: { user },
+        credentials: 'include', // חשוב כדי לשלוח cookie
+      }),
+    })
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useRefreshTokenMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useRefreshTokenMutation, useLogoutMutation } = authApi;
