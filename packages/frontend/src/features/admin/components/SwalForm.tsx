@@ -1,10 +1,10 @@
-import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Swal from 'sweetalert2';
 import { userSchema } from '../validation/userSchema';
 import { UserFormFields, user } from '../types/userTypes';
 import { useCreateUserMutation } from '../services/adminApi';
+import { ChevronDown } from "lucide-react";
 
 const SwalForm = () => {
   const [createUser] = useCreateUserMutation();
@@ -35,12 +35,12 @@ const SwalForm = () => {
       await createUser(fullUser).unwrap();
       Swal.close();
       Swal.fire({
-  title: '!נוסף',
-  text: 'המשתמש נוסף בהצלחה',
-  icon: 'success',
-  iconColor: '#64748B', 
-  confirmButtonColor: '#00B894', 
-});
+        title: '!נוסף',
+        text: 'המשתמש נוסף בהצלחה',
+        icon: 'success',
+        iconColor: '#64748B',
+        confirmButtonColor: '#00B894',
+      });
 
       reset();
     } catch (err: any) {
@@ -48,42 +48,74 @@ const SwalForm = () => {
 
       Swal.fire({
         icon: 'error',
-          iconColor: '#64748B', 
+        iconColor: '#64748B',
         title: 'שגיאה',
         text:
           err?.data?.error ||
           err?.error ||
           err?.message ||
           'אירעה שגיאה בעת הוספת המשתמש',
-            confirmButtonColor: '#00B894', 
+        confirmButtonColor: '#00B894',
 
       });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 p-2">
-     <input {...register('firstName')} placeholder="שם פרטי" className="text-right" />
-<span className="text-red-600 text-sm">{errors.firstName?.message}</span>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2" dir="rtl">
+      <input
+        {...register('firstName', { required: 'שדה חובה' })}
+        placeholder="שם פרטי"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      <span className="text-red-600 text-sm">{errors.firstName?.message}</span>
 
-<input {...register('lastName')} placeholder="שם משפחה" className="text-right" />
-<span className="text-red-600 text-sm">{errors.lastName?.message}</span>
+      <input
+        {...register('lastName', { required: 'שדה חובה' })}
+        placeholder="שם משפחה"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      <span className="text-red-600 text-sm">{errors.lastName?.message}</span>
 
-<input {...register('email')} placeholder="אימייל" className="text-right" />
-<span className="text-red-600 text-sm">{errors.email?.message}</span>
+      <input
+        {...register('email', { required: 'שדה חובה' })}
+        placeholder="אימייל"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      <span className="text-red-600 text-sm">{errors.email?.message}</span>
 
-<input {...register('password')} placeholder="סיסמה" type="password" className="text-right" />
-<span className="text-red-600 text-sm">{errors.password?.message}</span>
+      <input
+        {...register('password', { required: 'שדה חובה' })}
+        placeholder="סיסמה"
+        type="password"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      <span className="text-red-600 text-sm">{errors.password?.message}</span>
 
-<input {...register('phone')} placeholder="טלפון" className="text-right" />
-<span className="text-red-600 text-sm">{errors.phone?.message}</span>
+      <input
+        {...register('phone', { required: 'שדה חובה' })}
+        placeholder="טלפון"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      <span className="text-red-600 text-sm">{errors.phone?.message}</span>
 
-<select {...register('role')} className="text-right">
-  <option value="">בחר תפקיד</option>
-  <option value="student">תלמיד</option>
-  <option value="manager">מנהל</option>
-</select>
-<span className="text-red-600 text-sm">{errors.role?.message}</span>
+      <div className="relative">
+        <select
+          {...register('role', { required: 'יש לבחור תפקיד' })}
+          className="text-right text-gray-400 border border-gray-300 rounded px-3 py-2 pr-10 w-full bg-white appearance-none"
+          defaultValue=""
+        >
+          <option value="" disabled hidden>בחר תפקיד</option>
+          <option className="text-black" value="student">תלמיד</option>
+          <option className="text-black" value="manager">מנהל</option>
+        </select>
+
+        <ChevronDown
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+          size={18}
+        />
+      </div>
+      <span className="text-red-600 text-sm">{errors.role?.message}</span>
 
       <button
         type="submit"

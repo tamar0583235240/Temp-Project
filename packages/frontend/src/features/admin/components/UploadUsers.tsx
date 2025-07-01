@@ -1,6 +1,7 @@
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import Swal from "sweetalert2";
 import { useUploadUsers } from "../hooks/useUploadUsers";
+import { Upload } from "lucide-react";
 
 export const UploadUsers = () => {
   const { upload, loading } = useUploadUsers();
@@ -13,11 +14,11 @@ export const UploadUsers = () => {
         title: "?האם לעדכן משתמשים",
         text: "הפעולה תעלה את המשתמשים מהקובץ למערכת",
         icon: "question",
-        iconColor: '#64748B', 
+        iconColor: '#64748B',
         showCancelButton: true,
         confirmButtonText: "כן, עדכן",
         cancelButtonText: "ביטול",
-        confirmButtonColor: "#00B894", 
+        confirmButtonColor: "#00B894",
         cancelButtonColor: "#64748B",
       });
 
@@ -46,10 +47,11 @@ export const UploadUsers = () => {
     <div className="relative">
       <label
         htmlFor="fileUpload"
-        className={`bg-primary-dark text-white px-4 py-2 rounded-md font-medium cursor-pointer transition 
+        className={`bg-primary-dark text-white px-4 py-2 rounded-md font-medium cursor-pointer transition flex items-center gap-2
         ${loading ? 'cursor-not-allowed opacity-60' : 'hover:bg-primary-dark/90'}`}
       >
-        Excel העלאת  משתמשים חדשים מקובץ
+        <Upload className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
+        טעינה מקובץ
       </label>
 
       <input
