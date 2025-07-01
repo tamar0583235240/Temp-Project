@@ -15,28 +15,28 @@ import { SharedRecording } from "./SharedRecording";
 @Entity("Answer", { schema: "public" })
 export class Answer {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
 
   @Column("text", { name: "fileurl", nullable: true })
-  fileurl!: string | null;
+  fileurl: string | null;
 
   @Column("timestamp without time zone", {
     name: "submittedat",
     default: () => "CURRENT_TIMESTAMP",
   })
-  submittedat!: Date;
+  submittedat: Date;
 
   @OneToMany(() => AiInsight, (aiInsight) => aiInsight.answer)
-  aiInsights!: AiInsight[];
+  aiInsights: AiInsight[];
 
   @ManyToOne(() => Question, (question) => question.answers)
   @JoinColumn([{ name: "questionid", referencedColumnName: "id" }])
-  question!: Question;
+  question: Question;
 
   @ManyToOne(() => User, (user) => user.answers)
   @JoinColumn([{ name: "userid", referencedColumnName: "id" }])
-  user!: User;
+  user: User;
 
   @OneToMany(() => SharedRecording, (sharedRecording) => sharedRecording.answer)
-  sharedRecordings!: SharedRecording[];
+  sharedRecordings: SharedRecording[];
 }

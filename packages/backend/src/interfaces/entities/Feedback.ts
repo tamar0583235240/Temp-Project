@@ -1,10 +1,9 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { Answers } from "./Answers";
-import { Users } from "./Users";
-import { SharedRecordings } from "./SharedRecordings";
+import { User } from "./User";
+import { SharedRecording } from "./SharedRecording";
 
-@Index("feedback_pkey", ["id"], { unique: true })
-@Entity("feedback", { schema: "public" })
+@Index("Feedback_pkey", ["id"], { unique: true })
+@Entity("Feedback", { schema: "public" })
 export class Feedback {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
@@ -16,24 +15,19 @@ export class Feedback {
   rating: number | null;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
-    default: () => "now()",
+    name: "createdat",
+    default: () => "CURRENT_TIMESTAMP",
   })
-  createdAt: Date;
+  createdat: Date;
 
-  @ManyToOne(() => Answers, (answers) => answers.feedbacks)
-  @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
-  answerCode: Answers;
-
-  @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
-  @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
-  givenByUser: Users;
+  @ManyToOne(() => User, (user) => user.feedbacks)
+  @JoinColumn([{ name: "givenbyuserid", referencedColumnName: "id" }])
+  givenbyuser: User;
 
   @ManyToOne(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.feedbacks,
-    { onDelete: "CASCADE" }
+    () => SharedRecording,
+    (sharedRecording) => sharedRecording.feedbacks
   )
-  @JoinColumn([{ name: "shared_recording_id", referencedColumnName: "id" }])
-  sharedRecording: SharedRecordings;
+  @JoinColumn([{ name: "sharedrecordingid", referencedColumnName: "id" }])
+  sharedrecording: SharedRecording;
 }

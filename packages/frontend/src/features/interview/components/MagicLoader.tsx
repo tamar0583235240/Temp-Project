@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const typingText = "AI מנתח את התשובה שלך...";
+const typingText = "AI מנתח את תשובתך...";
 
 export default function MagicLoader() {
   const [displayedText, setDisplayedText] = useState("");
@@ -12,27 +12,27 @@ export default function MagicLoader() {
       setDisplayedText(typingText.slice(0, index + 1));
       index++;
       if (index >= typingText.length) clearInterval(interval);
-    }, 80);
+    }, 100);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-[50vh] p-4">
+    <div className="flex flex-col items-center justify-center h-[60vh]">
       <motion.div
-        className="relative w-24 h-24"
+        className="relative w-28 h-28"
         animate={{
-          scale: [1, 1.15, 1],
+          scale: [1, 1.2, 1],
           rotate: [0, 360, 0],
-          opacity: [0.8, 1, 0.8],
+          opacity: [0.7, 1, 0.7],
         }}
-        transition={{ duration: 2.5, repeat: Infinity }}
+        transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-secondary to-accent blur-xl" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-blue-400 blur-xl" />
         <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
           AI
         </div>
       </motion.div>
-      <div className="mt-6 text-lg font-semibold text-text-main animate-pulse">
+      <div className="mt-6 text-xl font-medium text-gray-700 animate-pulse">
         {displayedText}
       </div>
     </div>

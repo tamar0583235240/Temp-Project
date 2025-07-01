@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { interviewType } from "../types/questionType";
+import { InitialState } from "../types/initialState";
 
-interface SimulationState {
-  questions: interviewType[];
-  currentIndex: number;
-}
-
-const initialState: SimulationState = {
+const initialState: InitialState = {
   questions: [],
   currentIndex: 0,
+  loading: false,
+  currentAnswerId: "6d46fb89-2929-4acc-9c5f-b2c9fbed6218" // חדש: מזהה תשובה נוכחית
 };
 
 const simulationSlice = createSlice({
@@ -20,37 +18,45 @@ const simulationSlice = createSlice({
     },
     answerQuestion(
       state,
-      action: PayloadAction<{ index: number; answer: string }>
+      action: PayloadAction<{ index: number; answer: string; answerId?: string }>
     ) {
-      const { index, answer } = action.payload;
+      const { index, answer, answerId } = action.payload;
       if (state.questions[index]) {
         state.questions[index].answer = answer;
         state.questions[index].answered = true;
+        if (answerId) {
+          state.currentAnswerId = answerId;
+        }
       }
     },
+    setCurrentAnswerId(state, action: PayloadAction<string | null>) {
+      state.currentAnswerId = action.payload;
+    },
     resetQuestion(state, action: PayloadAction<number>) {
-  const index = action.payload;
-  if (state.questions[index]) {
-    state.questions[index].answer = "";
-    state.questions[index].answered = false;
-  }
-},
+      const index = action.payload;
+      if (state.questions[index]) {
+        state.questions[index].answer = "";
+        state.questions[index].answered = false;
+      }
+    },
+
     nextQuestion(state) {
       if (state.currentIndex < state.questions.length - 1) {
         state.currentIndex++;
       }
     },
+
     prevQuestion(state) {
       if (state.currentIndex > 0) {
         state.currentIndex--;
       }
     },
+
     goToQuestion(state, action: PayloadAction<number>) {
       state.currentIndex = action.payload;
-    },
-  },
+    }
+  }
 });
-
 export const {
   setQuestions,
   answerQuestion,
@@ -58,7 +64,12 @@ export const {
   nextQuestion,
   prevQuestion,
   goToQuestion,
+  setCurrentAnswerId,
 } = simulationSlice.actions;
-
-
 export default simulationSlice.reducer;
+
+
+
+
+
+

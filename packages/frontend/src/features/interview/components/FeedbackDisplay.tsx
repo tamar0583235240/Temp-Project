@@ -1,3 +1,5 @@
+
+
 export default function FeedbackDisplay({ analysis }: { analysis: string }) {
   return (
     <div className="p-6 bg-white shadow-md rounded-xl border max-w-xl mx-auto mt-6 animate-fade-in">
