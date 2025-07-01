@@ -3,26 +3,23 @@ import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
 const addQustion = async (question: Questions): Promise<Questions> => {
-    try {
+  try {
 
-        let id: string = "";
-        let exists = true;
-        console.log("---------------------");
-        console.log(question);
-         console.log("---------------------");
-        id = uuid4();
-        const query = `
+    let id: string = "";
+    let exists = true;
+    id = uuid4();
+    const query = `
       INSERT INTO questions (id , title , content , category , tips , ai_guidance , is_active)
       VALUES ('${id}', '${question.title}', '${question.content}', '${question.category}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
     `;
 
-        const result = await pool.query(query);
-        return result.rows[0] as Questions;
+    const result = await pool.query(query);
+    return result.rows[0] as Questions;
 
-    } catch (error) {
-        console.error("Error adding question to PostgreSQL:", error);
-        throw error;
-    }
+  } catch (error) {
+    console.error("Error adding question to PostgreSQL:", error);
+    throw error;
+  }
 };
 
 
@@ -46,9 +43,6 @@ const getAllQuestions = async (): Promise<Questions[]> => {
   try {
     const query = 'SELECT * FROM questions';
     const { rows } = await pool.query(query);
-    console.log("..............sari w..........");
-    console.log(rows[0]);
-     console.log("..............sari w..........");
     return rows as Questions[];
 
   } catch (error) {
@@ -62,21 +56,19 @@ const getAllQuestions = async (): Promise<Questions[]> => {
 
 const updateQuestionById = async (updates: Questions) => {
   const { id, ...fieldsToUpdate } = updates;
-  console.log(updates)
-  console.log("njnjnjn");
   const fields = Object.keys(fieldsToUpdate);
   if (fields.length === 0) {
     throw new Error('No fields provided for update.');
   }
   const values = Object.values(fieldsToUpdate);
   const setString = fields
-    .map((field, i) => `"${field}" = $${i+1}`)
+    .map((field, i) => `"${field}" = $${i + 1}`)
     .join(', ');
 
   const query = `
     UPDATE questions
     SET ${setString}
-    WHERE id = $${fields.length+1}
+    WHERE id = $${fields.length + 1}
     RETURNING *;
   `;
 
@@ -105,5 +97,5 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
     throw error;
   }
 }
-export default { getAllQuestionById, getAllQuestions, deleteQuestionById , addQustion,updateQuestionById };
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById };
 
