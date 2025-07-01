@@ -6,7 +6,6 @@ import { GridContainer } from "../../../shared/ui/GridContainer";
 import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { UpdateQuestion } from "./updateQuestion";
-import { useUpdateQuestionMutation } from "../services/adminQuestionApi";
 import { Question } from "../types/Question";
 import { AddQuestion } from "./addQuestion";
 import { SearchComponents } from "./searchComponents";
@@ -168,8 +167,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                       </svg>
                     }
                     iconPosition="right"
-                  >
-                    עריכה
+                  >                    
                   </Button>
                   {questionToEdit?.id === question.id && (
                     <UpdateQuestion
@@ -188,7 +186,6 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                     }
                     iconPosition="right"
                   >
-                    מחיקה
                   </Button>
                 </div>
               </CardSimple>
