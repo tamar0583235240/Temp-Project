@@ -43,9 +43,6 @@ const EndSurvey = () => {
               </span>
             </div>
 
-            <Paragraph className="mb-6 text-center">
-              כל הכבוד על ההשקעה! תוכל להנפיק תעודה או לחזור לדשבורד.
-            </Paragraph>
 
             {/* סיכום קצר (דוגמה) */}
             <SummaryBox

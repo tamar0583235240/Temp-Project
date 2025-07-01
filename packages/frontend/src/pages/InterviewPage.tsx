@@ -83,7 +83,11 @@ const InterviewPage = () => {
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
+          <EndSurvey/>
         </div>
+
+        
+
       </main>
 
       {/* Sidebar */}
