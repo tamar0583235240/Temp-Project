@@ -5,10 +5,8 @@ import { store } from "../shared/store/store";
 import SidebarNavigation from "../shared/ui/sidebar";
 import { Grid } from "../shared/ui/grid";
 import { SummaryBox } from "../shared/ui/SummaryBox";
-import { Card, CardSimple } from "../shared/ui/card";
-import { Input } from "../shared/ui/input";
 import { Heading1, Paragraph } from "../shared/ui/typography";
-import { Star, CircleGauge, Mic, ArrowLeft, Video, Brain, TrendingUp } from "lucide-react";
+import { ArrowLeft, Video, Brain, TrendingUp } from "lucide-react";
 
 const HomePage = () => {
   const navigate = useNavigate();
