@@ -8,7 +8,9 @@ import type { RecordingState, AudioRecorderProps } from '../types/Answer'; // ו
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   userId = '00000000-0000-0000-0000-000000000000',
-  questionId = '00000000-0000-0000-0000-000000000010'
+  questionId = '00000000-0000-0000-0000-000000000010',
+  onFinish,
+  onSaveSuccess
 }) => {
   const {
     currentRecording,
@@ -47,9 +49,16 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const handleSaveRecording = async () => {
     try {
-      await saveRecording(userId, questionId, fileName);
+      const answer = await saveRecording(userId, questionId, fileName);
       setShowSaveModal(false);
       setFileName('');
+      if (onFinish && audioBlobRef.current) {
+        const url = URL.createObjectURL(audioBlobRef.current);
+        onFinish(url, fileName);
+      }
+      if (onSaveSuccess && answer && answer.id) {
+        onSaveSuccess(answer.id);
+      }
     } catch (error) {
       console.error('שגיאה בשמירה:', error);
     }

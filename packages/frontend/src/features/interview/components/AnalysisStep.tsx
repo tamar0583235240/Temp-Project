@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TipsComponent from "./tipsCompenent";
+import TipsComponent from "./tipsComponent";
 import AnswerAI from "./AnswerAI";
 
 interface AnalysisStepProps {
