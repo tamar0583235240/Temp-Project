@@ -15,16 +15,16 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Simulation", href: "/simulation" },
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "My Recordings", href: "/recordings" },
-  { label: "Shared Recordings", href: "/shared" },
-  { label: "Resources", href: "/resources" },
-  { label: "Admin", href: "", isSectionTitle: true, adminOnly: true },
-  { label: "Manage Questions", href: "/manager/questions", adminOnly: true },
-  { label: "Manage Users", href: "/manager/users", adminOnly: true },
-  { label: "Manage Resources", href: "/manager/resources", adminOnly: true },
-  { label: "ניהול חומרים", href: "/admin/interview-materials" },
+  { label: "סימולציה", href: "/simulation" },
+  { label: "לוח בקרה", href: "/dashboard" },
+  { label: "ההקלטות שלי", href: "/recordings" },
+  { label: "הקלטות משותפות", href: "/shared" },
+  { label: "משאבים", href: "/resources" },
+  { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
+  { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
+  { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
+  { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
+  { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true },
 ];
 
 const SidebarNavigation = () => {

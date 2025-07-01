@@ -18,7 +18,8 @@ export const InterviewMaterialsList = () => {
         טוען...
       </p>
     );
-  if (error)
+  if (error) {
+    console.log("Guide loading error:", error);
     return (
       <p
         className="text-center py-8 text-lg text-red-600 font-semibold"
@@ -27,7 +28,7 @@ export const InterviewMaterialsList = () => {
         שגיאה בטעינת המדריכים.
       </p>
     );
-
+  }
   const handleDeleteClick = (id: string) => {
     setConfirmingId(id);
   };
@@ -53,7 +54,11 @@ export const InterviewMaterialsList = () => {
         {items?.map((item) => (
           <li
             key={item.id}
-            className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 hover:shadow-lg transition-shadow duration-300"
+            className="
+              bg-white border border-gray-200 rounded-2xl shadow-md p-6
+              flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6
+              hover:shadow-lg transition-shadow duration-300
+            "
           >
             {/* תמונה ממוזערת בצד ימין */}
             {item.thumbnail && (
@@ -65,7 +70,13 @@ export const InterviewMaterialsList = () => {
             )}
 
             {/* תוכן טקסט באמצע */}
-            <div className="flex-1 space-y-3 text-right">
+            <div
+              className="
+              flex-1 space-y-3 text-right
+              max-w-full md:max-w-[60%]
+              break-words whitespace-normal
+            "
+            >
               <h3 className="text-2xl font-extrabold tracking-wide text-gray-900 uppercase font-serif">
                 {item.title}
               </h3>
@@ -76,7 +87,7 @@ export const InterviewMaterialsList = () => {
 
             {/* כפתור הורדה וכפתור מחיקה בצד שמאל */}
             {item.file_url && (
-              <div className="md:self-start flex flex-col gap-3 items-start">
+              <div className="md:self-start flex flex-col gap-3 items-start min-w-[128px]">
                 <a
                   href={item.file_url}
                   target="_blank"

@@ -12,8 +12,8 @@ import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
+import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -122,6 +122,22 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <p>AdminResources</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/resources"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>AdminResources</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/interview-materials"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <InterviewMaterialsHub />
               </RoleProtectedRoute>
             }
           />
