@@ -147,7 +147,7 @@ export const useRecording = () => {
 
     const fileNameWithExtension = answerFileName.endsWith('.wav') ? answerFileName : `${answerFileName}.wav`;
 
-    // שלב 1: העלאת הקלטה לשרת
+    //  העלאת הקלטה לשרת
     const formData = new FormData();
     formData.append('userId', userId);
     formData.append('title', fileNameWithExtension);
@@ -162,7 +162,7 @@ export const useRecording = () => {
       return;
     }
 
-    // שלב 2: שליחת תשובה עם ה-URL
+    //  שליחת תשובה עם ה-URL
     const answerData: UploadAnswerDto = {
       userId: userId,
       questionId: questionId,

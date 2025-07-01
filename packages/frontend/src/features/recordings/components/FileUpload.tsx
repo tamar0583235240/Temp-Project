@@ -24,7 +24,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, questionId, onUploaded,
     setLoading(true);
     const formData = new FormData();
     formData.append("userId", userId);
-    formData.append("title", file.name); // שם הקובץ המקורי
+    formData.append("title", file.name); 
     formData.append("description", "");
     formData.append("file", file);
     try {
