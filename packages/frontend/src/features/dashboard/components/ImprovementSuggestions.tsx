@@ -4,17 +4,19 @@ import jsPDF from "jspdf";
 import { Download, Printer } from "lucide-react";
 import { useUserStore } from "../store/progressSlice";
 
-interface CertificateProps {
-  fullName: string;
+interface ImprovementSuggestionsProps {
+  fullName?: string;
 }
 
-export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName }) => {
+export const ImprovementSuggestions: React.FC<ImprovementSuggestionsProps> = ({ fullName }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
-  const { answered, total } = useUserStore();
+  const { answered, total, fullName: storeFullName } = useUserStore();
   const [showCertificate, setShowCertificate] = useState(false);
 
+  const displayName = fullName ?? storeFullName !;
+
   // const isComplete = answered === total && total > 0;
-  const isComplete =true;
+  const isComplete = true;
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
@@ -62,7 +64,6 @@ export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName })
           ref={certificateRef}
           className="border-4 border-yellow-500 bg-white p-10 rounded-xl shadow-2xl w-[700px] text-center relative"
         >
-          {/* כפתור הורדה */}
           <button
             onClick={handleDownload}
             title="הורד תעודה"
@@ -71,7 +72,6 @@ export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName })
             <Download size={24} />
           </button>
 
-          {/* כפתור הדפסה */}
           <button
             onClick={handlePrint}
             title="הדפס תעודה"
@@ -82,9 +82,9 @@ export const ImprovementSuggestions: React.FC<CertificateProps> = ({ fullName })
 
           <h1 className="text-3xl font-bold text-gray-800 mb-4">תעודת הצטיינות</h1>
           <p className="text-lg text-gray-700 mb-6">מוענקת ל־</p>
-          <h2 className="text-2xl font-semibold text-green-700 mb-6">{fullName}</h2>
+          <h2 className="text-2xl font-semibold text-green-700 mb-6">{displayName}</h2>
           <p className="text-gray-600 text-md">
-            על הישגים יוצאי דופן, התמדה ומצוינות בלימודים.
+            על הישגים יוצאי דופן, התמדה ומצוינות בלימודים. אנו מוקירים אותך ומאחלים המשך הצלחה.
           </p>
           <div className="mt-10 flex justify-between text-sm text-gray-500 px-4">
             <div>חתימה</div>

@@ -5,7 +5,8 @@ import { CheckCircle } from 'lucide-react';
 
 const ProgressStats: React.FC = () => {
   const userId = useUserStore((state) => state.userId) || "ba24bf25-e017-46bf-a8ca-a4d27a2bc7af";
-  const setProgress = useUserStore((state) => state.setProgress);
+  const setAnswered = useUserStore((state) => state.setAnswered);
+  const setTotal = useUserStore((state) => state.setTotal);
 
   const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
     skip: !userId,
@@ -13,9 +14,10 @@ const ProgressStats: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      setProgress(data.answeredQuestions, data.totalQuestions);
+      setAnswered(data.answeredQuestions);
+      setTotal(data.totalQuestions);
     }
-  }, [data]);
+  }, [data, setAnswered, setTotal]);
 
   if (!userId) return <p>אנא התחבר</p>;
   if (isLoading) return <p>טוען נתונים...</p>;

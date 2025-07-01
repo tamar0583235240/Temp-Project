@@ -1,5 +1,6 @@
-import { user } from '../types/userTypes';
 import React, { useState } from 'react';
+import { user } from '../types/userTypes';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface Props {
   user: user;
@@ -11,153 +12,57 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div
-      style={{
-        borderRadius: 12,
-        padding: '1rem',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        backgroundColor: '#f9f9f9',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          marginBottom: '1rem',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            direction: 'rtl',
-          }}
-        >
-          <span
-            title={user.isActive ? 'פעיל' : 'לא פעיל'}
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: '50%',
-              backgroundColor: user.isActive ? 'green' : 'transparent',
-              border: user.isActive ? 'none' : '1px solid gray',
-              display: 'inline-block',
-              marginLeft: 6,
-            }}
-          />
-          <span>{user.isActive ? 'פעיל' : 'לא פעיל'}</span>
-        </div>
+    <div className="rounded-xl p-4 flex flex-col bg-white shadow-md h-full">
+      <div className="flex items-center mb-4">
+        <span
+          className={`w-3.5 h-3.5 rounded-full mr-2 ${
+            user.isActive ? 'bg-green-500' : 'border border-gray-400'
+          }`}
+          title={user.isActive ? '' : ''}
+        />
+        <span>{user.isActive ? '' : ''}</span>
       </div>
 
-      <div style={{ flexGrow: 1 }}>
-        <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-          <strong></strong>
-          <span style={{ fontFamily: 'monospace', letterSpacing: '0.2em' }}>
+      <div className="flex-grow text-center">
+        {/* תווית "מנהל" אפורה */}
+        {user.role === 'manager' && (
+          <p className="mb-1 text-sm text-gray-500">מנהל</p>
+        )}
+
+        {/* שורה של סיסמה עם כפתור */}
+        <p className="flex items-center justify-center gap-2">
+          <span className="font-mono tracking-widest select-text">
             {showPassword ? user.password : '••••••••'}
           </span>
           <button
             onClick={() => setShowPassword(!showPassword)}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              margin: 0,
-            }}
-            aria-label={showPassword ? 'הסתר סיסמה' : 'הראה סיסמה'}
-            title={showPassword ? 'הסתר סיסמה' : 'הראה סיסמה'}
+            aria-label={showPassword ? 'הסתר סיסמה' : 'הצג סיסמה'}
+            className="text-primary-dark hover:text-primary-dark/80 transition"
+            type="button"
           >
-            {showPassword ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                width="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M2 12s4-8 10-8 10 8 10 8-4 8-10 8-10-8-10-8z"></path>
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                width="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-5 0-9-4-9-8a10.07 10.07 0 0 1 3.06-6.06"></path>
-                <path d="M1 1l22 22"></path>
-                <path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"></path>
-                <path d="M14.12 14.12a3 3 0 0 1-4.24-4.24"></path>
-              </svg>
-            )}
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </p>
 
-        <p>
-          <strong>
-            {user.firstName} {user.lastName}
-          </strong>
+        <p className="font-semibold">
+          {user.firstName} {user.lastName}
         </p>
         <p>{user.email}</p>
         <p>{user.phone || 'אין טלפון'}</p>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          marginTop: '1rem',
-        }}
-      >
+      <div className="flex gap-4 justify-center mt-4">
         <button
           onClick={() => onEdit(user)}
-          style={{
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            padding: '0.5rem 1.2rem',
-            fontSize: '1rem',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            boxShadow: '0 3px 6px rgba(0,123,255,0.4)',
-            transition: 'background-color 0.3s ease',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#0056b3')}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#007bff')}
+          className="bg-primary-dark text-white px-4 py-2 rounded-lg hover:bg-primary-dark/90 transition"
+          type="button"
         >
           עדכן
         </button>
-
         <button
           onClick={() => onDelete(user.id)}
-          style={{
-            backgroundColor: '#dc3545',
-            color: 'white',
-            border: 'none',
-            padding: '0.5rem 1.2rem',
-            fontSize: '1rem',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            boxShadow: '0 3px 6px rgba(220,53,69,0.4)',
-            transition: 'background-color 0.3s ease',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#a71d2a')}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#dc3545')}
+          className="bg-danger text-white px-4 py-2 rounded-lg hover:bg-danger/90 transition"
+          type="button"
         >
           מחק
         </button>
@@ -167,4 +72,3 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
 };
 
 export default UserCard;
-

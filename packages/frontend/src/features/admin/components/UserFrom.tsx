@@ -13,12 +13,17 @@ const UserForm: React.FC<Props> = ({ user, onSubmit }) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('firstName')} placeholder="שם פרטי" />
-      <input {...register('lastName')} placeholder="שם משפחה" />
-      <input {...register('email')} placeholder="אימייל" />
-      <input {...register('phone')} placeholder="טלפון" />
-      <button type="submit">שמור</button>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+      <input {...register('firstName')} placeholder="שם פרטי" className="input" />
+      <input {...register('lastName')} placeholder="שם משפחה" className="input" />
+      <input {...register('email')} placeholder="אימייל" className="input" />
+      <input {...register('phone')} placeholder="טלפון" className="input" />
+      <button
+        type="submit"
+        className="bg-primary-dark text-white py-2 rounded-md hover:bg-primary-dark/90 transition"
+      >
+        שמור
+      </button>
     </form>
   );
 };

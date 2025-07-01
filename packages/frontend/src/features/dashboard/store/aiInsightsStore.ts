@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { aiInsightsType } from '../types/aiInsightsType';
 
-interface aiInsightsState {
+interface AiInsightsState {
   data: aiInsightsType[];
   loading: boolean;
 }
 
-const initialState: aiInsightsState = {
+const initialState: AiInsightsState = {
   data: [],
   loading: false,
 };
@@ -22,7 +22,7 @@ const aiInsightsSlice = createSlice({
       state.data.push(action.payload);
     },
     deleteItem(state, action: PayloadAction<number>) {
-      state.data = state.data.filter(items => Number(items.id) !== action.payload);
+      state.data = state.data.filter(item => Number(item.id) !== action.payload);
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
@@ -32,4 +32,3 @@ const aiInsightsSlice = createSlice({
 
 export const { setItems, addItem, deleteItem, setLoading } = aiInsightsSlice.actions;
 export default aiInsightsSlice.reducer;
-
