@@ -3,7 +3,7 @@ import { Provider, useSelector } from "react-redux";
 import { store } from "../../../shared/store/store";
 import AIInsightsList from "./AIInsightsList";
 import ProgressStats from "./ProgressStats";
-import { ImprovementSuggestions } from "./ImprovementSuggestions";
+import ImprovementSuggestions from "./ImprovementSuggestions";
 import { SummaryStrengths } from "./Strengths";
 import { Certificate } from "./Certificate";
 import { Award } from "lucide-react";
