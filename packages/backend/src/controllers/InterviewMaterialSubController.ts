@@ -80,8 +80,8 @@ export const addInterviewMaterialSub = async (req: Request, res: Response): Prom
         const resultData = await InterviewMaterialSubRepository.createInterviewMaterialSub(
             req.body.title,
             thumbnail ?? '',
-            result.secure_url,
-            req.body.shortDescription
+            req.body.shortDescription,
+            result.secure_url
         );
         if (!resultData) {
             res.status(500).json({ message: 'Failed to save file data' });
