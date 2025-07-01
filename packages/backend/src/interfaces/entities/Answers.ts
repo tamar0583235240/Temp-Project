@@ -27,7 +27,6 @@ export class Answers {
   })
   submittedAt: Date;
 
-
   @Column("character varying", {
     name: "answer_file_name",
     nullable: true,
