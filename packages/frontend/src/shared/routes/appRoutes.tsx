@@ -88,7 +88,7 @@ export default function AppRoutes() {
             path="/resources"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialPage/>
+                <p>Resources</p>
               </RoleProtectedRoute>
             }
           />
@@ -96,7 +96,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>InterviewMaterialsHub</p>
+                <InterviewMaterialPage/>
               </RoleProtectedRoute>
             }
           />
