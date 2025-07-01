@@ -23,25 +23,37 @@ export default function AppRoutes() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={
-          <RoleProtectedRoute allowedRoles={['student', 'manager']}>
-            <ResetPassword />
-          </RoleProtectedRoute>} />
+        <Route
+          path="/reset-password"
+          element={
+            <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+              <ResetPassword />
+            </RoleProtectedRoute>
+          }
+        />
         {/* Routes with header */}
-        <Route path="/home" element={<HomePage />} />
         <Route element={<DashboardLayout />}>
-          <Route path="/profile" element={
-            <RoleProtectedRoute allowedRoles={['student', 'manager']}>
-              <ProfilePage />
-            </RoleProtectedRoute>} />
-          <Route path="settings" element={
-            <RoleProtectedRoute allowedRoles={['student', 'manager']}>
-              <SettingsPage />
-            </RoleProtectedRoute>} />
+          <Route path="/home" element={<HomePage />} />
+          <Route
+            path="/profile"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfilePage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <SettingsPage />
+              </RoleProtectedRoute>
+            }
+          />
           <Route
             path="/simulation"
             element={
-              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>Simulation</p>
               </RoleProtectedRoute>
             }
@@ -49,7 +61,7 @@ export default function AppRoutes() {
           <Route
             path="/dashboard"
             element={
-              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>Dashboard</p>
               </RoleProtectedRoute>
             }
@@ -57,7 +69,7 @@ export default function AppRoutes() {
           <Route
             path="/recordings"
             element={
-              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>Recordings</p>
               </RoleProtectedRoute>
             }
@@ -65,7 +77,7 @@ export default function AppRoutes() {
           <Route
             path="/shared"
             element={
-              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>SharedRecordings</p>
               </RoleProtectedRoute>
             }
@@ -73,7 +85,7 @@ export default function AppRoutes() {
           <Route
             path="/resources"
             element={
-              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>Resources</p>
               </RoleProtectedRoute>
             }
@@ -81,7 +93,7 @@ export default function AppRoutes() {
           <Route
             path="/interviewMaterialsHub"
             element={
-              <RoleProtectedRoute allowedRoles={['student', 'manager']}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>InterviewMaterialsHub</p>
               </RoleProtectedRoute>
             }

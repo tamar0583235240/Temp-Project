@@ -74,7 +74,6 @@ const SidebarNavigation = () => {
             )
           )}
       </nav>
-      <ExitButton />
     </aside>
   );
 };
