@@ -1,7 +1,11 @@
 export function isReminderDue(lastSentAt: string | null, frequency: string): boolean {
   const now = new Date();
   const last = new Date(lastSentAt || 0);
-  const diffDays = (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24);
+
+  const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const lastDateOnly = new Date(last.getFullYear(), last.getMonth(), last.getDate());
+
+  const diffDays = (nowDateOnly.getTime() - lastDateOnly.getTime()) / (1000 * 60 * 60 * 24);
 
   switch (frequency) {
     case 'daily': return diffDays >= 1;
@@ -12,16 +16,19 @@ export function isReminderDue(lastSentAt: string | null, frequency: string): boo
   }
 }
 
-export const isSentToday = (lastSentAt?: string | null): boolean => {
+
+export const isSentToday = (lastSentAt: Date | null): boolean => {
   if (!lastSentAt) return false;
+
   const now = new Date();
-  const lastDate = new Date(lastSentAt);
-  return now.toDateString() === lastDate.toDateString();
-}
+  const last = new Date(lastSentAt);
+
+  return now.toDateString() === last.toDateString();
+};
 
 export const isEarlier = (dateA: string | null, dateB: string | null): boolean => {
-  if (!dateA) return true; // אם אין תאריך A – נחשב כיותר ישן
-  if (!dateB) return false; // אם אין תאריך B – A בטוח לא ישן יותר
+  if (!dateA) return true; 
+  if (!dateB) return false; 
   return new Date(dateA).getTime() < new Date(dateB).getTime();
 }
 

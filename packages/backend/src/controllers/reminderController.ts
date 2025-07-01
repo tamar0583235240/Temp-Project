@@ -1,50 +1,8 @@
 import { Request, Response } from 'express';
 import reminderRepository from '../reposioty/reminderRepository';
 import { isReminderDue, isSentToday } from '../utils/reminderUtils';
-import { saveReminderSettingsForUser } from '../services/reminderService';
 import { pool } from '../config/dbConnection';
-
-
-
-export const reminderController = async (req: Request, res: Response) => {
-  try {
-
-    const allReminders = await reminderRepository.getDueReminders();
-    const selectedPerUser = new Map<string, any>();
-
-    for (const reminder of allReminders) {
-      const { user_id, tip_id, last_sent_at, user } = reminder;
-      const frequency = user?.user_reminder_settings?.frequency;
-      if (!frequency) continue;
-
-      if (!selectedPerUser.has(user_id)) {
-        selectedPerUser.set(user_id, reminder);
-      }
-    }
-
-    const remindersToShow = Array.from(selectedPerUser.values());
-    const remindersToUpdate = remindersToShow.filter(r =>
-      !isSentToday(r.last_sent_at) &&
-      isReminderDue(r.last_sent_at, r.user.user_reminder_settings.frequency)
-    );
-
-    for (const reminder of remindersToUpdate) {
-      await pool.query(
-        `UPDATE user_reminder_settings SET last_sent_at = NOW() WHERE user_id = $1 AND tip_id = $2`,
-        [reminder.user_id, reminder.tip_id]
-      );
-    }
-
-    if (remindersToShow.length === 0) {
-      return res.status(200).json({ message: 'אין טיפים לשליחה כרגע 😊' });
-    }
-
-    res.status(200).json(remindersToShow);
-  } catch (error) {
-    console.error('שגיאה בנתיב /api/tips:', error);
-    res.status(500).json({ error: 'שגיאה בשרת' });
-  }
-}
+import { saveReminderSettingsForUser } from '../services/reminderService';
 
 export const saveUserReminderSettings = async (req: Request, res: Response) => {
   try {
@@ -62,3 +20,34 @@ export const saveUserReminderSettings = async (req: Request, res: Response) => {
   }
 };
 
+export const reminderController = async (req: Request, res: Response) => {
+  try {
+    const allReminders = await reminderRepository.getDueReminders(); // מחזיר את כולם
+
+    for (const reminder of allReminders) {
+      const { last_sent_at, user_id, tip_id, user } = reminder;
+      const frequency = user?.user_reminder_settings?.frequency;
+
+      console.log('frequency:', frequency);
+      console.log('last_sent_at:', last_sent_at);
+      console.log('isReminderDue:', isReminderDue(last_sent_at, frequency));
+      console.log('isSentToday:', isSentToday(last_sent_at));
+
+      if (frequency && isReminderDue(last_sent_at, frequency) && !isSentToday(last_sent_at)) {
+        // עדכון רק למי שמגיע לו לפי התדירות
+        console.log(`Updating last_sent_at for user ${user_id} and tip ${tip_id}`);
+
+        await pool.query(
+          `UPDATE user_reminder_settings SET last_sent_at = NOW() WHERE user_id = $1 AND tip_id = $2`,
+          [user_id, tip_id]
+        );
+      }
+    }
+
+    // מחזירים את כולם – גם כאלה שלא אמורים להישלח היום
+    return res.status(200).json(allReminders);
+  } catch (error) {
+    console.error('שגיאה בנתיב /api/tips:', error);
+    res.status(500).json({ error: 'שגיאה בשרת' });
+  }
+};
