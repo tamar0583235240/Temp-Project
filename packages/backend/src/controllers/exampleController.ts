@@ -1,5 +1,6 @@
 // import { Request, Response } from 'express';
 // import exampleRepository from '../repository/exampleRepository';
+// import exampleRepository from '../reposioty/exampleReposioty';
 
 // export const exampleController = async (req: Request, res: Response): Promise<void> => {
 //   console.log('exampleController called');
