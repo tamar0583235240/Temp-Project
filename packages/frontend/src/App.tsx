@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './shared/routes/appRoutes'
 // import SharedRecording from './features/shared-recordings/components/sharedRecording';
 import SharedRecordingsComponent from './features/shared-recordings/components/SharedRecordingsComponent';
+import QuestionsChart from './pages/QuestionsChart';
 
 import './App.css';
 
@@ -16,7 +17,7 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
-
+      <QuestionsChart />
       </main>
     </div>
   );

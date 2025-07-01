@@ -1,5 +1,6 @@
 import { api } from "../../../shared/api/api";
 import { Question } from "../types/Question";
+import { Stats } from "../types/Stats";
 import { Answer } from "../types/answer";
 
 export const AnswerApi = api.injectEndpoints({
@@ -12,6 +13,11 @@ export const AnswerApi = api.injectEndpoints({
             query: (id) => `question/getAllQuestionById/${id}`,
             providesTags: ["question"],
         }),
+        // ←‑‑‑  Endpoint חדש
+        getQuestionsStatsByUserId: builder.query<Stats, void>({
+            query: () => `question/stats`,   // הנתיב ב‑backend
+            providesTags: ["questionStats"],
+        }),
     })
 });
-export const { useGetAnswersByIdUserQuery, useGetQuestionByIdQuery } = AnswerApi;
+export const { useGetAnswersByIdUserQuery, useGetQuestionByIdQuery, useGetQuestionsStatsByUserIdQuery} = AnswerApi;
