@@ -1,15 +1,16 @@
-import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
-import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
-import { setQuestions } from "../features/interview/store/simulationSlice"
-import { useNavigate } from "react-router-dom"
-import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper"
-import Buttons from "../features/interview/components/buttons"
-import Sidebar from "../features/interview/components/sidebar"
-import Question from "../features/interview/components/question"
-import AnswerAI from "../features/interview/components/AnswerAI"
-import TipsComponent from "../features/interview/components/tipsComponent"
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi";
+import { setQuestions } from "../features/interview/store/simulationSlice";
+import { useNavigate } from "react-router-dom";
+import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
+// import Buttons from "../features/interview/components/buttons";
+import Sidebar from "../features/interview/components/sidebar";
+import Question from "../features/interview/components/question";
+import AnswerAI from "../features/interview/components/AnswerAI";
+import TipsComponent from "../features/interview/components/tipsComponent";
+import MagicLoader from "../features/interview/components/MagicLoader"; // אם יש לך
+// import EndSurvey from "../features/interview/components/endSurvey";
 const InterviewPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const InterviewPage = () => {
   const [lastQuestionIndex, setLastQuestionIndex] = useState<number | null>(null);
   const [showTips, setShowTips] = useState(false);
   const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
 
   const currentIndex = useSelector((state: any) => state.simulation.currentIndex);
 
@@ -42,7 +44,7 @@ const InterviewPage = () => {
   }, [data, dispatch]);
 
   useEffect(() => {
-    if (lastQuestionIndex !== null && lastQuestionIndex !== undefined) {
+    if (lastQuestionIndex !== null) {
       setShowAnalysis(false);
       setShowTips(false);
       setAnswerIdForAI(null);
@@ -55,18 +57,40 @@ const InterviewPage = () => {
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
+      {/* Main content area */}
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
-        <div className="w-full max-w-2xl space-y-8">
-          <Question
-            onFinishRecording={() => setShowTips(true)}
-            onAnswerSaved={(id) => setAnswerIdForAI(id)}
-          />
-          {showTips && <TipsComponent />}
-          {answerIdForAI && <AnswerAI answerId={answerIdForAI} />}
-          <Buttons onShowAnalysis={() => setShowAnalysis(true)} analysisVisible={showAnalysis} />
-          {showAnalysis && <AnalysisStepWrapper />}
+        <div className="w-full max-w-6xl flex flex-row gap-6 items-start">
+          {/* טור שמאלי - שאלה וההקלטה */}
+          <div className="flex-1">
+            <Question
+              onFinishRecording={() => setShowTips(true)}
+              onAnswerSaved={(id) => {
+                setIsLoadingAI(true);
+                setAnswerIdForAI(null);
+                setTimeout(() => {
+                  setAnswerIdForAI(id);
+                  setIsLoadingAI(false);
+                }, 2000); // הדמיית טעינה
+              }}
+            />
+          </div>
+
+          {/* טור ימני - תובנות AI / טיפים */}
+          <div className="w-[320px] space-y-4">
+            {showTips && <TipsComponent />}
+            {isLoadingAI && <MagicLoader />}
+            {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />}
+          </div>
+        </div>
+
+        <div className="mt-8 w-full max-w-2xl">
+          {/* <EndSurvey/> */}
+          {/* <Buttons onShowAnalysis={() => setShowAnalysis(true)} analysisVisible={showAnalysis} />
+          {showAnalysis && <AnalysisStepWrapper />} */}
         </div>
       </main>
+
+      {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
         <Sidebar />
       </aside>
