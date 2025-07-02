@@ -4,14 +4,14 @@ import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../api/authApi";
-import { logout } from "../../features/auth/store/authSlice";
+import { logout as logoutAction } from "../../features/auth/store/authSlice";
 
 const UserMenu = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [logoutAPI] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,11 +28,11 @@ const UserMenu = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutAPI(user).unwrap(); // ← מבצע את הקריאה ומחכה להצלחה
-      dispatch(logout()); // ← מנקה את הסטייט ברדאקס
+      await logout(user).unwrap();
+      dispatch(logoutAction());
       navigate("/");
-    } catch (error) {
-      console.error("שגיאה בהתנתקות:", error);
+    } catch (err) {
+      console.error("שגיאה בהתנתקות:", err);
     }
   };
 

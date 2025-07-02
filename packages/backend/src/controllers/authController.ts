@@ -175,33 +175,16 @@ export const refreshToken = async (req: Request, res: Response) => {
 };
 
 // התנתקות
-export const logout = async (req: Request, res: Response) => {
-  try {
-    const userId = req.body.user?.id;
-
-    if (!userId) {
-      return res.status(401).json({ message: "לא מחובר" });
-    }
-
-    await authRepository.logout(userId);
-
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-    });
-    res.json({ message: "התנתקת בהצלחה" });
-  } catch (error) {
-    console.error("Logout failed:", error);
-    res.status(500).json({ message: "שגיאה בהתנתקות" });
-  }
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+  res.json({ message: 'התנתקת בהצלחה' });
 };
 
-const pendingSignup = new Map<
-  string,
-  { userData: Users; code: string; expiresAt: number }
->();
+const pendingSignups = new Map<string, { userData: Users; code: string; expiresAt: number }>();
 
 export const requestSignup = async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password } = req.body;
@@ -220,7 +203,7 @@ export const requestSignup = async (req: Request, res: Response) => {
   const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
 
   // שמירת פרטי המשתמש והקוד זמנית
-  pendingSignup.set(email, {
+  pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
       first_name,
@@ -254,13 +237,13 @@ export const confirmSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "אימייל וקוד דרושים" });
   }
 
-  const pending = pendingSignup.get(email);
+  const pending = pendingSignups.get(email);
   if (!pending) {
     return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
   }
 
   if (pending.expiresAt < Date.now()) {
-    pendingSignup.delete(email);
+    pendingSignups.delete(email);
     return res.status(400).json({ message: "הקוד פג תוקף. נא לבקש קוד חדש." });
   }
 
@@ -270,7 +253,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
   // יוצרים את המשתמש האמיתי במסד
   await authRepository.signup(pending.userData);
-  pendingSignup.delete(email);
+  pendingSignups.delete(email);
 
   // יוצרים טוקן
   const token = jwt.sign(
