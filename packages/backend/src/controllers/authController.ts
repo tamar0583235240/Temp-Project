@@ -85,23 +85,16 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
   try {
     const user = await userRepository.getUserByEmail(email);
-    if (!user) {
-      return res
-        .status(200)
-        .json({ message: "If email exists, reset link sent" });
+
+    if (user) {
+      const token = crypto.randomBytes(32).toString("hex");
+      const expiresAt = new Date(Date.now() + TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000);
+      await createToken(user.id, token, expiresAt);
+      await sendResetEmail(email, token);
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
-    const expiresAt = new Date(
-      Date.now() + TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000
-    );
+    return res.status(200).json({ message: "If email exists, reset link sent" });
 
-    await createToken(user.id, token, expiresAt);
-    await sendResetEmail(email, token);
-
-    return res
-      .status(200)
-      .json({ message: "If email exists, reset link sent" });
   } catch (error) {
     console.error("Forgot Password error:", error);
     return res.status(500).json({ message: "Internal server error" });
