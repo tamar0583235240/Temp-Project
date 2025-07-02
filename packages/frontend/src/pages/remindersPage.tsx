@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+
+import React, { useState } from 'react'; 
+
 import ReminderSettingsCard from '../features/reminders/components/ReminderSettingsCard';
 import { useSaveUserReminderSettingsMutation } from '../shared/api/api';
 
@@ -12,8 +14,20 @@ export default function RemindersPage() {
     tips: null,
   });
 
+  const [message, setMessage] = useState<string | null>(null);
+  const [messageType, setMessageType] = useState<'success' | 'warning' | null>(null);
+
+  const showMessage = (msg: string, type: 'success' | 'warning') => {
+    setMessage(msg);
+    setMessageType(type);
+    setTimeout(() => {
+      setMessage(null);
+      setMessageType(null);
+    }, 3000);
+  };
+
   const [saveUserReminderSettings] = useSaveUserReminderSettingsMutation();
-  const userId = "63b3ab3c-e4d7-485d-ba3e-36748208835e"; // הנחה שהמשתמש מחובר
+  const userId = "63b3ab3c-e4d7-485d-ba3e-36748208835e"; // משתמש דמה
 
   const handleOptionChange = (reminderType: string, optionId: string | null) => {
     setSelections((prev) => ({
@@ -23,58 +37,42 @@ export default function RemindersPage() {
   };
 
   const handleSaveAll = async () => {
-    const missing = Object.entries(selections).filter(
-      ([, optionId]) => optionId === null
+    const selected = Object.entries(selections).filter(
+      ([, optionId]) => optionId !== null
     );
-    if (missing.length > 0) {
-      alert(
-        `אנא בחר תדירות לכל התזכורות לפני שמירה.\nלא נבחר עבור: ${missing
-          .map(([key]) => key)
-          .join(', ')}`
-      );
+
+    if (selected.length === 0) {
+      showMessage("לא נבחרו תזכורות. תוכל להוסיף מתי שתרצה בהמשך.", 'warning');
       return;
     }
-
-    const messages = Object.entries(selections)
-      .map(([reminderType, optionId]) => {
-        let text = '';
-        switch (optionId) {
-          case 'every-two-days':
-            text = 'כל יומיים';
-            break;
-          case 'daily':
-            text = 'כל יום';
-            break;
-          case 'weekly':
-            text = 'אחת לשבוע';
-            break;
-          case 'every-three-days':
-            text = 'אחת ל-3 ימים';
-            break;
-          default:
-            text = 'לא נבחר';
-        }
-        return `סוג: ${reminderType}\nתדירות: ${text}`;
-      })
-      .join('\n\n');
-
-    alert(`התזכורות נשמרו בהצלחה:\n\n${messages}`);
 
     try {
       await saveUserReminderSettings({
         userId: userId,
         settings: selections as Record<string, string>,
       });
-      alert('התזכורות נשמרו בהצלחה!');
+      showMessage('התזכורות נשמרו בהצלחה!', 'success');
     } catch (error) {
       console.error('שגיאה בשמירה:', error);
-      alert('אירעה שגיאה בעת שמירת התזכורות');
+      showMessage('אירעה שגיאה בעת שמירת התזכורות', 'warning');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-md mx-auto">
+        {message && (
+          <div
+            className={`mb-4 p-3 rounded text-sm ${
+              messageType === 'success'
+                ? 'bg-green-100 text-green-800'
+                : 'bg-yellow-100 text-yellow-800'
+            }`}
+          >
+            {message}
+          </div>
+        )}
+
         <ReminderSettingsCard
           title="תרגול שאלות מקצועיות"
           description="קבל תזכורות לתרגול שאלות מקצועיות כדי לשפר את הידע שלך."
