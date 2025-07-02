@@ -67,7 +67,7 @@ export default function RemindersPage() {
   return (
     // dir="rtl"
     <div className="min-h-screen"  >
-      <ReminderComponent />
+      {/* <ReminderComponent /> */}
 
       <GridContainer maxWidth="md">
         {message && (
