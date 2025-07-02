@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { CardSimple } from "../../../shared/ui/card";
+import { cn } from "../../../shared/utils/cn";
+
+// אייקון מותאם – ניתן להחליף
+const ReminderIcon = () => <span className="text-xl">📅</span>;
 
 type OptionType = {
   id: string;
@@ -46,65 +51,58 @@ export default function ReminderSettingsCard({
   };
 
   const options: OptionType[] = [
-    { id: 'every-two-days', text: 'כל יומיים', icon: '📅' },
-    { id: 'daily', text: 'כל יום', icon: '📅' },
-    { id: 'weekly', text: 'אחת לשבוע', icon: '📅' },
-    { id: 'every-three-days', text: 'אחת ל-3 ימים', icon: '📅' },
+    { id: "every-two-days", text: "כל יומיים", icon: "📅" },
+    { id: "daily", text: "כל יום", icon: "📅" },
+    { id: "weekly", text: "אחת לשבוע", icon: "📅" },
+    { id: "every-three-days", text: "אחת ל-3 ימים", icon: "📅" },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
-        </div>
+    <CardSimple className="space-y-4">
+      <div className="flex items-center gap-2 justify-between ">
         <button
           onClick={toggleSwitch}
-          className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-            isEnabled ? 'bg-indigo-600' : 'bg-gray-300'
-          }`}
-          type="button"
-          role="switch"
-          aria-checked={isEnabled}
+          className={cn(
+            "relative inline-flex items-center h-6 w-11 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 p-0.5",
+            isEnabled ? "bg-primary-dark" : "bg-gray-300"
+          )}
         >
           <span
-            className={`inline-block w-4 h-4 transform transition-transform duration-200 ease-in-out bg-white rounded-full shadow-lg ${
-              isEnabled ? 'translate-x-6' : 'translate-x-1'
-            }`}
+            className={cn(
+              "inline-block w-4 h-4 transform bg-white rounded-full shadow transition-transform",
+              isEnabled ? "translate-x-5" : "translate-x-0"
+            )}
           />
         </button>
+        <div>
+          <h3 className="text-lg font-semibold text-text-main mb-1 text-right">{title}</h3>
+          <p className="text-sm text-text-secondary leading-snug text-right">{description}</p>
+        </div>
       </div>
 
       {isEnabled ? (
         <>
-          <h4 className="text-md font-semibold text-gray-800 mt-6 mb-4 text-center">
+          <h4 className="text-sm font-medium text-text-main text-center mt-4 text-right">
             בחר את תדירות התזכורת שלך:
           </h4>
+
           <div className="grid grid-cols-2 gap-4">
             {options.map((option) => (
               <div
                 key={option.id}
                 onClick={() => selectOption(option.id)}
-                className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 flex items-center justify-center ${
+                className={cn(
+                  "relative p-4 rounded-lg border cursor-pointer transition-all text-center space-y-1",
                   selectedOption === option.id
-                    ? 'bg-gray-800 border-gray-800 text-white'
-                    : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-gray-300'
-                }`}
+                    ? "bg-primary-dark border-primary-dark text-white"
+                    : "bg-gray-50 border-border text-text-main hover:border-gray-300"
+                )}
               >
-                <div className="text-center">
-                  <div className="text-2xl mb-2">{option.icon}</div>
-                  <p className="text-sm font-medium">{option.text}</p>
-                </div>
+                <div className="text-2xl">{option.icon}</div>
+                <p className="text-sm font-medium">{option.text}</p>
                 {selectedOption === option.id && (
                   <div className="absolute top-2 right-2">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <span className="text-white">✓</span>
                   </div>
                 )}
               </div>
@@ -112,10 +110,10 @@ export default function ReminderSettingsCard({
           </div>
 
           {selectedOption && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-              <div className="flex items-center">
-                <div className="text-green-600 ml-2">✓</div>
-                <p className="text-green-800 text-sm">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-4">
+              <div className="flex items-center gap-2">
+                <span className="text-green-600 font-bold">✓</span>
+                <p className="text-green-800 text-sm text-right">
                   נבחר: {options.find((opt) => opt.id === selectedOption)?.text}
                 </p>
               </div>
@@ -123,10 +121,10 @@ export default function ReminderSettingsCard({
           )}
         </>
       ) : (
-        <div className="text-center text-gray-500 mt-6">
-          <p>הדלק את המתג כדי לבחור תדירות תזכורת</p>
-        </div>
+        <p className="text-center text-text-secondary mt-4 text-sm text-right">
+          הדלק את המתג כדי לבחור תדירות תזכורת
+        </p>
       )}
-    </div>
+    </CardSimple>
   );
 }

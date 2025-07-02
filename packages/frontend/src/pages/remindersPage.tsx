@@ -1,24 +1,25 @@
+import React, { useState } from "react";
+import ReminderSettingsCard from "../features/reminders/components/ReminderSettingsCard";
+import ReminderComponent from "../features/reminders/components/remindersComponents";
+import { useSaveUserReminderSettingsMutation } from "../shared/api/api";
+import { GridContainer } from "../shared/ui/GridContainer";
+import { Button } from "../shared/ui/button";
 
-import React, { useState } from 'react'; 
-
-import ReminderSettingsCard from '../features/reminders/components/ReminderSettingsCard';
-import ReminderComponent from '../features/reminders/components/remindersComponents';
-import { useSaveUserReminderSettingsMutation } from '../shared/api/api';
-
-type Selections = {
-  [reminderType: string]: string | null;
-};
+// הגדרת טיפוס מדויק
+type ReminderSelections = Record<string, string | null>;
 
 export default function RemindersPage() {
-  const [selections, setSelections] = useState<Selections>({
+  const [selections, setSelections] = useState<ReminderSelections>({
     questions: null,
     tips: null,
   });
 
   const [message, setMessage] = useState<string | null>(null);
-  const [messageType, setMessageType] = useState<'success' | 'warning' | null>(null);
+  const [messageType, setMessageType] = useState<"success" | "warning" | null>(null);
 
-  const showMessage = (msg: string, type: 'success' | 'warning') => {
+  const [saveUserReminderSettings] = useSaveUserReminderSettingsMutation();
+
+  const showMessage = (msg: string, type: "success" | "warning") => {
     setMessage(msg);
     setMessageType(type);
     setTimeout(() => {
@@ -26,9 +27,6 @@ export default function RemindersPage() {
       setMessageType(null);
     }, 3000);
   };
-
-  const [saveUserReminderSettings] = useSaveUserReminderSettingsMutation();
-  const userId = "63b3ab3c-e4d7-485d-ba3e-36748208835e"; // משתמש דמה
 
   const handleOptionChange = (reminderType: string, optionId: string | null) => {
     setSelections((prev) => ({
@@ -38,37 +36,46 @@ export default function RemindersPage() {
   };
 
   const handleSaveAll = async () => {
-    const selected = Object.entries(selections).filter(
-      ([, optionId]) => optionId !== null
+    // מסנן רק תזכורות שנבחרו (לא null) ושולח בצורה תקינה
+    const filteredSettings: Record<string, string> = Object.entries(selections).reduce(
+      (acc, [key, value]) => {
+        if (value !== null) {
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {} as Record<string, string>
     );
 
-    if (selected.length === 0) {
-      showMessage("לא נבחרו תזכורות. תוכל להוסיף מתי שתרצה בהמשך.", 'warning');
+    if (Object.keys(filteredSettings).length === 0) {
+      showMessage("לא נבחרו תזכורות. תוכל להוסיף מתי שתרצה בהמשך.", "warning");
       return;
     }
 
     try {
       await saveUserReminderSettings({
-        userId: userId,
-        settings: selections as Record<string, string>,
+        userId: "9b12018e-95ef-494d-bc8b-1bd0ad4ca1d6",
+        settings: filteredSettings,
       });
-      showMessage('התזכורות נשמרו בהצלחה!', 'success');
+      showMessage("התזכורות נשמרו בהצלחה!", "success");
     } catch (error) {
-      console.error('שגיאה בשמירה:', error);
-      showMessage('אירעה שגיאה בעת שמירת התזכורות', 'warning');
+      console.error("שגיאה בשמירה:", error);
+      showMessage("אירעה שגיאה בעת שמירת התזכורות", "warning");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <ReminderComponent/>
-      <div className="max-w-md mx-auto">
+    // dir="rtl"
+    <div className="min-h-screen"  >
+      <ReminderComponent />
+
+      <GridContainer maxWidth="md">
         {message && (
           <div
             className={`mb-4 p-3 rounded text-sm ${
-              messageType === 'success'
-                ? 'bg-green-100 text-green-800'
-                : 'bg-yellow-100 text-yellow-800'
+              messageType === "success"
+                ? "bg-green-100 text-green-800"
+                : "bg-yellow-100 text-yellow-800"
             }`}
           >
             {message}
@@ -85,21 +92,18 @@ export default function RemindersPage() {
 
         <ReminderSettingsCard
           title="טיפים"
-          description="!קבל טיפ מעשי"
+          description="קבל טיפ מעשי כל כמה ימים!"
           reminderType="tips"
           savedOption={selections.tips}
           onOptionChange={handleOptionChange}
         />
 
         <div className="mt-8 text-center">
-          <button
-            onClick={handleSaveAll}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
-          >
+          <Button size="lg" onClick={handleSaveAll}>
             שמור את כל התזכורות
-          </button>
+          </Button>
         </div>
-      </div>
+      </GridContainer>
     </div>
   );
 }
