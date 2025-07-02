@@ -1,80 +1,89 @@
-// import React, { useEffect, useState } from 'react';
-// import SearchBox from '../features/interview-materials-hub/components/SearchBox';
-// import { interview_materials_subType } from '../features/interview-materials-hub/types/interview_materials_subType';
-// import { useGetAllMaterialsQuery, useSearchMaterialsQuery } from '../features/interview-materials-hub/store/interviewMaterialSubApi';
-// import DownloadCard from '../features/interview-materials-hub/components/DownloadCard';
+// "use client"
 
-// const DEBOUNCE_DELAY = 500;
+// import type React from "react"
+// import { useEffect, useState } from "react"
+// import SearchBox from "../features/interview-materials-hub/components/SearchBox"
+// import DownloadCard from "../features/interview-materials-hub/components/DownloadCard"
+// import type { interview_materials_subType } from "../features/interview-materials-hub/types/interview_materials_subType"
+// import {
+//   useGetAllMaterialsQuery,
+//   useSearchMaterialsQuery,
+// } from "../features/interview-materials-hub/store/interviewMaterialSubApi"
+
+// const DEBOUNCE_DELAY = 500
 
 // const InterviewMaterialsHub: React.FC = () => {
-//   const [query, setQuery] = useState('');
-//   const [results, setResults] = useState<interview_materials_subType[]>([]);
-//   const [debouncedQuery, setDebouncedQuery] = useState(query);
-//   const [didSearch, setDidSearch] = useState(false);
+//   const [query, setQuery] = useState("")
+//   const [results, setResults] = useState<interview_materials_subType[]>([])
+//   const [debouncedQuery, setDebouncedQuery] = useState(query)
+//   const [didSearch, setDidSearch] = useState(false)
 
 //   const {
 //     data: allMaterials,
 //     isLoading: isLoadingAll,
 //     isSuccess: isSuccessAll,
-//   } = useGetAllMaterialsQuery();
+//     isError: isErrorAll,
+//   } = useGetAllMaterialsQuery()
 
 //   const {
 //     data: searchResults,
 //     isLoading: isLoadingSearch,
 //     isSuccess: isSuccessSearch,
+//     isError: isErrorSearch,
 //   } = useSearchMaterialsQuery(debouncedQuery, {
 //     skip: !debouncedQuery,
-//   });
+//   })
 
+//   // Debounce logic
 //   useEffect(() => {
 //     const handler = setTimeout(() => {
-//       setDebouncedQuery(query.trim());
-//     }, DEBOUNCE_DELAY);
+//       setDebouncedQuery(query.trim())
+//     }, DEBOUNCE_DELAY)
 
-//     return () => clearTimeout(handler);
-//   }, [query]);
+//     return () => clearTimeout(handler)
+//   }, [query])
 
+//   // Results logic
 //   useEffect(() => {
 //     if (debouncedQuery) {
-//       setDidSearch(true);
+//       setDidSearch(true)
 //       if (isSuccessSearch && searchResults) {
-//         setResults(searchResults);
+//         setResults(searchResults)
 //       }
 //     } else {
 //       if (!didSearch && isSuccessAll && allMaterials) {
-//         setResults(allMaterials); // רק בטעינה ראשונה
+//         setResults(allMaterials) // רק בטעינה ראשונה
 //       } else {
-//         setResults([]); // אם כבר בוצע חיפוש, אל תציג כלום
+//         setResults([]) // אם כבר בוצע חיפוש, אל תציג כלום
 //       }
 //     }
-//   }, [
-//     debouncedQuery,
-//     isSuccessAll,
-//     allMaterials,
-//     isSuccessSearch,
-//     searchResults,
-//     didSearch,
-//   ]);
+//   }, [debouncedQuery, isSuccessAll, allMaterials, isSuccessSearch, searchResults, didSearch])
+
+//   const handleSearch = (e: React.FormEvent) => {
+//     e.preventDefault()
+//     setDebouncedQuery(query.trim())
+//   }
+
+//   const isLoading = isLoadingAll || isLoadingSearch
+//   const isError = isErrorAll || isErrorSearch
 
 //   return (
-//     <div className="px-4 py-6">
-//       <h1 className="text-2xl font-bold mb-4">🎯 חיפוש חומרי ריאיונות</h1>
-//       <SearchBox
-//         query={query}
-//         setQuery={setQuery}
-//         loading={isLoadingAll || isLoadingSearch}
-//         results={results}
-//         onSearch={(e) => {
-//           e.preventDefault();
-//           setDebouncedQuery(query.trim());
-//         }}
-//       />
-//       <DownloadCard />
-//     </div>
-//   );
-// };
+//     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-primary/5 to-secondary/10" dir="rtl">
+//       <SearchBox query={query} setQuery={setQuery} onSearch={handleSearch} loading={isLoading} />
 
-// export default InterviewMaterialsHub;
+//       <DownloadCard
+//         files={results}
+//         isLoading={isLoading}
+//         isError={isError}
+//         hasSearched={didSearch || (isSuccessAll && allMaterials?.length > 0)}
+//         didSearch={didSearch} isSearchEmpty={false}      />
+//     </div>
+//   )
+// }
+
+// export default InterviewMaterialsHub
+
+
 
 
 "use client"
@@ -94,8 +103,8 @@ const DEBOUNCE_DELAY = 500
 const InterviewMaterialsHub: React.FC = () => {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<interview_materials_subType[]>([])
-  const [debouncedQuery, setDebouncedQuery] = useState(query)
-  const [didSearch, setDidSearch] = useState(false)
+  const [debouncedQuery, setDebouncedQuery] = useState("")
+  const [hasSearched, setHasSearched] = useState(false)
 
   const {
     data: allMaterials,
@@ -122,40 +131,50 @@ const InterviewMaterialsHub: React.FC = () => {
     return () => clearTimeout(handler)
   }, [query])
 
-  // Results logic
+  // Results logic - תיקון הלוגיקה הראשית
   useEffect(() => {
-    if (debouncedQuery) {
-      setDidSearch(true)
+    const trimmedQuery = query.trim()
+
+    if (trimmedQuery) {
+      // יש טקסט חיפוש - בצע חיפוש
+      setHasSearched(true)
       if (isSuccessSearch && searchResults) {
         setResults(searchResults)
       }
     } else {
-      if (!didSearch && isSuccessAll && allMaterials) {
-        setResults(allMaterials) // רק בטעינה ראשונה
+      // אין טקסט חיפוש - הצג את כל הקבצים
+      if (isSuccessAll && allMaterials) {
+        setResults(allMaterials)
       } else {
-        setResults([]) // אם כבר בוצע חיפוש, אל תציג כלום
+        setResults([])
       }
     }
-  }, [debouncedQuery, isSuccessAll, allMaterials, isSuccessSearch, searchResults, didSearch])
+  }, [query, isSuccessAll, allMaterials, isSuccessSearch, searchResults])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    setDebouncedQuery(query.trim())
+    const trimmedQuery = query.trim()
+    setDebouncedQuery(trimmedQuery)
+    if (trimmedQuery) {
+      setHasSearched(true)
+    }
   }
 
   const isLoading = isLoadingAll || isLoadingSearch
   const isError = isErrorAll || isErrorSearch
+  const isSearchEmpty = query.trim() === ""
+  const didSearch = !isSearchEmpty && hasSearched
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-primary/5 to-secondary/10" dir="rtl">
       <SearchBox query={query} setQuery={setQuery} onSearch={handleSearch} loading={isLoading} />
-
       <DownloadCard
         files={results}
         isLoading={isLoading}
         isError={isError}
-        hasSearched={didSearch || (isSuccessAll && allMaterials?.length > 0)}
+        hasSearched={hasSearched}
         didSearch={didSearch}
+        isSearchEmpty={isSearchEmpty}
       />
     </div>
   )

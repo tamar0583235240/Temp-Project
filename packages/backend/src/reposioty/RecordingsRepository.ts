@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -21,7 +21,6 @@ export const getAllRecordingsFromCloudinary = async () => {
       data: response.data.resources,
     };
   } catch (error: any) {
-    // משיכת הודעת השגיאה האמיתית מה־mock שהבדיקה יוצרת
     const message =
       error.response?.data?.message ||
       error.response?.data?.error?.message || // לפעמים זה ככה

@@ -21,7 +21,6 @@ const searchFiles = async (queryText: string): Promise<InterviewMaterialSub[]> =
 console.log("yess");
 
 
-// שלב 2 – fallback לחיפוש פשוט
 let results = await pool.query(
   `SELECT id, title, thumbnail, short_description
    FROM interview_materials_sub
@@ -30,9 +29,7 @@ let results = await pool.query(
    LIMIT 20`,
   [queryText.trim()]
 );
-console.log('QueryText:', queryText);
-console.log('Processed:', smartQuery);
-console.log('Results count (stage 1):', results.rowCount);
+
 
     if (results.rowCount) return results.rows;
 

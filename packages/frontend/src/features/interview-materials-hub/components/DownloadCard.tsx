@@ -1,26 +1,4 @@
-// import React from 'react';
-// import { interview_materials_subType } from '../types/interview_materials_subType';
-// import { useGetAllMaterialsQuery,useUpdateDownloadsCountMutation } from '../store/interviewMaterialSubApi';
 
-// const DownloadCard: React.FC = () => {
-//   const { data: files = [], isLoading, isError } = useGetAllMaterialsQuery();
-//     const [incrementDownloadCount] = useUpdateDownloadsCountMutation();
-// const id:string="1"
-// console.log('files', files);
-// console.log("tamiiii");
-
-//   const handleView = (fileUrl: string) => {
-//     if (!fileUrl) {
-//       alert('הקובץ לא זמין לצפייה');
-//       return;
-//     }
-//     window.open(fileUrl, '_blank');
-//   };
-
-//   const handleDownload = (fileUrl: string) => {
-
-//     if (!fileUrl) {
-//       alert('הקובץ לא זמין להורדה');
 
 
 
@@ -33,16 +11,17 @@ import { GridContainer } from "../../../shared/ui/GridContainer"
 import { IconWrapper } from "../../../shared/ui/IconWrapper"
 import type { interview_materials_subType } from "../../../features/interview-materials-hub/types/interview_materials_subType"
 import { useUpdateDownloadsCountMutation } from "../../../features/interview-materials-hub/store/interviewMaterialSubApi"
-
+import { fileTypeToThumbnail, getFileType } from "../../../shared/utils/FileType"
 type Props = {
   files: interview_materials_subType[]
   isLoading: boolean
   isError: boolean
   hasSearched: boolean
   didSearch: boolean
+  isSearchEmpty: boolean
 }
 
-const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched, didSearch }) => {
+const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched, didSearch, isSearchEmpty }) => {
   const [incrementDownloadCount] = useUpdateDownloadsCountMutation()
 
   const handleView = (fileUrl: string) => {
@@ -63,9 +42,9 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
     link.href = fileUrl
     link.download = fileUrl.split("/").pop() || "download"
     link.click()
-
-    incrementDownloadCount({ id: materialId }) // עדכון ב־DB
+    incrementDownloadCount({ id: materialId })
   }
+
 
   if (isLoading) {
     return (
@@ -89,15 +68,18 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
             <span className="text-2xl">⚠️</span>
           </IconWrapper>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">אירעה שגיאה</h3>
-          <p className="text-gray-500">אירעה שגיאה בטעינת הקבצים. אנא נסה שוב מאוחר יותר</p>
+          <p className="text-gray-500">אירעה שגיאה בטעينת הקבצים. אנא נסה שוב מאוחר יותר</p>
         </div>
       </GridContainer>
     )
   }
 
+  // לוגיקה פשוטה: אם לא חיפשו בכלל ואין קבצים - הצג הודעת התחלה
+  const showInitialMessage = !hasSearched && files.length === 0 && isSearchEmpty
+
   return (
     <GridContainer maxWidth="xl">
-      {!hasSearched && files.length === 0 ? (
+      {showInitialMessage ? (
         // Initial state - before any search
         <div className="text-center py-16">
           <IconWrapper size="lg" color="muted" className="mb-4 mx-auto">
@@ -126,6 +108,7 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
           ) : (
             // Results grid
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
               {files.map((file) => (
                 <div
                   key={file.id}
@@ -134,16 +117,14 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
                   <div className="h-2 bg-gradient-to-r from-primary via-secondary to-accent"></div>
                   <div className="p-6">
                     <div className="flex items-start gap-4 mb-4">
-                      {file.thumbnail ? (
+                      {/* {file.thumbnail ? (
                         <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
                           <img
-                            src={file.thumbnail||"📖"}
+                            src={file.thumbnail || "📖"}
                             alt={file.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               // Fallback to placeholder if image fails to load
-                              // const target = e.target as HTMLImageElement
-                              // target.src = "❔"
                             }}
                           />
                         </div>
@@ -151,19 +132,39 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
                         <IconWrapper size="md" color="muted" className="flex-shrink-0">
                           <span className="text-lg">📄</span>
                         </IconWrapper>
-                      )}
+                      )} */}
+                      <div className="w-12 h-12 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img
+                          src={
+                            file.thumbnail ||
+                            fileTypeToThumbnail[getFileType(file.file_url || '')] ||
+                            fileTypeToThumbnail['other']
+                          }
+                          alt={file.title}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = fileTypeToThumbnail['other']
+                          }}
+                        />
+                      </div>
+
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-relaxed">{file.title}</h3>
+                        {/* כמות ההתקנות - מיקום משופר ועיצוב יפה יותר */}
+                        <div className="flex items-center gap-1 text-sm text-gray-500 mb-2">
+                          <Download className="h-3 w-3" />
+                          <span>{file.downloads_count} הורדות</span>
+                        </div>
                       </div>
                     </div>
+
                     <p className="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">{file.short_description}</p>
-<p> ⬇️  {file.downloads_count} התקנות</p>
-                    {/* File availability warning */}
-                    {!file.thumbnail && (
+
+                    {/* {!file.file_url && (
                       <div className="mb-4 p-2 bg-red-50 border border-red-200 rounded-lg">
                         <p className="text-red-600 text-xs">❌ הקובץ לא נמצא</p>
                       </div>
-                    )}
+                    )} */}
 
                     <div className="flex gap-3">
                       <Button
