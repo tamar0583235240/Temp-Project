@@ -1,19 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { useState, useRef, useEffect } from "react";
-import { logout } from "../../features/auth/store/authSlice";
-
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../api/authApi";
+import { logout } from "../../features/auth/store/authSlice";
 
 const UserMenu = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [logoutApi] = useLogoutMutation();
+  const [logoutAPI] = useLogoutMutation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -29,9 +28,9 @@ const UserMenu = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutApi(user).unwrap(); // ← מבצע את הקריאה ומחכה להצלחה
+      await logoutAPI(user).unwrap(); // ← מבצע את הקריאה ומחכה להצלחה
       dispatch(logout()); // ← מנקה את הסטייט ברדאקס
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error("שגיאה בהתנתקות:", error);
     }
@@ -72,7 +71,7 @@ const UserMenu = () => {
           </button>
 
           <button
-            onClick={() => handleLogout()}
+            onClick={handleLogout}
             className="flex items-center gap-2 space-x-2 w-full text-right px-4 py-2 text-sm hover:bg-gray-100"
           >
             <FaSignOutAlt />

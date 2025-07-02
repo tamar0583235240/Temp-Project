@@ -1,7 +1,11 @@
-import React from "react";
 import LoginForm from "../features/auth/components/LoginForm";
+import { useSelector } from "react-redux";
+import { RootState } from "../shared/store/store";
+import { Navigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     // <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
     //   <div className="max-w-xl w-full flex flex-col items-center space-y-6" >
