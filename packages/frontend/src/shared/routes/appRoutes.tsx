@@ -30,14 +30,19 @@ export default function AppRoutes() {
         <Route
           path="/reset-password"
           element={
-            <RoleProtectedRoute allowedRoles={["student", "manager"]}>
               <ResetPassword />
-            </RoleProtectedRoute>
           }
         />
         {/* Routes with header */}
         <Route element={<DashboardLayout />}>
-          <Route path="/home" element={<HomePage />} />
+          <Route
+            path="/home"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <HomePage />
+              </RoleProtectedRoute>
+            }
+          />
           <Route
             path="/profile"
             element={

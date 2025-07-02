@@ -187,9 +187,9 @@ export const logout = (req: Request, res: Response) => {
 const pendingSignups = new Map<string, { userData: Users; code: string; expiresAt: number }>();
 
 export const requestSignup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
-  if (!email || !password || !firstName || !lastName) {
+  if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
@@ -201,16 +201,17 @@ export const requestSignup = async (req: Request, res: Response) => {
   // יצירת קוד אימות
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // שמירת פרטי המשתמש והקוד זמנית
   pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       phone,
-      password,
+      password: hashedPassword,
       role: 'student',
       isActive: true,
       answers: [],
@@ -257,10 +258,24 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
   // יוצרים טוקן
   const token = jwt.sign(
-    { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
-    JWT_SECRET,
-    { expiresIn: '1h' }
-  );
+      { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+      REFRESH_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge:  2 * 60 * 60 * 1000
+    });
 
   res.status(201).json({ user: pending.userData, token });
 };
@@ -268,7 +283,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
 // הרשמה
 export const signup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
@@ -279,8 +294,8 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     email,
     phone,
     password: hashedPassword,
@@ -309,7 +324,7 @@ const client = new OAuth2Client();
 
 export const authWithGoogle = async (req: Request, res: Response) => {
   try {
-    const { payload } = req.body;
+    const { payload, rememberMe } = req.body;
     if (!payload?.credential) {
       return res.status(400).json({ message: 'Missing Google credential' });
     }
@@ -340,7 +355,31 @@ export const authWithGoogle = async (req: Request, res: Response) => {
       });
     }
 
-    return res.status(200).json({ user });
+    if (!user) {
+      return res.status(500).json({ message: 'Failed to create or retrieve user' });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: rememberMe ? '7d' : '1h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      REFRESH_SECRET,
+      { expiresIn: rememberMe ? '7d' : '2h' }
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000
+    });
+
+    return res.status(200).json({ user, token });
   } catch (err) {
     console.error('Google Auth error:', err);
     return res.status(500).json({ message: 'Google authentication failed' });

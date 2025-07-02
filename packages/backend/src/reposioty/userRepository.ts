@@ -62,22 +62,44 @@ export const updateUserPassword = async (userId: string, newPassword: string) =>
 };
 
 // עדכון פרטי משתמש
-const updateUser = async (id: string, userData: Partial<Users>): Promise<Users | null> => {
-
-    try {
-        const { firstName, lastName, email, phone, role, isActive, password } = userData;
+const updateUser = async (
+  id: string,
+  userData: Partial<Users>
+): Promise<Users | null> => {
+  try {
+    const { first_name, last_name, email, phone, role, isActive, password } =
+      userData;
 
         const res = await pool.query(`
             UPDATE users 
             SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password)
             WHERE id = $8 RETURNING *`,
-            [firstName, lastName, email, phone, role, isActive, password, id]
-        );
-        return res.rows[0] || null;
-    } catch (error) {
-        console.error("Error updating user in local DB:", error);
-        throw error;
-    }
+      [first_name, last_name, email, phone, role, isActive, password, id]
+    );
+    return res.rows[0] || null;
+  } catch (error) {
+    console.error("Error updating user in local DB:", error);
+    throw error;
+  }
+};
+
+const updateActiveUser = async (
+  id: string,
+): Promise<Users | null> => {
+  try {
+
+    const res = await pool.query(
+      `
+            UPDATE users 
+            SET is_active = true
+            WHERE id = $1 `,
+      [id]
+    );
+    return res.rows[0] || null;
+  } catch (error) {
+    console.error("Error updating user in local DB:", error);
+    throw error;
+  }
 };
 
 // יצירת משתמש חדש
@@ -90,21 +112,21 @@ const createUser = async (user: Users): Promise<Users> => {
             `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
              VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7)
              RETURNING *`,
-            [
-                user.firstName,
-                user.lastName,
-                user.email,
-                user.phone,
-                user.role,
-                user.isActive ?? true,
-                user.password,
-            ]
-        );
-        return res.rows[0];
-    } catch (error) {
-        console.error("Error creating user in local DB:", error);
-        throw error;
-    }
+      [
+        user.first_name,
+        user.last_name,
+        user.email,
+        user.phone,
+        user.role,
+        user.isActive ?? true,
+        user.password,
+      ]
+    );
+    return res.rows[0];
+  } catch (error) {
+    console.error("Error creating user in local DB:", error);
+    throw error;
+  }
 };
 
 const insertUser = async (user: {
