@@ -1,11 +1,12 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Buttons from "../features/interview/components/buttons"
 import Question from "../features/interview/components/question"
 import Sidebar from "../features/interview/components/sidebar"
-import TipsComponent from "../features/interview/components/tipsCompenent"
-import { useEffect } from "react"
+import TipsComponent from "../features/interview/components/tipsComponent"
+import { useEffect, useState } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
+
 import { useNavigate } from "react-router-dom"
 
 const InterviewPage = () => {
