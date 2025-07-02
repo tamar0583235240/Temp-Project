@@ -12,26 +12,62 @@ export const pool = new Pool({
   database: process.env.DATABASE,
 });
 
-// יצירת תשובה חדשה
+// // יצירת תשובה חדשה
+// export const createAnswer = async (
+//   userId: string,
+//   questionId: string,
+//   fileUrl: string
+// ) => {
+//   console.log('Repository: Creating answer with:', { userId, questionId, fileUrl });
+
+//   if (!userId || !questionId || !fileUrl) {
+//     console.error('Missing values in repository function');
+//     throw new Error('Missing required values in repository');
+//   }
+
+//   try {
+//     const query = `
+//       INSERT INTO answers (user_id, question_id, file_url)
+//       VALUES ($1, $2, $3)
+//       RETURNING *;
+//     `;
+//     const values = [userId, questionId, fileUrl];
+
+//     const { rows } = await pool.query(query, values);
+//     return rows[0];
+//   } catch (error: any) {
+//     console.error('Error inserting answer:', error.message || error);
+//     throw new Error('Failed to create answer');
+//   }
+// };
+
 export const createAnswer = async (
   userId: string,
   questionId: string,
-  fileUrl: string
+  fileUrl: string,
+  amountFeedbacks: number,
+  answerFileName: string
 ) => {
-  console.log('Repository: Creating answer with:', { userId, questionId, fileUrl });
+  console.log('Repository: Creating answer with:', {
+    userId,
+    questionId,
+    fileUrl,
+    amountFeedbacks,
+    answerFileName
+  });
 
-  if (!userId || !questionId || !fileUrl) {
+  if (!userId || !questionId || !fileUrl || amountFeedbacks === undefined || !answerFileName) {
     console.error('Missing values in repository function');
     throw new Error('Missing required values in repository');
   }
 
   try {
     const query = `
-      INSERT INTO answers (user_id, question_id, file_url)
-      VALUES ($1, $2, $3)
+      INSERT INTO answers (user_id, question_id, file_url, amount_feedbacks, answer_file_name)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
-    const values = [userId, questionId, fileUrl];
+    const values = [userId, questionId, fileUrl, amountFeedbacks, answerFileName];
 
     const { rows } = await pool.query(query, values);
     return rows[0];
@@ -40,8 +76,6 @@ export const createAnswer = async (
     throw new Error('Failed to create answer');
   }
 };
-
-
 
 // שליפת כל התשובות
 export const getAllAnswers = async () => {
@@ -75,6 +109,7 @@ export const updateAnswer = async (id: string, updates: any) => {
   const { rows } = await pool.query(query, [...values, id]);
   return rows[0];
 };
+
 
 
 // מחיקת תשובה

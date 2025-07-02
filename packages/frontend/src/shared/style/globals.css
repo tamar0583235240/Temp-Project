@@ -13,7 +13,7 @@
     --color-surface: #EEFDF7 ;
   }
 
-   
+
   body {
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;

@@ -37,6 +37,21 @@ module.exports = {
         bold: "700",
         extrabold: "800",
       },
+  keyframes: {
+        pulseWave: {
+          '0%': {
+            transform: 'translate(-50%, -50%) scale(1)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'translate(-50%, -50%) scale(1.8)',
+            opacity: '0',
+          },
+        },
+      },
+      animation: {
+        'pulse-wave': 'pulseWave 1.5s ease-out infinite',
+      },
     },
   },
   plugins: [],
