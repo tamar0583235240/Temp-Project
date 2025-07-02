@@ -66,8 +66,16 @@ const InterviewPage = () => {
         לדף הבית
       </button> */}
         <div className="w-full max-w-2xl space-y-8">
-          <Question />
-          <Buttons />
+<Question
+  onFinishRecording={() => console.log("📢 סיום הקלטה")}
+  onAnswerSaved={(answer: string) => console.log("💾 תשובה נשמרה:", answer)}
+/>
+
+<Buttons
+  onShowAnalysis={() => setShowAnalysis(!showAnalysis)}
+  analysisVisible={showAnalysis}
+/>
+
           <TipsComponent/>
         </div>
       </main>
