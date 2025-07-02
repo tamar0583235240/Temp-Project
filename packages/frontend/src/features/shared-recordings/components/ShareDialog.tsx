@@ -11,7 +11,6 @@ import { ShareDialogProps } from "../types/ShareDialogProps";
 const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) => {
   const [email, setEmail] = useState("");
 
-  // קבל refetch מה-hook
   const { data: participants = [], isLoading, refetch } = useGetSharedWithQuery(
     { userId, recordingId },
     { refetchOnMountOrArgChange: true, skip: !open }
@@ -33,7 +32,7 @@ const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) =
       console.log("Adding participant:", { recordingId, email, userId });
       await addParticipant({ recordingId, email, userId }).unwrap();
       setEmail("");
-      refetch(); // רענון ידני אחרי הוספה
+      refetch();
     } catch (err) {
       console.error("Error adding participant:", err);
       alert("שגיאה בהוספת משתתף. נסה שוב.");
@@ -43,7 +42,7 @@ const ShareDialog = ({ open, onClose, userId, recordingId }: ShareDialogProps) =
   const handleDelete = async (email: string) => {
     try {
       await deleteParticipant({ recordingId, email }).unwrap();
-      refetch(); // רענון ידני אחרי מחיקה
+      refetch();
     } catch (err) {
       console.error("Error deleting participant:", err);
       alert("שגיאה במחיקת משתתף. נסה שוב.");
