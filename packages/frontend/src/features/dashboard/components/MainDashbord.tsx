@@ -11,7 +11,9 @@ import { motion } from "framer-motion";
 import type { RootState } from "../../../shared/store/store";
 
 const MainDashboard: React.FC = () => {
-  const userName = useSelector((state: RootState) => state.auth?.user?.firstName ?? "אורח");
+  const userName = useSelector(
+    (state: RootState) => state.auth?.user?.firstName ?? "אורח"
+  );
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);
 
@@ -53,23 +55,40 @@ const MainDashboard: React.FC = () => {
         </div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
             <SummaryStrengths />
           </motion.div>
-          <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
             <ImprovementSuggestions fullName={userName} />
           </motion.div>
-          <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
             <AIInsightsList />
           </motion.div>
         </div>
 
-        <motion.div className="max-w-6xl mx-auto" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+        <motion.div
+          className="max-w-6xl mx-auto"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.3 }}
+        >
           <ProgressStats />
         </motion.div>
 
         {!showCertificate && (
-          <motion.div className="max-w-md mx-auto text-center" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+          <motion.div
+            className="max-w-md mx-auto text-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
             <button
               onClick={() => setShowCertificate(true)}
               className="inline-flex items-center gap-3 bg-gradient-to-br from-[--color-primary] to-[--color-primary-dark] text-white py-3 px-6 rounded-full text-lg font-semibold shadow-md hover:shadow-xl transition"

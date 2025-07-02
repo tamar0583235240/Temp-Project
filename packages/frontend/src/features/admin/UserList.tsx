@@ -6,12 +6,9 @@ import AddUserWithSwal from './components/AddNewUser';
 import { UploadUsers } from './components/UploadUsers';
 import UserUpdateForm from './components/UserUpdateForm';
 import { user } from './types/userTypes';
-import {
-  useGetUsersQuery,
-  useDeleteUserMutation,
-  useUpdateUserMutation,
-} from './services/adminApi';
+import {useGetUsersQuery,useDeleteUserMutation,useUpdateUserMutation,} from './services/adminApi';
 import { createRoot } from 'react-dom/client';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 const MySwal = withReactContent(Swal);
 
@@ -119,14 +116,22 @@ try {
 
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
         <div className="flex flex-wrap gap-4 items-center">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="חיפוש לפי שם"
-            className="px-4 py-2 border rounded-lg w-60 text-right"
-            style={{ direction: 'rtl' }}
-          />
+<div className="relative">
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="חיפוש לפי שם"
+    className="px-4 py-2 border rounded-lg w-60 text-right pr-10" // הוספתי pr-10 כדי להשאיר מקום לאיקון משמאל
+    style={{ direction: 'rtl' }}
+  />
+  <div className="absolute inset-y-0 left-0 flex items-center pl-2"> 
+    <div className="rounded p-1" style={{ backgroundColor: '#00B894' }}>
+      <MagnifyingGlassIcon className="h-5 w-5 text-white" />
+    </div>
+  </div>
+</div>
+
 
           <select
             value={statusFilter}
