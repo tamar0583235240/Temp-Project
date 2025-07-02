@@ -4,6 +4,7 @@ import { Column, Entity, Index } from "typeorm";
 @Entity("status", { schema: "public" })
 
 export class Status {
+  [x: string]: any;
   @Column("uuid", { name: "user_id" })
   user_id: string;
   @Column("simple-json", { name: "answered" })

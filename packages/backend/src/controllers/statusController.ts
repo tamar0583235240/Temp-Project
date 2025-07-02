@@ -33,5 +33,27 @@ const saveOrUpdateStatus = async (userId: string, answered: boolean[]) => {
     throw error;
   }
 };
+export const createStatus = async (req: Request, res: Response) => {
+  const { user_id, questionCount } = req.body;
+  try {
+    const newStatus = await statusRepository.insertStatus(user_id, questionCount);
+    res.status(201).json(newStatus);
+  } catch (error) {
+    console.error("Error creating status:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const updateStatus = async (req: Request, res: Response) => {
+  const { user_id, questionIndex } = req.body;
+  try {
+    const updatedStatus = await statusRepository.updateAnsweredStatus(user_id, questionIndex);
+    res.json(updatedStatus);
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 
 export default { getStatusByUserId , saveOrUpdateStatus };
