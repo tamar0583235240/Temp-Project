@@ -2,6 +2,7 @@
 import React, { useState } from 'react'; 
 
 import ReminderSettingsCard from '../features/reminders/components/ReminderSettingsCard';
+import ReminderComponent from '../features/reminders/components/remindersComponents';
 import { useSaveUserReminderSettingsMutation } from '../shared/api/api';
 
 type Selections = {
@@ -60,6 +61,7 @@ export default function RemindersPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <ReminderComponent/>
       <div className="max-w-md mx-auto">
         {message && (
           <div

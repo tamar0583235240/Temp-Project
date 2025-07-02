@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import reminderType from "../../features/reminders/types/reminderType";
+import reminderType from "../../features/reminders/types/tipType"
 
 export const api = createApi({
   reducerPath: "api", 
