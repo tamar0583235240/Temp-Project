@@ -5,6 +5,7 @@ import { logout } from "../../features/auth/store/authSlice";
 
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../api/authApi";
 
 const UserMenu = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -12,6 +13,7 @@ const UserMenu = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [logoutApi] = useLogoutMutation();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -24,7 +26,16 @@ const UserMenu = () => {
   }, []);
 
   if (!user) return null;
-  
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi(user).unwrap(); // ← מבצע את הקריאה ומחכה להצלחה
+      dispatch(logout()); // ← מנקה את הסטייט ברדאקס
+      navigate("/login");
+    } catch (error) {
+      console.error("שגיאה בהתנתקות:", error);
+    }
+  };
 
   return (
     <div className="relative" ref={menuRef}>
@@ -61,7 +72,7 @@ const UserMenu = () => {
           </button>
 
           <button
-            onClick={() => dispatch(logout())}
+            onClick={() => handleLogout()}
             className="flex items-center gap-2 space-x-2 w-full text-right px-4 py-2 text-sm hover:bg-gray-100"
           >
             <FaSignOutAlt />

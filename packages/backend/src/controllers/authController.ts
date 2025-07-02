@@ -217,6 +217,7 @@ export const logout = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      path: "/",
     });
     res.json({ message: "התנתקת בהצלחה" });
   } catch (error) {
@@ -225,15 +226,15 @@ export const logout = async (req: Request, res: Response) => {
   }
 };
 
-const pendingSignups = new Map<
+const pendingSignup = new Map<
   string,
   { userData: Users; code: string; expiresAt: number }
 >();
 
 export const requestSignup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
-  if (!email || !password || !firstName || !lastName) {
+  if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
@@ -251,11 +252,11 @@ export const requestSignup = async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
   // שמירת פרטי המשתמש והקוד זמנית
-  pendingSignups.set(email, {
+  pendingSignup.set(email, {
     userData: {
       id: uuidv4(),
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       phone,
       password: hashedPassword,
@@ -287,13 +288,13 @@ export const confirmSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "אימייל וקוד דרושים" });
   }
 
-  const pending = pendingSignups.get(email);
+  const pending = pendingSignup.get(email);
   if (!pending) {
     return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
   }
 
   if (pending.expiresAt < Date.now()) {
-    pendingSignups.delete(email);
+    pendingSignup.delete(email);
     return res.status(400).json({ message: "הקוד פג תוקף. נא לבקש קוד חדש." });
   }
 
@@ -303,7 +304,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
   // יוצרים את המשתמש האמיתי במסד
   await authRepository.signup(pending.userData);
-  pendingSignups.delete(email);
+  pendingSignup.delete(email);
 
   // יוצרים טוקן
   const token = jwt.sign(
@@ -321,7 +322,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
 //הרשמה
 export const signup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
   const existing = (await userRepository.getAllUsers()).find(
     (user) => user.email === email
@@ -334,8 +335,8 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     email,
     phone,
     password: hashedPassword,

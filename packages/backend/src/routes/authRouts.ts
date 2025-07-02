@@ -7,7 +7,6 @@ import { getMe } from '../controllers/userController';
 const router = express.Router();
 
 router.post('/login', login);
-// router.post('/signup', signup);
 router.post('/createValidationCode',  generateAndSendCode);
 router.post('/validateCode',  validateCode);
 router.post('/refresh', refreshToken);

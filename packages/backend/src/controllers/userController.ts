@@ -42,7 +42,7 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password, role } = req.body;
+  const { first_name, last_name, email, phone, password, role } = req.body;
 
   console.log("askaflaksjflsa");
   console.log(req.body.password);
@@ -59,8 +59,8 @@ export const createUser = async (req: Request, res: Response) => {
   console.log(hashedPassword);
   const newUser: Users = {
     id: uuidv4(),
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     email,
     phone,
     password: hashedPassword,
