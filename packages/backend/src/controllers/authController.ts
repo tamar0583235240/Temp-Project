@@ -201,6 +201,7 @@ export const requestSignup = async (req: Request, res: Response) => {
   // יצירת קוד אימות
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // שמירת פרטי המשתמש והקוד זמנית
   pendingSignups.set(email, {
@@ -210,7 +211,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       last_name,
       email,
       phone,
-      password,
+      password: hashedPassword,
       role: 'student',
       isActive: true,
       answers: [],
