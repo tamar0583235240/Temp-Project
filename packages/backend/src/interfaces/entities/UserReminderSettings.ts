@@ -36,6 +36,9 @@ export class UserReminderSettings {
   })
   lastSentAt: Date | null;
 
+  @Column("uuid", { name: "tip_id", nullable: true })
+  tipId: string | null;
+
   @ManyToOne(() => Users, (users) => users.userReminderSettings, {
     onDelete: "CASCADE",
   })
