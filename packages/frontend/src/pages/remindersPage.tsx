@@ -61,7 +61,7 @@ export default function RemindersPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <ReminderComponent/>
+      {/* <ReminderComponent/> */}
       <div className="max-w-md mx-auto">
         {message && (
           <div
