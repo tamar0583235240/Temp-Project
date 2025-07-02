@@ -8,12 +8,10 @@ import FileUpload from "../../recordings/components/FileUpload";
 import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
 import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
-
 type QuestionProps = {
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
 };
-
 const Question: React.FC<QuestionProps> = ({
   onFinishRecording,
   onAnswerSaved,
@@ -31,11 +29,8 @@ const Question: React.FC<QuestionProps> = ({
   const [showFileActions, setShowFileActions] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
-
   const userId = "00000000-0000-0000-0000-000000000000"; // שימי את ה־userId הנכון שלך
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -43,18 +38,15 @@ const Question: React.FC<QuestionProps> = ({
       setShowFileActions(true);
     }
   };
-
   const handleApprove = () => {
     setIsUploading(true);
   };
-
   const handleReupload = () => {
     setSelectedFile(null);
     setShowFileActions(false);
     setIsUploading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
-
   return (
     <div>
       {notification && (
@@ -75,7 +67,6 @@ const Question: React.FC<QuestionProps> = ({
           <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
             {currentQuestion.content}
           </div>
-
           <div className="flex gap-4 w-full">
             {/* העלאת קובץ */}
             <div className="w-1/2">
@@ -173,7 +164,6 @@ const Question: React.FC<QuestionProps> = ({
                 />
               )}
             </div>
-
             {/* הקלטה */}
             <div className="w-1/2">
               <AudioRecorder
@@ -186,7 +176,7 @@ const Question: React.FC<QuestionProps> = ({
         </div>
       </div>
       {/* הטיפ יוצג מתחת לכל הקומפוננטה */}
-      {selectedFile && showFileActions && !isUploading && (
+      {selectedFile && showFileActions && isUploading && (
         <div className="w-full flex justify-center mt-4">
           <TipsComponent />
         </div>
@@ -194,5 +184,4 @@ const Question: React.FC<QuestionProps> = ({
     </div>
   );
 };
-
 export default Question;
