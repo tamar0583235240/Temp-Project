@@ -20,6 +20,9 @@ export class Answers {
   @Column("text", { name: "file_url" })
   fileUrl: string;
 
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName: string | null;
+
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",

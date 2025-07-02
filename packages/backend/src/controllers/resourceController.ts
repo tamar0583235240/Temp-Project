@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { v2 as cloudinary } from 'cloudinary';
-import { Pool } from 'pg';
 import { pool } from '../config/dbConnection';
 
 cloudinary.config({
@@ -8,7 +7,6 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
 export const uploadRecording = async (req: Request, res: Response) => {
   try {

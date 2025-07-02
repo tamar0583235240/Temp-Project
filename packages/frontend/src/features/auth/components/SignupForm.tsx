@@ -252,8 +252,9 @@ export default function SignupForm() {
       });
       const data = await res.json();
       if (res.ok) {
-        dispatch(loginSuccess(data));
-        navigate("/");
+        setMessage('ההרשמה הושלמה בהצלחה!');
+        dispatch(loginSuccess(data)); // מחובר אוטומטית
+        navigate("/home"); // מעבר לדף הבית
       } else {
         setMessage(data.message || "קוד לא תקין");
       }

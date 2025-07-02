@@ -259,6 +259,14 @@ export default function LoginForm() {
       const message = err?.data?.message || "שגיאה בהתחברות";
       dispatch(loginFailure(message));
       setErrorMessage(message);
+      setShowValidation(false);
+    }
+  };
+
+  const successfulLogin = (res: any) => {
+    if (res?.user && res?.token) {
+      dispatch(loginSuccess({ user: res.user, token: res.token }));
+      navigate("/home");
     }
   };
 
