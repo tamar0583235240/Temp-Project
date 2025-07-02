@@ -10,7 +10,11 @@ console.log("📥 userId from params:", userId);
     
     const answered = await statusRepository.getStatusByUserId(userId);
     console.log("✅ answered result:", answered);
-    console.log('✅ Questions fetched successfully:', answered.length);
+   if (answered) {
+  console.log('✅ Questions fetched successfully:', answered.length);
+} else {
+  console.log('❌ No answered data found');
+}
     res.json(answered);
 
   } catch (error) {
