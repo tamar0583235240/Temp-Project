@@ -258,10 +258,24 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
   // יוצרים טוקן
   const token = jwt.sign(
-    { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
-    JWT_SECRET,
-    { expiresIn: '1h' }
-  );
+      { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+      REFRESH_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge:  2 * 60 * 60 * 1000
+    });
 
   res.status(201).json({ user: pending.userData, token });
 };
