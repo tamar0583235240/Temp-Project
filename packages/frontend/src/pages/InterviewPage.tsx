@@ -7,36 +7,52 @@ import { useEffect } from "react"
 import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
 import { setQuestions } from "../features/interview/store/simulationSlice"
 import { useNavigate } from "react-router-dom"
-// import Status from "../features/interview/components/status"
 
 const InterviewPage = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, isLoading, error } = useGetAllQuestionsQuery();
+  const { data } = useGetAllQuestionsQuery();
+
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const [lastQuestionIndex, setLastQuestionIndex] = useState<number | null>(null);
+  const [showTips, setShowTips] = useState(false);
+  const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+
+  const currentIndex = useSelector((state: any) => state.simulation.currentIndex);
 
   useEffect(() => {
-     if (data) {
-       const mappedQuestions = data.map((q: any) => ({
-         id: q.id,
-         title: q.title || "",
-         content: q.content || "",
-         category: q.category || "",
-         tips: q.tips || "",
-         question_type: q.question_type || q.type || "open",
-         options: q.options || [],
-         answered: false,
-         answer: q.answer || "",
-         aiGuidance: q.aiGuidance || "",
-         isActive: q.isActive ?? false,
-       }));
-       dispatch(setQuestions(mappedQuestions));
-     }
-   }, [data, dispatch]);
- 
-  return (
+    if (data) {
+      const mappedQuestions = data.map((q: any) => ({
+        id: q.id,
+        title: q.title || "",
+        content: q.content || "",
+        category: q.category || "",
+        tips: q.tips || "",
+        question_type: q.question_type || q.type || "open",
+        options: q.options || [],
+        answered: false,
+        answer: q.answer || "",
+        aiGuidance: q.aiGuidance || "",
+        isActive: q.isActive ?? false,
+      }));
+      dispatch(setQuestions(mappedQuestions));
+    }
+  }, [data, dispatch]);
 
-    
+  useEffect(() => {
+    if (lastQuestionIndex !== null) {
+      setShowAnalysis(false);
+      setShowTips(false);
+      setAnswerIdForAI(null);
+    }
+  }, [lastQuestionIndex]);
+
+  useEffect(() => {
+    setLastQuestionIndex(currentIndex);
+  }, [currentIndex]);
+
+  return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
       
       
@@ -50,17 +66,17 @@ const InterviewPage = () => {
       </button> */}
         <div className="w-full max-w-2xl space-y-8">
           <Question />
-
           <Buttons />
           <TipsComponent/>
         </div>
       </main>
+
       {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
         <Sidebar />
       </aside>
     </div>
-  )
-}
+  );
+};
 
 export default InterviewPage;

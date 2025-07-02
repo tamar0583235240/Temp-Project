@@ -1,5 +1,6 @@
 import { pool } from '../config/dbConnection';
 import { Status } from '../interfaces/entities/Status';
+
 // Removed duplicate getStatusByUserId function to resolve redeclaration error.
 export const insertStatus = async (user_id: string, questionCount: number): Promise<Status> => {
   const answered = Array(questionCount).fill(false);
