@@ -1,6 +1,5 @@
 // shared/api/api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ProgressStats } from "../../features/dashboard/types/aiInsightsType";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
