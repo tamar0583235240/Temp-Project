@@ -8,10 +8,15 @@ import { Certificate } from "./Certificate";
 import { motion } from "framer-motion";
 import { Award } from "lucide-react";
 import { useRef, useState } from "react";
+import { useUserStore } from "../store/progressSlice";
 
 const MainDashboard = () => {
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);
+
+  const { answered, total } = useUserStore();
+  const isComplete = answered === total && total > 0;
+
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (
@@ -68,8 +73,24 @@ const MainDashboard = () => {
           <ProgressStats />
         </motion.div>
 
-        {!showCertificate && (
+        {/* {showCertificate && (
           <motion.div className="max-w-md mx-auto text-center" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+            <button
+              onClick={() => setShowCertificate(true)}
+              className="inline-flex items-center gap-3 bg-gradient-to-br from-[--color-primary] to-[--color-primary-dark] text-white py-3 px-6 rounded-full text-lg font-semibold shadow-md hover:shadow-xl transition"
+            >
+              <Award size={24} className="text-white" />
+              תעודת מוכנות לראיון
+            </button>
+          </motion.div>
+        )} */}
+
+        {isComplete && !showCertificate && (
+          <motion.div
+            className="max-w-md mx-auto text-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
             <button
               onClick={() => setShowCertificate(true)}
               className="inline-flex items-center gap-3 bg-gradient-to-br from-[--color-primary] to-[--color-primary-dark] text-white py-3 px-6 rounded-full text-lg font-semibold shadow-md hover:shadow-xl transition"

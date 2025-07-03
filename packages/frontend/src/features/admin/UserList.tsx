@@ -100,16 +100,16 @@ const UserList = () => {
         title: '!עודכן',
         text: 'הפרטים עודכנו בהצלחה',
         icon: 'success',
-        iconColor: '#64748B', // כאן הוספתי
-        confirmButtonColor: '#00B894', // לדוגמה ירוק מותאם
+        iconColor: '#64748B',
+        confirmButtonColor: '#00B894',
       });
     } catch {
       Swal.fire({
         title: 'שגיאה',
         text: 'אירעה שגיאה בעדכון',
         icon: 'error',
-        iconColor: '#64748B', // גם כאן אם תרצי
-        confirmButtonColor: '#e74c3c', // לדוגמה אדום מותאם
+        iconColor: '#64748B',
+        confirmButtonColor: '#e74c3c',
       });
     }
   }
