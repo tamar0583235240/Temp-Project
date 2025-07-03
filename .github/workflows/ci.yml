@@ -20,48 +20,45 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
           cache-dependency-path: |
-            frontend/package-lock.json
-            backend/package-lock.json
+            packages/frontend/package-lock.json
+            packages/backend/package-lock.json
 
       # ---------- CLIENT ----------
       - name: Install client dependencies
-        working-directory: frontend
-        run: yarn install
+        working-directory: packages/frontend
+        run: npm install
 
       - name: Lint client
-        working-directory: frontend
+        working-directory: packages/frontend
         run: |
-          if yarn lint; then echo "Lint passed"; else echo "Lint failed" && exit 1; fi
-        continue-on-error: false
+          if npm run lint; then echo "Lint passed"; else echo "Lint failed" && exit 1; fi
 
       - name: Build client
-        working-directory: frontend
-        run: yarn build
+        working-directory: packages/frontend
+        run: npm run build
 
       - name: Test client
-        working-directory: frontend
-        run: yarn test --watchAll=false
+        working-directory: packages/frontend
+        run: npm test -- --watchAll=false
 
       # ---------- SERVER ----------
       - name: Install server dependencies
-        working-directory: backend
-        run: yarn install || npm install
+        working-directory: packages/backend
+        run: npm install
 
       - name: Build server
-        working-directory: backend
-        run: yarn build || npm run build
+        working-directory: packages/backend
+        run: npm run build
 
       - name: Test server (skipped if not available)
-        working-directory: backend
+        working-directory: packages/backend
         run: |
-          if [ -f "package.json" ] && grep -q '"test"' backend/package.json; then
-            yarn test || npm test
+          if [ -f "package.json" ] && grep -q '"test"' package.json; then
+            npm test
           else
             echo "No server tests defined. Skipping."
           fi
@@ -76,11 +73,11 @@ jobs:
       - name: Check folder structure
         run: |
           EXPECTED_DIRS=(
-            "frontend/src/features/auth"
-            "frontend/src/features/interview"
-            "backend/src/controllers"
-            "backend/src/routes"
-            "frontend/src/pages"
+            "packages/frontend/src/features/auth"
+            "packages/frontend/src/features/interview"
+            "packages/backend/src/controllers"
+            "packages/backend/src/routes"
+            "packages/frontend/src/pages"
           )
 
           for DIR in "${EXPECTED_DIRS[@]}"; do
@@ -94,11 +91,11 @@ jobs:
       - name: Check critical files exist
         run: |
           CRITICAL_FILES=(
-            "frontend/src/index.tsx"
-            "frontend/src/App.tsx"
-            "frontend/src/store/index.ts"
-            "backend/src/index.ts"
-            "backend/src/app.ts"
+            "packages/frontend/src/index.tsx"
+            "packages/frontend/src/App.tsx"
+            "packages/frontend/src/store/index.ts"
+            "packages/backend/src/index.ts"
+            "packages/backend/src/app.ts"
           )
 
           for FILE in "${CRITICAL_FILES[@]}"; do
@@ -111,7 +108,7 @@ jobs:
 
       - name: Check no extra package.json files
         run: |
-          EXTRA_PKG=$(find . -name package.json ! -path "./frontend/package.json" ! -path "./backend/package.json")
+          EXTRA_PKG=$(find . -name package.json ! -path "./packages/frontend/package.json" ! -path "./packages/backend/package.json")
           if [ -n "$EXTRA_PKG" ]; then
             echo "❌ Found unexpected package.json files:" && echo "$EXTRA_PKG" && exit 1
           fi
@@ -119,7 +116,7 @@ jobs:
 
       - name: Check no node_modules outside frontend/backend
         run: |
-          OUTSIDE_NODE_MODULES=$(find . -type d -name node_modules ! -path "./frontend/node_modules" ! -path "./backend/node_modules")
+          OUTSIDE_NODE_MODULES=$(find . -type d -name node_modules ! -path "./packages/frontend/node_modules" ! -path "./packages/backend/node_modules")
           if [ -n "$OUTSIDE_NODE_MODULES" ]; then
             echo "❌ Found unexpected node_modules directories:" && echo "$OUTSIDE_NODE_MODULES" && exit 1
           fi
@@ -127,7 +124,7 @@ jobs:
 
       - name: Check no unexpected build/dist folders
         run: |
-          INVALID_BUILD_DIRS=$(find . -type d \( -name dist -o -name build \) ! -path "./frontend/build" ! -path "./backend/dist")
+          INVALID_BUILD_DIRS=$(find . -type d \( -name dist -o -name build \) ! -path "./packages/frontend/build" ! -path "./packages/backend/dist")
           if [ -n "$INVALID_BUILD_DIRS" ]; then
             echo "❌ Found unexpected build/dist directories:" && echo "$INVALID_BUILD_DIRS" && exit 1
           fi
@@ -135,8 +132,8 @@ jobs:
 
       - name: Check no .env files outside backend
         run: |
-          INVALID_ENVS=$(find . -name ".env" ! -path "./backend/.env")
+          INVALID_ENVS=$(find . -name ".env" ! -path "./packages/backend/.env")
           if [ -n "$INVALID_ENVS" ]; then
             echo "❌ Found unexpected .env files:" && echo "$INVALID_ENVS" && exit 1
           fi
-          echo "✅ No unexpected .env files found. "
+          echo "✅ No unexpected .env files found."
