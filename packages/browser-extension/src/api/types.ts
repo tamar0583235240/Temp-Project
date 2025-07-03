@@ -12,3 +12,14 @@ export interface LoginRequest {
   email: string;
   password: string;
 }
+
+export interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone?: string;
+  role: 'student' | 'manager';
+  createdAt: string;
+  isActive: boolean;
+}

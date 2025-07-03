@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { ProgressButton } from './ProgressButton';
 import { ProgressStats } from './ProgressStats';
-import { useGetProgressQuery } from '../api/progressApi';
+import { useGetProgressQuery } from '../api/api';
 
 export const OverlayPopup = () => {
   const [open, setOpen] = useState(false);
