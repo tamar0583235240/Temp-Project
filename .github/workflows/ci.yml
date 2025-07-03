@@ -1,49 +1,137 @@
-name: Monorepo CI
+name: CI
 
 on:
   push:
-    # branches: [main]
-    branches: [TamarBiton]
+    branches: [main, TamarBiton]
   pull_request:
     branches: [main]
 
 jobs:
-  build:
+  install-and-test:
+    name: Install, Lint, Build & Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18]
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
+          cache: 'yarn'
 
-      - name: Install server dependencies
-        working-directory: ./packages/server
-        run: yarn install
-
-      - name: Build server
-        working-directory: ./packages/server
-        run: yarn build
-
-      - name: Test server
-        working-directory: ./packages/server
-        run: yarn test || echo "No server tests"
-
+      # ---------- CLIENT ----------
       - name: Install client dependencies
-        working-directory: ./packages/client
+        working-directory: frontend
         run: yarn install
+
+      - name: Lint client
+        working-directory: frontend
+        run: |
+          if yarn lint; then echo "Lint passed"; else echo "Lint failed" && exit 1; fi
+        continue-on-error: false
 
       - name: Build client
-        working-directory: ./packages/client
+        working-directory: frontend
         run: yarn build
 
       - name: Test client
-        working-directory: ./packages/client
-        run: yarn test || echo "No client tests"
+        working-directory: frontend
+        run: yarn test --watchAll=false
 
-        
+      # ---------- SERVER ----------
+      - name: Install server dependencies
+        working-directory: backend
+        run: yarn install || npm install
+
+      - name: Build server
+        working-directory: backend
+        run: yarn build || npm run build
+
+      - name: Test server (skipped if not available)
+        working-directory: backend
+        run: |
+          if [ -f "package.json" ] && grep -q '"test"' backend/package.json; then
+            yarn test || npm test
+          else
+            echo "No server tests defined. Skipping."
+          fi
+
+  # ---------- STRUCTURE CHECK ----------
+  verify-structure:
+    name: Validate Project Structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check folder structure
+        run: |
+          EXPECTED_DIRS=(
+            "frontend/src/features/auth"
+            "frontend/src/features/interview"
+            "backend/src/controllers"
+            "backend/src/routes"
+            "frontend/src/pages"
+          )
+
+          for DIR in "${EXPECTED_DIRS[@]}"; do
+            if [ ! -d "$DIR" ]; then
+              echo "Missing expected directory: $DIR" && exit 1
+            fi
+          done
+
+          echo "✅ All expected folders exist."
+
+      - name: Check critical files exist
+        run: |
+          CRITICAL_FILES=(
+            "frontend/src/index.tsx"
+            "frontend/src/App.tsx"
+            "frontend/src/store/index.ts"
+            "backend/src/index.ts"
+            "backend/src/app.ts"
+          )
+
+          for FILE in "${CRITICAL_FILES[@]}"; do
+            if [ ! -f "$FILE" ]; then
+              echo "❌ Missing critical file: $FILE" && exit 1
+            fi
+          done
+
+          echo "✅ All critical files exist."
+
+      - name: Check no extra package.json files
+        run: |
+          EXTRA_PKG=$(find . -name package.json ! -path "./frontend/package.json" ! -path "./backend/package.json")
+          if [ -n "$EXTRA_PKG" ]; then
+            echo "❌ Found unexpected package.json files:" && echo "$EXTRA_PKG" && exit 1
+          fi
+          echo "✅ No unexpected package.json files found."
+
+      - name: Check no node_modules outside frontend/backend
+        run: |
+          OUTSIDE_NODE_MODULES=$(find . -type d -name node_modules ! -path "./frontend/node_modules" ! -path "./backend/node_modules")
+          if [ -n "$OUTSIDE_NODE_MODULES" ]; then
+            echo "❌ Found unexpected node_modules directories:" && echo "$OUTSIDE_NODE_MODULES" && exit 1
+          fi
+          echo "✅ No unexpected node_modules directories found."
+
+      - name: Check no unexpected build/dist folders
+        run: |
+          INVALID_BUILD_DIRS=$(find . -type d \( -name dist -o -name build \) ! -path "./frontend/build" ! -path "./backend/dist")
+          if [ -n "$INVALID_BUILD_DIRS" ]; then
+            echo "❌ Found unexpected build/dist directories:" && echo "$INVALID_BUILD_DIRS" && exit 1
+          fi
+          echo "✅ No unexpected build/dist directories found."
+
+      - name: Check no .env files outside backend
+        run: |
+          INVALID_ENVS=$(find . -name ".env" ! -path "./backend/.env")
+          if [ -n "$INVALID_ENVS" ]; then
+            echo "❌ Found unexpected .env files:" && echo "$INVALID_ENVS" && exit 1
+          fi
+          echo "✅ No unexpected .env files found."
