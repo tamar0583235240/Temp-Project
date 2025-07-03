@@ -1,7 +1,8 @@
-import { Router } from 'express';
-import { saveTimeSpent} from '../controllers/activity-Monitoring';
+import express from "express";
+import { getPopularQuestions } from "../controllers/activity-Monitoring";
 
-const router = Router();
-router.post('/',saveTimeSpent)
+const router = express.Router();
+
+router.get("/questions/popular", getPopularQuestions);
 
 export default router;

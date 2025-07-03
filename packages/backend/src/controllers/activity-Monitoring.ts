@@ -1,27 +1,29 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 import { pool } from "../config/dbConnection";
 
-export const saveTimeSpent = async (req: Request, res: Response) => {
+export const getPopularQuestions = async (req: Request, res: Response) => {
   try {
-    const { page, timeSpentSec } = req.body;
+    const limit = parseInt(req.query.limit as string, 10) || 5;
 
-    if ( !page || !timeSpentSec) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    await pool.query(
+    const popularQuestionsResult = await pool.query(
       `
-      INSERT INTO user_activity ( page, time_spent_sec, timestamp)
-      VALUES ($1, $2,  NOW())
+      SELECT 
+        q.id,
+        q.question_text,
+        COUNT(a.id) AS answer_count
+      FROM questions q
+      LEFT JOIN answers a ON q.id = a.question_id
+      WHERE q.is_active = true
+      GROUP BY q.id, q.question_text
+      ORDER BY answer_count DESC
+      LIMIT $1
       `,
-      [ page, timeSpentSec]
+      [limit]
     );
 
-    return res.status(201).json({ message: "Time spent recorded successfully" });
+    res.json(popularQuestionsResult.rows);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("שגיאה בשליפת שאלות פופולריות:", error);
+    res.status(500).json({ error: "אירעה שגיאה בעת שליפת שאלות פופולריות" });
   }
 };
-
-  
