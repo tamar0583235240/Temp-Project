@@ -1,10 +1,11 @@
-[{
+[
+  {
     "name": "default",
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "ruti",
+    "password": "rut1558",
     "database": "",
     "synchronize": false,
     "entities": ["entities/*.js"]

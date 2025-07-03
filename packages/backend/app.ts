@@ -3,7 +3,9 @@ import AiInsightsRouter from './src/routes/aIInsightRouts';
 import answerRouter from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
-import cors from 'cors';
+import cors from 'cors'
+import router from './src/routes/questionRouts';
+
 import questionRouter from './src/routes/questionRouts';
 
 
@@ -28,6 +30,12 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+// <<<<<<< HEAD
+// app.use(cors());
+// app.use('/api', router)
+
+// =======
+// >>>>>>> main
 app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
