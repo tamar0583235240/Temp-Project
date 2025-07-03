@@ -1,11 +1,33 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+async function login(email: string, password: string) {
+  const res = await fetch("/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ email, password }),
+  });
+  if (!res.ok) throw new Error("שגיאה בהתחברות");
+  const data = await res.json();
+  return data.token; // או data.user, לפי מה שהשרת מחזיר
+}
+async function getProgress(token: string) {
+  const res = await fetch("/progress", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) throw new Error("שגיאה בשליפת התקדמות");
+  return await res.json();
+}
+async function getTips(token: string) {
+  const res = await fetch("/tips", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) throw new Error("שגיאה בשליפת טיפים");
+  return await res.json();
+}
 
-export const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000", 
-    credentials: 'include',
-  }),
-  reducerPath: "api",
-  tagTypes: [],
-  endpoints: () => ({}),
-});
+export { login, getProgress, getTips };
