@@ -6,7 +6,7 @@ export const AdminQuestionApi = api.injectEndpoints({
     endpoints: (builder) => ({
         addQuestion: builder.mutation<void, Question>({
             query: (question) => ({
-                url: "api/questions/addQuestion",
+                url: "question/addQuestion",
                 method: "POST",
                 body: question,
             }),

@@ -32,6 +32,7 @@ export const AddQuestion = () => {
         e.preventDefault()
         
         try {
+            console.log(newQuestion);
             await addQuestion(newQuestion).unwrap()
             showMessage("הצלחה!", "השאלה נוספה בהצלחה למאגר השאלות")
             setNewQuestion({
