@@ -40,7 +40,7 @@ const Question: React.FC<QuestionProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
-  const userId = "00000000-0000-0000-0000-000000000000"; // שימי את ה־userId הנכון שלך
+  const userId = "123e9567-e89b-12d3-a456-426614155000"; 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
