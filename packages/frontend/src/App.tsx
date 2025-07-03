@@ -8,7 +8,6 @@ function App() {
   return (
     <MessageModalProvider>
       <BrowserRouter>
-        <RouteTimer/>
           <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>

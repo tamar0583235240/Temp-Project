@@ -18,6 +18,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);
 app.use("/api/monitoringh", activity_MonitoringRoutes);
+app.use("/api/activity", activity_MonitoringRoutes);
 
 
 export default app;

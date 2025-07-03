@@ -49,6 +49,11 @@ export default function AppRoutes() {
                     <p>AdminResources</p>
                 </RoleProtectedRoute>
             } />
+            <Route path="/admin/monitoring" element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                    <p>Monitoring</p>
+                </RoleProtectedRoute>
+            } />
         </Routes>
     );
 }
