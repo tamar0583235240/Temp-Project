@@ -1,10 +1,19 @@
 import dotenv from 'dotenv';
-import app from './app';
+import { appA, appB } from './app';
+
+
 dotenv.config();
 
-const PORT = process.env.PORT || 5001;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const PORTA = process.env.PORTA || 5001;
+appA.listen(PORTA, () => {
+  console.log(`Server is running on port ${PORTA}`);
 });
+
+
+const PORTB = process.env.PORTB || 5001;
+appB.listen(PORTB, () => {
+  console.log(`Server is running on port ${PORTB}`);
+});
+
+
 

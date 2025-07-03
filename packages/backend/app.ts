@@ -14,34 +14,38 @@ import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
 // import {supabase} from './src/config/dbConnection';
 
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
-};
+
 dotenv.config();
-const app: Application = express();
 
+const createApp = (): Application => {
+  const app = express();
 
+  const corsOptions = {
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  };
+  app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }));
+  app.use(cors(corsOptions));
+  app.use(express.json());
+  app.use(cookieParser());
+  app.use('/api', feedbackRouter);
+  app.use('/api', AiInsightsRouter);
+  app.use('/api', sharedRecrdingRouter);
+  app.use('/answers', answerRouter);
+  app.use('/question', questionRouter);
+  app.use('/users', userRouts);
+  app.use('/auth', authRouts);
+  app.use('/interview-materials-hub', interviewMaterialsHub);
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
-app.use(express.json());
-app.use('/api' ,feedbackRouter )
-app.use('/api' , AiInsightsRouter ) 
-app.use('/api' , sharedRecrdingRouter )  
-app.use('/answers', answerRouter);
-app.use('/question', questionRouter); 
-app.use(cookieParser());
-app.use('/users', userRouts);
-app.use('/auth', authRouts);
+  return app;
+};
+const appA = createApp();
+const appB = createApp();
 
-app.use('/interview-materials-hub', interviewMaterialsHub);
-
-
-
-export default app;
+export  { appA, appB };
 
 
 

@@ -1,5 +1,7 @@
 import {pool} from '../config/dbConnection';
 import { Feedback } from "../interfaces/entities/Feedback";
+import shareRecordingRepository  from '../reposioty/shareRecordingRepository';
+
 
 const getFeedbackByAnswerCode= async (answerCode:string): Promise<Feedback[]> => {
   
@@ -15,4 +17,22 @@ const getFeedbackByAnswerCode= async (answerCode:string): Promise<Feedback[]> =>
   }
 }
 
-export default {getFeedbackByAnswerCode};
+
+const getFeedbackesByanswerId = async (answerId:string): Promise<Feedback[]> => {
+    
+    try {
+        const sharedRecordingId =  await shareRecordingRepository.getSharedRecordingIdByAnswerId(answerId);
+        const data = await pool.query(`SELECT * FROM feedback WHERE shared_recording_id = $1` , [sharedRecordingId] );   
+
+        console.log(data.rows.length);
+        
+        return data.rows as Feedback[];
+    }
+    catch (error) {
+        console.error(`Error fetching feedbackes by sharedRecordingId: ${answerId} from Supabase:`, error);
+        throw error;
+    }
+
+}
+
+export default { getFeedbackesByanswerId ,getFeedbackByAnswerCode};

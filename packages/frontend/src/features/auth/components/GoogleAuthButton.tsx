@@ -5,7 +5,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../store/userSlice';
-import { useAuthWithGoogleMutation } from '../../../shared/api/userApi';
+import { useAuthWithGoogleMutation } from '../../../shared/api/userApiA';
 import { loginFailure, loginSuccess } from '../store/authSlice';
 
 const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';

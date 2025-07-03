@@ -27,7 +27,7 @@
   },
   "include": [
     "src/**/*"
-  ],
+, "SimulationService/repository/answerRepository.ts"  ],
   "exclude": [
     "node_modules",
     "dist"

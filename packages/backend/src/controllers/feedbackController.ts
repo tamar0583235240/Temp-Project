@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import feedbackRepository from '../reposioty/feedbackReposioty';
+import feedbackRepository from '../reposioty/feedBackRepository';
 import { Feedback } from '../interfaces/entities/Feedback';
 export const getFeedbackesByanswerId = async (req: Request, res: Response): Promise<Feedback | void> => {
     try {

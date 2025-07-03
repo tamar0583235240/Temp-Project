@@ -1,5 +1,5 @@
-import { pool } from '../config/dbConnection';
-import { Answers } from "../interfaces/entities/Answers";
+import { pool } from '../../src/config/dbConnection';
+import { Answers } from "../../src/interfaces/entities/Answers";
 
 const getAllAnswersByIdUser = async (userId: string): Promise<Answers[]> => {
 
