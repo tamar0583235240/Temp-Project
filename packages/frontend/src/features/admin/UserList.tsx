@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import UserCard from './components/UserCard';
@@ -6,12 +6,9 @@ import AddUserWithSwal from './components/AddNewUser';
 import { UploadUsers } from './components/UploadUsers';
 import UserUpdateForm from './components/UserUpdateForm';
 import { user } from './types/userTypes';
-import {
-  useGetUsersQuery,
-  useDeleteUserMutation,
-  useUpdateUserMutation,
-} from './services/adminApi';
+import { useGetUsersQuery, useDeleteUserMutation, useUpdateUserMutation, } from './services/adminApi';
 import { createRoot } from 'react-dom/client';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 const MySwal = withReactContent(Swal);
 
@@ -119,15 +116,23 @@ const UserList = () => {
       <h2 className="text-center text-2xl font-bold mb-8">רשימת משתמשים</h2>
 
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
-        <div className="flex flex-wrap gap-4 items-center" dir='rtl'>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="חיפוש לפי שם"
-            className="px-4 py-2 border rounded-lg w-40 text-right"
-            style={{ direction: 'rtl' }}
-          />
+        <div className="flex flex-wrap gap-4 items-center">
+          <div className="relative">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="חיפוש לפי שם"
+              className="px-4 py-2 border rounded-lg w-60 text-right pr-10" // הוספתי pr-10 כדי להשאיר מקום לאיקון משמאל
+              style={{ direction: 'rtl' }}
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center pl-2">
+              <div className="rounded p-1" style={{ backgroundColor: '#00B894' }}>
+                <MagnifyingGlassIcon className="h-5 w-5 text-white" />
+              </div>
+            </div>
+          </div>
+
 
           <select
             value={statusFilter}

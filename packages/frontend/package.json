@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.1.1",
     "@jridgewell/gen-mapping": "^0.3.8",
     "@nodelib/fs.walk": "^1.2.8",
