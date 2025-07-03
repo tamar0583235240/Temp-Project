@@ -19,7 +19,7 @@ export default function SignupForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [step, setStep] = useState<"form" | "verify">("form");
-  const [step, setStep] = useState<"form" | "verify">("form");
+ 
 
   const [form, setForm] = useState({
     first_name: "",
@@ -27,11 +27,7 @@ export default function SignupForm() {
     email: "",
     password: "",
     phone: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    phone: "",
+   
   });
 
   const [codeDigits, setCodeDigits] = useState(["", "", "", "", "", ""]);

@@ -35,7 +35,7 @@ function App() {
 }, []);
   if (loading) return <p>טוען...</p>;
  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
- const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
+ 
   return (
     <GoogleOAuthProvider clientId={clientId}>
     <Provider store={store}>
