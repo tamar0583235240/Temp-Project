@@ -1,3 +1,4 @@
+
 import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
@@ -16,10 +17,8 @@ function App() {
   const dispatch = useAppDispatch();
   const [refreshTokenTrigger] = useRefreshTokenMutation();
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
   dispatch(loginStart());
-
   refreshTokenTrigger()
     .unwrap()
     .then((res) => {
@@ -34,8 +33,8 @@ function App() {
       setLoading(false);
     });
 }, []);
-
   if (loading) return <p>טוען...</p>;
+ const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
   return (
     <GoogleOAuthProvider clientId={clientId}>
@@ -59,5 +58,4 @@ function App() {
            </GoogleOAuthProvider>
   );
 }
-
 export default App;

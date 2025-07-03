@@ -1,0 +1,14 @@
+export interface ProgressData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  percent: number;
+  answered: number;
+  total: number;
+  weakAreas: string[];
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}

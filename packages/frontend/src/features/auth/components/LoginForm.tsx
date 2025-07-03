@@ -28,7 +28,6 @@ const LoginForm = () => {
     e.preventDefault();
     dispatch(loginStart());
     setErrorMessage("");
-
     try {
       const res = await login({ email, password }).unwrap();
       setTempEmail(email);

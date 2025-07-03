@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 export async function sendResetEmail(email: string, token: string) {
   const resetUrl = `http://localhost:5000/reset-password?token=${token}`;
   const mailOptions = {
-    from: `"LingoPrep" <${process.env.EMAIL_USER}>`,
+    from: `"DiversiTech LingoPrep" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'איפוס סיסמה',
     text: ` קישור לאיפוס הסיסמה שלך: ${resetUrl}`,

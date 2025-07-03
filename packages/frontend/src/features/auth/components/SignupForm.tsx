@@ -19,8 +19,14 @@ export default function SignupForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [step, setStep] = useState<"form" | "verify">("form");
+  const [step, setStep] = useState<"form" | "verify">("form");
 
   const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    phone: "",
     first_name: "",
     last_name: "",
     email: "",
@@ -41,6 +47,7 @@ export default function SignupForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
