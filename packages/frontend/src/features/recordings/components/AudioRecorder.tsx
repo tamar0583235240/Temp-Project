@@ -17,8 +17,8 @@ type AudioRecorderProps = {
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
-  userId = '00000000-0000-0000-0000-000000000000',
-  questionId = '00000000-0000-0000-0000-000000000010',
+  userId = '550e8400-e29b-41d4-a716-446655440005',
+  questionId = '00ca827f-f7a4-4449-8abc-64f84ce23dad',
   onFinish,
   onSaveSuccess
 }) => {
