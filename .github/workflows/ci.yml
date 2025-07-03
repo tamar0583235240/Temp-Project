@@ -94,7 +94,7 @@ jobs:
             "packages/frontend/src/index.tsx"
             "packages/frontend/src/App.tsx"
             "packages/backend/src/index.ts"
-            "packages/backend/src/app.ts"
+            "packages/backend/app.ts"
           )
 
           for FILE in "${CRITICAL_FILES[@]}"; do
