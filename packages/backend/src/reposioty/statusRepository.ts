@@ -30,9 +30,12 @@ export const updateAnsweredStatus = async (user_id: string, questionIndex: numbe
 
   let answered = currentStatus.answered;
 
-  // אם המערך קצר מדי – נרחיב אותו עד האינדקס הנדרש, עם false
   if (questionIndex >= answered.length) {
-    const extended = Array.from({ length: questionIndex + 1 }, (_, i) => answered[i] ?? false);
+    // מרחיבים את המערך – כל מה שחסר מאותחל ל־false
+    const extended = [...answered];
+    for (let i = answered.length; i <= questionIndex; i++) {
+      extended[i] = false;
+    }
     answered = extended;
   }
 
