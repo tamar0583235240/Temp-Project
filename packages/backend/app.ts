@@ -8,12 +8,24 @@ import cookieParser from 'cookie-parser';
 import interviewMaterialsHub from './src/routes/interview-materials-sub';
 import dotenv from 'dotenv';
 
+dotenv.config();
+
+const allowedOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin) return callback(null, true); // בקשות כמו Postman שאין להן origin
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('CORS blocked: Origin not allowed'));
+    }
+  },
   credentials: true,
 };
-
-dotenv.config();
 
 const app: Application = express();
 
@@ -22,11 +34,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+
 app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  next();
+});
 app.use(express.json());
 app.use(cookieParser());
 
