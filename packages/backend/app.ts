@@ -3,6 +3,7 @@ import cors from 'cors';
 import usersRoutes from './src/routes/userRouts';
 import answerRoutes from './src/routes/answerRouts';
 import aiInsightRoutes from './src/routes/aIInsightRouts';
+import activity_MonitoringRoutes from './src/routes/activity-MonitoringRoutes'
 import { pool } from './src/config/dbConnection';
 
 const app: Application = express();
@@ -16,5 +17,7 @@ app.use(express.json());
 app.use("/api/users", usersRoutes);
 app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);
+app.use("/api/monitoringh", activity_MonitoringRoutes);
+
 
 export default app;
