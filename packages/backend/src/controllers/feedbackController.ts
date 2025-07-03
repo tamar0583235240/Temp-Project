@@ -1,14 +1,16 @@
 import { Request, Response } from 'express';
-import feedbackRepository from '../reposioty/feedbackReposioty';
 import { Feedback } from '../interfaces/entities/Feedback';
-export const getFeedbackesByanswerId = async (req: Request, res: Response): Promise<Feedback | void> => {
+import { getFeedbackesByanswerIdRepo } from '../reposioty/feedBackRepository';
+
+export const getFeedbackesByanswerId = async (req: Request, res: Response): Promise<void> => {
     try {
-        // const sharedRecordingId = req.params.sharedRecordingId;
-        // const feedbackes = await feedbackRepository.getFeedbackesByanswerId(sharedRecordingId);
-        // res.json(feedbackes);        
-        //res.json([{id:"1",sharedRecordingId:"1",givenByUserId:"1",comment:"good",rating:5,createdAt:new Date()},{id:"2",sharedRecordingId:"1",givenByUserId:"1",comment:"good",rating:5,createdAt:new Date()},{id:"3",sharedRecordingId:"1",givenByUserId:"1",comment:"good",rating:5,createdAt:new Date()}])
+        const sharedRecordingId = req.params.sharedRecordingId;
+        const feedbackes = await getFeedbackesByanswerIdRepo(sharedRecordingId);
+        res.json(feedbackes);
     } catch (error) {
         console.error('Error in getFeedbackesBysharedRecordingId:', error);
-        res.status(500).json({ error });
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
 };

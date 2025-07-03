@@ -9,7 +9,7 @@ export const TitleQuestions: React.FC<TitleQuestionsProps> = ({ data }) => {
     const questions = useGetQuestionByIdQuery(data);
     return (
         <div>
-            {questions.data?.title}
+            {questions.data?.content}
         </div>
     );
 };
