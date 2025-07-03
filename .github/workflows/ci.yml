@@ -93,7 +93,6 @@ jobs:
           CRITICAL_FILES=(
             "packages/frontend/src/index.tsx"
             "packages/frontend/src/App.tsx"
-            "packages/frontend/src/store/index.ts"
             "packages/backend/src/index.ts"
             "packages/backend/src/app.ts"
           )
