@@ -9,7 +9,7 @@ import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
 import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
-import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
+// import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
 import Buttons from "../features/interview/components/buttons";
 
 const InterviewPage = () => {
@@ -75,11 +75,14 @@ const InterviewPage = () => {
           {/* כאן מציגים את הטיפ וה-AI */}
           {showTips && <TipsComponent />}
           {isLoadingAI && <MagicLoader />}
-          {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />}
+          {/* //////////////////////////// */}
+          {answerIdForAI && !isLoadingAI && <AnswerAI/>}
+
+          {/* {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />} */}
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
-          <EndSurvey/>
+          <EndSurvey />
         </div>
       </main>
 

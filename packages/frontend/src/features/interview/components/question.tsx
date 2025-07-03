@@ -11,7 +11,6 @@ import TipsComponent from "./tipsComponent";
 import AnswerAI from "../../interview/components/AnswerAI";
 import MagicLoader from "../../interview/components/MagicLoader";
 
-// הוסף פרופס חדשים לקבלת סטייטים מהעמוד הראשי
 interface QuestionProps {
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
@@ -205,7 +204,7 @@ const Question: React.FC<QuestionProps> = ({
         {/* הצגת ניתוח AI */}
         {answerIdForAI && !isLoadingAI && (
           <div className="w-full flex justify-center">
-            <AnswerAI answerId={answerIdForAI} />
+            <AnswerAI />
           </div>
         )}
         {/* חיווי טעינה ל-AI */}
