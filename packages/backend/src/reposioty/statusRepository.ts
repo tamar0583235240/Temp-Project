@@ -1,7 +1,12 @@
 import { pool } from '../config/dbConnection';
 import { Status } from '../interfaces/entities/Status';
 
-// Removed duplicate getStatusByUserId function to resolve redeclaration error.
+export const getAllStatuses = async (): Promise<Status[]> => {
+  const query = `SELECT * FROM status;`;
+  const result = await pool.query(query);
+  return result.rows;
+};
+
 export const insertStatus = async (user_id: string, questionCount: number): Promise<Status> => {
   const answered = Array(questionCount).fill(false);
   const query = `
@@ -36,4 +41,26 @@ export const updateAnsweredStatus = async (user_id: string, questionIndex: numbe
   return result.rows[0];
 };
 
-export default { getStatusByUserId, updateAnsweredStatus, insertStatus };
+// ✅ פונקציה שהייתה קודם ב-controller
+export const saveOrUpdateStatus = async (userId: string, answered: boolean[]): Promise<void> => {
+  try {
+    const query = `
+      INSERT INTO status (user_id, answered)
+      VALUES ($1, $2)
+      ON CONFLICT (user_id)
+      DO UPDATE SET answered = EXCLUDED.answered
+    `;
+    await pool.query(query, [userId, answered]);
+  } catch (error) {
+    console.error("❌ Error saving status:", error);
+    throw error;
+  }
+};
+
+export default {
+  getStatusByUserId,
+  updateAnsweredStatus,
+  insertStatus,
+  getAllStatuses,
+  saveOrUpdateStatus,
+};
