@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const typingText = "AI מנתח את תשובתך...";
+const typingText = "מנתח תשובה...";
 
 export default function MagicLoader() {
   const [displayedText, setDisplayedText] = useState("");
@@ -17,24 +17,9 @@ export default function MagicLoader() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-[60vh]">
-      <motion.div
-        className="relative w-28 h-28"
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, 360, 0],
-          opacity: [0.7, 1, 0.7],
-        }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-blue-400 blur-xl" />
-        <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
-          AI
-        </div>
-      </motion.div>
-      <div className="mt-6 text-xl font-medium text-gray-700 animate-pulse">
-        {displayedText}
-      </div>
+    <div className="flex flex-col items-center justify-center py-6">
+      <Loader2 className="animate-spin w-12 h-12 text-[--color-primary] mb-2" />
+      <span className="text-base text-gray-700">{displayedText}</span>
     </div>
   );
 }

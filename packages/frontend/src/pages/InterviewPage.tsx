@@ -1,13 +1,16 @@
-import { useDispatch, useSelector } from "react-redux"
-import Buttons from "../features/interview/components/buttons"
-import Question from "../features/interview/components/question"
-import Sidebar from "../features/interview/components/sidebar"
-import TipsComponent from "../features/interview/components/tipsComponent"
-import { useEffect, useState } from "react"
-import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi"
-import { setQuestions } from "../features/interview/store/simulationSlice"
-
-import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi";
+import { setQuestions } from "../features/interview/store/simulationSlice";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "../features/interview/components/sidebar";
+import Question from "../features/interview/components/question";
+import AnswerAI from "../features/interview/components/AnswerAI";
+import TipsComponent from "../features/interview/components/tipsComponent";
+import MagicLoader from "../features/interview/components/MagicLoader";
+import EndSurvey from "../features/interview/components/endSurvey";
+// import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
+import Buttons from "../features/interview/components/buttons";
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
@@ -55,28 +58,31 @@ const InterviewPage = () => {
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
-      
-      
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        {/* <button
-        className="bg-primary-dark text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark/90 transition"
-        onClick={() => navigate('/')}
-      >
-        לדף הבית
-      </button> */}
+      {/* Main content area */}
+      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
         <div className="w-full max-w-2xl space-y-8">
-<Question
-  onFinishRecording={() => console.log("📢 סיום הקלטה")}
-  onAnswerSaved={(answer: string) => console.log("💾 תשובה נשמרה:", answer)}
-/>
+          <Question
+            onFinishRecording={() => setShowTips(true)}
+            onAnswerSaved={(id) => {
+              setIsLoadingAI(true);
+              setAnswerIdForAI(null);
+              setTimeout(() => {
+                setAnswerIdForAI(id);
+                setIsLoadingAI(false);
+              }, 2000); // הדמיית טעינה
+            }}
+          />
+          {/* כאן מציגים את הטיפ וה-AI */}
+          {showTips && <TipsComponent />}
+          {isLoadingAI && <MagicLoader />}
+          {/* //////////////////////////// */}
+          {answerIdForAI && !isLoadingAI && <AnswerAI/>}
 
-<Buttons
-  onShowAnalysis={() => setShowAnalysis(!showAnalysis)}
-  analysisVisible={showAnalysis}
-/>
+          {/* {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />} */}
+        </div>
 
-          <TipsComponent/>
+        <div className="mt-8 w-full max-w-2xl">
+          <EndSurvey />
         </div>
       </main>
 

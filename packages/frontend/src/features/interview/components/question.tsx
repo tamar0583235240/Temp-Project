@@ -8,13 +8,23 @@ import FileUpload from "../../recordings/components/FileUpload";
 import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
 import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
-type QuestionProps = {
+import AnswerAI from "../../interview/components/AnswerAI";
+import MagicLoader from "../../interview/components/MagicLoader";
+
+interface QuestionProps {
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
-};
+  showTips?: boolean;
+  answerIdForAI?: string | null;
+  isLoadingAI?: boolean;
+}
+
 const Question: React.FC<QuestionProps> = ({
   onFinishRecording,
   onAnswerSaved,
+  showTips,
+  answerIdForAI,
+  isLoadingAI
 }) => {
   const dispatch = useDispatch();
   const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
@@ -175,12 +185,23 @@ const Question: React.FC<QuestionProps> = ({
           </div>
         </div>
       </div>
-      {/* הטיפ יוצג מתחת לכל הקומפוננטה */}
-      {selectedFile && showFileActions && isUploading && (
-        <div className="w-full flex justify-center mt-4">
+      {/* כאן יוצג הטיפ וה-AI מתחת לשאלה */}
+      <div className="w-full flex flex-col items-center mt-4 gap-4">
+        {/* טיפ זמני אחרי בחירת קובץ ולפני אישור */}
+        {selectedFile && showFileActions && !isUploading && (
           <TipsComponent />
-        </div>
-      )}
+        )}
+        {/* טיפ קבוע אחרי הקלטה/שמירה */}
+        {showTips && <TipsComponent />}
+        {/* הצגת ניתוח AI */}
+        {answerIdForAI && !isLoadingAI && (
+          <div className="w-full flex justify-center">
+            <AnswerAI />
+          </div>
+        )}
+        {/* חיווי טעינה ל-AI */}
+        {isLoadingAI && <MagicLoader />}
+      </div>
     </div>
   );
 };

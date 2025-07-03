@@ -7,6 +7,7 @@ const initialState: InitialState = {
   questions: [],
   currentIndex: 0,
   loading: false,
+  currentAnswerId: "00000000-0000-0000-0000-000000000030" // חדש: מזהה תשובה נוכחית
 };
 
 // יצירת הסלייס
@@ -18,17 +19,22 @@ const simulationSlice = createSlice({
     setQuestions(state, action: PayloadAction<interviewType[]>) {
       state.questions = action.payload;
     },
-
-    // סימון שאלה כ"נענתה"
-    answerQuestion(state, action: PayloadAction<{ index: number; answer: string }>) {
-      const { index, answer } = action.payload;
+    answerQuestion(
+      state,
+      action: PayloadAction<{ index: number; answer: string; answerId?: string }>
+    ) {
+      const { index, answer, answerId } = action.payload;
       if (state.questions[index]) {
         state.questions[index].answer = answer;
         state.questions[index].answered = true;
+        if (answerId) {
+          state.currentAnswerId = answerId;
+        }
       }
     },
-
-    // איפוס תשובה לשאלה
+    setCurrentAnswerId(state, action: PayloadAction<string | null>) {
+      state.currentAnswerId = action.payload;
+    },
     resetQuestion(state, action: PayloadAction<number>) {
       const index = action.payload;
       if (state.questions[index]) {
@@ -66,7 +72,10 @@ export const {
   nextQuestion,
   prevQuestion,
   goToQuestion,
+  setCurrentAnswerId,
 } = simulationSlice.actions;
 
 // יצוא ברירת מחדל של הרידוסר
 export default simulationSlice.reducer;
+
+

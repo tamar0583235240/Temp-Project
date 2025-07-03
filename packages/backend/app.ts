@@ -5,10 +5,10 @@ import resourceRouts from '../backend/src/routes/resourceRouts'
 import dotenv from 'dotenv';
 import answerRoutes from "../backend/src/routes/answerRouts";
 import statusRouts from './src/routes/statusRouts';
+import aIInsightRouts from './src/routes/aIInsightRouts';
 
 
 dotenv.config();
-// import exampleRouts from './src/routes/exampleRouts';
 import "reflect-metadata";
 import questionRoutes from './src/routes/questionRoutes';
 import statusRoutes from '../backend/src/routes/statusRouts';
@@ -16,15 +16,9 @@ import statusRoutes from '../backend/src/routes/statusRouts';
 const app: Application = express();
 console.log('i am here in app');
 app.use(express.json());
-// app.use('/api', exampleRouts);
-// app.use('/api', resourceRouts);
 
-
-
-// Middleware
 app.use(cors());
 app.use(express.json());
-// app.use('/api', exampleRouts);
 
 // Routes
 app.use('/api', resourceRouts);
@@ -34,6 +28,8 @@ app.use('/api/status', statusRoutes);
 app.use('/api/answers', answerRoutes);
 
 
+app.use('/api/status', statusRouts);
+app.use('/api/insights',aIInsightRouts) ;
 
 
 export default app;
