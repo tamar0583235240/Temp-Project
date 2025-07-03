@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import { useSendPageTimeMutation } from '../api/activity_MonitoringhApi'
+import { useSendPageTimeMutation } from '../../../shared/api/activity_MonitoringhApi'
 const RouteTimer = () => {
 
     const location = useLocation();

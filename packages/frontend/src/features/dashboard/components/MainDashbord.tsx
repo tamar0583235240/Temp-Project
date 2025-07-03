@@ -3,19 +3,24 @@ import { Provider, useSelector } from "react-redux";
 import { store } from "../../../shared/store/store";
 import AIInsightsList from "./AIInsightsList";
 import ProgressStats from "./ProgressStats";
-import ImprovementSuggestions from "./ImprovementSuggestions";
 import { SummaryStrengths } from "./Strengths";
 import { Certificate } from "./Certificate";
 import { Award } from "lucide-react";
+import { useUserStore } from "../store/progressSlice";
 import { motion } from "framer-motion";
 import type { RootState } from "../../../shared/store/store";
+import { ImprovementSuggestions } from "./ImprovementSuggestions";
 
 const MainDashboard: React.FC = () => {
   const userName = useSelector(
-    (state: RootState) => state.auth?.user?.firstName ?? "אורח"
+    (state: RootState) => state.auth?.user?.firstName !
   );
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);
+
+  const { answered, total } = useUserStore();
+  const isComplete = answered === total && total > 0;
+
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (
@@ -65,7 +70,7 @@ const MainDashboard: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
-            <ImprovementSuggestions fullName={userName} />
+            <ImprovementSuggestions />
           </motion.div>
           <motion.div
             whileHover={{ scale: 1.02 }}
@@ -83,7 +88,23 @@ const MainDashboard: React.FC = () => {
           <ProgressStats />
         </motion.div>
 
-        {!showCertificate && (
+        {/* {!showCertificate && (
+          <motion.div
+            className="max-w-md mx-auto text-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
+            <button
+              onClick={() => setShowCertificate(true)}
+              className="inline-flex items-center gap-3 bg-gradient-to-br from-[--color-primary] to-[--color-primary-dark] text-white py-3 px-6 rounded-full text-lg font-semibold shadow-md hover:shadow-xl transition"
+            >
+              <Award size={24} className="text-white" />
+              תעודת מוכנות לראיון
+            </button>
+          </motion.div>
+        )} */}
+
+        {isComplete && !showCertificate && (
           <motion.div
             className="max-w-md mx-auto text-center"
             whileHover={{ scale: 1.02 }}
