@@ -3,6 +3,7 @@ import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import { io } from '../../app';
 
 const SALT_ROUNDS = 10;
 
@@ -75,6 +76,10 @@ export const createUser = async (req: Request, res: Response) => {
   };
 
   const createdUser = await userRepository.createUser(newUser);
+  // socket event
+  const newUsersList = await userRepository.getAllUsers();  
+  io.emit('userAdded', newUsersList);
+  // 
   res.status(201).json(createdUser);
 };
 

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { deleteFileFromCloudinary, uploadFileToCloudinary } from '../config/cloudinary';
 import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
+import { io } from '../../app';
 
 export const getInterviewMaterialSubs = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -26,7 +27,7 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
         }
 
         console.log('Existing Material Sub file:', existingMaterialSub.file_url);
-        
+
         let updatedThumbnail = existingMaterialSub.thumbnail;
         let updatedFileUrl = existingMaterialSub.file_url;
 
@@ -50,7 +51,10 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
             updatedThumbnail,
             updatedFileUrl
         );
-
+        // socket event
+        const newinterviewMaterialSubList = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
+        io.emit('interviewMaterialSubUpdated', newinterviewMaterialSubList);
+        // 
         res.json(updatedInterviewMaterialSub);
 
     } catch (error) {

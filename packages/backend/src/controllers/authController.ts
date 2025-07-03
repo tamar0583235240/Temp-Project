@@ -16,6 +16,7 @@ import {
   sendResetEmail,
   sendVerificationCodeEmail,
 } from "../utils/emailSender";
+import { io } from "../../app";
 
 const SALT_ROUNDS = 10;
 
@@ -349,13 +350,15 @@ export const signup = async (req: Request, res: Response) => {
   };
 
   await authRepository.signup(newUser);
-
   const token = jwt.sign(
     { id: newUser.id, email: newUser.email, role: newUser.role },
     JWT_SECRET,
     { expiresIn: "1h" }
   );
-
+  // socket event
+  const newUsersList = await userRepository.getAllUsers();  
+  io.emit('userAdded', newUsersList);
+  // 
   res.status(201).json({ user: newUser, token });
 };
 
