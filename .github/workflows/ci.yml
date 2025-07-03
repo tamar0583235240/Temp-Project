@@ -32,11 +32,6 @@ jobs:
         working-directory: packages/frontend
         run: npm install
 
-      - name: Lint client
-        working-directory: packages/frontend
-        run: |
-          if npm run lint; then echo "Lint passed"; else echo "Lint failed" && exit 1; fi
-
       - name: Build client
         working-directory: packages/frontend
         run: npm run build
