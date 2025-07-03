@@ -7,8 +7,15 @@ export const getAllStatuses = async (): Promise<Status[]> => {
   return result.rows;
 };
 
-export const insertStatus = async (user_id: string, questionCount: number): Promise<Status> => {
-  const answered: boolean[] = Array.from({ length: questionCount }, () => false); // מבטיח שאין undefined/null
+export const insertStatus = async (user_id: string): Promise<Status> => {
+  // שלב 1: שליפת מספר השאלות מהדאטאבייס
+  const countQuery = `SELECT COUNT(*) FROM questions;`;
+  const countResult = await pool.query(countQuery);
+  const questionCount = parseInt(countResult.rows[0].count, 10);
+
+  // שלב 2: יצירת מערך answered לפי מספר השאלות
+  const answered: boolean[] = Array.from({ length: questionCount }, () => false);
+
   const query = `
     INSERT INTO status (user_id, answered)
     VALUES ($1, $2)
@@ -17,6 +24,7 @@ export const insertStatus = async (user_id: string, questionCount: number): Prom
   const result = await pool.query(query, [user_id, answered]);
   return result.rows[0];
 };
+
 
 export const getStatusByUserId = async (user_id: string): Promise<Status | null> => {
   const query = `SELECT * FROM status WHERE user_id = $1;`;

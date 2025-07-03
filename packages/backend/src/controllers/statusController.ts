@@ -27,9 +27,9 @@ export const getStatusByUserId = async (req: Request, res: Response): Promise<vo
 
 // POST /api/status
 export const createStatus = async (req: Request, res: Response) => {
-  const { user_id, questionCount } = req.body;
+  const { user_id } = req.body;
   try {
-    const newStatus = await insertStatus(user_id, questionCount);
+    const newStatus = await statusRepository.insertStatus(user_id); // בלי questionCount
     res.status(201).json(newStatus);
   } catch (error) {
     console.error("Error creating status:", error);
