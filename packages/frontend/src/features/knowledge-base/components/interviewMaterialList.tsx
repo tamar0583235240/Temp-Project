@@ -1,10 +1,10 @@
-import { useDeleteinterviewMaterialMutation, useGetinterviewMaterialsQuery } from "../../../shared/api/interviewMaterialApi";
+import { useDeleteInterviewMaterialMutation, useGetInterviewMaterialsQuery } from "../../../shared/api/interviewMaterialApi";
 import { InterviewMaterial } from "../types/InterviewMaterial";
 import { InterviewMaterialListItem } from "./interviewMaterialItem";
 
 const InterviewMaterialList = () => {
-  const { data: interviewMaterial, error, isLoading } = useGetinterviewMaterialsQuery();
-  const [deleteInterviewMaterial] = useDeleteinterviewMaterialMutation();
+  const { data: interviewMaterial, error, isLoading } = useGetInterviewMaterialsQuery();
+  const [deleteInterviewMaterial] = useDeleteInterviewMaterialMutation();
 
 
   /**

@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
-import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
@@ -12,6 +11,8 @@ import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
+
+import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 
 export default function AppRoutes() {
@@ -28,14 +29,19 @@ export default function AppRoutes() {
         <Route
           path="/reset-password"
           element={
-            <RoleProtectedRoute allowedRoles={["student", "manager"]}>
               <ResetPassword />
-            </RoleProtectedRoute>
           }
         />
         {/* Routes with header */}
         <Route element={<DashboardLayout />}>
-          <Route path="/home" element={<HomePage />} />
+          <Route
+            path="/home"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <HomePage />
+              </RoleProtectedRoute>
+            }
+          />
           <Route
             path="/profile"
             element={
@@ -96,7 +102,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialPage/>
+                <InterviewMaterialPage />
               </RoleProtectedRoute>
             }
           />
@@ -121,6 +127,22 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <p>AdminResources</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/resources"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>AdminResources</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/interview-materials"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <InterviewMaterialsHub />
               </RoleProtectedRoute>
             }
           />
