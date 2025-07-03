@@ -7,8 +7,10 @@ import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
 import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
-import MagicLoader from "../features/interview/components/MagicLoader"; // אם יש לך
+import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
+// import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
+import Buttons from "../features/interview/components/buttons";
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
@@ -58,36 +60,30 @@ const InterviewPage = () => {
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
       {/* Main content area */}
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
-        <div className="w-full max-w-6xl flex flex-row gap-6 items-start">
-          {/* טור שמאלי - שאלה וההקלטה */}
-          <div className="flex-1">
-            <Question
-              onFinishRecording={() => setShowTips(true)}
-              onAnswerSaved={(id) => {
-                setIsLoadingAI(true);
-                setAnswerIdForAI(null);
-                setTimeout(() => {
-                  setAnswerIdForAI(id);
-                  setIsLoadingAI(false);
-                }, 2000); // הדמיית טעינה
-              }}
-            />
-          </div>
+        <div className="w-full max-w-2xl space-y-8">
+          <Question
+            onFinishRecording={() => setShowTips(true)}
+            onAnswerSaved={(id) => {
+              setIsLoadingAI(true);
+              setAnswerIdForAI(null);
+              setTimeout(() => {
+                setAnswerIdForAI(id);
+                setIsLoadingAI(false);
+              }, 2000); // הדמיית טעינה
+            }}
+          />
+          {/* כאן מציגים את הטיפ וה-AI */}
+          {showTips && <TipsComponent />}
+          {isLoadingAI && <MagicLoader />}
+          {/* //////////////////////////// */}
+          {answerIdForAI && !isLoadingAI && <AnswerAI/>}
 
-          {/* טור ימני - תובנות AI / טיפים */}
-          <div className="w-[320px] space-y-4">
-            {showTips && <TipsComponent />}
-            {isLoadingAI && <MagicLoader />}
-            {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />}
-          </div>
+          {/* {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />} */}
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
-          <EndSurvey/>
+          <EndSurvey />
         </div>
-
-        
-
       </main>
 
       {/* Sidebar */}

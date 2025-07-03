@@ -8,6 +8,7 @@ import {
   addAnswer 
 } from '../store/recordingSlice';
 import { useUploadAnswerMutation } from '../services/recordingApi';
+import { useUploadRecordingMutation } from '../services/resourceApi';
 import { UploadAnswerDto } from '../types/UploadAnswerDto';
 
 export const useRecording = () => {
@@ -15,6 +16,7 @@ export const useRecording = () => {
   const { currentRecording, showRecordingModal } = useSelector(
     (state: RootState) => state.recording);  
   const [uploadAnswer, { isLoading }] = useUploadAnswerMutation();
+  const [uploadRecording] = useUploadRecordingMutation();
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
@@ -23,6 +25,7 @@ export const useRecording = () => {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
   // טיימר להקלטה
+  
   useEffect(() => {
     if (currentRecording.isRecording && !currentRecording.isPaused) {
       timerRef.current = setInterval(() => {
@@ -138,7 +141,7 @@ export const useRecording = () => {
     userId: string,
     questionId: string,
     answerFileName: string,
-    amountFeedbacks: number = 0 // ברירת מחדל
+    amountFeedbacks: number = 0 
   ) => {
     if (!audioBlobRef.current || !answerFileName.trim()) {
       alert('אנא הזן שם לקובץ');
@@ -147,10 +150,26 @@ export const useRecording = () => {
 
     const fileNameWithExtension = answerFileName.endsWith('.wav') ? answerFileName : `${answerFileName}.wav`;
 
+    //  העלאת הקלטה לשרת
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('title', fileNameWithExtension);
+    formData.append('description', '');
+    formData.append('file', audioBlobRef.current, fileNameWithExtension);
+    let fileUrl = '';
+    try {
+      const uploadRes = await uploadRecording(formData).unwrap();
+      fileUrl = uploadRes.url;
+    } catch (e) {
+      console.error ('שגיאה בהעלאת הקלטה לשרת');
+      return;
+    }
+
+    //  שליחת תשובה עם ה-URL
     const answerData: UploadAnswerDto = {
       userId: userId,
       questionId: questionId,
-      fileUrl: fileNameWithExtension,
+      fileUrl: fileUrl, // ה-URL מהענן
       amountFeedbacks: amountFeedbacks,
       answerFileName: fileNameWithExtension,
     };
@@ -180,6 +199,6 @@ export const useRecording = () => {
     restartRecording,
     saveRecording,
     audioBlobRef,
-    audioBlob, // הוסף את זה להחזרה
+    audioBlob, 
   };
 };

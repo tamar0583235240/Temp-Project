@@ -17,7 +17,7 @@ type AudioRecorderProps = {
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
-  userId = '00000000-0000-0000-0000-000000000001',
+  userId = '00000000-0000-0000-0000-000000000000',
   questionId = '00000000-0000-0000-0000-000000000010',
   onFinish,
   onSaveSuccess
@@ -65,10 +65,12 @@ const handleStopRecording = () => {
 
   const handleSaveRecording = async () => {
     try {
-      const result = await saveRecording(userId, questionId, fileName);
+      const answer = await saveRecording(userId, questionId, fileName);
       setShowSaveModal(false);
       setFileName('');
-      onSaveSuccess?.(result?.id || 'demo-id'); // מודיע לדף הראשי על תשובה חדשה
+      if (onSaveSuccess && answer && answer.id) {
+        onSaveSuccess(answer.id);
+      }
     } catch (error) {
       console.error('שגיאה בשמירה:', error);
     }

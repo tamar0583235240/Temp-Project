@@ -18,4 +18,6 @@ export interface RecordingState {
 export interface AudioRecorderProps {
   userId?: string;
   questionId?: string;
+  onFinish?: (audioUrl: string, fileName: string) => void;
+  onSaveSuccess?: (answerId: string) => void;
 }

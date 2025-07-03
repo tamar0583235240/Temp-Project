@@ -3,7 +3,7 @@ import { Answer, RecordingState } from '../types/Answer';
 
 interface RecordingSliceState {
   answers: Answer[];
-  currentRecording: Omit<RecordingState, 'audioBlob'>; // הסרנו audioBlob
+  currentRecording: Omit<RecordingState, 'audioBlob'>; 
   showRecordingModal: boolean;
   showSuccessMessage: boolean;
   loading: boolean;
