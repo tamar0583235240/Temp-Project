@@ -230,9 +230,10 @@ const pendingSignups = new Map<
 >();
 
 export const requestSignup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  
+  const { first_name, last_name, email, phone, password } = req.body;
 
-  if (!email || !password || !firstName || !lastName) {
+  if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
@@ -253,8 +254,8 @@ export const requestSignup = async (req: Request, res: Response) => {
   pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       phone,
       password: hashedPassword,
@@ -320,7 +321,8 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
 //הרשמה
 export const signup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
+
 
   const existing = (await userRepository.getAllUsers()).find(
     (user) => user.email === email
@@ -333,8 +335,8 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     email,
     phone,
     password: hashedPassword,

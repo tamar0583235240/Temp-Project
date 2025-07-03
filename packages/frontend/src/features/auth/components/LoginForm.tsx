@@ -1,227 +1,3 @@
-// import React, { useState } from 'react';
-// import { useLoginMutation } from '../../../shared/api/authApi';
-// import { useAppDispatch } from '../../../shared/hooks/reduxHooks';
-// import { loginSuccess, loginStart, loginFailure } from '../store/authSlice';
-// import GoogleLoginButton from './GoogleAuthButton';
-// import CodeVerificationScreen from './CodeVerificationScreen';
-// import { useNavigate } from 'react-router-dom';
-// import { CardSimple } from '../../../shared/ui/card';
-// import { Input } from '../../../shared/ui/input';
-// import { Button } from '../../../shared/ui/button';
-
-// function LoginForm() {
-//   const dispatch = useAppDispatch();
-//   const navigate = useNavigate();
-//   const [login, { isError, isSuccess, error, data, isLoading }] =
-//     useLoginMutation();
-
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [errorMessage, setErrorMessage] = useState("");
-//   const [showValidation, setShowValidation] = useState(false);
-//   const [tempEmail, setTempEmail] = useState("");
-//   const [rememberMe, setRememberMe] = useState(false);
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     dispatch(loginStart());
-//     setErrorMessage("");
-
-//     try {
-//       const res = await login({ email, password }).unwrap();
-//       setTempEmail(email);
-//       setShowValidation(true);
-//       successfulLogin(res);
-//     } catch (err: any) {
-//       const message = err?.data?.message || "שגיאה בהתחברות";
-//       dispatch(loginFailure(message));
-//       setErrorMessage(message);
-//       setShowValidation(false);
-//     }
-//   };
-
-//   const successfulLogin = (res: any) => {
-//     if (res?.user && res?.token) {
-//       dispatch(loginSuccess({ user: res.user, token: res.token }));
-//       navigate("/");
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
-//         <form onSubmit={handleSubmit}>
-//           <h2>התחברות</h2>
-//           <Input
-//             type="email"
-//             placeholder="אימייל"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             required
-//           />
-//           <Input
-//             type="password"
-//             placeholder="סיסמה"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             required
-//           />
-//           <label>
-//             <Input
-//               type="checkbox"
-//               checked={rememberMe}
-//               onChange={(e) => setRememberMe(e.target.checked)}
-//             />
-//             זכור אותי
-//           </label>
-//           <Button type="submit" disabled={isLoading}>
-//             {isLoading ? "מתחבר..." : "התחבר"}
-//           </Button>
-//           <Button type="button" onClick={() => navigate("/forgot-password")}>
-//             שכחתי סיסמה
-//           </Button>
-//           {isError && (
-//             <p style={{ color: "red" }}>
-//               {(error as any)?.data?.message || "משהו השתבש"}
-//             </p>
-//           )}
-//           {isSuccess && <p style={{ color: "green" }}>התחברת בהצלחה!</p>}
-
-//           <div className="google-auth-btn-wrapper">
-//             <p>או התחבר עם:</p>
-//             <GoogleLoginButton />
-//           </div>
-
-//           <p className="mt-4 text-center">
-//           <a  href="/signup" >עדיין לא רשום? הרשם</a> 
-//           </p>
-
-//         </form>
-//       </CardSimple>
-//     </div>
-//   );
-// }
-
-// export default LoginForm;
-
-
-
-
-// import React, { useState } from "react";
-// import { useLoginMutation } from "../../../shared/api/authApi";
-// import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
-// import { loginSuccess, loginStart, loginFailure } from "../store/authSlice";
-// import { useNavigate } from "react-router-dom";
-
-// import GoogleLoginButton from "./GoogleAuthButton";
-// import { CardSimple } from "../../../shared/ui/card";
-// import { Input } from "../../../shared/ui/input";
-// import { Button } from "../../../shared/ui/button";
-// import { Paragraph } from "../../../shared/ui/typography";
-// import { cn } from "../../../shared/utils/cn";
-
-// const LoginForm = () => {
-//   const dispatch = useAppDispatch();
-//   const navigate = useNavigate();
-//   const [login, { isError, isSuccess, error, isLoading }] = useLoginMutation();
-
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [rememberMe, setRememberMe] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState("");
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     dispatch(loginStart());
-//     setErrorMessage("");
-
-//     try {
-//       const res = await login({ email, password }).unwrap();
-//       dispatch(loginSuccess({ user: res.user, token: res.token }));
-//       navigate("/");
-//     } catch (err: any) {
-//       const msg = err?.data?.message || "שגיאה בהתחברות";
-//       dispatch(loginFailure(msg));
-//       setErrorMessage(msg);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center px-4 bg-muted">
-//       <CardSimple className="w-full max-w-md space-y-6 p-6 bg-white">
-//         <div className="text-center space-y-2">
-//           <h2 className="text-2xl font-bold text-text-main">התחברות</h2>
-//           <Paragraph>אנא הזן את פרטי ההתחברות שלך</Paragraph>
-//         </div>
-
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <Input
-//             type="email"
-//             placeholder="אימייל"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             required
-//           />
-//           <Input
-//             type="password"
-//             placeholder="סיסמה"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             required
-//           />
-
-//           <label className="flex items-center gap-2 text-sm text-text-secondary">
-//             <Input
-//               type="checkbox"
-//               checked={rememberMe}
-//               onChange={(e) => setRememberMe(e.target.checked)}
-//               className="w-4 h-4"
-//             />
-//             זכור אותי
-//           </label>
-
-//           {isError && (
-//             <p className="text-danger text-sm">{(error as any)?.data?.message || "שגיאה בהתחברות"}</p>
-//           )}
-//           {isSuccess && <p className="text-success text-sm">התחברת בהצלחה!</p>}
-
-//           <Button type="submit" isLoading={isLoading} fullWidth>
-//             התחבר
-//           </Button>
-
-//           <Button
-//             type="button"
-//             variant="ghost"
-//             fullWidth
-//             onClick={() => navigate("/forgot-password")}
-//           >
-//             שכחתי סיסמה
-//           </Button>
-//         </form>
-
-//         {/* <div className="text-center space-y-2">
-//           <p className="text-sm text-text-secondary">או התחבר עם:</p>
-//           <GoogleLoginButton />
-//         </div> */}
-// <div className="text-center space-y-2">
-//   <p className="text-sm text-text-secondary">או התחבר עם:</p>
-//   <div className="mx-auto w-full max-w-xs">
-//     <GoogleLoginButton />
-//   </div>
-// </div>
-
-//         <p className="text-center text-sm text-text-secondary">
-//           עדיין לא רשום?{" "}
-//           <a href="/signup" className="text-primary-dark hover:underline font-medium">
-//             הירשם
-//           </a>
-//         </p>
-//       </CardSimple>
-//     </div>
-//   );
-// };
-
-// export default LoginForm;
 
 import React, { useState } from "react";
 import { useLoginMutation } from "../../../shared/api/authApi";
@@ -233,18 +9,20 @@ import { Input } from "../../../shared/ui/input";
 import { Button } from "../../../shared/ui/button";
 import GoogleLoginButton from "./GoogleAuthButton";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
-
+import { Heading2, Paragraph } from "../../../shared/ui/typography";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
-export default function LoginForm() {
+const LoginForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [login, { isError, isSuccess, error, isLoading }] = useLoginMutation();
+  const [login, { isError, isSuccess, error, data, isLoading }] = useLoginMutation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showValidation, setShowValidation] = useState(false);
+  const [tempEmail, setTempEmail] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -253,8 +31,9 @@ export default function LoginForm() {
 
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(loginSuccess({ user: res.user, token: res.token }));
-      navigate("/");
+      setTempEmail(email);
+      setShowValidation(true);
+      successfulLogin(res);
     } catch (err: any) {
       const message = err?.data?.message || "שגיאה בהתחברות";
       dispatch(loginFailure(message));
@@ -271,43 +50,43 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen px-4">
+    <div className="flex justify-center items-center min-h-screen px-4 bg-background">
       <CardSimple className="w-full max-w-md p-6 animate-fade-in space-y-6">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-2xl font-bold text-text-main text-center">התחברות</h2>
+          <Heading2 className="text-center">התחברות</Heading2>
 
-          {/* Email Field */}
+          {/* Email */}
           <div className="relative">
-            <div className="absolute top-1/2 right-3 -translate-y-1/2">
-              {/* <IconWrapper size="sm" color="muted">
-                <FaEnvelope />
-              </IconWrapper> */}
-            </div>
             <Input
               type="email"
               placeholder="אימייל"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            //  className="pr-12"
+              className="pr-12"
               required
             />
+            <div className="absolute top-1/2 right-3 -translate-y-1/2">
+              <IconWrapper size="sm" color="muted">
+                <FaEnvelope />
+              </IconWrapper>
+            </div>
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div className="relative">
-            <div className="absolute top-1/2 right-3 -translate-y-1/2">
-              {/* <IconWrapper size="sm" color="muted">
-                {/* <FaLock /> */}
-              {/* </IconWrapper> */} 
-            </div>
             <Input
               type="password"
               placeholder="סיסמה"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-            //  className="pr-12"
+              className="pr-12"
               required
             />
+            <div className="absolute top-1/2 right-3 -translate-y-1/2">
+              <IconWrapper size="sm" color="muted">
+                <FaLock />
+              </IconWrapper>
+            </div>
           </div>
 
           {/* Remember Me + Forgot */}
@@ -317,7 +96,7 @@ export default function LoginForm() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                 className="accent-background"
+                className="accent-background"
               />
               זכור אותי
             </label>
@@ -330,17 +109,21 @@ export default function LoginForm() {
             </button>
           </div>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <Button type="submit" isLoading={isLoading} fullWidth>
             התחבר
           </Button>
 
-          {/* Error / Success */}
+          {/* Feedback */}
           {errorMessage && (
-            <p className="text-danger text-sm text-center">{errorMessage}</p>
+            <Paragraph className="text-danger text-center text-sm">
+              {errorMessage}
+            </Paragraph>
           )}
-          {isSuccess && (
-            <p className="text-success text-sm text-center">התחברת בהצלחה!</p>
+          {isSuccess && showValidation && (
+            <Paragraph className="text-success text-center text-sm">
+              התחברת בהצלחה!
+            </Paragraph>
           )}
 
           {/* Divider */}
@@ -348,19 +131,20 @@ export default function LoginForm() {
 
           {/* Google Login */}
           <div className="flex flex-col items-center gap-2">
-            <p className="text-sm text-text-secondary">או התחבר עם:</p>
+            <Paragraph className="text-sm">או התחבר עם:</Paragraph>
             <GoogleLoginButton />
           </div>
 
-          {/* Signup */}
-          <p className="text-sm text-center mt-4">
+          {/* Signup link */}
+          <Paragraph className="text-sm text-center mt-4">
             עדיין לא רשום?{" "}
             <a href="/signup" className="text-primary-dark hover:underline">
               הרשם
             </a>
-          </p>
+          </Paragraph>
         </form>
       </CardSimple>
     </div>
   );
 }
+export default LoginForm;

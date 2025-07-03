@@ -8,13 +8,14 @@ import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
 import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
+import LoginPage from "../../pages/LoginPage";
 
 export default function AppRoutes() {
   return (
   <div dir="rtl">
     <Routes>
       {/* Routes without sidebar */}
-      <Route path="/login" element={<LoginForm />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
