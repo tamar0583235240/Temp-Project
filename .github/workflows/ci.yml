@@ -139,4 +139,4 @@ jobs:
           if [ -n "$INVALID_ENVS" ]; then
             echo "❌ Found unexpected .env files:" && echo "$INVALID_ENVS" && exit 1
           fi
-          echo "✅ No unexpected .env files found."
+          echo "✅ No unexpected .env files found. "
