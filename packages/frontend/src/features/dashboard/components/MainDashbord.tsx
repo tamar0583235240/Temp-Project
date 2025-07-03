@@ -3,17 +3,17 @@ import { Provider, useSelector } from "react-redux";
 import { store } from "../../../shared/store/store";
 import AIInsightsList from "./AIInsightsList";
 import ProgressStats from "./ProgressStats";
-import ImprovementSuggestions from "./ImprovementSuggestions";
 import { SummaryStrengths } from "./Strengths";
 import { Certificate } from "./Certificate";
 import { Award } from "lucide-react";
 import { useUserStore } from "../store/progressSlice";
 import { motion } from "framer-motion";
 import type { RootState } from "../../../shared/store/store";
+import { ImprovementSuggestions } from "./ImprovementSuggestions";
 
 const MainDashboard: React.FC = () => {
   const userName = useSelector(
-    (state: RootState) => state.auth?.user?.firstName ?? "אורח"
+    (state: RootState) => state.auth?.user?.firstName !
   );
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);
@@ -70,7 +70,7 @@ const MainDashboard: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
-            <ImprovementSuggestions fullName={userName} />
+            <ImprovementSuggestions />
           </motion.div>
           <motion.div
             whileHover={{ scale: 1.02 }}
@@ -88,9 +88,7 @@ const MainDashboard: React.FC = () => {
           <ProgressStats />
         </motion.div>
 
-        {/* {showCertificate && (
-          <motion.div className="max-w-md mx-auto text-center" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
-        {!showCertificate && (
+        {/* {!showCertificate && (
           <motion.div
             className="max-w-md mx-auto text-center"
             whileHover={{ scale: 1.02 }}

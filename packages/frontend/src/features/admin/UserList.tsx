@@ -19,7 +19,6 @@ const UserList = () => {
   const {
     data: users = [],
     isLoading,
-    refetch,
   } = useGetUsersQuery();
 
   const [deleteUser] = useDeleteUserMutation();
@@ -117,13 +116,24 @@ const UserList = () => {
 
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
         <div className="flex flex-wrap gap-4 items-center">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
+            className="border rounded px-3 py-2 w-40 text-right"
+            dir="rtl"  // או style={{ direction: 'rtl' }}
+          >
+            <option value="all">הצג את כולם</option>
+            <option value="active">משתמשים פעילים</option>
+            <option value="inactive">משתמשים לא פעילים</option>
+          </select>
+
           <div className="relative">
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="חיפוש לפי שם"
-              className="px-4 py-2 border rounded-lg w-60 text-right pr-10" // הוספתי pr-10 כדי להשאיר מקום לאיקון משמאל
+              className="px-4 py-2 border rounded-lg w-48 text-right pl-10"
               style={{ direction: 'rtl' }}
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -132,17 +142,6 @@ const UserList = () => {
               </div>
             </div>
           </div>
-
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
-            className="border rounded px-3 py-2 text-right w-40"
-          >
-            <option value="all">הצג את כולם</option>
-            <option value="active">משתמשים פעילים</option>
-            <option value="inactive">משתמשים לא פעילים</option>
-          </select>
         </div>
 
         <div className="flex gap-4 items-center">
