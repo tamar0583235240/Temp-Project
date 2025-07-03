@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import statusRepository from '../reposioty/statusRepository';
+import statusRepository, { saveOrUpdateStatus } from '../reposioty/statusRepository';
 import { pool } from '../reposioty/answerRepository';
 
 export const getStatusByUserId = async (req: Request, res: Response): Promise<void> => {
@@ -23,20 +23,6 @@ console.log("📥 userId from params:", userId);
   }
 };
 
-const saveOrUpdateStatus = async (userId: string, answered: boolean[]) => {
-  try {
-    const query = `
-      INSERT INTO status (user_id, answered)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id)
-      DO UPDATE SET answered = EXCLUDED.answered
-    `;
-    await pool.query(query, [userId, JSON.stringify(answered)]);
-  } catch (error) {
-    console.error("❌ Error saving status:", error);
-    throw error;
-  }
-};
 export const createStatus = async (req: Request, res: Response) => {
   const { user_id, questionCount } = req.body;
   try {

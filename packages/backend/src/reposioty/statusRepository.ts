@@ -8,7 +8,7 @@ export const getAllStatuses = async (): Promise<Status[]> => {
 };
 
 export const insertStatus = async (user_id: string, questionCount: number): Promise<Status> => {
-  const answered = Array(questionCount).fill(false);
+  const answered: boolean[] = Array.from({ length: questionCount }, () => false); // מבטיח שאין undefined/null
   const query = `
     INSERT INTO status (user_id, answered)
     VALUES ($1, $2)
@@ -28,7 +28,14 @@ export const updateAnsweredStatus = async (user_id: string, questionIndex: numbe
   const currentStatus = await getStatusByUserId(user_id);
   if (!currentStatus) throw new Error('User not found');
 
-  const answered = currentStatus.answered;
+  let answered = currentStatus.answered;
+
+  // אם המערך קצר מדי – נרחיב אותו עד האינדקס הנדרש, עם false
+  if (questionIndex >= answered.length) {
+    const extended = Array.from({ length: questionIndex + 1 }, (_, i) => answered[i] ?? false);
+    answered = extended;
+  }
+
   answered[questionIndex] = true;
 
   const query = `
@@ -42,20 +49,18 @@ export const updateAnsweredStatus = async (user_id: string, questionIndex: numbe
 };
 
 // ✅ פונקציה שהייתה קודם ב-controller
-export const saveOrUpdateStatus = async (userId: string, answered: boolean[]): Promise<void> => {
-  try {
-    const query = `
-      INSERT INTO status (user_id, answered)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id)
-      DO UPDATE SET answered = EXCLUDED.answered
-    `;
-    await pool.query(query, [userId, answered]);
-  } catch (error) {
-    console.error("❌ Error saving status:", error);
-    throw error;
-  }
+export const saveOrUpdateStatus = async (userId: string, answered: boolean[]) => {
+  const sanitized = answered.map(v => v ?? false); // מסיר null/undefined
+
+  const query = `
+    INSERT INTO status (user_id, answered)
+    VALUES ($1, $2)
+    ON CONFLICT (user_id)
+    DO UPDATE SET answered = EXCLUDED.answered
+  `;
+  await pool.query(query, [userId, sanitized]);
 };
+
 
 export default {
   getStatusByUserId,
