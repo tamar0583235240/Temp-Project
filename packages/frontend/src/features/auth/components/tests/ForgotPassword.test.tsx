@@ -22,22 +22,22 @@ describe("ForgotPassword", () => {
     ).toBeInTheDocument();
   });
 
-  // test("validates invalid email input", async () => {
-  //   renderWithProviders(<ForgotPassword />);
+  test("validates invalid email input", async () => {
+    renderWithProviders(<ForgotPassword />);
 
-  //   const emailInput = screen.getByLabelText(/אימייל/i);
-  //   const submitButton = screen.getByRole("button", {
-  //     name: /שלח קישור לאיפוס סיסמה/i,
-  //   });
+    const emailInput = screen.getByLabelText(/אימייל/i);
+    const submitButton = screen.getByRole("button", {
+      name: /שלח קישור לאיפוס סיסמה/i,
+    });
 
-  //   fireEvent.change(emailInput, { target: { value: "not-an-email" } });
-  //   fireEvent.click(submitButton);
+    fireEvent.change(emailInput, { target: { value: "not-an-email" } });
+    fireEvent.click(submitButton);
 
-  //   // מחכים שהטקסט של שגיאת האימייל יופיע
-  //   await waitFor(() =>
-  //     expect(screen.getByText(/אימייל לא תקין/i)).toBeInTheDocument()
-  //   );
-  // });
+    // מחכים שהטקסט של שגיאת האימייל יופיע
+    await waitFor(() =>
+      expect(screen.getByText(/אימייל לא תקין/i)).toBeInTheDocument()
+    );
+  });
 
   test("sends request when email is valid", async () => {
     renderWithProviders(<ForgotPassword />);

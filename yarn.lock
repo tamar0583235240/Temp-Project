@@ -1882,6 +1882,7 @@ redux@*:
   resolved "https://registry.npmjs.org/redux/-/redux-5.0.1.tgz"
   integrity sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==
 
+<<<<<<< HEAD
 redux@^4.0.5:
   version "4.2.1"
   resolved "https://registry.npmjs.org/redux/-/redux-4.2.1.tgz"
@@ -1889,6 +1890,8 @@ redux@^4.0.5:
   dependencies:
     "@babel/runtime" "^7.9.2"
 
+=======
+>>>>>>> b6ec6271c23c757be910581e3829dd8c5a5f87f0
 "reflect-metadata@^0.1.14 || ^0.2.0", reflect-metadata@^0.2.2:
   version "0.2.2"
   resolved "https://registry.npmjs.org/reflect-metadata/-/reflect-metadata-0.2.2.tgz"

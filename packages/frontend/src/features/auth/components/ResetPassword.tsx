@@ -41,13 +41,6 @@ const ResetPassword = () => {
   return (
     <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* <h2>איפוס סיסמה</h2> */}
-        {/* <label>סיסמה חדשה:</label>
-        <Input type="password" {...register("password")} />
-        {errors.password && <p>{errors.password.message}</p>}
-        <label>אימות סיסמה:</label>
-        <Input type="password" {...register("confirm")} />
-        {errors.confirm && <p>{errors.confirm.message}</p>} */}
         <label htmlFor="password">סיסמה חדשה:</label>
         <Input id="password" type="password" {...register("password")} />
         {errors.password && <p>{errors.password.message}</p>}

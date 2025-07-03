@@ -36,8 +36,10 @@ const ForgotPassword = () => {
     <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>שכחתי סיסמה</h2>
-        <label htmlFor="email">אימייל:</label>
-        <Input id="email" type="email" {...register("email")} />
+        <label htmlFor="email-input">אימייל:</label>
+        <Input id="email-input" type="email" {...register("email")} />
+        {/* <label htmlFor="email">אימייל:</label>
+        <Input id="email" type="email" {...register("email")} /> */}
         {errors.email && <p>{errors.email.message}</p>}
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "טוען..." : "שלח קישור לאיפוס סיסמה"}
