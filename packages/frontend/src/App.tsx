@@ -3,12 +3,13 @@ import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './shared/routes/appRoutes'
 import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
-
+import RouteTimer from '../src/shared/routes/RouteTimer'
 function App() {
   return (
     <MessageModalProvider>
       <BrowserRouter>
-        <AppRoutes />
+        <RouteTimer/>
+          <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>
   );
