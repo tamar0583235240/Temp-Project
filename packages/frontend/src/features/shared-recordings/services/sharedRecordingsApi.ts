@@ -5,10 +5,15 @@ import { feedbackType } from "../../feedback/types/feedbackType";
 export const sharedRecordingsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // 1. קבלת כל ההקלטות ששויכו למשתמש
-    getSharedRecordings: builder.query<SharedRecording[], string>({
-      query: (userId) => `/api/shared-recordings/user/${userId}`,
-      providesTags: ["SharedRecordings"],
-    }),
+
+getSharedRecordings: builder.query<SharedRecording[], string>({
+  
+  // query: (userId) => `/api/shared-recordings?userId=${userId}`,
+  query: (userId) => `/shared-recordings?userId=${userId}`,
+
+  providesTags: ["SharedRecordings"],
+}),
+
 
     // 2. קבלת פרטי הקלטה לפי ID
     getSharedRecordingDetails: builder.query<SharedRecording, string>({
@@ -19,7 +24,7 @@ export const sharedRecordingsApi = api.injectEndpoints({
     // 3. יצירת פידבק
     createFeedback: builder.mutation<feedbackType, Partial<feedbackType> & { answerId: string }>({
       query: ({ answerId, ...body }) => ({
-        url: `/api/feedback/${answerId}`,
+        url: `/feedback/${answerId}`,
         method: "POST",
         body,
       }),
@@ -29,7 +34,7 @@ export const sharedRecordingsApi = api.injectEndpoints({
     // 4. עדכון פידבק
     updateFeedback: builder.mutation<feedbackType, { feedbackId: string; comment: string; rating: number }>({
       query: ({ feedbackId, ...body }) => ({
-        url: `/api/feedback/${feedbackId}`,
+        url: `/feedback/${feedbackId}`,
         method: "PUT",
         body,
       }),

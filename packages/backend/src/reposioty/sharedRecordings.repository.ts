@@ -1,24 +1,41 @@
 import { pool } from '../config/dbConnection';
 
 export const getSharedRecordingsByUserId = async (userId: string) => {
-  const query = `
-    SELECT
-      sr.id,
-      u.first_name || ' ' || u.last_name AS "userName",
-      q.title AS "questionTitle",
-      sr.date,
-      sr.audio_url AS "audioUrl",
-      sr.ai_summary AS "aiSummary",
-      f.comment AS "feedbackComment",
-      f.rating AS "feedbackRating"
-    FROM shared_recordings sr
-    JOIN users u ON sr.owner_id = u.id
-    JOIN questions q ON sr.question_id = q.id
-    LEFT JOIN feedback f ON f.sharedrecordingid = sr.id
-    WHERE $1 = ANY(sr.sharedwith)
+  // const query = `
+  //   SELECT
+  //     sr.id,
+  //     u.first_name || ' ' || u.last_name AS "userName",
+  //     q.title AS "questionTitle",
+  //     sr.date,
+  //     sr.audiourl AS "audioUrl",
+  //     sr.aisummary AS "aiSummary",
+  //     f.comment AS "feedbackComment",
+  //     f.rating AS "feedbackRating"
+  //   FROM shared_recordings sr
+  //   JOIN users u ON sr.owner_id = u.id
+  //   JOIN questions q ON sr.question_id = q.id
+  //   LEFT JOIN feedback f ON f.sharedrecordingid = sr.id
+  //   WHERE $1 = ANY(sr.sharedwith)
 
-  `;
+  // `;
+  const query = `
+  SELECT
+    sr.id,
+    sr.username AS "userName",
+    sr.questiontitle AS "questionTitle",
+    sr.date,
+    sr.audiourl AS "audioUrl",
+    sr.aisummary AS "aiSummary",
+    f.comment AS "feedbackComment",
+    f.rating AS "feedbackRating"
+  FROM shared_recordings sr
+LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+  WHERE $1 = ANY(sr.sharedwith)
+`;
   const { rows } = await pool.query(query, [userId]);
+  console.log(`[getSharedRecordingsByUserId] userId = ${userId}`);
+  console.log(`[getSharedRecordingsByUserId] rows.length = ${rows.length}`);
+
   return rows;
 };
 
@@ -32,6 +49,7 @@ export const getRecordingDetailsById = async (recordingId: string) => {
     WHERE sr.id = $1
   `;
   const { rows } = await pool.query(query, [recordingId]);
+
   return rows[0];
 };
 

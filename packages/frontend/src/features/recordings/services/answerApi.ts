@@ -6,12 +6,12 @@ export const AnswerApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getAnswersByIdUser: builder.query<Answer[], string>({
             query: (id) => `answers/getAllAnswersByIdUser/${id}`,
-            providesTags: ["answers"],  
+            providesTags: ["Answers"],  
         }),
         
         getQuestionById: builder.query<Question, string>({
             query: (id) => `question/getAllQuestionById/${id}`,
-            providesTags: ["question"],  
+            providesTags: ["Questions"],  
         })
     })
 });

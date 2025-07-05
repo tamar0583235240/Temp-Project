@@ -1,17 +1,9 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm";
+import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Feedbacktype } from "./Feedbacktype";
-import { Users } from "./Users";
 
 @Index("shared_recording_pkey", ["id"], { unique: true })
-@Entity("shared_recordings", { schema: "public" })
-export class SharedRecordings {
+@Entity("shared_recording", { schema: "public" })
+export class SharedRecording {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
@@ -35,8 +27,4 @@ export class SharedRecordings {
 
   @OneToMany(() => Feedbacktype, (feedbacktype) => feedbacktype.sharedRecording)
   feedbacktypes: Feedbacktype[];
-
-  @ManyToOne(() => Users, (users) => users.sharedRecordings)
-  @JoinColumn([{ name: "owner_id", referencedColumnName: "id" }])
-  owner: Users;
 }

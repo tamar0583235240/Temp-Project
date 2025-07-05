@@ -1,12 +1,34 @@
 import { Request, Response } from 'express';
 import * as sharedRepo from '../reposioty/sharedRecordings.repository'
 
+// export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
+//   try {
+//     const userId = req.query.userId as string;
+//       console.log("📩 קיבלתי בקשה ל־/api/shared-recordings עם userId:", userId);
+
+//     console.log("📥 קיבלנו userId:", userId);
+
+
+//     const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
+//     console.log("🎧 מספר הקלטות שנמצאו:", recordings.length);
+
+//     res.json(recordings);
+//   } catch (error) {
+//     console.error("❌ שגיאה בשליפת הקלטות:", error);
+//     res.status(500).json({ error });
+//   }
+// };
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.query.userId as string;
+    console.log("📩 קיבלתי בקשה ל־/api/shared-recordings עם userId:", userId);
+
     const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
+    console.log("🎧 מספר הקלטות שנמצאו:", recordings.length);
+
     res.json(recordings);
   } catch (error) {
+    console.error("❌ שגיאה בשליפת הקלטות:", error);
     res.status(500).json({ error });
   }
 };

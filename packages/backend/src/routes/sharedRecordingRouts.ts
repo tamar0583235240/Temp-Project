@@ -13,7 +13,10 @@ const router = Router();
 router.use(sharedRecordingMiddleware);
 
 // בקשה לכל ההקלטות ששיתפו עם משתמש
-router.get('/:userId', getSharedRecordingsByUser);
+// router.get('/:userId', getSharedRecordingsByUser);
+
+// router.ts
+router.get('/', getSharedRecordingsByUser);
 
 // בקשה לפרטי הקלטה מסוימת לפי ID
 router.get('/details/:recordingId', getRecordingDetails);

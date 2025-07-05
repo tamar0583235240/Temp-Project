@@ -9,7 +9,7 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
-import { SharedRecordings } from "./SharedRecordings";
+import { Feedback } from "./Feedback";
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
@@ -26,8 +26,8 @@ export class Answers {
   })
   submittedAt: Date;
 
-  @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
+  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  amountFeedbacks: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
@@ -42,9 +42,6 @@ export class Answers {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.answer
-  )
-  sharedRecordings: SharedRecordings[];
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
+  feedbacks: Feedback[];
 }
