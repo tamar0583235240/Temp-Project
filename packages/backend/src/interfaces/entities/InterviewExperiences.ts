@@ -22,7 +22,7 @@ export class InterviewExperiences {
   interviewDate: string | null;
 
   @Column("text", { name: "questions", nullable: true, array: true })
-  questions: string[] | null;
+  questions: string | null;
 
   @Column("text", { name: "tips", nullable: true })
   tips: string | null;

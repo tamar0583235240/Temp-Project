@@ -5,6 +5,7 @@ import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
 import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Resources } from "./Resources";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -40,14 +41,14 @@ export class Users {
   @Column("text", { name: "password", nullable: true })
   password: string | null;
 
-  @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
-  contentReports: ContentReports[];
+  // @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
+  // contentReports: ContentReports[];
 
-  @OneToMany(
-    () => ExperienceThanks,
-    (experienceThanks) => experienceThanks.user
-  )
-  experienceThanks: ExperienceThanks[];
+  // @OneToMany(
+  //   () => ExperienceThanks,
+  //   (experienceThanks) => experienceThanks.user
+  // )
+  // experienceThanks: ExperienceThanks[];
 
   @OneToMany(
     () => PasswordResetTokens,
@@ -60,6 +61,9 @@ export class Users {
 
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
+
+  @OneToMany(() => Resources, (resources) => resources)
+  resources: Resources[];
 
   @OneToMany(
     () => SharedRecordings,

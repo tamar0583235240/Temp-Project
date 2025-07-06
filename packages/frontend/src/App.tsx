@@ -8,6 +8,7 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
+import { InterviewExperiencesList } from './features/interviewExperiences/components/interviewExperiencesList';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ function App() {
     <MessageModalProvider>
       <BrowserRouter>
         <AppRoutes />
+        <InterviewExperiencesList></InterviewExperiencesList>
       </BrowserRouter>
     </MessageModalProvider>
   );

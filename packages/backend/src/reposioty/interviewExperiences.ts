@@ -3,7 +3,7 @@ import { InterviewExperiences } from "../interfaces/entities/InterviewExperience
 
 const getAllInterviewExperiences = async (): Promise<InterviewExperiences[] | void> => {
     try {
-        const { rows } = await pool.query('SELECT * FROM Interview_Experiences');
+        const { rows } = await pool.query('SELECT * FROM "Interview_Experiences"');
         return rows as InterviewExperiences[];
     } catch (error) {
         console.error('Error fetching interview experiences:', error);
