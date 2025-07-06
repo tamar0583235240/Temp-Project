@@ -8,9 +8,11 @@ import { AiInsightsList } from "./AiInsightsList";
 import './RecordingsList.css';
 
 export const RecordingsList = () => {
-    const user = useSelector((state: RootState) => state.auth.user);
-    // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
-    const userId = user && user.id ? user.id.toString() : 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
+    const userId = 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
+
+    // const user = useSelector((state: RootState) => state.auth.user);
+    // // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
+    // const userId = user && user.id ? user.id.toString() : 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
 
     if (isLoading)

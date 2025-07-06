@@ -1,13 +1,34 @@
-import { SharedRecording } from '../types/types'
-import FeedbackSection from '../components/FeedbackSection'
+import React from 'react';
 
-export default function SharedRecordingCard({ recording }: { recording: SharedRecording }) {
+interface Props {
+  id: string;
+  sharedBy: string;
+  sharedAt: string;
+  feedbackRating?: number;
+  onClick: () => void;
+}
+
+export default function SharedRecordingCard({
+  id,
+  sharedBy,
+  sharedAt,
+  feedbackRating = 0,
+  onClick,
+}: Props) {
   return (
-    <div className="border p-4 rounded-xl shadow-sm">
-      <h3 className="font-bold">{recording.title}</h3>
-      <audio controls src={recording.audioUrl} className="my-2" />
-      <div className="text-sm text-gray-600">{recording.aiInsights}</div>
-      <FeedbackSection recordingId={recording.id} />
+    <div
+      onClick={onClick}
+      className="cursor-pointer bg-white shadow rounded-xl p-4 border hover:shadow-md transition"
+    >
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-lg font-semibold">משתף: {sharedBy}</h2>
+          <p className="text-sm text-gray-500">תאריך: {new Date(sharedAt).toLocaleDateString()}</p>
+        </div>
+        <div className="text-yellow-400 text-xl">
+          {'★'.repeat(feedbackRating)}{'☆'.repeat(5 - feedbackRating)}
+        </div>
+      </div>
     </div>
   );
 }

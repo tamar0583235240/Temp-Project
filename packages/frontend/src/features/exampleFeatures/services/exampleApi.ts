@@ -1,4 +1,6 @@
 
+
+export {}
 // import { api } from "../../../shared/api/api";
 // import { exampleType } from "../types/exampleType";
 

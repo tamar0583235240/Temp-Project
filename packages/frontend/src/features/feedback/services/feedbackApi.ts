@@ -3,14 +3,29 @@ import { feedbackType } from "../types/feedbackType";
 
 export const feedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getFeedbackesBysharedRecordingId: builder.query<feedbackType[], string>({
-      query: (sharedRecordingId) => `api/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`,
+    getFeedbacksBySharedRecordingId: builder.query<feedbackType[], string>({
+      query: (sharedRecordingId) =>
+        `/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`,
       providesTags: ["Feedback"],
-    })
+    }),
 
+    createFeedback: builder.mutation<void, {
+      shared_recording_id: string;
+      given_by_user_id: string;
+      comment: string;
+      rating: number;
+    }>({
+      query: (body) => ({
+        url: '/feedbackes',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ["Feedback", "SharedRecordings"],
+    }),
   }),
 });
 
 export const {
-  useGetFeedbackesBysharedRecordingIdQuery
+  useGetFeedbacksBySharedRecordingIdQuery,
+  useCreateFeedbackMutation,
 } = feedbackApi;

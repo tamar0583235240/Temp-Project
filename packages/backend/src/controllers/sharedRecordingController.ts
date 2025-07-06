@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
-import * as sharedRepo from '../reposioty/sharedRecordings.repository'
+import * as sharedRepo from '../reposioty/sharedRecordings.repository';
 
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.query.userId as string; // ✅ שינוי כאן
+    if (!userId) {
+      return res.status(400).json({ error: 'Missing userId in query' });
+    }
     const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
     res.json(recordings);
   } catch (error) {
@@ -21,13 +24,11 @@ export const getRecordingDetails = async (req: Request, res: Response) => {
   }
 };
 
-
 export const createFeedback = async (req: Request, res: Response) => {
   try {
     console.log('BODY RECEIVED:', req.body);
     const { sharedRecordingId, comment, rating } = req.body;
 
-    // בדיקת קלט בסיסית
     if (!sharedRecordingId || !comment || typeof rating !== 'number') {
       return res.status(400).json({ message: 'Missing or invalid fields in request body.' });
     }
@@ -43,7 +44,6 @@ export const createFeedback = async (req: Request, res: Response) => {
     });
   }
 };
-
 
 export const updateFeedback = async (req: Request, res: Response) => {
   try {
