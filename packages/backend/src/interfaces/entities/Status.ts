@@ -1,12 +1,12 @@
 import { Column, Entity, Index } from "typeorm";
 
-@Index("status_pkey", ["id"], { unique: true })
+@Index("status_pkey", ["userId"], { unique: true })
 @Entity("status", { schema: "public" })
 
 export class Status {
-  [x: string]: any;
-  @Column("uuid", { name: "user_id" })
-  user_id: string;
-  @Column("simple-json", { name: "answered" })
-  answered: boolean[];
+  @Column("uuid", { primary: true, name: "user_id" })
+  userId: string;
+
+  @Column("bool", { name: "answered", nullable: true, array: true })
+  answered: boolean[] | null;
 }

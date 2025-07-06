@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
-import { FiMic, FiPause, FiPlay, FiTrash2, FiDownload, FiRefreshCw, FiCheck, FiRotateCcw } from 'react-icons/fi';
+import { FiDownload, FiCheck, FiRotateCcw } from 'react-icons/fi';
 
 import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
-import TipsComponent from '../../interview/components/tipsComponent';
-import AnswerAI from '../../interview/components/AnswerAI';
 
 type AudioRecorderProps = {
   userId?: string;
@@ -20,7 +18,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   userId = '550e8400-e29b-41d4-a716-446655440005',
   questionId = '00ca827f-f7a4-4449-8abc-64f84ce23dad',
   onFinish,
-  onSaveSuccess
+  onSaveSuccess,
 }) => {
   const {
     currentRecording,
@@ -29,7 +27,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     pauseRecording,
     resumeRecording,
     stopRecording,
-    deleteRecording,
     restartRecording,
     saveRecording,
     audioBlobRef,
@@ -39,15 +36,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [recordingPhase, setRecordingPhase] = useState<'idle' | 'recording' | 'paused'>('idle');
-  const [isRecordDisabled, setIsRecordDisabled] = useState(false);
-
+  const [recordingPhase, setRecordingPhase] = useState<
+    'idle' | 'recording' | 'paused' | 'finished'
+  >('idle');
 
   const handleMainButtonClick = () => {
-    if (recordingPhase === 'idle') {
-      startRecording();
+    if (recordingPhase === 'idle' || recordingPhase === 'finished') {
+      restartRecording();
       setRecordingPhase('recording');
-      setIsRecordDisabled(false);
     } else if (recordingPhase === 'recording') {
       pauseRecording();
       setRecordingPhase('paused');
@@ -56,19 +52,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setRecordingPhase('recording');
     }
   };
-const handleStopRecording = () => {
-  stopRecording();
-  setRecordingPhase('idle');
-  setIsRecordDisabled(true);
-  onFinish?.(); // מודיע לדף הראשי שסיימנו הקלטה
-};
+
+  const handleStopRecording = () => {
+    stopRecording();
+    setRecordingPhase('finished');
+    onFinish?.();
+  };
 
   const handleSaveRecording = async () => {
     try {
       const answer = await saveRecording(userId, questionId, fileName);
       setShowSaveModal(false);
       setFileName('');
-      if (onSaveSuccess && answer && answer.id) {
+      if (onSaveSuccess && answer?.id) {
         onSaveSuccess(answer.id);
       }
     } catch (error) {
@@ -91,15 +87,14 @@ const handleStopRecording = () => {
 
   return (
     <div className="space-y-4 w-full">
-      {/* כפתור התחלה / עצירה */}
+      {/* כפתור ראשי */}
       <RecordButton
         state={recordingPhase}
         onClick={handleMainButtonClick}
-        disabled={isRecordDisabled}
       />
 
-      {/* זמן הקלטה */}
-      {(recordingPhase === 'recording' || recordingPhase === 'paused') && (
+      {/* מונה זמן */}
+      {(recordingPhase === 'recording' || recordingPhase === 'paused' ) && (
         <div className="flex flex-col items-center gap-2">
           <div className="text-lg font-bold text-text-main">
             {formatTime(currentRecording.recordingTime)}
@@ -107,23 +102,9 @@ const handleStopRecording = () => {
         </div>
       )}
 
-      {/* כפתורי שליטה בהקלטה */}
+      {/* כפתורים בזמן עצירה זמנית */}
       {recordingPhase === 'paused' && (
         <div className="grid grid-cols-2 gap-2">
-          <Button
-            size="sm"
-            fullWidth
-            variant="primary-dark"
-            onClick={() => {
-              resumeRecording();
-              setRecordingPhase('recording');
-              setIsRecordDisabled(false);
-            }}
-            icon={<FiPlay />}
-            className="gap-2"
-          >
-            המשך
-          </Button>
           <Button
             size="sm"
             fullWidth
@@ -131,26 +112,11 @@ const handleStopRecording = () => {
             onClick={() => {
               restartRecording();
               setRecordingPhase('recording');
-              setIsRecordDisabled(false);
             }}
             icon={<FiRotateCcw />}
             className="gap-2"
           >
             מחדש
-          </Button>
-          <Button
-            size="sm"
-            fullWidth
-            variant="danger"
-            onClick={() => {
-              deleteRecording();
-              setRecordingPhase('idle');
-              setIsRecordDisabled(false);
-            }}
-            icon={<FiTrash2 />}
-            className="gap-2"
-          >
-            מחק
           </Button>
           <Button
             size="sm"
@@ -165,10 +131,9 @@ const handleStopRecording = () => {
         </div>
       )}
 
-      {/* נגן + אפשרויות שמירה והורדה */}
+      {/* תצוגה מקדימה + הורדה ושמירה */}
       {audioBlobRef.current && (
         <div className="space-y-2">
-          <h4 className="font-semibold text-text-main">תצוגה מקדימה:</h4>
           <audio controls className="w-full rounded-lg border border-muted">
             <source src={URL.createObjectURL(audioBlobRef.current)} type="audio/wav" />
           </audio>
@@ -195,7 +160,6 @@ const handleStopRecording = () => {
           </div>
         </div>
       )}
-
 
       {/* מודל שמירה */}
       {showSaveModal && (
