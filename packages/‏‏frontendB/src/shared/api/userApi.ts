@@ -1,9 +1,8 @@
-import { apiA } from './api';
-
+import { api } from './api';
 import { User } from '../../features/auth/types/types';
 import { get } from 'http';
 
-export const userApiA = apiA.injectEndpoints({
+export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query<User[], void>({
       query: () => '/users',
@@ -58,4 +57,4 @@ export const {
   useDeleteUserMutation,
   useAuthWithGoogleMutation,
   useLazyGetUserByIdQuery
-} = userApiA;
+} = userApi;
