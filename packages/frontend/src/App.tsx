@@ -36,17 +36,9 @@ function App() {
     <GoogleOAuthProvider clientId={clientId}>
     <Provider store={store}>
      <MessageModalProvider>
-      <>
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
-       {/* <EditInterviewMaterialsSubForm
-  id="some-id"
-  defaultValues={{ title: "", shortDescription: "" }}
-  onSuccess={() => console.log("Saved!")}
-  onCancel={() => console.log("Cancelled")}
-  /> */}
-   </>
     </MessageModalProvider>
        </Provider>
            </GoogleOAuthProvider>

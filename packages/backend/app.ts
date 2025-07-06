@@ -7,6 +7,10 @@ import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import cookieParser from 'cookie-parser';
 import interviewMaterialsHub from './src/routes/interview-materials-sub';
 import dotenv from 'dotenv';
+import usersRoutes from './src/routes/userRouts';
+import answerRoutes from './src/routes/answerRouts';
+import aiInsightRoutes from './src/routes/aIInsightRouts';
+import { pool } from './src/config/dbConnection';
 
 dotenv.config();
 
@@ -42,6 +46,9 @@ app.use(cors(corsOptions));
 app.use((req, res, next) => {
   next();
 });
+console.log('✅ i am here in app');
+
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -50,6 +57,9 @@ app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/manager', interviewMaterialsRoutes);
 app.use('/interview-materials-hub', interviewMaterialsHub);
+app.use("/api/users", usersRoutes);
+app.use("/api/questions", answerRoutes);
+app.use("/api/aiInsight", aiInsightRoutes);
 
 export default app;
 

@@ -3,12 +3,14 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
+import Dashboard from '../../pages/dashboard';
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
+import AdminUser from "../../pages/AdminUser"; 
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
@@ -69,7 +71,7 @@ export default function AppRoutes() {
             path="/dashboard"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Dashboard</p>
+                    <Dashboard />
               </RoleProtectedRoute>
             }
           />
@@ -117,7 +119,7 @@ export default function AppRoutes() {
             path="/manager/users"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>AdminUsers</p>
+                    <AdminUser />
               </RoleProtectedRoute>
             }
           />
