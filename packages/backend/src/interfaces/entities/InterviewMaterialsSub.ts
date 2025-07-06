@@ -21,4 +21,7 @@ export class InterviewMaterialsSub {
     default: () => "0",
   })
   downloadsCount: number | null;
+
+  @Column("text", { name: "file_url" })
+  fileUrl: string;
 }
