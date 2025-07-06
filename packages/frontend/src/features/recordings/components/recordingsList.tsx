@@ -45,7 +45,7 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
     ratingFilter: null,
   });
   const [sortOption, setSortOption] = useState('latest');
-  const [displayedAnswers, setDisplayedAnswers] = useState<answer[]>([]);
+  const [displayedAnswers, setDisplayedAnswers] = useState<Answer[]>([]);
   const [expandedRecordings, setExpandedRecordings] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
