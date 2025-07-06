@@ -9,13 +9,13 @@ import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
 import { useEffect, useMemo, useState } from "react";
-import { Answer } from "../types/Answer";
 import { FilteringComponents } from "./filteringComponents";
 import { SearchComponents } from "./searchComponents";
 import { SortComponents } from "./sortComponents";
 import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 import ShareButton from "../../shared-recordings/components/ShareButton";
 import ShareDialog from "../../shared-recordings/components/ShareDialog";
+import { Answer } from "../types/answer";
 
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
   const user = useSelector((state: RootState) => state.auth.user);
