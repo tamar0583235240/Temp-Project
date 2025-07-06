@@ -21,7 +21,7 @@ async function getDueReminders() {
     last_sent_at: row.last_sent_at,
     user: {
       user_reminder_settings: {
-        frequency: row.frequency,
+        tip_frequency: row.frequency,
       },
     },
   }));

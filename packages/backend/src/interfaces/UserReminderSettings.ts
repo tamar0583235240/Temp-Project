@@ -3,7 +3,7 @@ export interface UserReminderSettings {
     user_id: string;
     tip_id: string;
     type: string;
-    frequency: string;
+    tip_frequency: string;
     is_enabled: boolean;
     last_sent_at: Date;
 }

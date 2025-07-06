@@ -1,4 +1,4 @@
-export function isReminderDue(lastSentAt: string | null, frequency: string): boolean {
+export function isReminderDue(lastSentAt: string | null, tip_frequency: string): boolean {
   const now = new Date();
   const last = new Date(lastSentAt || 0);
 
@@ -7,7 +7,7 @@ export function isReminderDue(lastSentAt: string | null, frequency: string): boo
 
   const diffDays = (nowDateOnly.getTime() - lastDateOnly.getTime()) / (1000 * 60 * 60 * 24);
 
-  switch (frequency) {
+  switch (tip_frequency) {
     case 'daily': return diffDays >= 1;
     case 'every_2_days': return diffDays >= 2;
     case 'every_3_days': return diffDays >= 3;

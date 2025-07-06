@@ -139,7 +139,8 @@ export const login = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
   try {
-    const user = await authRepository.login(email, password);
+    // const user = await authRepository.login(email, password);
+    const user = await userRepository.getUserByEmail(email);
     console.log("User found:", user);
     if (!user) {
       // return res.status(401).json({ message: "אימייל או סיסמה שגויים" });

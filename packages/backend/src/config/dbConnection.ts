@@ -28,7 +28,7 @@ console.log('Database host:', process.env.DB_HOST);
 console.log('Database name:', process.env.DB_NAME);
 console.log('Database password:', process.env.DB_PASSWORD);
 console.log('Database port:', process.env.DB_PORT);
-const pool = new Pool({
+export const pool = new Pool({
 
   user: process.env.DB_USER,
   host: process.env.DB_HOST,

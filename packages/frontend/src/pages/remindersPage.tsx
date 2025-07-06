@@ -54,7 +54,7 @@ export default function RemindersPage() {
 
     try {
       await saveUserReminderSettings({
-        userId: "9b12018e-95ef-494d-bc8b-1bd0ad4ca1d6",
+        userId: "13a8730d-6247-4988-8fa1-a28abd6fb131",
         settings: filteredSettings,
       });
       showMessage("התזכורות נשמרו בהצלחה!", "success");

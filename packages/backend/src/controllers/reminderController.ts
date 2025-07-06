@@ -26,14 +26,14 @@ export const reminderController = async (req: Request, res: Response) => {
 
     for (const reminder of allReminders) {
       const { last_sent_at, user_id, tip_id, user } = reminder;
-      const frequency = user?.user_reminder_settings?.frequency;
+      const tip_frequency = user?.user_reminder_settings?.tip_frequency;
 
-      console.log('frequency:', frequency);
+      console.log('frequency:', tip_frequency);
       console.log('last_sent_at:', last_sent_at);
-      console.log('isReminderDue:', isReminderDue(last_sent_at, frequency));
+      console.log('isReminderDue:', isReminderDue(last_sent_at, tip_frequency));
       console.log('isSentToday:', isSentToday(last_sent_at));
 
-      if (frequency && isReminderDue(last_sent_at, frequency) && !isSentToday(last_sent_at)) {
+      if (tip_frequency && isReminderDue(last_sent_at, tip_frequency) && !isSentToday(last_sent_at)) {
         // עדכון רק למי שמגיע לו לפי התדירות
         console.log(`Updating last_sent_at for user ${user_id} and tip ${tip_id}`);
 

@@ -1,7 +1,7 @@
 
 import {pool} from '../config/dbConnection';      
 
-const frequencyMap: Record<string, string> = {
+const tipFrequencyMap: Record<string, string> = {
   'daily': 'daily',
   'every-two-days': 'every_2_days',
   'every-three-days': 'every_3_days',
@@ -23,16 +23,16 @@ export const saveReminderSettingsForUser = async (
 
     for (const [type, freq] of Object.entries(settings)) {
       const dbType = typeMap[type];
-      const dbFreq = frequencyMap[freq];
+      const dbFreq = tipFrequencyMap[freq];
 
       if (!dbType || !dbFreq) continue;
 
       await client.query(
         `
-        INSERT INTO user_reminder_settings (user_id, type, frequency, is_enabled)
+        INSERT INTO user_reminder_settings (user_id, type, tip_frequency, is_enabled)
         VALUES ($1, $2, $3, true)
         ON CONFLICT (user_id, type)
-        DO UPDATE SET frequency = EXCLUDED.frequency, is_enabled = true
+        DO UPDATE SET tip_frequency = EXCLUDED.tip_frequency, is_enabled = true
         `,
         [userId, dbType, dbFreq]
       );

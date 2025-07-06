@@ -15,30 +15,26 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  dispatch(loginStart());
+    dispatch(loginStart());
 
-  refreshTokenTrigger()
-    .unwrap()
-    .then((res) => {
-      console.log("הצלחה!", res);
-      dispatch(loginSuccess({ token: res.token, user: res.user }));
-    })
-    .catch((err) => {
-      console.log("נכשל ברענון הטוקן", err);
-      dispatch(logout());
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-}, []);
+    refreshTokenTrigger()
+      .unwrap()
+      .then((res) => {
+        console.log("הצלחה!", res);
+        dispatch(loginSuccess({ token: res.token, user: res.user }));
+      })
+      .catch((err) => {
+        console.log("נכשל ברענון הטוקן", err);
+        dispatch(logout());
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   if (loading) return <p>טוען...</p>;
 
   return (
-    <MessageModalProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
     <MessageModalProvider>
       <BrowserRouter>
         <AppRoutes />

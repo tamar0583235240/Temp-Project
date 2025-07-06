@@ -18,7 +18,7 @@ describe('בדיקות ל-reminderController', () => {
                 last_sent_at: '2024-01-01T00:00:00Z',
                 user: {
                     user_reminder_settings: {
-                        frequency: 'weekly',
+                        tip_frequency: 'weekly',
                     },
                 },
             }

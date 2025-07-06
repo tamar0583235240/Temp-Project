@@ -11,6 +11,7 @@ import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
+import RemindersPage from "../../pages/remindersPage";
 
 export default function AppRoutes() {
   return (
@@ -45,6 +46,7 @@ export default function AppRoutes() {
           <Route path="/recordings" element={<RecordingsList allowedRoles={["student"]} />} />
           <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
           <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
+          <Route path="/reminders" element={<RoleProtectedRoute allowedRoles={["student"]}><RemindersPage/></RoleProtectedRoute>} />
 
           <Route
             path="/interviewMaterialsHub"
@@ -69,7 +71,7 @@ export default function AppRoutes() {
               <p>AdminResources</p>
             </RoleProtectedRoute>
           } />
-          </Route>
+        </Route>
       </Routes>
     </div>
   );

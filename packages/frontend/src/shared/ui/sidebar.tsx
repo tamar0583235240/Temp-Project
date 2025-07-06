@@ -15,6 +15,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Home", href: "/" },
+  { label: "Reminders", href: "/reminders" },
   { label: "Simulation", href: "/simulation" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "My Recordings", href: "/recordings" },

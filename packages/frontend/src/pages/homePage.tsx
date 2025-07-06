@@ -26,6 +26,9 @@ const HomePage = () => {
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/shared")}>
         משותף
       </Button>
+      <Button variant="primary-dark" fullWidth onClick={() => navigate("/reminders")}>
+        טיפים ותזכורות
+      </Button>
 
 
       {isManager && (

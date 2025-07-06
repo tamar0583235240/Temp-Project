@@ -6,7 +6,7 @@ export interface Reminder {
     last_sent_at: string | null;
     user: {
         user_reminder_settings: {
-            frequency: 'daily' | 'every_2_days' | 'every_3_days' | '"weekly"';
+            tip_frequency: 'daily' | 'every_2_days' | 'every_3_days' | '"weekly"';
         }
     };
 }

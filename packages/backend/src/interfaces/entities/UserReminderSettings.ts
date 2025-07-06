@@ -24,7 +24,7 @@ export class UserReminderSettings {
     name: "frequency",
     enum: ["daily", "every_2_days", "every_3_days", "weekly"],
   })
-  frequency: "daily" | "every_2_days" | "every_3_days" | "weekly";
+  tip_frequency: "daily" | "every_2_days" | "every_3_days" | "weekly";
 
   @Column("boolean", { name: "is_enabled", default: () => "true" })
   isEnabled: boolean;

@@ -3,7 +3,7 @@ export default interface tip {
     content: string;
     user: {
         user_reminder_settings: {
-            frequency: string;
+            tip_frequency: string;
         };
     }
 }
