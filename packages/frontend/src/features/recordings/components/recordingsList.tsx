@@ -9,7 +9,7 @@ import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
 import { useEffect, useMemo, useState } from "react";
-import { answer } from "../types/answer";
+import { Answer } from "../types/Answer";
 import { FilteringComponents } from "./filteringComponents";
 import { SearchComponents } from "./searchComponents";
 import { SortComponents } from "./sortComponents";

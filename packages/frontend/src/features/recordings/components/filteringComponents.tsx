@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { answer } from '../types/answer';
+import { Answer } from '../types/Answer';
 import { TitleQuestions } from './question';
 import { Button } from '../../../shared/ui/button';
 import { cn } from '../../../shared/utils/cn';
@@ -18,7 +18,7 @@ export const FilteringComponents = (props: {
     feedbackCategory: string;
     ratingFilter: number | null;
   }) => void;
-  originalAnswers: answer[];
+  originalAnswers: Answer[];
 }) => {
   const { filterCriteria, setFilterCriteria, originalAnswers } = props;
 
