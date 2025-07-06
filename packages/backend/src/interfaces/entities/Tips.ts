@@ -8,4 +8,11 @@ export class Tips {
 
   @Column("text", { name: "content" })
   content: string;
+
+  @Column("enum", {
+    name: "frequency",
+    nullable: true,
+    enum: ["daily", "weekly", "monthly"],
+  })
+  frequency: "daily" | "weekly" | "monthly" | null;
 }

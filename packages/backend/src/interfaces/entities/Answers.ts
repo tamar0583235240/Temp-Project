@@ -9,7 +9,6 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
-import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("answers_pkey", ["id"], { unique: true })
@@ -30,12 +29,8 @@ export class Answers {
   @Column("text", { name: "answer_file_name", nullable: true })
   answerFileName: string | null;
 
-  @Column("integer", {
-    name: "amount_feedbacks",
-    nullable: true,
-    default: () => "0",
-  })
-  amountFeedbacks: number | null;
+  @Column("numeric", { name: "amount_feedbacks", nullable: true })
+  amountFeedbacks: string | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
@@ -49,9 +44,6 @@ export class Answers {
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
-
-  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
-  feedbacks: Feedback[];
 
   @OneToMany(
     () => SharedRecordings,
