@@ -84,7 +84,7 @@ jobs:
           echo ":white_check_mark: All critical files exist."
       - name: Check no extra package.json files
         run: |
-          EXTRA_PKG=$(find . -name package.json ! -path "./packages/frontend/package.json" ! -path "./packages/backend/package.json")
+          EXTRA_PKG=$(find . -name package.json ! -path "./packages/frontend/package.json" ! -path "./packages/backend/package.json" ! -path "./packages/shared/package.json")
           if [ -n "$EXTRA_PKG" ]; then
             echo ":x: Found unexpected package.json files:" && echo "$EXTRA_PKG" && exit 1
           fi
