@@ -34,7 +34,6 @@ export const generateAndSendCode = async (req: Request, res: Response) => {
      codesPerEmail.set(email, { code, expiresAt });
      // בקוד הזה צריך לטפל...
     await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`)
-    console.log(`Sending code ${code} to email ${email}`);
     res.status(200).json({sent:true, message: "הקוד נשלח בהצלחה!"});
 }
 

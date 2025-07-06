@@ -1,3 +1,4 @@
+
 // src/shared/api/authApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { User } from '../types';
@@ -56,3 +57,4 @@ export const api = createApi({
 });
 
 export const { useLoginMutation, useRefreshTokenQuery, useGetProgressQuery, useGetTipsQuery } = api;
+

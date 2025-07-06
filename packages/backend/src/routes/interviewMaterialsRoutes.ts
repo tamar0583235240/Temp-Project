@@ -1,12 +1,36 @@
-import express from 'express';
-import { getAllInterviewMaterials } from '../controllers/interviewMaterialsController';
-import { deleteInterviewMaterial } from "../controllers/interviewMaterialsController";
+import { Router } from 'express';
+import multer from 'multer';
+import {
+    getAllInterviewMaterials,
+    deleteInterviewMaterialController,
+    addInterviewMaterial,
+    updateInterviewMaterialController,
+} from '../controllers/interviewMaterialsController';
 
+const router = Router();
 
-const router = express.Router();
+// הגדרת multer להעלאת קבצים מהזיכרון
+const storage = multer.memoryStorage();
 
-router.get('/interview-materials', getAllInterviewMaterials);
+const upload = multer({ storage });
 
-router.delete('/interview-materials/:id', deleteInterviewMaterial);
+router.get('/', getAllInterviewMaterials);
+router.delete('/:id', deleteInterviewMaterialController);
+router.post('/',
+    upload.fields([
+        { name: 'thumbnail', maxCount: 1 },
+        { name: 'file', maxCount: 1 }
+    ]),
+    addInterviewMaterial
+)
+router.put(
+    '/:id',
+    upload.fields([
+        { name: 'thumbnail', maxCount: 1 },
+        { name: 'file', maxCount: 1 }
+    ]),
+    updateInterviewMaterialController
+);
 
 export default router;
+
