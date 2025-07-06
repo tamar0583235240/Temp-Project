@@ -348,7 +348,7 @@ export const signup = async (req: Request, res: Response) => {
     sharedRecordings: [],
     createdAt: new Date(),
     resources: [],
-    userReminderSettings: [],
+    userReminderSettings: []
   };
 
   await authRepository.signup(newUser);

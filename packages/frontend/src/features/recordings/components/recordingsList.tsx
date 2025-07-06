@@ -18,13 +18,11 @@ import ShareButton from "../../shared-recordings/components/ShareButton";
 import ShareDialog from "../../shared-recordings/components/ShareDialog";
 
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
-  const user = useSelector((state: RootState) => state.auth.user);
-  console.log("User: ", user);
-  const userId = user?.id ?? '';
-  console.log("User ID: ", userId);
-
-  const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
-  const { data: allInsights } = useGetAiInsightsQuery();
+    const user = useSelector((state: RootState) => state.auth.user);
+    const userId = user?.id ?? '';
+    console.log(user?.id);
+    const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
+    const { data: allInsights } = useGetAiInsightsQuery();
 
   const insightsMap = useMemo(() => {
     const map = new Map<string, number>();
