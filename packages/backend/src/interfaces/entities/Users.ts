@@ -4,6 +4,7 @@ import { ExperienceThanks } from "./ExperienceThanks";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
+import { PasswordResetTokens } from "./PasswordResetTokens";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -48,6 +49,12 @@ export class Users {
   )
   experienceThanks: ExperienceThanks[];
 
+  @OneToMany(
+    () => PasswordResetTokens,
+    (passwordResetTokens) => passwordResetTokens.userId
+  )
+  
+  passwordResetTokens: PasswordResetTokens[];
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
 

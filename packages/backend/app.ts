@@ -5,7 +5,7 @@ import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
 import cors from 'cors';
 import questionRouter from './src/routes/questionRouts';
-
+import interviewExperiencesRouter from './src/routes/interviewExperiencesRouts';
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
 import dotenv from 'dotenv';
@@ -36,7 +36,7 @@ app.use('/question', questionRouter);
 app.use(cookieParser());
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
-
+app.use('/interviewExperiences', interviewExperiencesRouter);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 
 
