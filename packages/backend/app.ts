@@ -1,10 +1,9 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-// import exampleRouts from './src/routes/exampleRouts';
 import resourceRouts from '../backend/src/routes/resourceRouts'
 import dotenv from 'dotenv';
 import answerRoutes from "../backend/src/routes/answerRouts";
-import statusRouts from './src/routes/statusRouts';
+ import statusRouts from './src/routes/statusRouts';
 import aIInsightRouts from './src/routes/aIInsightRouts';
 
 

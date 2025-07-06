@@ -9,9 +9,6 @@ const getAllQuestions = async (): Promise<Question[]> => {
       FROM "questions"
       WHERE is_active = TRUE
     `;
-    // const query = `
-    //   SELECT * FROM "questions"
-    // `;
     const result = await pool.query(query);
     return result.rows as Question[];
   } catch (error) {

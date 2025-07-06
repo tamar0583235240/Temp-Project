@@ -6,7 +6,7 @@ const initialState: InitialState = {
   questions: [],
   currentIndex: 0,
   loading: false,
-  currentAnswerId: "00000000-0000-0000-0000-000000000030" // חדש: מזהה תשובה נוכחית
+  currentAnswerId: "00000000-0000-0000-0000-000000000020" //מזהה תשובה נוכחית
 };
 
 const simulationSlice = createSlice({

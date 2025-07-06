@@ -9,8 +9,6 @@ import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
 import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
-// import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
-import Buttons from "../features/interview/components/buttons";
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
