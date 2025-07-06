@@ -1,4 +1,4 @@
-export interface Answer {
+export interface answer {
     id: string
     user_id: string
     question_id: string

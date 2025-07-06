@@ -9,7 +9,7 @@ import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
 import { useEffect, useMemo, useState } from "react";
-import { Answer } from "../types/answer";
+import { answer } from "../types/answer";
 import { FilteringComponents } from "./filteringComponents";
 import { SearchComponents } from "./searchComponents";
 import { SortComponents } from "./sortComponents";
@@ -45,7 +45,7 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
     ratingFilter: null,
   });
   const [sortOption, setSortOption] = useState('latest');
-  const [displayedAnswers, setDisplayedAnswers] = useState<Answer[]>([]);
+  const [displayedAnswers, setDisplayedAnswers] = useState<answer[]>([]);
   const [expandedRecordings, setExpandedRecordings] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);

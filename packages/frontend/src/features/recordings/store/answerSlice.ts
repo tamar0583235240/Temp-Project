@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Answer } from '../types/answer';
+import { answer } from '../types/answer';
 import { Question } from '../types/Question';
 
 interface AnswerState {
-  data: Answer[];
+  data: answer[];
   loading: boolean;
 }
 
@@ -28,7 +28,7 @@ const answerSlice = createSlice({
   name: 'answer',
   initialState,
   reducers: {
-    getAnswerByUserId(state, action: PayloadAction<Answer>) {
+    getAnswerByUserId(state, action: PayloadAction<answer>) {
       const index = state.data.findIndex(answer => answer.user_id === action.payload.user_id);
       if (index !== -1)
         state.data[index] = action.payload;

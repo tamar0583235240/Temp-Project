@@ -1,11 +1,11 @@
 import { api } from "../../../shared/api/api";
-import { Answer } from "../types/answer";
+import { answer } from "../types/answer";
 import { Question } from "../types/Question";
 
 
 export const AnswerApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        getAnswersByIdUser: builder.query<Answer[], string>({
+        getAnswersByIdUser: builder.query<answer[], string>({
             query: (id) => `answers/getAllAnswersByIdUser/${id}`,
             providesTags: ["answers"],
         }),
