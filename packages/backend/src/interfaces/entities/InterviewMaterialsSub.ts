@@ -4,24 +4,24 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 @Entity("interview_materials_sub", { schema: "public" })
 export class InterviewMaterialsSub {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
-  id: number;
+  id!: number;
 
   @Column("text", { name: "title" })
-  title: string;
+  title!: string;
 
   @Column("text", { name: "thumbnail" })
-  thumbnail: string;
+  thumbnail!: string;
 
   @Column("text", { name: "short_description", nullable: true })
-  shortDescription: string | null;
+  shortDescription!: string | null;
 
   @Column("integer", {
     name: "downloads_count",
     nullable: true,
     default: () => "0",
   })
-  downloadsCount: number | null;
+  downloadsCount!: number | null;
 
   @Column("text", { name: "file_url" })
-  fileUrl: string;
+  fileUrl!: string;
 }

@@ -12,36 +12,36 @@ export class UserReminderSettings {
     name: "id",
     default: () => "gen_random_uuid()",
   })
-  id: string;
+  id!: string;
 
   @Column("uuid", { name: "user_id", unique: true })
-  userId: string;
+  userId!: string;
 
   @Column("enum", { name: "type", unique: true, enum: ["practice", "tip"] })
-  type: "practice" | "tip";
+  type!: "practice" | "tip";
 
   @Column("enum", {
     name: "frequency",
     enum: ["daily", "every_2_days", "every_3_days", "weekly"],
   })
-  frequency: "daily" | "every_2_days" | "every_3_days" | "weekly";
+  frequency!: "daily" | "every_2_days" | "every_3_days" | "weekly";
 
   @Column("boolean", { name: "is_enabled", default: () => "true" })
-  isEnabled: boolean;
+  isEnabled!: boolean;
 
   @Column("timestamp without time zone", {
     name: "last_sent_at",
     nullable: true,
     default: () => "now()",
   })
-  lastSentAt: Date | null;
+  lastSentAt!: Date | null;
 
   @Column("uuid", { name: "tip_id", nullable: true })
-  tipId: string | null;
+  tipId!: string | null;
 
   @ManyToOne(() => Users, (users) => users.userReminderSettings, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user!: Users;
 }

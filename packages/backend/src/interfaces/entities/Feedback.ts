@@ -6,26 +6,26 @@ import { SharedRecordings } from "./SharedRecordings";
 @Entity("feedback", { schema: "public" })
 export class Feedback {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "comment" })
-  comment: string;
+  comment!: string;
 
   @Column("integer", { name: "rating", nullable: true })
-  rating: number | null;
+  rating!: number | null;
 
   @Column("timestamp without time zone", {
     name: "created_at",
     default: () => "now()",
   })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column("uuid", { name: "answer_code" })
-  answerCode: string;
+  answerCode!: string;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
-  givenByUser: Users;
+  givenByUser!: Users;
 
   @ManyToOne(
     () => SharedRecordings,
@@ -33,5 +33,5 @@ export class Feedback {
     { onDelete: "CASCADE" }
   )
   @JoinColumn([{ name: "shared_recording_id", referencedColumnName: "id" }])
-  sharedRecording: SharedRecordings;
+  sharedRecording!: SharedRecordings;
 }

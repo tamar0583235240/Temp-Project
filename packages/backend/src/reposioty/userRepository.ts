@@ -40,39 +40,38 @@ const getUserById = async (id: string): Promise<Users | null> => {
   }
 };
 
-// קבלת משתמש לפי אימייל וסיסמה
 export const getUserByEmailAndPassword = async (
   email: string,
   password: string
 ): Promise<User | null> => {
   try {
+    console.log("🔵 Checking user by email:", email); // ✅✅
+
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
     const user = result.rows[0];
 
-    const a = "rivka123";
-    const hash = "$2b$10$LGl9guHZZheSoOKeb7vN4O6wgv2gFo3uSGVaaEZ7nZ6W7okfyMN2K";
+    if (!user) {
+      console.log("🔴 No user found with this email");
+      throw new Error("Invalid credentials");
+    }
 
-    bcrypt.compare(a, hash).then((res) => {
-      console.log("Compare result:", res); // אמור להדפיס true
-    });
-
-    if (!user) throw new Error("Invalid credentials");
-
-    console.log("Password:", password);
-    console.log("User from DB:", user);
+    console.log("🟢 User found in DB:", user); // ✅✅
+    console.log("🔵 Comparing passwords..."); // ✅✅
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("Is match:", isMatch);
+    console.log("🟢 Password match result:", isMatch); // ✅✅
 
     if (!isMatch) throw new Error("Invalid credentials");
 
     return user;
-  } catch {
+  } catch (err) {
+    console.error("🔴 Error in getUserByEmailAndPassword:", err); // ✅✅
     throw new Error("User not found");
   }
 };
+
 
 // עדכון סיסמה
 export const updateUserPassword = async (

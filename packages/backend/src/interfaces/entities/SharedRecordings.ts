@@ -14,23 +14,23 @@ import { Users } from "./Users";
 @Entity("shared_recordings", { schema: "public" })
 export class SharedRecordings {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "shared_with", array: true })
-  sharedWith: string[];
+  sharedWith!: string[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.sharedRecording)
-  feedbacks: Feedback[];
+  feedbacks!: Feedback[];
 
   @ManyToOne(() => Answers, (answers) => answers.sharedRecordings, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "answer_id", referencedColumnName: "id" }])
-  answer: Answers;
+  answer!: Answers;
 
   @ManyToOne(() => Users, (users) => users.sharedRecordings, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "owner_id", referencedColumnName: "id" }])
-  owner: Users;
+  owner!: Users;
 }

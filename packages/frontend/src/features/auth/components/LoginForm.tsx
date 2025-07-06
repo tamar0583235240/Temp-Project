@@ -22,23 +22,30 @@ function LoginForm() {
   const [tempEmail, setTempEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginStart());
-    setErrorMessage("");
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  console.log("🔵 Submitting login with:", email, password); // ✅✅
 
-    try {
-      const res = await login({ email, password }).unwrap();
-      setTempEmail(email);
-      setShowValidation(true);
-      successfulLogin(res);
-    } catch (err: any) {
-      const message = err?.data?.message || "שגיאה בהתחברות";
-      dispatch(loginFailure(message));
-      setErrorMessage(message);
-      setShowValidation(false);
-    }
-  };
+  dispatch(loginStart());
+  setErrorMessage("");
+
+  try {
+    const res = await login({ email, password }).unwrap();
+    console.log("🟢 Login response:", res); // ✅✅
+
+    setTempEmail(email);
+    setShowValidation(true);
+    successfulLogin(res);
+  } catch (err: any) {
+    console.error("🔴 Login error:", err); // ✅✅
+
+    const message = err?.data?.message || "שגיאה בהתחברות";
+    dispatch(loginFailure(message));
+    setErrorMessage(message);
+    setShowValidation(false);
+  }
+};
+
 
   const successfulLogin = (res: any) => {
     if (res?.user && res?.token) {
