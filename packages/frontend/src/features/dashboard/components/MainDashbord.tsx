@@ -10,17 +10,20 @@ import { useUserStore } from "../store/progressSlice";
 import { motion } from "framer-motion";
 import type { RootState } from "../../../shared/store/store";
 import { ImprovementSuggestions } from "./ImprovementSuggestions";
+import SmileRating from "./SmileRating";
+
 
 const MainDashboard: React.FC = () => {
   const userName = useSelector(
-    (state: RootState) => state.auth?.user?.firstName !
+    (state: RootState) => state.auth?.user?.firstName!
   );
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);
 
   const { answered, total } = useUserStore();
-  const isComplete = answered === total && total > 0;
-
+  // const isComplete = answered === total && total > 0;
+  //שורה קודמת ולשים את זה בהערה  רוצה לראות את התעודה אחכ לשחרר
+  const isComplete = true;
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (
@@ -85,6 +88,20 @@ const MainDashboard: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
         >
+          {/* ✅ הוספת דירוג סמיילים – בין התובנות להתקדמות כללית */}
+          <motion.div
+            className="max-w-6xl mx-auto"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
+            <SmileRating aiInsightId="demo-insight-id" />
+          </motion.div>
+
+          <motion.div
+            className="max-w-6xl mx-auto"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          ></motion.div>
           <ProgressStats />
         </motion.div>
 

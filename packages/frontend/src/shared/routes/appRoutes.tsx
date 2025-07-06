@@ -1,8 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import AdminUser from "../../pages/AdminUser"; 
+import AdminUser from "../../pages/AdminUser";
 import Dashboard from '../../pages/dashboard';
+import ActivityMonitoringPage from "../../pages/ActivityMonitoringPage";
+
 
 export default function AppRoutes() {
     return (
@@ -49,6 +51,12 @@ export default function AppRoutes() {
                     <p>AdminResources</p>
                 </RoleProtectedRoute>
             } />
+            <Route path="/activity-monitoring" element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                    <ActivityMonitoringPage />
+                </RoleProtectedRoute>
+            } />
+
         </Routes>
     );
 }

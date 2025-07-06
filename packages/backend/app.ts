@@ -3,6 +3,7 @@ import cors from 'cors';
 import usersRoutes from './src/routes/userRouts';
 import answerRoutes from './src/routes/answerRouts';
 import aiInsightRoutes from './src/routes/aIInsightRouts';
+import  ActivityMonitoringRoutes  from './src/routes/activityMonitoringRoutes';
 import { pool } from './src/config/dbConnection';
 
 const app: Application = express();
@@ -16,5 +17,8 @@ app.use(express.json());
 app.use("/api/users", usersRoutes);
 app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);
+//להחליף אחכ ל
+app.use("/api/activity", ActivityMonitoringRoutes);
+// app.use("/api/monitoringh", ActivityMonitoringRoutes);
 
 export default app;

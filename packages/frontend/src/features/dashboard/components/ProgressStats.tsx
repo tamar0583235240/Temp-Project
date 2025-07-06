@@ -5,7 +5,7 @@ import { useGetProgressStatsQuery } from "../../../shared/api/api";
 
 const ProgressStats: React.FC = () => {
   const userId =
-    useUserStore((state) => state.userId) || "00000000-0000-0000-0000-000000000000";
+    useUserStore((state) => state.userId) || "d89186f7-3ae6-4486-a90f-ed72bab5e7de";
   const setAnswered = useUserStore((state) => state.setAnswered);
   const setTotal = useUserStore((state) => state.setTotal);
 

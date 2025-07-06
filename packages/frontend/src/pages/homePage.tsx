@@ -23,6 +23,10 @@ const HomePage = () => {
         <div onClick={() => { navigate('/shared') }}>
           <button>shared</button>
         </div>
+        {/* להעביר אחכ רק למנהל את הניתובים */}
+        <div onClick={() => { navigate('/activity-monitoring') }}>
+          <button>activity monitoring</button>
+        </div>
       </div>
       {isManager && (
         <div>
