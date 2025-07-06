@@ -5,7 +5,8 @@ import { InitialState } from "../types/initialState";
 const initialState: InitialState = {
   questions: [],
   currentIndex: 0,
-  loading: false
+  loading: false,
+  currentAnswerId: "00000000-0000-0000-0000-000000000020" //מזהה תשובה נוכחית
 };
 
 const simulationSlice = createSlice({
@@ -17,13 +18,19 @@ const simulationSlice = createSlice({
     },
     answerQuestion(
       state,
-      action: PayloadAction<{ index: number; answer: string }>
+      action: PayloadAction<{ index: number; answer: string; answerId?: string }>
     ) {
-      const { index, answer } = action.payload;
+      const { index, answer, answerId } = action.payload;
       if (state.questions[index]) {
         state.questions[index].answer = answer;
         state.questions[index].answered = true;
+        if (answerId) {
+          state.currentAnswerId = answerId;
+        }
       }
+    },
+    setCurrentAnswerId(state, action: PayloadAction<string | null>) {
+      state.currentAnswerId = action.payload;
     },
     resetQuestion(state, action: PayloadAction<number>) {
       const index = action.payload;
@@ -57,11 +64,8 @@ export const {
   nextQuestion,
   prevQuestion,
   goToQuestion,
+  setCurrentAnswerId,
 } = simulationSlice.actions;
 export default simulationSlice.reducer;
-
-
-
-
 
 

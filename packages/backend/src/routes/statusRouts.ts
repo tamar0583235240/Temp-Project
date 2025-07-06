@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { getStatusByUserId } from '../controllers/statusController';
-// import { exampleMiddleware } from '../middlewares/exampleMiddlewares'; // אם יש לך
+import { getUserAnsweredQuestionsControler } from '../controllers/statusController';
 const router = Router();
-router.get('/:userId', getStatusByUserId);
+
+router.get('/answered/:userId', getUserAnsweredQuestionsControler);
+
 export default router;

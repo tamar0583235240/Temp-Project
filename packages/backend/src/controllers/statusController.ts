@@ -1,31 +1,20 @@
 import { Request, Response } from 'express';
 import statusRepository from '../reposioty/statusRepository';
-import { pool } from '../reposioty/answerRepository';
-export const getStatusByUserId = async (req: Request, res: Response): Promise<void> => {
-  const { userId } = req.params;
-console.log(":inbox_tray: userId from params:", userId);
+
+export const getUserAnsweredQuestionsControler = async (req: Request, res: Response) => {
   try {
-    const answered = await statusRepository.getStatusByUserId(userId);
-    console.log(":white_check_mark: answered result:", answered);
-    console.log(':white_check_mark: Questions fetched successfully:', answered.length);
-    res.json(answered);
+    const userId = req.params.userId;
+    const category = req.query.category as string;
+
+    if (!userId || !category) {
+      return res.status(400).json({ message: 'Missing userId or category' });
+    }
+
+    const questions = await statusRepository.getUserAnsweredQuestions(userId, category);
+
+    return res.status(200).json(questions);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch answered' });
+    console.error('❌ Controller error:', error);
+    return res.status(500).json({ message: 'Server error fetching answered questions' });
   }
 };
-const saveOrUpdateStatus = async (userId: string, answered: boolean[]) => {
-  try {
-    const query = `
-      INSERT INTO status (user_id, answered)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id)
-      DO UPDATE SET answered = EXCLUDED.answered
-    `;
-    await pool.query(query, [userId, JSON.stringify(answered)]);
-  } catch (error) {
-    console.error(":x: Error saving status:", error);
-    throw error;
-  }
-};
-export default { getStatusByUserId , saveOrUpdateStatus };
