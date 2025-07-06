@@ -3,7 +3,9 @@ import AiInsightsRouter from './src/routes/aIInsightRouts';
 import answerRouter from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
-import cors from 'cors';
+import cors from 'cors'
+import router from './src/routes/questionRouts';
+
 import questionRouter from './src/routes/questionRouts';
 
 

@@ -71,7 +71,8 @@ export const createUser = async (req: Request, res: Response) => {
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
-    resources: []
+    resources: [],
+    userReminderSettings: []
   };
 
   const createdUser = await userRepository.createUser(newUser);
