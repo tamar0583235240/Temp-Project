@@ -61,7 +61,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000",
+
   "devDependencies": {
     "@nodelib/fs.walk": "^1.2.8",
     "@types/jwt-decode": "^2.2.1",
