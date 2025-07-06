@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Answer } from '../types/answer';
+import { Answer } from "../types/Answer";
 import { TitleQuestions } from './question';
 import { Button } from '../../../shared/ui/button';
 import { cn } from '../../../shared/utils/cn';
