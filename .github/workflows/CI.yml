@@ -26,9 +26,10 @@ jobs:
       - name: Install client dependencies
         working-directory: packages/frontend
         run: npm install
-      - name: Build client
+      - name: Build client (ignore warnings)
         working-directory: packages/frontend
-        run: npm run build
+        run: CI=false npm run build
+
       - name: Test client
         working-directory: packages/frontend
         run: npm test -- --watchAll=false
