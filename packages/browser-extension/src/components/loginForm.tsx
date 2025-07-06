@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import GoogleLoginButton from './GoogleAuthButton';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { login } from '../api/api';
 
-function LoginForm() {
+function LoginForm({ onLoginSuccess }: { onLoginSuccess: (token:string) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, seterror] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
-    console.error("function handleSubmit called");
-    successfulLogin();
-  };
-
-  const successfulLogin = () => {
-    console.error("function successfulLogin called");
+    e.preventDefault();
+    login(email, password, rememberMe)
+      .then((res) => {console.log(res);
+       onLoginSuccess(res); })
+      .catch(() => {
+        seterror(true);
+      });
   };
 
   return (
@@ -44,7 +46,7 @@ function LoginForm() {
         <Button type="submit" >התחבר</Button>
         {error && <p style={{ color: "red" }}> {error}</p>}
         <div className="google-auth-btn-wrapper">
-          <GoogleLoginButton />
+          <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
         </div>
       </form>
     </div>

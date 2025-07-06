@@ -32,7 +32,7 @@ export default function SignupForm() {
     setIsSuccessMsg(false);
     setLoading(true);
     try {
-      const res = await fetch("/auth/signup/request", {
+      const res = await fetch("http://localhost:5000/auth/signup/request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -55,7 +55,7 @@ export default function SignupForm() {
     setIsSuccessMsg(false);
     setLoading(true);
     try {
-      const res = await fetch("/auth/signup/confirm", {
+      const res = await fetch("http://localhost:5000/auth/signup/confirm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email, code }),

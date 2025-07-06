@@ -14,9 +14,12 @@ const allowedOrigins = (process.env.CORS_ORIGIN || '')
   .split(',')
   .map(o => o.trim())
   .filter(Boolean);
+console.log('Allowed CORS origins:', allowedOrigins);
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    console.log('Origin:', origin);
+    
     if (!origin) return callback(null, true); // בקשות כמו Postman שאין להן origin
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);

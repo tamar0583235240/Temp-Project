@@ -3,12 +3,12 @@ const url =
     ? import.meta.env.VITE_API_URL
     : "http://localhost:5000";
 
-async function login(email: string, password: string) {
+async function login(email: string, password: string, rememberMe: boolean = false) {
   const res = await fetch(`${url}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, rememberMe }),
   });
   if (!res.ok) throw new Error("שגיאה בהתחברות");
   const data = await res.json();
@@ -24,7 +24,7 @@ async function loginWithGoogle(credential: string) {
     }),
   });
   if (!res.ok) throw new Error("שגיאה בהתחברות עם Google");
-  return await res.json(); // מחזיר { user, token }
+  return await res.json();
 }
 async function getProgress(token: string) {
   const res = await fetch(`${url}/progress`, {
