@@ -59,9 +59,3 @@ export const {
   goToQuestion,
 } = simulationSlice.actions;
 export default simulationSlice.reducer;
-
-
-
-
-
-

@@ -1,7 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { useGetAllQuestionsQuery } from "../features/interview/services/questionsApi";
-import { setQuestions } from "../features/interview/store/simulationSlice";
+import { useState, useEffect } from "react";
+import { useGetAllQuestionsQuery, useGetQuestionsByCategoryQuery } from "../features/interview/services/questionsApi";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
@@ -9,89 +7,64 @@ import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
 import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
-import AnalysisStepWrapper from "../features/interview/components/AnalysisStepWrapper";
-import Buttons from "../features/interview/components/buttons";
+import ShowCategories from "../features/interview/components/showCategories";
 
 const InterviewPage = () => {
-  const dispatch = useDispatch();
+  const categoryId = "77777777-7777-7777-7777-777777777777"
   const navigate = useNavigate();
-  const { data } = useGetAllQuestionsQuery();
+  const { data: questions = [], isLoading, isError } = useGetQuestionsByCategoryQuery(categoryId);
 
-  const [showAnalysis, setShowAnalysis] = useState(false);
-  const [lastQuestionIndex, setLastQuestionIndex] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [showTips, setShowTips] = useState(false);
   const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
 
-  const currentIndex = useSelector((state: any) => state.simulation.currentIndex);
-
   useEffect(() => {
-    if (data) {
-      const mappedQuestions = data.map((q: any) => ({
-        id: q.id,
-        title: q.title || "",
-        content: q.content || "",
-        category: q.category || "",
-        tips: q.tips || "",
-        question_type: q.question_type || q.type || "open",
-        options: q.options || [],
-        answered: false,
-        answer: q.answer || "",
-        aiGuidance: q.aiGuidance || "",
-        isActive: q.isActive ?? false,
-      }));
-      dispatch(setQuestions(mappedQuestions));
-    }
-  }, [data, dispatch]);
-
-  useEffect(() => {
-    if (lastQuestionIndex !== null) {
-      setShowAnalysis(false);
-      setShowTips(false);
-      setAnswerIdForAI(null);
-    }
-  }, [lastQuestionIndex]);
-
-  useEffect(() => {
-    setLastQuestionIndex(currentIndex);
+    setShowTips(false);
+    setAnswerIdForAI(null);
   }, [currentIndex]);
+
+  if (isLoading) return <p className="p-8 text-center">טוען שאלות...</p>;
+  if (isError || !questions.length) return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
+
+  const currentQuestion = questions[currentIndex];
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
       {/* Main content area */}
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
-        <div className="w-full max-w-6xl flex flex-row gap-6 items-start">
-          {/* טור שמאלי - שאלה וההקלטה */}
-          <div className="flex-1">
-            <Question
-              onFinishRecording={() => setShowTips(true)}
-              onAnswerSaved={(id) => {
-                setIsLoadingAI(true);
-                setAnswerIdForAI(null);
-                setTimeout(() => {
-                  setAnswerIdForAI(id);
-                  setIsLoadingAI(false);
-                }, 2000); // הדמיית טעינה
-              }}
-            />
-          </div>
-
-          {/* טור ימני - תובנות AI / טיפים */}
-          <div className="w-[320px] space-y-4">
-            {showTips && <TipsComponent />}
-            {isLoadingAI && <MagicLoader />}
-            {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />}
-          </div>
+        <ShowCategories/>
+        <div className="w-full max-w-2xl space-y-8">
+          <Question
+            question={questions[currentIndex]}
+            index={currentIndex}
+            total={questions.length}
+            onFinishRecording={() => setShowTips(true)}
+            onAnswerSaved={(id) => {
+              setIsLoadingAI(true);
+              setTimeout(() => {
+                setAnswerIdForAI(id);
+                setIsLoadingAI(false);
+              }, 2000);
+            }}
+          />
+          {showTips && <TipsComponent />}
+          {isLoadingAI && <MagicLoader />}
+          {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />}
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
-          <EndSurvey/>
+          <EndSurvey />
         </div>
       </main>
 
       {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
-        <Sidebar />
+        <Sidebar
+          questions={questions}
+          currentIndex={currentIndex}
+          onNavigate={(index) => setCurrentIndex(index)}
+        />
       </aside>
     </div>
   );
