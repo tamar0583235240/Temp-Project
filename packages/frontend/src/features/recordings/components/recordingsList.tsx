@@ -15,7 +15,7 @@ import { SortComponents } from "./sortComponents";
 import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 import ShareButton from "../../shared-recordings/components/ShareButton";
 import ShareDialog from "../../shared-recordings/components/ShareDialog";
-import { Answer } from "../types/answer";
+import { Answer } from '../types/Answer';
 
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
   const user = useSelector((state: RootState) => state.auth.user);

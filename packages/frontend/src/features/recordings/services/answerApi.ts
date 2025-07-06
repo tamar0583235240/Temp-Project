@@ -1,5 +1,5 @@
 import { api } from "../../../shared/api/api";
-import { Answer } from "../types/answer";
+import { Answer } from '../types/Answer';
 import { Question } from "../types/Question";
 
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Question } from '../types/Question';
-import { Answer } from '../types/answer';
+import { Answer } from '../types/Answer';
 
 interface AnswerState {
   data: Answer[];
