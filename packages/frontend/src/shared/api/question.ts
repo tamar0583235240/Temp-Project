@@ -12,14 +12,3 @@ export const authApi = api.injectEndpoints({
 export const {
     useGetProgressStatsQuery
 } = authApi;
-
-
-
-
-
-
-
-
-
-
-

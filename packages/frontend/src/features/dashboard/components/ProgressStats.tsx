@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { BarChart2 } from "lucide-react";
 import { useUserStore } from "../store/progressSlice";
-import { useGetProgressStatsQuery } from "../../../shared/api/api";
+import { useGetProgressStatsQuery } from "../../../shared/api/question";
+
 
 const ProgressStats: React.FC = () => {
   const userId =
