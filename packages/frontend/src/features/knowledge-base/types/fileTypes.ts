@@ -7,3 +7,4 @@ export const allowedTypes = [
   "audio/mpeg",
   "audio/wav",
 ];
+
