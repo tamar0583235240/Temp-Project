@@ -35,7 +35,7 @@ const Question: React.FC<QuestionProps> = ({
   } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const userId = "00000000-0000-0000-0000-000000000000"; // לשנות לפי משתמש אמיתי
+  const userId = "00000000-0000-0000-0000-000000000000";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -80,7 +80,7 @@ const Question: React.FC<QuestionProps> = ({
           </div>
 
           <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
-            {question.content}
+            {question.title}
           </div>
 
           <div className="flex gap-4 w-full">
