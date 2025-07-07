@@ -115,7 +115,7 @@
 
 // export default ReminderComponent;
 
-// reminderComponent:
+// reminderComponenmt:
 import React from "react";
 import { useGetUserRemindersQuery } from "../services/remindersApi";
 

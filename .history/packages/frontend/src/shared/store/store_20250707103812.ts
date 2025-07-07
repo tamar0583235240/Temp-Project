@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
 import authReducer from '../../features/auth/store/authSlice';
 import userReducer from '../../features/auth/store/userSlice';
-import { remindersApi } from "../../features/reminders/services/remindersApi";
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +11,7 @@ export const store = configureStore({
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(remindersApi.middleware, api.middleware),
+    getDefaultMiddleware().concat(api.middleware) ,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -55,7 +55,7 @@ export default function ReminderSettingsCard({
     { id: "every_2_days", text: "כל יומיים", icon: "📅" },
     { id: "daily", text: "כל יום", icon: "📅" },
     { id: "weekly", text: "אחת לשבוע", icon: "📅" },
-    { id: "every_3_days", text: "אחת ל-3 ימים", icon: "📅" },
+    { id: "every-three-days", text: "אחת ל-3 ימים", icon: "📅" },
   ];
 
   return (

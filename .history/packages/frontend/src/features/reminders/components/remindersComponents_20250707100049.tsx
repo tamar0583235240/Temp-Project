@@ -115,28 +115,10 @@
 
 // export default ReminderComponent;
 
-// reminderComponent:
-import React from "react";
-import { useGetUserRemindersQuery } from "../services/remindersApi";
 
-export default function ReminderComponent({ userId }: { userId: string }) {
-  const { data: reminders, isLoading, error } = useGetUserRemindersQuery(userId);
-
-  if (isLoading) return <p>טוען טיפים...</p>;
-  if (error) return <p>שגיאה בטעינת טיפים</p>;
-  if (!reminders || reminders.length === 0) return <p>אין טיפים זמינים</p>;
-
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">טיפים שלך:</h2>
-      <ul className="space-y-2">
-        {reminders.map((r) => (
-          <li key={r.id} className="border p-2 rounded bg-white shadow">
-            <p>{r.content}</p>
-            <p className="text-sm text-gray-500">תדירות: {r.frequency}</p>
-          </li>
-        ))}
-      </ul>
+const ReminderComponent = () => {
+  <div>
+      <h1>ReminderComponent page</h1>
     </div>
-  );
 }
+export default ReminderComponent;

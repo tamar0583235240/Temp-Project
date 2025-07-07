@@ -266,7 +266,7 @@ export default function RemindersPage() {
           title="תרגול שאלות מקצועיות"
           description="קבל תזכורות לתרגול שאלות מקצועיות כדי לשפר את הידע שלך."
           reminderType="practice"
-          savedOption={selections.practice}
+          savedOption={selections.questions}
           onOptionChange={handleOptionChange}
         />
 

@@ -115,9 +115,9 @@
 
 // export default ReminderComponent;
 
-// reminderComponent:
+
 import React from "react";
-import { useGetUserRemindersQuery } from "../services/remindersApi";
+import { useGetUserRemindersQuery } from "../services";
 
 export default function ReminderComponent({ userId }: { userId: string }) {
   const { data: reminders, isLoading, error } = useGetUserRemindersQuery(userId);

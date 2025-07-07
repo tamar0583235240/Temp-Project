@@ -10,12 +10,9 @@
 // export default router;
 
 
-import express from "express";
-import { saveUserReminderSettings, getRemindersForUser } from "../controllers/reminderController";
 
-const router = express.Router();
 
-router.post("/settings", saveUserReminderSettings);
-router.get("/:userId", getRemindersForUser);
 
-export default router;
+
+
+

@@ -194,7 +194,7 @@ type ReminderSelections = Record<string, string | null>;
 
 export default function RemindersPage() {
   const [selections, setSelections] = useState<ReminderSelections>({
-    practice: null,
+    questions: null,
     tips: null,
   });
 
@@ -265,8 +265,8 @@ export default function RemindersPage() {
         <ReminderSettingsCard
           title="תרגול שאלות מקצועיות"
           description="קבל תזכורות לתרגול שאלות מקצועיות כדי לשפר את הידע שלך."
-          reminderType="practice"
-          savedOption={selections.practice}
+          reminderType="questions"
+          savedOption={selections.questions}
           onOptionChange={handleOptionChange}
         />
 

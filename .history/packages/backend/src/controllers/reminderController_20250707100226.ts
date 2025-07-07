@@ -54,57 +54,25 @@
 import { Request, Response } from "express";
 import { pool } from '../config/dbConnection';
 
-// export const saveUserReminderSettings = async (req: Request, res: Response) => {
-//   const { userId, settings } = req.body;
-
-//   if (!userId || !Array.isArray(settings)) {
-//     return res.status(400).json({ error: "Missing userId or settings" });
-//   }
-
-//   try {
-//     for (const setting of settings) {
-//       const { type, frequency } = setting;
-
-//       if (!type || !frequency) continue;
-
-//       await pool.query(
-//         `
-//         INSERT INTO user_reminder_settings (id, user_id, type, frequency, is_enabled, last_sent_at)
-//         VALUES (gen_random_uuid(), $1, $2, $3, true, NOW())
-//         ON CONFLICT (user_id, type)
-//         DO UPDATE SET frequency = EXCLUDED.frequency, is_enabled = true, last_sent_at = NOW()
-//         `,
-//         [userId, type, frequency]
-//       );
-//     }
-
-//     res.status(200).json({ message: "Settings saved successfully" });
-//   } catch (err) {
-//     console.error("Error saving settings", err);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// };
-
 export const saveUserReminderSettings = async (req: Request, res: Response) => {
   const { userId, settings } = req.body;
 
-  if (!userId || typeof settings !== "object" || settings === null) {
+  if (!userId || !Array.isArray(settings)) {
     return res.status(400).json({ error: "Missing userId or settings" });
   }
 
   try {
-    // settings הוא אובייקט { type: frequency }
-    for (const type in settings) {
-      const frequency = settings[type];
+    for (const setting of settings) {
+      const { type, frequency } = setting;
 
       if (!type || !frequency) continue;
 
-      await pool.query(
+      await p.query(
         `
-        INSERT INTO user_reminder_settings (id, user_id, type, frequency, is_enabled, last_sent_at)
+        INSERT INTO user_reminder_settings (id, user_id, type, frequency, is_active, last_sent_at)
         VALUES (gen_random_uuid(), $1, $2, $3, true, NOW())
         ON CONFLICT (user_id, type)
-        DO UPDATE SET frequency = EXCLUDED.frequency, is_enabled = true, last_sent_at = NOW()
+        DO UPDATE SET frequency = EXCLUDED.frequency, is_active = true, last_sent_at = NOW()
         `,
         [userId, type, frequency]
       );
@@ -117,16 +85,15 @@ export const saveUserReminderSettings = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getRemindersForUser = async (req: Request, res: Response) => {
   const userId = req.params.userId;
   try {
-    const result = await pool.query(
+    const result = await db.query(
       `
       SELECT tips.id, tips.content, s.frequency
       FROM user_reminder_settings s
       JOIN tips ON s.tip_id = tips.id
-      WHERE s.user_id = $1 AND s.is_enabled = true
+      WHERE s.user_id = $1 AND s.is_active = true
       `,
       [userId]
     );
