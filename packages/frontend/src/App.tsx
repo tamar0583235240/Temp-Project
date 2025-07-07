@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
 
 import "./App.css";
@@ -8,6 +7,7 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   const dispatch = useAppDispatch();
