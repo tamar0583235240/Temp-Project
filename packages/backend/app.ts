@@ -27,7 +27,7 @@ app.use('/api/answers', answerRoutes);
 
 
 app.use('/api/status', statusRouts);
-app.use('/api/insights',aIInsightRouts) ;
+//app.use('/api/insights',aIInsightRouts) ;
 
 
 export default app;
