@@ -5,3 +5,5 @@ module.exports = {
     "/node_modules/(?!@reduxjs|@standard-schema).+\\.js$"
   ],
 };
+
+export {};
