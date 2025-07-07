@@ -7,7 +7,11 @@ interface SidebarProps {
   onNavigate: (index: number) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ questions, currentIndex, onNavigate }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  questions,
+  currentIndex,
+  onNavigate,
+}) => {
   const answeredCount = questions.filter((q) => q.answered).length;
   const percentage = Math.round((answeredCount / questions.length) * 100);
 
@@ -17,15 +21,18 @@ const Sidebar: React.FC<SidebarProps> = ({ questions, currentIndex, onNavigate }
         {`${currentIndex + 1} מתוך ${questions.length}`}
       </div>
 
-      {/* אחוזי התקדמות */}
       <div className="w-full mt-2 mb-4">
-        <div className="text-sm text-text-secondary text-center mb-1">{percentage}% הושלמו</div>
+        <div className="text-sm text-text-secondary text-center mb-1">
+          {percentage}% הושלמו
+        </div>
         <div className="w-full h-2 bg-gray-200 rounded-full">
-          <div className="h-full bg-primary-dark rounded-full" style={{ width: `${percentage}%` }}></div>
+          <div
+            className="h-full bg-primary-dark rounded-full"
+            style={{ width: `${percentage}%` }}
+          ></div>
         </div>
       </div>
 
-      {/* חץ למעלה */}
       <button
         onClick={() => onNavigate(currentIndex - 1)}
         className="text-primary hover:bg-primary/10 rounded-full p-2 transition mb-2"
@@ -35,7 +42,6 @@ const Sidebar: React.FC<SidebarProps> = ({ questions, currentIndex, onNavigate }
         <ChevronUp size={20} />
       </button>
 
-      {/* כפתורי מספרים */}
       <div className="flex flex-wrap justify-center gap-2 overflow-y-auto max-h-[300px] mb-2">
         {questions.map((q, i) => {
           const isCurrent = i === currentIndex;
@@ -45,9 +51,13 @@ const Sidebar: React.FC<SidebarProps> = ({ questions, currentIndex, onNavigate }
               key={q.id}
               onClick={() => onNavigate(i)}
               className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition
-                ${isCurrent ? "bg-primary text-white shadow" :
-                  isAnswered ? "bg-primary/20 text-primary border border-primary" :
-                    "bg-gray-100 text-gray-600 hover:bg-gray-200"}
+                ${
+                  isCurrent
+                    ? "bg-primary text-white shadow"
+                    : isAnswered
+                    ? "bg-primary/20 text-primary border border-primary"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }
               `}
               title={`שאלה ${i + 1}`}
             >
@@ -57,7 +67,6 @@ const Sidebar: React.FC<SidebarProps> = ({ questions, currentIndex, onNavigate }
         })}
       </div>
 
-      {/* חץ למטה */}
       <button
         onClick={() => onNavigate(currentIndex + 1)}
         className="text-primary hover:bg-primary/10 rounded-full p-2 transition mt-2"
@@ -67,9 +76,8 @@ const Sidebar: React.FC<SidebarProps> = ({ questions, currentIndex, onNavigate }
         <ChevronDown size={20} />
       </button>
 
-      {/* כפתור חזור לעמוד הבית */}
       <button
-        onClick={() => window.location.href = "/"}
+        onClick={() => (window.location.href = "/")}
         className="mt-6 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition flex items-center gap-2 text-sm"
       >
         <Home size={16} />

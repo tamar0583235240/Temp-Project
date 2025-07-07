@@ -7,7 +7,6 @@ import {
   getAnswerById,
 } from '../reposioty/answerRepository';
 
-
 export const createAnswerController = async (req: Request, res: Response) => {
   const userId = req.body.userId || req.body.user_id;
   const questionId = req.body.questionId || req.body.question_id;
@@ -15,7 +14,8 @@ export const createAnswerController = async (req: Request, res: Response) => {
   const amountFeedbacks = req.body.amountFeedbacks;
   const answerFileName = req.body.answerFileName;
 
-  if (!userId || !questionId || !fileUrl || amountFeedbacks === undefined || !answerFileName) {
+  // בדיקה משופרת לשדות חובה
+  if (!userId || !questionId || !fileUrl || amountFeedbacks == null || !answerFileName) {
     console.error('❌ Missing fields:', {
       userId,
       questionId,
@@ -26,11 +26,17 @@ export const createAnswerController = async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  // ודא שמספר הפידבקים הוא מספר
+  const amountFeedbacksNum = Number(amountFeedbacks);
+  if (isNaN(amountFeedbacksNum)) {
+    return res.status(400).json({ error: 'amountFeedbacks must be a number' });
+  }
+
   console.log('✅ Creating answer with:', {
     userId,
     questionId,
     fileUrl,
-    amountFeedbacks,
+    amountFeedbacks: amountFeedbacksNum,
     answerFileName
   });
 
@@ -39,16 +45,15 @@ export const createAnswerController = async (req: Request, res: Response) => {
       userId,
       questionId,
       fileUrl,
-      amountFeedbacks,
+      amountFeedbacksNum,
       answerFileName
     );
     res.json(newAnswer);
   } catch (error: any) {
     console.error('❌ Error creating answer:', error.message || error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 };
-
 
 export const getAllAnswersController = async (req: Request, res: Response) => {
   try {
@@ -59,12 +64,24 @@ export const getAllAnswersController = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getAnswerByIdController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const answer = await getAnswerById(id);
+    if (!answer) {
+      return res.status(404).json({ error: 'Answer not found' });
+    }
     res.json(answer);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteAnswerController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    await deleteAnswer(id);
+    res.sendStatus(204);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -72,45 +89,21 @@ export const getAnswerByIdController = async (req: Request, res: Response) => {
 
 export const updateAnswerController = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { fileUrl, amountFeedbacks, answerFileName } = req.body;
 
-  const userId = req.body.userId || req.body.user_id;
-  const questionId = req.body.questionId || req.body.question_id;
-  const fileUrl = req.body.fileUrl || req.body.file_url;
-
-  const updates: any = {};
-
-  if (userId !== undefined) updates.user_id = userId;
-  if (questionId !== undefined) updates.question_id = questionId;
-  if (fileUrl !== undefined) updates.file_url = fileUrl;
-
-  if (Object.keys(updates).length === 0) {
-    return res.status(400).json({ error: 'No fields provided to update' });
-  }
+  // בדוק אילו שדות נמסרו ועדכן רק את השדות הללו
+  const updatedFields: Partial<{ fileUrl?: string; amountFeedbacks?: number; answerFileName?: string }> = {};
+  if (fileUrl) updatedFields.fileUrl = fileUrl;
+  if (amountFeedbacks != null) updatedFields.amountFeedbacks = Number(amountFeedbacks);
+  if (answerFileName) updatedFields.answerFileName = answerFileName;
 
   try {
-    const updated = await updateAnswer(id, updates);
-    res.json(updated);
-  } catch (error: any) {
-    console.error('❌ Error updating answer:', error.message || error);
-    res.status(500).json({ error: error.message });
-  }
-};
-
-
-export const deleteAnswerController = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    await deleteAnswer(id);
-    res.json({ success: true });
+    const updatedAnswer = await updateAnswer(id, updatedFields);
+    if (!updatedAnswer) {
+      return res.status(404).json({ error: 'Answer not found' });
+    }
+    res.json(updatedAnswer);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
-
-
-
-
-
