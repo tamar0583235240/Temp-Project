@@ -17,6 +17,18 @@ export const interviewMaterialsApi = api.injectEndpoints({
       invalidatesTags: [{ type: "Item", id: "LIST" }],
     }),
 
+    updateInterviewMaterial: builder.mutation<void, { id: string; formData: FormData }>({
+      query: ({ id, formData }) => ({
+        url: `/manager/interview-materials/${id}`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Item", id },
+        { type: "Item", id: "LIST" },
+      ],
+    }),
+
     getInterviewMaterials: builder.query<InterviewMaterials[], void>({
       query: () => ({
         url: "/manager/interview-materials",
@@ -25,9 +37,9 @@ export const interviewMaterialsApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-            ...result.map(({ id }) => ({ type: "Item" as const, id })),
-            { type: "Item", id: "LIST" },
-          ]
+              ...result.map(({ id }) => ({ type: "Item" as const, id })),
+              { type: "Item", id: "LIST" },
+            ]
           : [{ type: "Item", id: "LIST" }],
     }),
 
@@ -37,13 +49,14 @@ export const interviewMaterialsApi = api.injectEndpoints({
         method: "DELETE",
         credentials: "include",
       }),
-      invalidatesTags: [{ type: 'Item', id: 'LIST' }],
+      invalidatesTags: [{ type: "Item", id: "LIST" }],
     }),
   }),
 });
 
 export const {
   useCreateInterviewMaterialMutation,
+  useUpdateInterviewMaterialMutation,
   useDeleteInterviewMaterialMutation,
   useGetInterviewMaterialsQuery,
 } = interviewMaterialsApi;

@@ -10,8 +10,8 @@ const ProfilePage = () => {
     <div className="max-w-md mx-auto mt-8 bg-white p-6 rounded-xl shadow">
       <h1 className="text-2xl font-bold text-center mb-6">פרופיל משתמש</h1>
       <div className="space-y-4">
-        <ProfileField label="שם פרטי" value={user.first_name} />
-        <ProfileField label="שם משפחה" value={user.last_name} />
+        <ProfileField label="שם פרטי" value={user.firstName} />
+        <ProfileField label="שם משפחה" value={user.lastName} />
         <ProfileField label="אימייל" value={user.email} />
         <ProfileField label="טלפון" value={user.phone || "לא הוזן"} />
         <ProfileField

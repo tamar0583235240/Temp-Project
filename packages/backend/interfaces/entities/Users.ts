@@ -12,11 +12,11 @@ export class Users {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("text", { name: "first_name" })
-  first_name: string;
+  @Column("text", { name: "firstName" })
+  firstName: string;
 
-  @Column("text", { name: "last_name" })
-  last_name: string;
+  @Column("text", { name: "lastName" })
+  lastName: string;
 
   @Column("text", { name: "email", unique: true })
   email: string;
