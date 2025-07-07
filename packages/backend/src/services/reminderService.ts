@@ -1,10 +1,10 @@
 
-import {pool} from '../config/dbConnection';      
+import { pool } from '../config/dbConnection';
 
 const tipFrequencyMap: Record<string, string> = {
   'daily': 'daily',
-  'every-two-days': 'every_2_days',
-  'every-three-days': 'every_3_days',
+  'every_2_days': 'every_2_days',
+  'every_3_days': 'every_3_days',
   'weekly': 'weekly',
 };
 
@@ -29,13 +29,14 @@ export const saveReminderSettingsForUser = async (
 
       await client.query(
         `
-        INSERT INTO user_reminder_settings (user_id, type, tip_frequency, is_enabled)
-        VALUES ($1, $2, $3, true)
-        ON CONFLICT (user_id, type)
-        DO UPDATE SET tip_frequency = EXCLUDED.tip_frequency, is_enabled = true
-        `,
+  INSERT INTO user_reminder_settings (user_id, type, frequency, is_enabled, tip_num)
+  VALUES ($1, $2, $3, true, 1)
+  ON CONFLICT (user_id, type)
+  DO UPDATE SET frequency = EXCLUDED.frequency, is_enabled = true, tip_num = 1
+  `,
         [userId, dbType, dbFreq]
       );
+
     }
 
     await client.query('COMMIT');

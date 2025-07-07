@@ -11,6 +11,17 @@ async function getDueReminders() {
     FROM tips t
     JOIN user_reminder_settings s ON s.tip_id = t.id
   `;
+    // const query = `
+    //   SELECT 
+    //     t.id AS tip_id,
+    //     t.content,
+    //     s.user_id,
+    //     p.frequency,
+    //     s.last_sent_at
+    //   FROM tips t
+    //   JOIN user_reminder_settings s ON s.tip_id = t.id
+    //   JOIN user_reminder_preferences p ON p.user_id = s.user_id
+    // `;
 
   const { rows } = await pool.query(query);
 
