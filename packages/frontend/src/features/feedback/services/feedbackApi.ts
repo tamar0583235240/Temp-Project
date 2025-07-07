@@ -5,19 +5,32 @@ export const feedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getFeedbacksBySharedRecordingId: builder.query<feedbackType[], string>({
       query: (sharedRecordingId) =>
-        `/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`,
+        `/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`, // ודאי שהנתיב הזה נכון בשרת
       providesTags: ["Feedback"],
     }),
 
     createFeedback: builder.mutation<void, {
-      shared_recording_id: string;
-      given_by_user_id: string;
+      sharedRecordingId: string;
+      givenByUserId: string;
       comment: string;
       rating: number;
     }>({
       query: (body) => ({
-        url: '/feedbackes',
+        url: '/shared-recordings/feedback',
         method: 'POST',
+        body,
+      }),
+      invalidatesTags: ["Feedback", "SharedRecordings"],
+    }),
+
+    updateFeedback: builder.mutation<void, {
+      id: string;
+      comment: string;
+      rating: number;
+    }>({
+      query: ({ id, ...body }) => ({
+        url: `/shared-recordings/feedback/${id}`,
+        method: 'PUT',
         body,
       }),
       invalidatesTags: ["Feedback", "SharedRecordings"],
@@ -28,4 +41,5 @@ export const feedbackApi = api.injectEndpoints({
 export const {
   useGetFeedbacksBySharedRecordingIdQuery,
   useCreateFeedbackMutation,
+  useUpdateFeedbackMutation,
 } = feedbackApi;

@@ -28,24 +28,22 @@ export default function SharedRecordingsPage() {
           date={selectedRecording.date}
           audioUrl={selectedRecording.audioUrl}
           aiSummary={selectedRecording.aiSummary}
+          recordingId={selectedRecording.id} // ✅ הוסף
           onBack={() => setSelectedRecordingId(null)}
           onSubmitFeedback={async (comment, rating) => {
-            if (!selectedRecording) return;
-
             try {
               await createFeedback({
-                shared_recording_id: selectedRecording.id,
-                given_by_user_id: userId,
+                sharedRecordingId: selectedRecording.id, // ✅ תואם ל-API
+                givenByUserId: userId,
                 comment,
                 rating,
-              });
+              }).unwrap();
               alert('הפידבק נשלח בהצלחה!');
+              setSelectedRecordingId(null);
             } catch (err) {
               alert('אירעה שגיאה בשליחת הפידבק.');
               console.error(err);
             }
-
-            setSelectedRecordingId(null);
           }}
         />
       ) : (

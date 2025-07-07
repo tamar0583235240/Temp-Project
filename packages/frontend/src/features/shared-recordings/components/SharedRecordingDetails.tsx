@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { feedbackType } from '../../feedback/types/feedbackType';
 
 interface Props {
   userName: string;
@@ -6,8 +7,10 @@ interface Props {
   date: string;
   audioUrl: string;
   aiSummary: string;
-  onSubmitFeedback: (comment: string, rating: number) => void;
-  onBack: () => void; // חדש!
+  onSubmitFeedback: (comment: string, rating: number, feedbackId?: string) => void;
+  onBack: () => void;
+  recordingId: string;
+  feedback?: feedbackType | null; // פידבק קיים אם יש
 }
 
 export default function SharedRecordingDetails({
@@ -18,9 +21,22 @@ export default function SharedRecordingDetails({
   aiSummary,
   onSubmitFeedback,
   onBack,
+  recordingId,
+  feedback,
 }: Props) {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    if (feedback) {
+      setComment(feedback.comment);
+      setRating(feedback.rating);
+    }
+  }, [feedback]);
+
+  const handleSubmit = () => {
+    onSubmitFeedback(comment, rating, feedback?.id);
+  };
 
   return (
     <div className="p-6 bg-gray-50 rounded-xl shadow">
@@ -35,7 +51,7 @@ export default function SharedRecordingDetails({
       <p className="text-sm text-gray-600 mb-1">שאלה: {questionTitle}</p>
       <p className="text-sm text-gray-600 mb-3">תאריך: {new Date(date).toLocaleDateString()}</p>
 
-      <audio controls className="mb-4">
+      <audio controls className="mb-4 w-full">
         <source src={audioUrl} type="audio/mpeg" />
         הדפדפן שלך לא תומך בהשמעת אודיו.
       </audio>
@@ -64,13 +80,14 @@ export default function SharedRecordingDetails({
             ★
           </span>
         ))}
+        {rating === 0 && <span className="text-sm text-gray-500 ml-2">מחכה לדירוג שלך 😊</span>}
       </div>
 
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        onClick={() => onSubmitFeedback(comment, rating)}
+        onClick={handleSubmit}
       >
-        שלחי פידבק
+        {feedback ? 'עדכון פידבק' : 'שלחי פידבק'}
       </button>
     </div>
   );

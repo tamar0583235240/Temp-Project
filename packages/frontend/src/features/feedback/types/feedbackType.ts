@@ -3,6 +3,6 @@ export interface feedbackType {
   shared_recording_id: string;
   given_by_user_id: string;
   comment: string;
-  rating?: number;
-  created_at: string; // עדיף string כאן אם מגיע מהשרת בפורמט תאריך ISO
+  rating: number;
+  created_at: string;
 }
