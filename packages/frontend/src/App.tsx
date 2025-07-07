@@ -10,6 +10,7 @@ import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import  WorkExperience  from './features/profile/components/WorkExperienceTab';
 function App() {
   const dispatch = useAppDispatch();
   const [refreshTokenTrigger] = useRefreshTokenMutation();
@@ -40,16 +41,25 @@ function App() {
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
-       {/* <EditInterviewMaterialsSubForm
-  id="some-id"
-  defaultValues={{ title: "", shortDescription: "" }}
-  onSuccess={() => console.log("Saved!")}
-  onCancel={() => console.log("Cancelled")}
-  /> */}
    </>
     </MessageModalProvider>
        </Provider>
            </GoogleOAuthProvider>
   );
+
+
+// const userId = '649c94a7-e414-4d35-a5b2-b7e56ef97163';
+
+// return (
+//   <GoogleOAuthProvider clientId={clientId}>
+//     <Provider store={store}>
+//       <MessageModalProvider>
+//         <WorkExperience userId={userId} />
+//       </MessageModalProvider>
+//     </Provider>
+//   </GoogleOAuthProvider>
+// );
+
+
 }
 export default App;

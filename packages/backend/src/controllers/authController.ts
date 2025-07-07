@@ -219,7 +219,10 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       sharedRecordings: [],
       createdAt: new Date(),
-      resources: []
+      resources: [],
+      userActivities: [],       
+     workExperiences: [] 
+      
     },
     code,
     expiresAt,
@@ -306,7 +309,9 @@ export const signup = async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
-    resources: []
+    resources: [],
+    userActivities: [],       
+    workExperiences: [] 
   };
 
   await authRepository.signup(newUser);

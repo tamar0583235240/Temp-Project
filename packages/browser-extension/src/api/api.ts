@@ -7,13 +7,13 @@ async function login(email: string, password: string) {
   });
   if (!res.ok) throw new Error("שגיאה בהתחברות");
   const data = await res.json();
-  return data.token; // או data.user, לפי מה שהשרת מחזיר
+  return data.token;
 }
 async function getProgress(token: string) {
   const res = await fetch("/progress", {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
     },
   });
   if (!res.ok) throw new Error("שגיאה בשליפת התקדמות");

@@ -6,6 +6,7 @@ import authRouts from './src/routes/authRouts';
 import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import cookieParser from 'cookie-parser';
 import interviewMaterialsHub from './src/routes/interview-materials-sub';
+import workExperienceRoutes from './src/routes/workExperienceRoutes';
 import dotenv from 'dotenv';
 
 const corsOptions = {
@@ -35,6 +36,7 @@ app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/manager', interviewMaterialsRoutes);
 app.use('/interview-materials-hub', interviewMaterialsHub);
+app.use("/work-experience", workExperienceRoutes);
 
 export default app;
 
