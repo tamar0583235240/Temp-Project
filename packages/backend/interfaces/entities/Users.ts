@@ -1,8 +1,7 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
-import { Answers } from "./Answer";
+import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
-import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("users_email_key", ["email"], { unique: true })
@@ -50,9 +49,6 @@ export class Users {
     (passwordResetTokens) => passwordResetTokens.user
   )
   passwordResetTokens: PasswordResetTokens[];
-
-  @OneToMany(() => Resources, (resources) => resources.user)
-  resources: Resources[];
 
   @OneToMany(
     () => SharedRecordings,

@@ -14,19 +14,7 @@ export const getUserAnsweredQuestionsControler = async (req: Request, res: Respo
 
     return res.status(200).json(questions);
   } catch (error) {
-    console.error(":x: Error saving status:", error);
-    throw error;
+    console.error('❌ Controller error:', error);
+    return res.status(500).json({ message: 'Server error fetching answered questions' });
   }
 };
-// Define or import these functions before exporting
-const getStatusByUserId = async (req: Request, res: Response) => {
-  // TODO: Implement this function
-  res.status(501).json({ message: 'Not implemented' });
-};
-
-const saveOrUpdateStatus = async (req: Request, res: Response) => {
-  // TODO: Implement this function
-  res.status(501).json({ message: 'Not implemented' });
-};
-
-export default { getStatusByUserId, saveOrUpdateStatus };
