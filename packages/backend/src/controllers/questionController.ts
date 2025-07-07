@@ -1,13 +1,21 @@
 import { Request, Response } from 'express';
 import questionRepository from '../reposioty/questionRepository';
 import { Questions } from '../interfaces/entities/Questions';
-const addQuestion = async (req: Request, res: Response):Promise<Questions | void> => {
+import { createProducer,TOPICS } from 'kafkaService';
+
+const addQuestion = async (req: Request, res: Response): Promise<Questions | void> => {
   try {
     const question: Questions = req.body;
     console.log(question);
-    
+
     const result = await questionRepository.addQustion(question);
     res.status(201).json(result);
+    const producer = await createProducer();
+    await producer.send({
+      topic: TOPICS.QUESTIONS, 
+      messages: [{ value: JSON.stringify(question) }],
+    });
+    
   } catch (error) {
     console.error('Error adding question:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -19,7 +27,7 @@ export { addQuestion };
 export const questionController = async (req: Request, res: Response): Promise<void> => {
 
   console.log('questionController called');
-    try {
+  try {
     const items = await questionRepository.getAllQuestionById(req.params.question_id);
     res.json(items);
   } catch (error) {
@@ -31,7 +39,7 @@ export const questionController = async (req: Request, res: Response): Promise<v
 export const adminqQuestionController = async (req: Request, res: Response): Promise<void> => {
 
   console.log('adminQuestionController called');
-    try {
+  try {
     const items = await questionRepository.getAllQuestions();
     res.json(items);
   } catch (error) {
@@ -59,8 +67,8 @@ export const deleteQuestionController = async (req: Request, res: Response): Pro
   try {
     const questionId = req.params.question_id;
     const is_active = false;
-    await questionRepository.deleteQuestionById(questionId,is_active);
-    res.status(200).send("Question deleted successfully"); 
+    await questionRepository.deleteQuestionById(questionId, is_active);
+    res.status(200).send("Question deleted successfully");
   } catch (error) {
     console.error('Error in deleteQuestionController:', error);
     res.status(500).json({ error });

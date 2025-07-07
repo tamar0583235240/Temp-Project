@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Question } from '../types/Question';
+import { Question } from '../../recordings/types/Question';
+
 
 interface AdminQuestionState {
     questions: Question[];
