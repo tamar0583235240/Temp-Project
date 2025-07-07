@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import AppRoutes from "./shared/routes/appRoutes";
-
 import "./App.css";
+
+
+
 import { MessageModalProvider } from "./shared/ui/MessageModalContext";
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
 import { BrowserRouter } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import AppRoutes from "./shared/routes/appRoutes";
 
 function App() {
   const dispatch = useAppDispatch();
