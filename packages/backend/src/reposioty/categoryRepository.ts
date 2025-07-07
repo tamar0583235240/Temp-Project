@@ -1,6 +1,6 @@
 import { promises } from "dns";
 import { Categories } from "../interfaces/entities/Categories";
-import { pool } from "./answerRepository";
+import { pool } from "../config/dbConnection";
 
 
 const getAllCategories = async (): Promise<Categories[]> => {

@@ -141,7 +141,7 @@ export const useRecording = () => {
     userId: string,
     questionId: string,
     answerFileName: string,
-    amountFeedbacks: number = 0 // ברירת מחדל
+    amountFeedbacks: number = 0 
   ) => {
     if (!audioBlobRef.current || !answerFileName.trim()) {
       alert('אנא הזן שם לקובץ');
@@ -161,8 +161,8 @@ export const useRecording = () => {
       const uploadRes = await uploadRecording(formData).unwrap();
       fileUrl = uploadRes.url;
     } catch (e) {
-      // במקום alert, נזרוק שגיאה עם הודעה ברורה
-      throw new Error('שגיאה בהעלאת הקלטה לשרת');
+      console.error ('שגיאה בהעלאת הקלטה לשרת');
+      return;
     }
 
     //  שליחת תשובה עם ה-URL
@@ -199,6 +199,6 @@ export const useRecording = () => {
     restartRecording,
     saveRecording,
     audioBlobRef,
-    audioBlob, // הוסף את זה להחזרה
+    audioBlob, 
   };
 };
