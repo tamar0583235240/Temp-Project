@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
 import { loginSuccess } from "../store/authSlice";
 import GoogleAuthButton from "./GoogleAuthButton";
@@ -9,13 +9,23 @@ import { Input } from "../../../shared/ui/input";
 import { useNavigate } from "react-router-dom";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
 import { Heading2, Paragraph } from "../../../shared/ui/typography";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaPlusCircle } from "react-icons/fa";
 import {
   useSignupRequestMutation,
   useSignupConfirmMutation,
 } from "../../../shared/api/authApi";
+import { ToggleSwitch } from "../../../shared/ui/ToggleSwitch";
+import { TagInput } from "../../../shared/ui/TagInput";
+import { Spinner } from "../../../shared/ui/spiner";
+import { SectionWrapper } from "../../../shared/ui/SectionWrapper";
+import { ProgressCircle } from "../../../shared/ui/ProgressCircle";
+import { ProgressBar } from "../../../shared/ui/ProgressBar";
+import { EditableListItem } from "../../../shared/ui/EditableListItem";
+import { EmptyState } from "../../../shared/ui/EmptyState";
 
 export default function SignupForm() {
+ 
+  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [step, setStep] = useState<"form" | "verify">("form");
@@ -181,8 +191,12 @@ export default function SignupForm() {
               </div>
             </div>
           )}
+     
+
+
         </form>
       </CardSimple>
+      
     </div>
   );
 }

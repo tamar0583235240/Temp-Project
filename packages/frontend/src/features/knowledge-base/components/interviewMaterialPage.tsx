@@ -4,6 +4,10 @@ import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
 import { Plus } from "lucide-react"; 
 import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialsSubApi";
+import { InterviewMaterialListItem } from "./interviewMaterialItem";
+import { InterviewMaterialsList } from "../../infoItems/components/InterviewMaterialsList";
+import { store } from "../store/store";
+import { Provider } from "react-redux";
 
 const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,11 +51,11 @@ const InterviewMaterialPage = () => {
         />
       )}
 
-      {/* 
+      
       <Provider store={store}>
-        <InterviewMaterialList />
+        <InterviewMaterialsList />
       </Provider>
-      */}
+     
     </>
   );
 };
