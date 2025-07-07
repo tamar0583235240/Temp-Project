@@ -6,7 +6,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { Answers } from "./Answer";
+import { Answers } from "./Answers";
 import { Categories } from "./Categories";
 
 @Index("questions_pkey", ["id"], { unique: true })
@@ -33,8 +33,8 @@ export class Questions {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-  @Column("text", { name: "options", nullable: true, array: true })
-  options: string[] | null;
+  @Column("jsonb", { name: "options", nullable: true })
+  options: object | null;
 
   @Column("text", { name: "question_type", nullable: true })
   questionType: string | null;

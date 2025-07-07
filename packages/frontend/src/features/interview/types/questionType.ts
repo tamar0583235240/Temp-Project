@@ -6,8 +6,8 @@ export interface interviewType {
   tips: string;
   aiGuidance: string;
   isActive: boolean;
-  answer?: string;
   answered: boolean;
+  answer?: string;
   text?: string;
   question_type: 'open' | 'closed';
   options?: string[];

@@ -6,37 +6,53 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { AiInsight } from "./AiInsight";
-import { Question } from "./Question";
-import { User } from "./User";
-import { SharedRecording } from "./SharedRecording";
+import { AiInsights } from "./AiInsights";
+import { Questions } from "./Questions";
+import { Users } from "./Users";
+import { Feedback } from "./Feedback";
+import { SharedRecordings } from "./SharedRecordings";
 
-@Index("Answer_pkey", ["id"], { unique: true })
-@Entity("Answer", { schema: "public" })
-export class Answer {
-  @Column("uuid", { primary: true, name: "id" })
+@Index("answers_pkey", ["id"], { unique: true })
+@Entity("answers", { schema: "public" })
+export class Answers {
+  @Column("uuid", {
+    primary: true,
+    name: "id",
+    default: () => "uuid_generate_v4()",
+  })
   id: string;
 
-  @Column("text", { name: "fileurl", nullable: true })
-  fileurl: string | null;
+  @Column("text", { name: "file_url" })
+  fileUrl: string;
 
   @Column("timestamp without time zone", {
-    name: "submittedat",
-    default: () => "CURRENT_TIMESTAMP",
+    name: "submitted_at",
+    default: () => "now()",
   })
-  submittedat: Date;
+  submittedAt: Date;
 
-  @OneToMany(() => AiInsight, (aiInsight) => aiInsight.answer)
-  aiInsights: AiInsight[];
+  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  amountFeedbacks: number | null;
 
-  @ManyToOne(() => Question, (question) => question.answers)
-  @JoinColumn([{ name: "questionid", referencedColumnName: "id" }])
-  question: Question;
+  @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
+  aiInsights: AiInsights[];
 
-  @ManyToOne(() => User, (user) => user.answers)
-  @JoinColumn([{ name: "userid", referencedColumnName: "id" }])
-  user: User;
+  @ManyToOne(() => Questions, (questions) => questions.answers, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn([{ name: "question_id", referencedColumnName: "id" }])
+  question: Questions;
 
-  @OneToMany(() => SharedRecording, (sharedRecording) => sharedRecording.answer)
-  sharedRecordings: SharedRecording[];
+  @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
+  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  user: Users;
+
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
+  feedbacks: Feedback[];
+
+  @OneToMany(
+    () => SharedRecordings,
+    (sharedRecordings) => sharedRecordings.answer
+  )
+  sharedRecordings: SharedRecordings[];
 }

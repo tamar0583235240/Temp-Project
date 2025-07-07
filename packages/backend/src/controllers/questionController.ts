@@ -12,3 +12,13 @@ export const getAllQuestionsController = async (req: Request, res: Response): Pr
     res.status(500).json({ error });
   }
 };
+
+export const getQuestionsByCategoryController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { categoryId } = req.params;
+    const questions = await questionRepository.getQuestionsByCategory(categoryId);
+    res.json(questions);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
