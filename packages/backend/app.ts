@@ -6,6 +6,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import questionRouter from './src/routes/questionRouts';
 import interviewExperiencesRouter from './src/routes/interviewExperiencesRouts';
+import experienceThanksRouter from './src/routes/experienceThanksRouts';
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
 import dotenv from 'dotenv';
@@ -38,7 +39,7 @@ app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/interviewExperiences', interviewExperiencesRouter);
 app.use('/interview-materials-hub', interviewMaterialsHub);
-
+app.use('/experienceThanks', experienceThanksRouter);
 
 
 export default app;

@@ -27,7 +27,7 @@ export class ExperienceThanks {
   @JoinColumn([{ name: "experience_id", referencedColumnName: "id" }])
   experience: InterviewExperiences;
 
-  @ManyToOne(() => Users, (users) => users.experienceThanks, {
+  @ManyToOne(() => Users, (users) => users, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])

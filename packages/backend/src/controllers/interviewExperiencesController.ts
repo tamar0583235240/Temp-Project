@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import InterviewExperiencesRepository from '../reposioty/interviewExperiences';
+import InterviewExperiencesRepository from '../reposioty/interviewExperiencesRepository';
 import { InterviewExperiences } from '@interfaces/entities/InterviewExperiences';
 
 export const getAllInterviewExperiences = async (req: Request, res: Response): Promise<InterviewExperiences[] | void > => {
