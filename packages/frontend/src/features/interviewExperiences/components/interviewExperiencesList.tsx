@@ -3,11 +3,14 @@
 import { data } from "react-router-dom";
 import { useGetAllInterviewExperiencesQuery } from "../services/interviewExperiencesApi";
 import { useGetAllExperienceThanksQuery } from '../services/experienceThanksApi';
+import {useGetUsersQuery} from '../../../shared/api/userApi'
 import { experienceThanks } from "../types/experienceThanks";
+import { InterviewExperienceView } from "./interviewExperienceView";
 
 export const InterviewExperiencesList = () => {
   const { data: interviewExperiences, isLoading, isError } = useGetAllInterviewExperiencesQuery();
   const { data: experienceThanks, isLoading: thanksLoading, isError: thanksError } = useGetAllExperienceThanksQuery();  
+  const { data: users, isLoading: usersLoading, isError: usersError } = useGetUsersQuery();
 
   function getThunksByInterviewExperienceId(interviewExperienceId: string): experienceThanks[] {
     return ( experienceThanks? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : [] );
@@ -39,7 +42,7 @@ export const InterviewExperiencesList = () => {
                                     </div>
       <p>פורסם ב {new Date(interviewExperience.created_at?interviewExperience.created_at:'')?.toLocaleDateString()}</p>
       <p>🙏 {getThunksByInterviewExperienceId(interviewExperience.id).length} תודות </p>
-      
+      <InterviewExperienceView interviewExperience={interviewExperience} experienceThanks={getThunksByInterviewExperienceId(interviewExperience.id)} users={users?users:[]}></InterviewExperienceView>
       </div>
     ))}
   </div>

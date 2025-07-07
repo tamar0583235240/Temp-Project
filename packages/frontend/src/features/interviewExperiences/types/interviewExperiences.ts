@@ -21,4 +21,6 @@ export interface interviewExperiences{
   anonymous: boolean | null;
   
   created_at: Date | null;
+
+  user_id: string | null;
 }

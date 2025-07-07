@@ -36,6 +36,10 @@ export class InterviewExperiences {
   @Column("integer", { name: "rating", nullable: true })
   rating: number | null;
 
+  @Column("uuid", { name: "user_id", nullable: true })
+  userId: string | null;
+
+
   @Column("boolean", {
     name: "anonymous",
     nullable: true,

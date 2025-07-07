@@ -32,4 +32,14 @@ export class ExperienceThanks {
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
+
+
+
+
+  //  @Column("uuid", {
+  //   primary: true,
+  //   name: "idUser",
+  //   default: () => "uuid_generate_v4()",
+  // })
+  // user_id: string;
 }
