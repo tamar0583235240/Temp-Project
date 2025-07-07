@@ -42,7 +42,7 @@ async function testUploadToCloudAndDb() {
 
     // הכנסת שורה ל־DB
     const insertRes = await client.query(
-      `INSERT INTO "Resource" (id, title, type, description, "fileUrl", "createdAt", user_id)
+      `INSERT INTO "Resource" (id, title, type, description, "fileUrl", "create_dat", user_id)
        VALUES (gen_random_uuid(), $1, $2, $3, $4, NOW(), $5) RETURNING *`,
       ['בדיקת הקלטה', 'link', 'הקלטה לבדיקה', result.secure_url, userId]
     );

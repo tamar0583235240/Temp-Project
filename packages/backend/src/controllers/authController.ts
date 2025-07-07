@@ -213,12 +213,12 @@ export const requestSignup = async (req: Request, res: Response) => {
       phone,
       password: hashedPassword,
       role: 'student',
-      isActive: true,
+      isactive: true,
       answers: [],
       feedbacks: [],
       passwordResetTokens: [],
       sharedRecordings: [],
-      createdAt: new Date(),
+      create_dat: new Date(),
       resources: []
     },
     code,
@@ -300,12 +300,12 @@ export const signup = async (req: Request, res: Response) => {
     phone,
     password: hashedPassword,
     role: 'student',
-    isActive: true,
+    isactive: true,
     answers: [],
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
-    createdAt: new Date(),
+    create_dat: new Date(),
     resources: []
   };
 
@@ -349,9 +349,9 @@ export const authWithGoogle = async (req: Request, res: Response) => {
         email: googleUser.email,
         phone: null,
         role: 'student',
-        is_active: true,
+        isactive: true,
         password: '',
-        created_at: new Date(),
+        create_dat: new Date(),
       });
     }
 

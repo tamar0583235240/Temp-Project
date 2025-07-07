@@ -11,8 +11,8 @@ export interface User {
   email: string;
   phone: string | null;
   role: string;
-  createdAt: Date;
-  isActive: boolean;
+  create_dat: Date;
+  isactive: boolean;
   password: string;
   answers?: Answers[]; // אם אתה טוען גם את הקשרים
   feedbacks?: Feedback[];

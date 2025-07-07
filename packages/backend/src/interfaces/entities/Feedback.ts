@@ -16,10 +16,10 @@ export class Feedback {
   rating: number | null;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
+    name: "create_dat",
     default: () => "now()",
   })
-  createdAt: Date;
+  create_dat: Date;
   @ManyToOne(() => Answers, (answers) => answers.feedbacks)
   @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
   answerCode: Answers;

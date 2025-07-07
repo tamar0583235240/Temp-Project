@@ -14,7 +14,7 @@ export const login = async (email: string, password: string): Promise<Users | nu
     if (!isMatch) return null;
 
     // סימון כמשתמש פעיל
-    await pool.query('UPDATE users SET is_active = true WHERE id = $1', [user.id]);
+    await pool.query('UPDATE users SET isactive = true WHERE id = $1', [user.id]);
 
     return user as Users;
   } catch (error) {
@@ -25,13 +25,13 @@ export const login = async (email: string, password: string): Promise<Users | nu
 
 const signup = async (userData: Users): Promise<Users> => {
   try {
-    const { id, first_name, last_name, email, phone, role, createdAt, isActive, password} = userData;
+    const { id, first_name, last_name, email, phone, role, create_dat, isactive, password} = userData;
 
     const res = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, create_dat, isactive, password)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING *`,
-      [id, first_name, last_name, email, phone, role, createdAt, isActive, password]
+      [id, first_name, last_name, email, phone, role, create_dat, isactive, password]
     );
 
     return (res.rows[0] as Users) || null;
@@ -43,7 +43,7 @@ const signup = async (userData: Users): Promise<Users> => {
 
 export const logout = async (userId: string): Promise<void> => {
   try {
-    await pool.query('UPDATE users SET is_active = false WHERE id = $1', [userId]);
+    await pool.query('UPDATE users SET isactive = false WHERE id = $1', [userId]);
   } catch (error) {
     console.error("Error during logout:", error);
     throw error;

@@ -20,10 +20,10 @@ export class Resources {
   fileUrl: string;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
+    name: "create_dat",
     default: () => "now()",
   })
-  createdAt: Date;
+  create_dat: Date;
 
   @ManyToOne(() => Users, (users) => users.resources)
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])

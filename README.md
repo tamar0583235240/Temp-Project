@@ -101,13 +101,13 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    create_dat TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_items_type ON items(type);
-CREATE INDEX IF NOT EXISTS createdat ON items(createdat);
+CREATE INDEX IF NOT EXISTS create_dat ON items(create_dat);
 
 -- Enable Row Level Security
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;

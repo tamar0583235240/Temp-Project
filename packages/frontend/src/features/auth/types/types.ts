@@ -5,8 +5,8 @@ export interface User {
   email: string;
   phone?: string;
   role: 'student' | 'manager';
-  createdAt: string;
-  isActive: boolean;
+  create_dat: string;
+  isactive: boolean;
 }
 
 export interface ForgotPasswordForm {

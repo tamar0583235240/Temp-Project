@@ -16,10 +16,10 @@ export class Feedback {
   rating: number | null;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
+    name: "create_dat",
     default: () => "now()",
   })
-  createdAt: Date;
+  create_dat: Date;
 
   @Column("text", { name: "answerCode", nullable: true })
   answerCode: string | null;

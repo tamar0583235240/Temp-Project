@@ -31,13 +31,13 @@ export class Users {
   role: string;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
+    name: "create_dat",
     default: () => "now()",
   })
-  createdAt: Date;
+  create_dat: Date;
 
-  @Column("boolean", { name: "is_active", default: () => "true" })
-  isActive: boolean;
+  @Column("boolean", { name: "isactive", default: () => "true" })
+  isactive: boolean;
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];

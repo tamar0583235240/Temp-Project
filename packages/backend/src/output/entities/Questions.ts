@@ -22,8 +22,8 @@ export class Questions {
   @Column("text", { name: "ai_guidance" })
   aiGuidance: string;
 
-  @Column("boolean", { name: "is_active", default: () => "true" })
-  isActive: boolean;
+  @Column("boolean", { name: "isactive", default: () => "true" })
+  isactive: boolean;
 
   @OneToMany(() => Answers, (answers) => answers.question)
   answers: Answers[];

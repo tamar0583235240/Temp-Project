@@ -67,14 +67,14 @@ const updateUser = async (
   userData: Partial<Users>
 ): Promise<Users | null> => {
   try {
-    const { first_name, last_name, email, phone, role, isActive, password } =
+    const { first_name, last_name, email, phone, role, isactive, password } =
       userData;
 
         const res = await pool.query(`
             UPDATE users 
-            SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password)
+            SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, isactive = $6, password = COALESCE($7, password)
             WHERE id = $8 RETURNING *`,
-      [first_name, last_name, email, phone, role, isActive, password, id]
+      [first_name, last_name, email, phone, role, isactive, password, id]
     );
     return res.rows[0] || null;
   } catch (error) {
@@ -91,7 +91,7 @@ const updateActiveUser = async (
     const res = await pool.query(
       `
             UPDATE users 
-            SET is_active = true
+            SET isactive = true
             WHERE id = $1 `,
       [id]
     );
@@ -109,7 +109,7 @@ const createUser = async (user: Users): Promise<Users> => {
             throw new Error("Password is required to create a user");
         }
         const res = await pool.query(
-            `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
+            `INSERT INTO users (id, first_name, last_name, email, phone, role, create_dat, isactive, password)
              VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7)
              RETURNING *`,
       [
@@ -118,7 +118,7 @@ const createUser = async (user: Users): Promise<Users> => {
         user.email,
         user.phone,
         user.role,
-        user.isActive ?? true,
+        user.isactive ?? true,
         user.password,
       ]
     );
@@ -136,12 +136,12 @@ const insertUser = async (user: {
   email: string;
   phone: string | null;
   role: string;
-  is_active: boolean;
+  isactive: boolean;
   password: string;
-  created_at: Date;
+  create_dat: Date;
 }) => {
   const result = await pool.query(
-    `INSERT INTO users (id, first_name, last_name, email, phone, role, is_active, password, created_at)
+    `INSERT INTO users (id, first_name, last_name, email, phone, role, isactive, password, create_dat)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
      RETURNING *`,
     [
@@ -151,9 +151,9 @@ const insertUser = async (user: {
       user.email,
       user.phone,
       user.role,
-      user.is_active,
+      user.isactive,
       user.password,
-      user.created_at,
+      user.create_dat,
     ]
   );
   return result.rows[0];

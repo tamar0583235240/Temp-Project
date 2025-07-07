@@ -18,10 +18,10 @@ export class Feedback {
   answercode: string | null;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
+    name: "create_dat",
     default: () => "now()",
   })
-  createdAt: Date;
+  create_dat: Date;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])

@@ -4,5 +4,5 @@ export interface InterviewMaterial {
   short_description: string;
   thumbnail: string | null;
   file_url: string | null;
-  created_at?: string;
+  create_dat?: string;
 }
