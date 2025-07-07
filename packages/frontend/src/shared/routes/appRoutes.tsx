@@ -13,6 +13,7 @@ import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterials";
 import InterviewMaterialView from "../../features/knowledge-base/components/InterviewMaterialsView";
+import ProjectsList from "../../features/profile/components/projects";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -28,7 +29,7 @@ export default function AppRoutes() {
         <Route
           path="/reset-password"
           element={
-              <ResetPassword />
+            <ResetPassword />
           }
         />
         {/* Routes with header */}
@@ -137,6 +138,15 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          <Route
+            path="/personal-projects"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProjectsList userId={user?.id ?? ""} />
+              </RoleProtectedRoute>
+            }
+          />
+
         </Route>
       </Routes>
     </div>

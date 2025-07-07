@@ -83,7 +83,8 @@ export const updateInterviewMaterialController = async (req: Request, res: Respo
     let updatedThumbnail = existingMaterial.thumbnail;
     let updatedFileUrl = existingMaterial.fileUrl;
 
-    const extractPublicId = (url: string) => {
+    const extractPublicId = (url?: string | null) => {
+      if (typeof url !== "string") return null;
       const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
       return match?.[1];
     };

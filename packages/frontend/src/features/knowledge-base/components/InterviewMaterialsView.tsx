@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CreateInterviewMaterialsForm } from "./CreateInterviewMaterialsForm";
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
-import { Plus } from "lucide-react"; 
+import { Plus } from "lucide-react";
 import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
 import InterviewMaterialsList from "./interviewMaterialsList";
 
@@ -26,13 +26,13 @@ const InterviewMaterialsView = () => {
     <>
       <Button
         onClick={handleOpenModal}
-        variant="primary-dark" 
+        variant="primary-dark"
         size="md"
         icon={<Plus size={18} />}
         iconPosition="left"
         className="mb-4"
       >
-        הוסף פריט 
+        הוסף פריט
       </Button>
 
       {isModalOpen && (
@@ -47,7 +47,7 @@ const InterviewMaterialsView = () => {
           onClose={handleCloseModal}
         />
       )}
-      <InterviewMaterialsList/>
+      <InterviewMaterialsList />
     </>
   );
 };
