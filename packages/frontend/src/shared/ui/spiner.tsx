@@ -7,3 +7,13 @@ export const Spinner = () => (
 );
 
 Spinner.displayName = "Spinner";
+
+
+
+export const SpinnerSmall = () => (
+  <div className="flex justify-center items-center py-4">
+    <div className="w-4 h-4 border-2 border-secondary border-l-transparent rounded-full animate-spin" />
+  </div>
+);
+
+SpinnerSmall.displayName = "SpinnerSmall";
