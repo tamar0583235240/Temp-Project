@@ -1,4 +1,3 @@
-
 import { pool } from '../config/dbConnection';
 import { InterviewMaterialsSub } from '../interfaces/entities/InterviewMaterialsSub';
 

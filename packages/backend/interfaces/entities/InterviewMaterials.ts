@@ -17,4 +17,11 @@ export class InterviewMaterials {
 
   @Column("text", { name: "file_url" })
   fileUrl: string;
+
+  @Column("integer", {
+    name: "downloads_count",
+    nullable: true,
+    default: () => "0",
+  })
+  downloadsCount: number | null;
 }
