@@ -1,4 +1,3 @@
-// api.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const api = createApi({
@@ -10,6 +9,3 @@ export const api = createApi({
     tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings"],
     endpoints: () => ({}),
 });
-
-
-
