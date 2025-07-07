@@ -10,7 +10,7 @@ import { useUserStore } from "../store/progressSlice";
 import { motion } from "framer-motion";
 import type { RootState } from "../../../shared/store/store";
 import { ImprovementSuggestions } from "./ImprovementSuggestions";
-import SmileRating from "./SmileRating";
+import SmileRating from "./SmileRating/SmileRating";
 
 
 const MainDashboard: React.FC = () => {
@@ -88,15 +88,9 @@ const MainDashboard: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
         >
-          {/* ✅ הוספת דירוג סמיילים – בין התובנות להתקדמות כללית */}
-          <motion.div
-            className="max-w-6xl mx-auto"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SmileRating aiInsightId="demo-insight-id" />
-          </motion.div>
-
+          {/* <SmileRating userId={user?.id || ''} /> */}
+          {/* לשנות אחכ 2 שורות אלו */}
+          <SmileRating /> 
           <motion.div
             className="max-w-6xl mx-auto"
             whileHover={{ scale: 1.02 }}

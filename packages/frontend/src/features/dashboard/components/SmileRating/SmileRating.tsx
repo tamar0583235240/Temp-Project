@@ -1,54 +1,36 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import  './SmileRating.css'; // Assuming you have a CSS file for styles
-
-type Props = {
-  aiInsightId: string;
-};
+import './SmileRating.css';
 
 const smileEmojis = ['😄', '🙂', '😐', '🙁', '😞'];
 
-export default function SmileRating({ aiInsightId }: Props) {
+export default function SmileRatingDemo() {
   const [selected, setSelected] = useState<number | null>(null);
   const [bouncing, setBouncing] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); // האם הקופסה קיימת ב־DOM
-  const [isFadingOut, setIsFadingOut] = useState(false); // אנימציית יציאה
+  const [isVisible, setIsVisible] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false);
   const [showUndoButton, setShowUndoButton] = useState(false);
 
   // העלמת כפתור הביטול אחרי 5 שניות
   useEffect(() => {
     if (showUndoButton) {
-      const timer = setTimeout(() => {
-        setShowUndoButton(false);
-      }, 5000);
+      const timer = setTimeout(() => setShowUndoButton(false), 5000);
       return () => clearTimeout(timer);
     }
   }, [showUndoButton]);
 
-  const handleClick = async (index: number) => {
+  const handleClick = (index: number) => {
     setSelected(index);
     setBouncing(index);
     setTimeout(() => setBouncing(null), 600);
 
-    try {
-      await axios.post('/api/ai-insight/rate', {
-        aiInsightId,
-        rating: index + 1,
-      });
-      setSubmitted(true);
-
-      // הפעלת אנימציית יציאה
-      setIsFadingOut(true);
-
-      // לאחר זמן האנימציה — הסתרה מהמסך + כפתור ביטול
-      setTimeout(() => {
-        setIsVisible(false);
-        setShowUndoButton(true);
-      }, 500); // תואם לאורך האנימציה
-    } catch (err) {
-      console.error('שגיאה בשליחת דירוג:', err);
-    }
+    // אנימציית יציאה
+    setSubmitted(true);
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      setShowUndoButton(true);
+    }, 500);
   };
 
   const handleUndo = () => {
@@ -66,7 +48,7 @@ export default function SmileRating({ aiInsightId }: Props) {
           dir="rtl"
           className={`text-right bg-white p-6 rounded-xl shadow-md max-w-xl mx-auto space-y-3 transition-all duration-500
           ${isFadingOut ? 'opacity-0 scale-90' : 'opacity-100 scale-100'}
-          `}
+        `}
         >
           <h2 className="text-lg font-bold text-gray-800">
             כמה אתה מרוצה מהניתוח של ה־AI?
