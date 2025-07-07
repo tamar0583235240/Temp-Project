@@ -19,9 +19,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["jest", "node"] // הוסיפי שורה זו כאן
+    "types": ["jest", "node"]
   },
   "include": [
     "src"
-, "jest.config.ts"  ]
+ ]
 }
