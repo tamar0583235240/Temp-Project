@@ -43,7 +43,7 @@ const UserMenu = () => {
         className="flex items-center gap-2 text-[--color-primary] border border-[--color-primary] bg-transparent hover:bg-[--color-surface] hover:text-[--color-primary-dark] transition rounded-full p-2"
       >
         <FaUserCircle size={24} />
-        <span className="inline">{user.firstName}</span>
+        <span className="inline">{user.first_name}</span>
       </button>
 
       {open && (

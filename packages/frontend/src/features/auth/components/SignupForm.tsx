@@ -13,8 +13,8 @@ export default function SignupForm() {
   const navigate = useNavigate();
   const [step, setStep] = useState<"form" | "verify">("form");
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     phone: "",
@@ -122,8 +122,8 @@ export default function SignupForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {step === "form" && (
             <>
-              <Input name="firstName" placeholder="שם פרטי" value={form.firstName} onChange={handleChange} required />
-              <Input name="lastName" placeholder="שם משפחה" value={form.lastName} onChange={handleChange} required />
+              <Input name="first_name" placeholder="שם פרטי" value={form.first_name} onChange={handleChange} required />
+              <Input name="last_name" placeholder="שם משפחה" value={form.last_name} onChange={handleChange} required />
               <Input name="email" type="email" placeholder="אימייל" value={form.email} onChange={handleChange} required />
               {/* שדה סיסמה עם הצג/הסתר */}
               <div className="relative">

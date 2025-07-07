@@ -69,8 +69,8 @@ export const CreateInterviewMaterialsForm = ({
 
     onSubmit(formData);
     setShowSuccessMessage(true);
-    reset();
-    setTimeout(() => setShowSuccessMessage(false), 4000);
+    reset(); 
+    setTimeout(() => setShowSuccessMessage(false), 4000); 
   };
 
   return (
@@ -138,9 +138,8 @@ export const CreateInterviewMaterialsForm = ({
       </div>
       <div className="flex gap-4">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          {isSubmitting ? "שומר..." : "שמור"}
+          {isSubmitting ? "שולח..." : "שמור"}
         </Button>
-
         {onCancel && (
           <Button
             type="button"

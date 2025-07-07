@@ -186,9 +186,9 @@ export const logout = (req: Request, res: Response) => {
 const pendingSignups = new Map<string, { userData: Users; code: string; expiresAt: number }>();
 
 export const requestSignup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
-  if (!email || !password || !firstName || !lastName) {
+  if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
@@ -206,8 +206,8 @@ export const requestSignup = async (req: Request, res: Response) => {
   pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       phone,
       password: hashedPassword,
@@ -282,7 +282,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
 // הרשמה
 export const signup = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
@@ -293,8 +293,8 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     email,
     phone,
     password: hashedPassword,
@@ -343,8 +343,8 @@ export const authWithGoogle = async (req: Request, res: Response) => {
     if (!user) {
       user = await userRepository.insertUser({
         id: uuidv4(),
-        firstName: googleUser.given_name ?? '',
-        lastName: googleUser.family_name ?? '',
+        first_name: googleUser.given_name ?? '',
+        last_name: googleUser.family_name ?? '',
         email: googleUser.email,
         phone: null,
         role: 'student',

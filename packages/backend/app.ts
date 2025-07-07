@@ -5,7 +5,6 @@ import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
 import interviewMaterialsHub from './src/routes/interviewMaterialsRoutes';
-import projectsRoutes from './src/routes/projectsRoutes';
 import dotenv from 'dotenv';
 
 const corsOptions = {
@@ -33,6 +32,5 @@ app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/manager/interview-materials', interviewMaterialsHub);
-app.use('/personal-projects', projectsRoutes);
 
 export default app;

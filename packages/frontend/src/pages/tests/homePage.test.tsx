@@ -21,7 +21,7 @@ const mockStore = configureStore([]);
 describe("HomePage", () => {
   it("מציג כותרת, תיאור, כפתור ותיבות summary", () => {
     const store = mockStore({
-      auth: { isAdmin: false, user: { firstName: "דוגמה" } }
+      auth: { isAdmin: false, user: { first_name: "דוגמה" } }
     });
 
     render(
@@ -46,7 +46,7 @@ describe("HomePage", () => {
 
   it("בלחיצה על כפתור סימולציה מתבצע ניווט", async () => {
     const store = mockStore({
-      auth: { isAdmin: false, user: { firstName: "דוגמה" } }
+      auth: { isAdmin: false, user: { first_name: "דוגמה" } }
     });
     const navigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(navigate);

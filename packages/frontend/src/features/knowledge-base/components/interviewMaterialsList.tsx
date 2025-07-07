@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   useGetInterviewMaterialsQuery,
   useDeleteInterviewMaterialMutation,
@@ -6,14 +6,12 @@ import {
 import { InterviewMaterials } from "../types/InterviewMaterials";
 import MessageModal from "../../../shared/ui/messageModal";
 import { InterviewMaterialsItem } from "./interviewMaterialsItem";
-import { EditInterviewMaterialsSubForm } from "./EditInterviewMaterialsSubForm";
 
 const InterviewMaterialsList = () => {
   const { data: items, error, isLoading } = useGetInterviewMaterialsQuery();
   const [deleteMaterial] = useDeleteInterviewMaterialMutation();
 
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<InterviewMaterials | null>(null);
 
   const handleDeleteClick = (id: string) => setConfirmingId(id);
   const handleCancelDelete = () => setConfirmingId(null);
@@ -30,15 +28,8 @@ const InterviewMaterialsList = () => {
   };
 
   const handleEdit = (item: InterviewMaterials) => {
-    setEditingItem(item);
+    // TODO: הוספת ניווט או פתיחת מודאל לעריכה
   };
-
-  useEffect(() => {
-    document.body.style.overflow = editingItem ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [editingItem]);
 
   if (isLoading)
     return (
@@ -76,52 +67,29 @@ const InterviewMaterialsList = () => {
       </section>
 
       {confirmingId && (
-        <MessageModal
-          title="אישור מחיקה"
-          message={
-            <div>
-              <p>בטוחה שברצונך למחוק את הפריט הזה?</p>
-              <div className="mt-6 flex justify-end gap-4">
-                <button
-                  onClick={handleConfirmDelete}
-                  className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-                >
-                  מחק
-                </button>
-                <button
-                  onClick={handleCancelDelete}
-                  className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
-                >
-                  ביטול
-                </button>
-              </div>
+        <>
+          <MessageModal
+            title="אישור מחיקה"
+            message="בטוחה שברצונך למחוק את הפריט הזה?"
+            onClose={handleCancelDelete}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white shadow-lg rounded-xl p-6 space-x-4 flex gap-4">
+              <button
+                onClick={handleConfirmDelete}
+                className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+              >
+                מחק
+              </button>
+              <button
+                onClick={handleCancelDelete}
+                className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
+              >
+                ביטול
+              </button>
             </div>
-          }
-          onClose={handleCancelDelete}
-        />
-      )}
-      {editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 relative">
-            <h3 className="text-xl font-semibold mb-4 text-right text-green-800">עריכת משאב</h3>
-            <EditInterviewMaterialsSubForm
-              id={editingItem.id}
-              defaultValues={{
-                title: editingItem.title,
-                shortDescription: editingItem.short_description || "",
-              }}
-              onSuccess={() => setEditingItem(null)}
-              onCancel={() => setEditingItem(null)}
-            />
-            <button
-              onClick={() => setEditingItem(null)}
-              className="absolute top-2 left-2 text-gray-500 hover:text-gray-700"
-              aria-label="סגור"
-            >
-              ✕
-            </button>
           </div>
-        </div>
+        </>
       )}
     </>
   );
