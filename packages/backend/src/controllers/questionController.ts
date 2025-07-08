@@ -1,4 +1,9 @@
 import { Request, Response } from 'express';
+import cloudinary from '../config/cloudinary';
+import { Readable } from 'stream';
+import { pool } from '../config/dbConnection';
+
+
 import questionRepository from '../reposioty/questionRepository';
 
 export const questionController = async (req: Request, res: Response): Promise<void> => {
