@@ -148,6 +148,7 @@ export const login = async (req: Request, res: Response) => {
 
 // רענון טוקן
 export const refreshToken = async (req: Request, res: Response) => {
+  
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(407).json({ message: 'לא סופק refresh token' });

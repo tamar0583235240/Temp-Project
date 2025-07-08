@@ -44,4 +44,8 @@ export const ToggleSwitch = ({
       </button>
     </div>
   );
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> origin/UI_Shevi
