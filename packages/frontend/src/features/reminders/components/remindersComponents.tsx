@@ -1,167 +1,65 @@
-// // // import React from 'react';
-// // // import { useGetRemindersQuery } from '../services/remindersApi';
-// // // import reminderType from '../types/reminderType';
-// // // import { FaQuestionCircle, FaLightbulb, FaHeart } from 'react-icons/fa';
+// // import React from "react";
+// // import { skipToken } from '@reduxjs/toolkit/query/react';
+// // import { useGetRemindersQuery } from "../services/remindersApi";
 
-// // // const ReminderComponent: React.FC = () => {
-// // //   const { data: reminders, isLoading, error } = useGetRemindersQuery();
-
-// // //   if (isLoading) return <p>טוען טיפים...</p>;
-// // //   if (error) return <p>שגיאה בטעינת טיפים</p>;
-// // //   if (reminders?.length == 0) return <p>אין טיפים :(</p>;
-
-// // //   const renderIcon = (text: string) => {
-// // //     if (text.includes('טיפ') || text.includes('שתה')) return <FaLightbulb className="text-yellow-500" />;
-// // //     if (text.includes('פעילות')) return <FaQuestionCircle className="text-blue-500" />;
-// // //     return <FaHeart className="text-pink-400" />;
-// // //   };
-
-// // //   const formatFrequency = (f: reminderType['frequency']) => {
-// // //     switch (f) {
-// // //       case 'Every day':
-// // //         return 'כל יום';
-// // //       case 'Every other day':
-// // //         return 'כל יומיים';
-// // //       case 'Once every 3 days':
-// // //         return 'פעם ב-3 ימים';
-// // //       case 'Once a week':
-// // //         return 'פעם בשבוע';
-// // //       default:
-// // //         return 'תדירות לא ידועה';
-// // //     }
-// // //   };
-
-// // //   return (
-// // //     <div className="p-4">
-// // //       <h2 className="text-xl font-bold mb-4">תזכורות אישיות</h2>
-// // //       <ul className="space-y-4">
-// // //         {reminders?.map((reminder) => (
-// // //           <li
-// // //             key={reminder.id}
-// // //             className="flex items-center gap-4 p-4 border rounded-lg shadow-sm bg-white"
-// // //           >
-// // //             <div className="text-2xl">{renderIcon(reminder.content)}</div>
-// // //             <div className="flex-1">
-// // //               <p className="font-medium">{reminder.content}</p>
-// // //               <p className="text-sm text-gray-600">{formatFrequency(reminder.frequency)}</p>
-// // //             </div>
-// // //             <div>
-// // //               {/* <span className={`text-sm ${reminder.id ? 'text-green-600' : 'text-red-600'}`}>
-// // //                 {reminder.id ? 'פעילה' : 'כבויה'}
-// // //               </span> */}
-// // //             </div>
-// // //           </li>
-// // //         ))}
-// // //       </ul>
-// // //       <p className="mt-6 text-sm text-gray-500">
-// // //         ניתן לשנות או לבטל תזכורות בכל שלב דרך מסך ההגדרות.
-// // //       </p>
-// // //     </div>
-// // //   );
-// // // };
-
-// // // export default ReminderComponent;
-// // import React from 'react';
-// // import { useGetRemindersQuery } from '../services/remindersApi';
-// // import { FaQuestionCircle, FaLightbulb, FaHeart } from 'react-icons/fa';
-
-// // const ReminderComponent: React.FC = () => {
-// //   const { data: reminders, isLoading, error } = useGetRemindersQuery();
-
+// // export default function ReminderComponent() {
+// //   const { data: reminders, isLoading, error } = useGetRemindersQuery("");
 
 // //   if (isLoading) return <p>טוען טיפים...</p>;
 // //   if (error) return <p>שגיאה בטעינת טיפים</p>;
-// //   if (reminders?.length == 0) return <p>אין טיפים :(</p>;
-
-// //   const renderIcon = (text: string) => {
-// //     if (text.includes('טיפ') || text.includes('שתה')) return <FaLightbulb className="text-yellow-500" />;
-// //     if (text.includes('פעילות')) return <FaQuestionCircle className="text-blue-500" />;
-// //     return <FaHeart className="text-pink-400" />;
-// //   };
-
-// //   const formatFrequency = (f: string) => {
-// //     switch (f) {
-// //       case 'daily': return 'כל יום';
-// //       case 'every_2_days': return 'כל יומיים';
-// //       case 'every_3_days': return 'פעם ב-3 ימים';
-// //       case 'weekly': return 'פעם בשבוע';
-// //       default: return 'תדירות לא ידועה';
-// //     }
-// //   };
+// //   if (!reminders || reminders.length === 0) return <p>אין טיפים זמינים</p>;
 
 // //   return (
-// //     <div className="p-4">
-// //       <h2 className="text-xl font-bold mb-4">תזכורות אישיות</h2>
-// //       <ul className="space-y-4">
-// //         {reminders?.map((reminder) => (
-// //           <li
-// //             key={reminder.id}
-// //             className="flex items-center gap-4 p-4 border rounded-lg shadow-sm bg-white"
-// //           >
-// //             <div className="text-2xl">{renderIcon(reminder.content)}</div>
-// //             <div className="flex-1">
-// //               <p className="font-medium">{reminder.content}</p>
-// //               <p className="text-sm text-gray-600">{formatFrequency(reminder.user.user_reminder_settings.frequency)}</p>
-// //             </div>
+// //     <div>
+// //       <h2 className="text-xl font-bold mb-4">טיפים שלך:</h2>
+// //       <ul className="space-y-2">
+// //         {reminders.map((r) => (
+// //           <li key={r.id} className="border p-2 rounded bg-white shadow">
+// //             <p>{r.content}</p>
+// //             <p className="text-sm text-gray-500">תדירות: {r.user.user_reminder_settings.tip_frequency}</p>
 // //           </li>
 // //         ))}
 // //       </ul>
-// //       <p className="mt-6 text-sm text-gray-500">
-// //         ניתן לשנות או לבטל תזכורות בכל שלב דרך מסך ההגדרות.
-// //       </p>
 // //     </div>
 // //   );
-// // };
+// // }
 
-// // export default ReminderComponent;
-
-
-// // reminderComponent:
 // import React from "react";
 // import { useGetRemindersQuery } from "../services/remindersApi";
 
-// export default function ReminderComponent({ userId }: { userId: string }) {
-//   const { data: reminders, isLoading, error } = useGetRemindersQuery(userId);
+// export default function ReminderComponent() {
+//   const { data: reminders, isLoading, error } = useGetRemindersQuery("");
 
-//   if (isLoading) return <p>טוען טיפים...</p>;
-//   if (error) return <p>שגיאה בטעינת טיפים</p>;
-//   if (!reminders || reminders.length === 0) return <p>אין טיפים זמינים</p>;
+//   if (isLoading) return <p>טוען תזכורת...</p>;
+//   if (error) return <p>שגיאה בטעינה</p>;
+//   if (!reminders || reminders.length === 0) return <p>אין תזכורות להצגה כרגע</p>;
+
+//   const reminder = reminders[0]; // מציג רק את התזכורת היומית
 
 //   return (
-//     <div>
-//       <h2 className="text-xl font-bold mb-4">טיפים שלך:</h2>
-//       <ul className="space-y-2">
-//         {reminders.map((r) => (
-//           <li key={r.id} className="border p-2 rounded bg-white shadow">
-//             <p>{r.content}</p>
-//             <p className="text-sm text-gray-500">תדירות: {r.user.user_reminder_settings.tip_frequency}</p>
-//           </li>
-//         ))}
-//       </ul>
+//     <div className="border p-4 rounded bg-white shadow mt-6">
+//       <h2 className="text-xl font-bold mb-2">טיפ יומי 🎯</h2>
+//       <p className="text-lg">{reminder.content}</p>
+//       <p className="text-sm text-gray-500 mt-2">תדירות: {reminder.frequency}</p>
 //     </div>
 //   );
 // }
-
-import React from "react";
-import { skipToken } from '@reduxjs/toolkit/query/react';
-import { useGetRemindersQuery } from "../services/remindersApi";
+import React from 'react';
+import { useGetSentTipsQuery } from '../services/remindersApi';
 
 export default function ReminderComponent() {
-  const { data: reminders, isLoading, error } = useGetRemindersQuery("");
+  const { data: tips, isLoading, error } = useGetSentTipsQuery();
 
-  if (isLoading) return <p>טוען טיפים...</p>;
-  if (error) return <p>שגיאה בטעינת טיפים</p>;
-  if (!reminders || reminders.length === 0) return <p>אין טיפים זמינים</p>;
+  if (isLoading) return <p>טוען טיפים שנשלחו...</p>;
+  if (error) return <p>שגיאה בטעינת הטיפים</p>;
+  if (!tips || tips.length === 0) return <p>אין טיפים להצגה</p>;
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">טיפים שלך:</h2>
-      <ul className="space-y-2">
-        {reminders.map((r) => (
-          <li key={r.id} className="border p-2 rounded bg-white shadow">
-            <p>{r.content}</p>
-            <p className="text-sm text-gray-500">תדירות: {r.user.user_reminder_settings.tip_frequency}</p>
-          </li>
+      <h2>טיפים שנשלחו עד היום</h2>
+      <ul>
+        {tips.map(tip => (
+          <li key={tip.tip_id}>{tip.content}</li>
         ))}
       </ul>
     </div>
