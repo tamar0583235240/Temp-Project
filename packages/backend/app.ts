@@ -7,6 +7,8 @@ import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import cookieParser from 'cookie-parser';
 import interviewMaterialsHub from './src/routes/interview-materials-sub';
 import dotenv from 'dotenv';
+import profileRoutes from "./src/routes/profileRouts";
+
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -22,10 +24,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+//   credentials: true
+// }));
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
@@ -35,6 +38,9 @@ app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/manager', interviewMaterialsRoutes);
 app.use('/interview-materials-hub', interviewMaterialsHub);
+app.use("/profiles", profileRoutes);
+
+
 
 export default app;
 

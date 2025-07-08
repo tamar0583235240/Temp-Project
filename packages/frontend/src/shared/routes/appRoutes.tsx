@@ -13,6 +13,9 @@ import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import ProfileList from "../../features/profile/components/ProfileList";
+import EditProfilePage from "../../pages/my-profile";
+import MyProfileViewPage from "../../pages/my-profile-view";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -25,12 +28,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/reset-password"
-          element={
-              <ResetPassword />
-          }
-        />
+        <Route path="/reset-password" element={<ResetPassword />} />
         {/* Routes with header */}
         <Route element={<DashboardLayout />}>
           <Route
@@ -46,6 +44,22 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <ProfilePage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-profile"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <MyProfileViewPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-profile/edit"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <EditProfilePage />
               </RoleProtectedRoute>
             }
           />
@@ -102,6 +116,14 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <InterviewMaterialPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/profiles"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfileList />
               </RoleProtectedRoute>
             }
           />
