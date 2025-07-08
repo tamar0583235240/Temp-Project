@@ -6,7 +6,7 @@ const initialState: InitialState = {
   questions: [],
   currentIndex: 0,
   loading: false,
-  currentAnswerId: "00000000-0000-0000-0000-000000000020", //מזהה תשובה נוכחית
+  currentAnswerId: "", //מזהה תשובה נוכחית
   currentCategoryId: "",
   currentUserId: "00000000-0000-0000-0000-000000000000", //מזהה משתמש נוכחי
 };
@@ -40,7 +40,7 @@ const simulationSlice = createSlice({
     },
 
     setCurrentUserId(state, action: PayloadAction<string | null>) {
-      state.currentCategoryId = action.payload ?? "";
+      state.currentUserId = action.payload ?? "";
     },
 
     resetQuestion(state, action: PayloadAction<number>) {

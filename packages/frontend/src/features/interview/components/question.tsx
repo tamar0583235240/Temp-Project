@@ -7,6 +7,10 @@ import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
 import AnswerAI from "../../interview/components/AnswerAI";
 import MagicLoader from "../../interview/components/MagicLoader";
+import { answerQuestion } from "../store/simulationSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../shared/store/store";
 
 interface QuestionProps {
   onFinishRecording: () => void;
@@ -189,10 +193,10 @@ const Question: React.FC<QuestionProps> = ({
           </div>
         </div>
       </div>
-      {/* כאן יוצג הטיפ וה-AI מתחת לשאלה */}
+      {/* כאן יוצג הטיפ וה-AI מתחת לשאלה
       <div className="w-full flex flex-col items-center mt-4 gap-4">
         {selectedFile && showFileActions && !isUploading && <TipsComponent />}
-      </div>
+      </div> */}
     </div>
   );
 };

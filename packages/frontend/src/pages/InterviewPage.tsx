@@ -6,6 +6,7 @@ import { useGetQuestionsByCategoryQuery } from "../features/interview/services/q
 import {
   setQuestions,
   goToQuestion,
+  setCurrentAnswerId,
 } from "../features/interview/store/simulationSlice";
 import { addAnsweredAnswer } from "../features/interview/store/answeredSlice";
 import { RootState } from "../shared/store/store";
@@ -24,8 +25,10 @@ const InterviewPage = () => {
   const { currentCategoryId, currentIndex } = useSelector(
     (state: RootState) => state.simulation
   );
-  const { data: questions = [], isLoading, isError } =
-    useGetQuestionsByCategoryQuery(currentCategoryId || skipToken);
+const { data: questions = [], isLoading, isError } =
+  useGetQuestionsByCategoryQuery(currentCategoryId || skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const answeredAnswers = useSelector(
     (state: RootState) => state.answered.answeredAnswers
@@ -35,7 +38,6 @@ const InterviewPage = () => {
   const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   
-
   const answeredQuestionIds = useMemo(() => {
     return answeredAnswers.map((a: { question: { id: any; }; }) => a.question.id);
   }, [answeredAnswers]);
@@ -52,26 +54,32 @@ const InterviewPage = () => {
   const totalQuestions = questions.length;
   const answeredCount = questionsWithStatus.filter(q => q.answered).length;
   const allAnswered = totalQuestions > 0 && answeredCount === totalQuestions;
+useEffect(() => {
+  if (questions.length > 0) {
+    dispatch(setQuestions(questions)); // ⬅️ מעדכן את השאלות ב־Redux
+    dispatch(goToQuestion(0));         // ⬅️ מאפס את האינדקס לשאלה הראשונה
+  }
+}, [questions, dispatch]);
 
 
   if (isLoading) return <p className="p-8 text-center">טוען שאלות...</p>;
   if (isError || !questions.length)
     return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
 
-  const handleAnswerSaved = (answerId: string) => {
-    const q = questions[currentIndex];
-    dispatch(
-      addAnsweredAnswer({
-        id: answerId,
-        question: { id: String(q.id), text: q.title || q.text },
-      })
-    );
-    setIsLoadingAI(true);
-    setTimeout(() => {
-      setAnswerIdForAI(answerId);
-      setIsLoadingAI(false);
-    }, 2000);
-  };
+const handleAnswerSaved = (answerId: string) => {
+  const q = questions[currentIndex];
+  dispatch(
+    addAnsweredAnswer({
+      id: answerId,
+      question: { id: String(q.id), text: q.title || q.text },
+    })
+  );
+  dispatch(setCurrentAnswerId(answerId)); // עדכון Redux
+  setIsLoadingAI(true);
+  setTimeout(() => {
+    setIsLoadingAI(false);
+  }, 2000);
+};
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
@@ -86,6 +94,13 @@ const InterviewPage = () => {
             isLoadingAI={isLoadingAI}
           />
         </div>
+
+           {showTips && <TipsComponent />}
+          {isLoadingAI && <MagicLoader />}
+          {answerIdForAI && !isLoadingAI && (
+            <AnswerAI />
+          )}
+        
         <div className="mt-8 w-full max-w-2xl">
           <EndSurvey showEndButton={allAnswered} answeredCount={answeredCount} totalQuestions={totalQuestions} />
         </div>

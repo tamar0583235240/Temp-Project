@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetAllCategoriesQuery } from "../services/categoriesApi";
 import { FiChevronDown } from "react-icons/fi";
 import { useSelector } from "react-redux";
@@ -14,6 +14,18 @@ const CategoryDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const{ currentCategoryId } = useSelector((state: RootState) => state.simulation)
+
+   useEffect(() => {
+    if (currentCategoryId) {
+      setSelectedCategory(currentCategoryId);
+    }
+  }, [currentCategoryId]);
+
+  useEffect(() => {
+  if (!currentCategoryId && categories?.length) {
+    dispatch(setCurrentCategoryId(String(categories[0].id)));
+  }
+}, [categories, currentCategoryId, dispatch]);
 
   if (isLoading) return <p className="text-gray-500">טוען קטגוריות...</p>;
   if (error) return <p className="text-red-600">שגיאה בטעינת הקטגוריות</p>;
