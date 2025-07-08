@@ -28,6 +28,7 @@ export default function SharedRecordingCard({
         <div className="text-yellow-400 text-xl">
           {'★'.repeat(feedbackRating)}{'☆'.repeat(5 - feedbackRating)}
         </div>
+       
       </div>
     </div>
   );

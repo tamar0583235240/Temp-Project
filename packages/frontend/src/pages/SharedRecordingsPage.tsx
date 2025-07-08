@@ -6,7 +6,7 @@ import { SharedRecording } from '../features/shared-recordings/types/types';
 import { useCreateFeedbackMutation } from '../features/feedback/services/feedbackApi';
 
 export default function SharedRecordingsPage() {
-  const userId = 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77'; // זמני
+  const userId = 'cdb5a81b-3fbc-4355-8cab-3df28b160533'; // זמני
   const { data, isLoading, error } = useGetSharedRecordingsQuery(userId);
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
 
@@ -28,17 +28,20 @@ export default function SharedRecordingsPage() {
           date={selectedRecording.date}
           audioUrl={selectedRecording.audioUrl}
           aiSummary={selectedRecording.aiSummary}
-          recordingId={selectedRecording.id} // ✅ הוסף
+          recordingId={selectedRecording.id} 
+           feedbackComment={selectedRecording.feedbackComment} 
+            feedbackRating={selectedRecording.feedbackRating} 
           onBack={() => setSelectedRecordingId(null)}
+            userId={userId} 
           onSubmitFeedback={async (comment, rating) => {
             try {
               await createFeedback({
-                sharedRecordingId: selectedRecording.id, // ✅ תואם ל-API
+                sharedRecordingId: selectedRecording.id, 
                 givenByUserId: userId,
                 comment,
                 rating,
               }).unwrap();
-              alert('הפידבק נשלח בהצלחה!');
+              alert(' נשלח בהצלחה!');
               setSelectedRecordingId(null);
             } catch (err) {
               alert('אירעה שגיאה בשליחת הפידבק.');

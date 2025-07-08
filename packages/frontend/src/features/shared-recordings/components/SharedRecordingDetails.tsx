@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { feedbackType } from '../../feedback/types/feedbackType';
+import FeedbackSection from './FeedbackSection';
 
 interface Props {
   userName: string;
@@ -10,7 +11,10 @@ interface Props {
   onSubmitFeedback: (comment: string, rating: number, feedbackId?: string) => void;
   onBack: () => void;
   recordingId: string;
-  feedback?: feedbackType | null; // פידבק קיים אם יש
+  userId: string; 
+  feedback?: feedbackType | null; 
+  feedbackRating?: number;  
+    feedbackComment?: string; // ✅ הוספה
 }
 
 export default function SharedRecordingDetails({
@@ -22,22 +26,11 @@ export default function SharedRecordingDetails({
   onSubmitFeedback,
   onBack,
   recordingId,
+  userId, 
   feedback,
+  feedbackRating = 0, 
+  feedbackComment
 }: Props) {
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState(0);
-
-  useEffect(() => {
-    if (feedback) {
-      setComment(feedback.comment);
-      setRating(feedback.rating);
-    }
-  }, [feedback]);
-
-  const handleSubmit = () => {
-    onSubmitFeedback(comment, rating, feedback?.id);
-  };
-
   return (
     <div className="p-6 bg-gray-50 rounded-xl shadow">
       <button
@@ -46,49 +39,42 @@ export default function SharedRecordingDetails({
       >
         ← חזרה לרשימה
       </button>
-
       <h2 className="text-xl font-bold mb-2">משתף: {userName}</h2>
       <p className="text-sm text-gray-600 mb-1">שאלה: {questionTitle}</p>
       <p className="text-sm text-gray-600 mb-3">תאריך: {new Date(date).toLocaleDateString()}</p>
-
       <audio controls className="mb-4 w-full">
         <source src={audioUrl} type="audio/mpeg" />
         הדפדפן שלך לא תומך בהשמעת אודיו.
       </audio>
-
       <div className="mb-3">
         <h3 className="font-medium mb-1">תובנות AI:</h3>
         <p className="text-gray-700">{aiSummary}</p>
       </div>
+      {feedbackComment && (
+  <div className="mb-3">
+    <h3 className="font-medium mb-1">הפידבק הקודם שלך:</h3>
+    <p className="text-gray-700 whitespace-pre-line">{feedbackComment}</p>
+    
+  </div>
+)}
 
-      <div className="mb-3">
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="כתבי כאן פידבק..."
-          className="w-full border rounded p-2"
-        />
-      </div>
+{typeof feedbackRating === 'number' && (
+  <div className="mb-3 flex items-center space-x-1 rtl:space-x-reverse text-yellow-400 text-xl">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <span key={star}>
+        {feedbackRating >= star ? '★' : '☆'}
+      </span>
+    ))}
+  </div>
+)}
 
-      <div className="flex items-center mb-3 gap-2">
-        {[1, 2, 3, 4, 5].map((num) => (
-          <span
-            key={num}
-            className={`cursor-pointer text-2xl ${rating >= num ? 'text-yellow-400' : 'text-gray-300'}`}
-            onClick={() => setRating(num)}
-          >
-            ★
-          </span>
-        ))}
-        {rating === 0 && <span className="text-sm text-gray-500 ml-2">מחכה לדירוג שלך 😊</span>}
-      </div>
-
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        onClick={handleSubmit}
-      >
-        {feedback ? 'עדכון פידבק' : 'שלחי פידבק'}
-      </button>
+      <FeedbackSection
+        recordingId={recordingId}
+        userId={userId} 
+          feedbackRating={feedbackRating} 
+        onSubmitted={onSubmitFeedback}
+      />
+    
     </div>
   );
 }

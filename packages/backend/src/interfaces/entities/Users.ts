@@ -1,7 +1,12 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
+import { Feedbacktype } from "./Feedbacktype";
+import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+import { UserActivity } from "./UserActivity";
+import { UserReminderSettings } from "./UserReminderSettings";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -34,15 +39,39 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+  @Column("text", { name: "password", nullable: true })
+  password: string | null;
+
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
+  @OneToMany(() => Feedbacktype, (feedbacktype) => feedbacktype.givenByUser)
+  feedbacktypes: Feedbacktype[];
+
+  @OneToMany(
+    () => PasswordResetTokens,
+    (passwordResetTokens) => passwordResetTokens.user
+  )
+  passwordResetTokens: PasswordResetTokens[];
+
+  @OneToMany(() => Resources, (resources) => resources.user)
+  resources: Resources[];
+
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
+  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+  userActivities: UserActivity[];
+
+  @OneToMany(
+    () => UserReminderSettings,
+    (userReminderSettings) => userReminderSettings.user
+  )
+  userReminderSettings: UserReminderSettings[];
 }
