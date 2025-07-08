@@ -6,22 +6,17 @@ import { Users } from "./Users";
 export class Resources {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
-  id: string;
 
   @Column("text", { name: "title" })
-  title: string;
   title: string;
 
   @Column("text", { name: "type" })
   type: string;
-  type: string;
 
   @Column("text", { name: "description" })
   description: string;
-  description: string;
 
   @Column("text", { name: "file_url" })
-  fileUrl: string;
   fileUrl: string;
 
   @Column("timestamp without time zone", {

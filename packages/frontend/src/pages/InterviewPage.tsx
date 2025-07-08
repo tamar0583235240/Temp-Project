@@ -10,7 +10,7 @@ import EndSurvey from "../features/interview/components/endSurvey";
 import ShowCategories from "../features/interview/components/showCategories";
 
 const InterviewPage = () => {
-  const categoryId = "77777777-7777-7777-7777-777777777777"
+  const categoryId = "33333333-3333-3333-3333-333333333333"
   const navigate = useNavigate();
   const { data: questions = [], isLoading, isError } = useGetQuestionsByCategoryQuery(categoryId);
 

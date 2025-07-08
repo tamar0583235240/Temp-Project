@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Feedback } from "./Feedback";
-import { Answers } from "./Answer";
+import { Answers } from "./Answers";
 import { Users } from "./Users";
 
 @Index("shared_recordings_pkey", ["id"], { unique: true })

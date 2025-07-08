@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
-import { FiDownload, FiCheck, FiRotateCcw } from 'react-icons/fi';
+import { FiDownload, FiCheck, FiRotateCcw, FiMic } from 'react-icons/fi';
 
 import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
@@ -36,6 +36,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showRecordingModal, setShowRecordingModal] = useState(false);
   const [recordingPhase, setRecordingPhase] = useState<
     'idle' | 'recording' | 'paused' | 'finished'
   >('idle');
@@ -87,14 +88,37 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   return (
     <div className="space-y-4 w-full">
-      {/* כפתור ראשי */}
-      <RecordButton
-        state={recordingPhase}
-        onClick={handleMainButtonClick}
-      />
+      {/* כפתור ראשי תמיד מוצג */}
+      <>
+        {!showRecordingModal && (
+          <button
+            className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3"
+            onClick={() => setShowRecordingModal(true)}
+          >
+            <FiMic size={20} />
+            התחל הקלטה
+          </button>
+        )}
+        <RecordButton
+          open={showRecordingModal}
+          onClose={() => setShowRecordingModal(false)}
+          recordingPhase={recordingPhase}
+          onMainButtonClick={handleMainButtonClick}
+          onStopRecording={handleStopRecording}
+          onRestartRecording={() => {
+            restartRecording();
+            setRecordingPhase('recording');
+          }}
+          recordingTime={currentRecording.recordingTime}
+          audioBlob={audioBlobRef.current}
+          onSave={() => setShowSaveModal(true)}
+          onDownload={downloadRecording}
+          formatTime={formatTime}
+        />
+      </>
 
       {/* מונה זמן */}
-      {(recordingPhase === 'recording' || recordingPhase === 'paused' ) && (
+      {(recordingPhase === 'recording' || recordingPhase === 'paused') && (
         <div className="flex flex-col items-center gap-2">
           <div className="text-lg font-bold text-text-main">
             {formatTime(currentRecording.recordingTime)}

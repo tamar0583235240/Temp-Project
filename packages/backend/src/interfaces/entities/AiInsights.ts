@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { Answers } from "./Answer";
+import { Answers } from "./Answers";
 
 @Index("ai_insights_pkey", ["id"], { unique: true })
 @Entity("ai_insights", { schema: "public" })
