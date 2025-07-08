@@ -73,6 +73,7 @@ export const createUser = async (req: Request, res: Response) => {
     sharedRecordings: [],
     resources: [],
     userReminderSettings:[],
+    userActivities:[]
   };
 
   const createdUser = await userRepository.createUser(newUser);

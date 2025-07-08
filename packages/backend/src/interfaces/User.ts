@@ -19,4 +19,5 @@ export interface User {
   passwordResetTokens?: PasswordResetTokens[];
   resources?: Resources[];
   sharedRecordings?: SharedRecordings[];
+  
 }

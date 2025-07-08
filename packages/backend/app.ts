@@ -5,6 +5,7 @@ import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
 import cors from 'cors';
 import questionRouter from './src/routes/questionRouts';
+import feedbackToSystemRouter from './src/routes/feedbackesToSystemRouts';
 
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
@@ -36,7 +37,7 @@ app.use('/question', questionRouter);
 app.use(cookieParser());
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
-
+app.use('/feedbackToSystem', feedbackToSystemRouter); 
 app.use('/interview-materials-hub', interviewMaterialsHub);
 
 

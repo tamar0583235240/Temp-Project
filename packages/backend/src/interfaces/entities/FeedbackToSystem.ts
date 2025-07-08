@@ -54,4 +54,17 @@ export class FeedbackToSystem {
     default: () => "false",
   })
   isAnonymous: boolean | null;
+
+  @Column("uuid", { name: "user_id", nullable: true })
+  userId: string | null;
+
+  @Column("enum", {
+    name: "treatment_status",
+    enum: ["Tested", "In treatment", "Treated"],
+    default: () => "'Tested'",
+  })
+  treatmentStatus: "Tested" | "In treatment" | "Treated";
+
+  @Column("date", { name: "createdat", default: () => "CURRENT_DATE" })
+  createdat: string;
 }
