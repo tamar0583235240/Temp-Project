@@ -23,7 +23,10 @@ const GoogleAuthButton = () => {
       .unwrap()
       .then((res) => {
         const user = res.user;
+        console.log('Google user:', user);
+
         dispatch(loginSuccess({ user: user, token: token }));
+
         navigate('/home');
       })
       .catch((error: any) => {
