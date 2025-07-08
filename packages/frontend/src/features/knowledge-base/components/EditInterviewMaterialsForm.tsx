@@ -38,7 +38,7 @@ interface EditInterviewMaterialsSubFormProps {
     onCancel?: () => void;
 }
 
-export const EditInterviewMaterialsSubForm = ({
+export const EditInterviewMaterialsForm = ({
     id,
     defaultValues,
     onSuccess,

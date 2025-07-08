@@ -6,7 +6,7 @@ import {
 import { InterviewMaterials } from "../types/InterviewMaterials";
 import MessageModal from "../../../shared/ui/messageModal";
 import { InterviewMaterialsItem } from "./interviewMaterialsItem";
-import { EditInterviewMaterialsSubForm } from "./EditInterviewMaterialsSubForm";
+import { EditInterviewMaterialsForm } from "./EditInterviewMaterialsForm";
 
 const InterviewMaterialsList = () => {
   const { data: items, error, isLoading } = useGetInterviewMaterialsQuery();
@@ -104,7 +104,7 @@ const InterviewMaterialsList = () => {
         <MessageModal
           title="עריכת משאב"
           message={
-            <EditInterviewMaterialsSubForm
+            <EditInterviewMaterialsForm
               id={editingItem.id}
               defaultValues={{
                 title: editingItem.title,
