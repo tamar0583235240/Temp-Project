@@ -15,6 +15,7 @@ import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 
+
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
@@ -23,6 +24,7 @@ export default function AppRoutes() {
       <Routes>
         {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
+     
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

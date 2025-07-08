@@ -7,7 +7,6 @@ import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/inter
 import { Provider } from "react-redux";
 import { store } from "../store/store";
 import { InterviewMaterialsList } from "./InterviewMaterialsList";
-import InterviewMaterialList from "./interviewMaterialList";
 
 const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
