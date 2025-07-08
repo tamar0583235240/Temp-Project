@@ -100,6 +100,7 @@ export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersLis
                                                 <Calendar size={16} />
                                                 <span className="text-sm">
                                                     {f?.created_dat && new Date(f.created_dat).toLocaleDateString('he-IL')}
+
                                                 </span>
                                             </div>
                                         </div>

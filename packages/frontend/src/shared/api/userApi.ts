@@ -54,6 +54,13 @@ export const {
   // useAddUserMutation,
   // useUpdateUserMutation,
   // useDeleteUserMutation,
+
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  // useGetMeQuery,
+  // useAddUserMutation,
+  // useUpdateUserMutation,
+  // useDeleteUserMutation,
   useAuthWithGoogleMutation,
   useLazyGetUserByIdQuery
 } = userApi;

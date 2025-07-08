@@ -6,6 +6,12 @@ export const api = createApi({
         credentials: 'include',
     }),
     reducerPath: "api",
+
     tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings","admin","users"],
     endpoints: () => ({}),
 });
+
+
+
+
+

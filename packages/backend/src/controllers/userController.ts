@@ -7,9 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { insertUsersFromExcel } from '../reposioty/userRepository';
 import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
 
-
-
-
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -70,7 +67,6 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
-
 export const getMe = async (req: Request, res: Response) => {
     const userId = (req as any).user?.id;
 
@@ -150,7 +146,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     await userRepository.deleteUser(userId);
     res.status(204).send();
 };
-
 
 export const createUserByAdmin = async (req: Request, res: Response) => {
   try {
@@ -283,8 +278,5 @@ export const uploadUsersExcel = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'שגיאה בעת עיבוד הקובץ' });
   }
 };
-
-
-
 
 

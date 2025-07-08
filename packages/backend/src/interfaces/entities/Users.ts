@@ -37,8 +37,9 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-  @Column("text", { name: "password" })
-  password: string;
+
+  @Column("text", { name: "password", nullable: true })
+  password: string | null;
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];

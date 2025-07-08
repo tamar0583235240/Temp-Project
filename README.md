@@ -101,7 +101,11 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
+<<<<<<< HEAD
     created_dat TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+=======
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+>>>>>>> 9f041a36ae71909367bf95aaecde1288be92f2be
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
