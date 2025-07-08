@@ -10,6 +10,6 @@ export async function getMaterialById(id: string) {
   return result.rows[0];
 }
 
-export async function deleteMaterialById(id: string) {
+export async function c(id: string) {
   await pool.query("DELETE FROM interview_materials WHERE id = $1", [id]);
 }

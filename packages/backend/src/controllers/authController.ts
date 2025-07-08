@@ -207,8 +207,8 @@ export const requestSignup = async (req: Request, res: Response) => {
   pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
-      first_name,
-      last_name,
+      firstName:first_name,
+      lastName:last_name,
       email,
       phone,
       password: hashedPassword,
@@ -294,8 +294,8 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    first_name,
-    last_name,
+    firstName:first_name,
+    lastName:last_name,
     email,
     phone,
     password: hashedPassword,

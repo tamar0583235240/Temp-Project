@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { deleteFileFromCloudinary, uploadFileToCloudinary } from '../config/cloudinary';
 import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
 
-export const getInterviewMaterialSubs = async (req: Request, res: Response): Promise<void> => {
+const getInterviewMaterialSubs = async (req: Request, res: Response): Promise<void> => {
     try {
         const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
         res.json(items);
@@ -12,7 +12,7 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
     }
 };
 
-export const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
+const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { title, shortDescription } = req.body;
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -25,20 +25,25 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
             return;
         }
 
-        console.log('Existing Material Sub file:', existingMaterialSub.fileUrl);
-        
+        console.log('Existing Material Sub file:', existingMaterialSub.file_url);
+
         let updatedThumbnail = existingMaterialSub.thumbnail;
-        let updatedFileUrl = existingMaterialSub.fileUrl;
+        let updatedFileUrl = existingMaterialSub.file_url;
 
         if (files?.thumbnail?.[0]) {
             const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) { await deleteFileFromCloudinary(match[1]); }
+            if (match && match[1]) {
+                await deleteFileFromCloudinary(match[1]);
+            }
             const thumbnailResult = await uploadFileToCloudinary(files.thumbnail[0], 'interviewMaterialsHub/thumbnails');
             updatedThumbnail = thumbnailResult.secure_url;
         }
+
         if (files?.file?.[0]) {
-            const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) { await deleteFileFromCloudinary(match[1]); }
+            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+            if (match && match[1]) {
+                await deleteFileFromCloudinary(match[1]);
+            }
             const fileResult = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
             updatedFileUrl = fileResult.secure_url;
         }
@@ -46,7 +51,7 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
         const updatedInterviewMaterialSub = await InterviewMaterialSubRepository.updateInterviewMaterialSub(
             id,
             title || existingMaterialSub.title,
-            shortDescription || existingMaterialSub.shortDescription,
+            shortDescription || existingMaterialSub.short_description,
             updatedThumbnail,
             updatedFileUrl
         );
@@ -59,16 +64,17 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
     }
 };
 
-
-export const addInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
+const addInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
     try {
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         const thumbnailFile = files?.thumbnail?.[0];
         const file = files?.file?.[0];
+
         if (!file) {
             res.status(400).json({ message: 'No file uploaded' });
             return;
         }
+
         let thumbnail: string | undefined;
         if (thumbnailFile) {
             const thumbnailResult = await uploadFileToCloudinary(thumbnailFile, 'interviewMaterialsHub/thumbnails');
@@ -83,10 +89,12 @@ export const addInterviewMaterialSub = async (req: Request, res: Response): Prom
             req.body.shortDescription,
             result.secure_url
         );
+
         if (!resultData) {
             res.status(500).json({ message: 'Failed to save file data' });
             return;
         }
+
         res.status(201).json({
             message: 'File uploaded successfully',
             data: resultData,
@@ -96,4 +104,44 @@ export const addInterviewMaterialSub = async (req: Request, res: Response): Prom
         console.error('Upload error:', err);
         res.status(500).json({ message: 'Server error', error: err });
     }
+};
+
+const deleteInterviewMaterial = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    try {
+        const existingMaterialSub = await InterviewMaterialSubRepository.getInterviewMaterialSubById(id);
+        if (!existingMaterialSub) {
+            res.status(404).json({ message: 'Interview material sub not found' });
+            return;
+        }
+
+        if (existingMaterialSub.thumbnail) {
+            const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+            if (match && match[1]) {
+                await deleteFileFromCloudinary(match[1]);
+            }
+        }
+
+        if (existingMaterialSub.file_url) {
+            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+            if (match && match[1]) {
+                await deleteFileFromCloudinary(match[1]);
+            }
+        }
+
+        await InterviewMaterialSubRepository.deleteInterviewMaterialSub(id);
+
+        res.json({ message: 'Interview material sub deleted successfully' });
+
+    } catch (error) {
+        console.error('Error in delete interview material sub controller:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export{
+    getInterviewMaterialSubs,
+    updateInterviewMaterialSub,
+    addInterviewMaterialSub,
+    deleteInterviewMaterial
 };

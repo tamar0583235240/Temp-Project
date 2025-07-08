@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { useDeleteInterviewMaterialMutation, useGetInterviewMaterialsQuery } from "../../../shared/api/interviewMaterialApi";
 import { InterviewMaterial } from "../types/InterviewMaterial";
 import { InterviewMaterialListItem } from "./interviewMaterialItem";
 
+
 const InterviewMaterialList = () => {
-  const { data: interviewMaterial, error, isLoading } = useGetInterviewMaterialsQuery();
+  const { data: interviewMaterial=[], error, isLoading } = useGetInterviewMaterialsQuery();
   const [deleteInterviewMaterial] = useDeleteInterviewMaterialMutation();
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
 
   /**
@@ -52,7 +55,7 @@ const InterviewMaterialList = () => {
           </div>
         ))
       ) : (
-        <p className="text-gray-500 text-sm">אין ען להצגה כרגע.</p>
+        <p className="text-gray-500 text-sm">אין תוכן להצגה כרגע.</p>
       )}
     </section>
   );

@@ -11,7 +11,6 @@ interface interviewMaterialListItemProps {
 }
 
 export const InterviewMaterialListItem = ({ item, onEdit, onDelete }: interviewMaterialListItemProps) => {
-  const [showVideo, setShowVideo] = useState(false);
 
   return (
     <div className="grid grid-cols-6 items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-100 text-right">

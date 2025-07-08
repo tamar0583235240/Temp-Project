@@ -10,16 +10,23 @@ export const interviewMaterialApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getInterviewMaterials: builder.query<InterviewMaterial[], void>({
       query: () => ({
-        url: "/interviewMaterial",
+        url: "/interview-materials-hub",
         method: "GET",
       }),
     }),
 
     deleteInterviewMaterial: builder.mutation<deleteRes, number>({
       query: (id) => ({
-        url: `/interview-material/${id}`,
+        url: `/interview-materials-hub/${id}`,
         method: "DELETE",
         credentials: "include",
+      }),
+    }),
+     createInterviewMaterialSub: builder.mutation<void, FormData>({
+      query: (formData) => ({
+        url: "/interview-materials-hub",
+        method: "POST",
+        body: formData,
       }),
     }),
   }),
@@ -28,4 +35,5 @@ export const interviewMaterialApi = api.injectEndpoints({
 export const {
   useDeleteInterviewMaterialMutation,
   useGetInterviewMaterialsQuery,
+  useCreateInterviewMaterialSubMutation,
 } = interviewMaterialApi;

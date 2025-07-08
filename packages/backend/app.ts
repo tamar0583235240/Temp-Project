@@ -3,9 +3,8 @@ import cors from 'cors';
 import exampleRouts from './src/routes/exampleRouts';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
-import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
-import cookieParser from 'cookie-parser';
 import interviewMaterialsHub from './src/routes/interview-materials-sub';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
 const corsOptions = {
@@ -33,7 +32,7 @@ app.use(cookieParser());
 app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
-app.use('/manager', interviewMaterialsRoutes);
+app.use('/manager', interviewMaterialsHub);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 
 export default app;
