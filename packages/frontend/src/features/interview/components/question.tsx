@@ -1,8 +1,4 @@
-
-import React, { useState, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../shared/store/store";
-import { answerQuestion } from "../store/simulationSlice";
+import React, { useRef, useState } from "react";
 import { CheckCircle2, XCircle, Trash2 } from "lucide-react";
 import AudioRecorder from "../../recordings/components/AudioRecorder";
 import FileUpload from "../../recordings/components/FileUpload";
@@ -195,20 +191,7 @@ const Question: React.FC<QuestionProps> = ({
       </div>
       {/* כאן יוצג הטיפ וה-AI מתחת לשאלה */}
       <div className="w-full flex flex-col items-center mt-4 gap-4">
-        {/* טיפ זמני אחרי בחירת קובץ ולפני אישור */}
-        {selectedFile && showFileActions && !isUploading && (
-          <TipsComponent />
-        )}
-        {/* טיפ קבוע אחרי הקלטה/שמירה */}
-        {showTips && <TipsComponent />}
-        {/* הצגת ניתוח AI */}
-        {answerIdForAI && !isLoadingAI && (
-          <div className="w-full flex justify-center">
-            <AnswerAI answerId={""} />
-          </div>
-        )}
-        {/* חיווי טעינה ל-AI */}
-        {isLoadingAI && <MagicLoader />}
+        {selectedFile && showFileActions && !isUploading && <TipsComponent />}
       </div>
     </div>
   );

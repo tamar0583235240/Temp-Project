@@ -80,3 +80,5 @@ export const {
   setCurrentCategoryId
 } = simulationSlice.actions;
 export default simulationSlice.reducer;
+
+

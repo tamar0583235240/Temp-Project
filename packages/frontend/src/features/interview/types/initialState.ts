@@ -1,5 +1,4 @@
 
-
 import { interviewType } from "./questionType";
 
 export interface InitialState {

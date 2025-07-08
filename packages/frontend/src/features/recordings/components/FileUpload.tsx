@@ -27,7 +27,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, questionId, file, onUpl
       }
     };
     if (file) upload();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
   return null;

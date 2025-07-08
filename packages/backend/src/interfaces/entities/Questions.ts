@@ -26,12 +26,6 @@ export class Questions {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-  @Column("jsonb", { name: "options", nullable: true })
-  options: object | null;
-
-  @Column("text", { name: "question_type", nullable: true })
-  questionType: string | null;
-
   @OneToMany(() => Answers, (answers) => answers.question)
   answers: Answers[];
 

@@ -14,12 +14,6 @@ export class Categories {
   @Column("text", { name: "name" })
   name: string;
 
-  @ManyToMany(() => Questions, (questions) => questions.categories)
-  @JoinTable({
-    name: "question_categories",
-    joinColumns: [{ name: "category_id", referencedColumnName: "id" }],
-    inverseJoinColumns: [{ name: "question_id", referencedColumnName: "id" }],
-    schema: "public",
-  })
-  questions: Questions[];
+  @OneToMany(() => Question, (questions) => questions.category_2)
+  questions: Question[];
 }

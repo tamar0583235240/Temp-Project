@@ -23,7 +23,4 @@ export class Resources {
     default: () => "now()",
   })
   createdAt: Date;
-
-  @Column("uuid", { name: "user_id", nullable: true })
-  userId: string | null;
 }

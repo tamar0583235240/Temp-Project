@@ -1,29 +1,34 @@
-import React from 'react';
-import { FiMic, FiPause, FiPlay } from 'react-icons/fi';
+import { FiMic, FiPause, FiPlay, FiRefreshCw } from "react-icons/fi";
 
 type RecordButtonProps = {
-  state: 'idle' | 'recording' | 'paused';
+  state: 'idle' | 'recording' | 'paused' | 'finished'; // ⬅️ הוספנו מצב חדש
   onClick: () => void;
   className?: string;
   disabled?: boolean;
 };
+
 const RecordButton: React.FC<RecordButtonProps> = ({ state, onClick, className = '', disabled = false }) => {
   const isRecording = state === 'recording';
 
-  const icon = isRecording ? <FiPause /> : state === 'paused' ? <FiPlay /> : <FiMic />;
-  const text = isRecording ? 'השהה הקלטה' : state === 'paused' ? 'המשך הקלטה' : 'התחלת הקלטה';
+  const icon =
+    isRecording ? <FiPause /> :
+    state === 'paused' ? <FiPlay /> :
+    state === 'finished' ? <FiRefreshCw /> :
+    <FiMic />;
 
-  // בסיס עיצוב זהה לכפתור העלאה, עם התאמות למצבי הקלטה
+  const text =
+    isRecording ? 'השהיה' :
+    state === 'paused' ? 'המשך הקלטה' :
+    state === 'finished' ? 'הקלט מחדש' :
+    'התחלת הקלטה';
+
   const baseClasses =
     'w-full border px-6 py-3 rounded-lg font-semibold transition text-lg flex flex-row-reverse items-center justify-center gap-2';
-  const idleClasses = 'bg-primary-dark text-white border-primary-dark hover:brightness-110';
-  const recordingClasses = 'bg-red-600 text-white border-red-600 hover:brightness-110';
-  const pausedClasses = 'bg-primary-dark text-white border-primary-dark hover:brightness-110';
-  const disabledClasses = 'opacity-60 cursor-not-allowed bg-primary-dark border-primary-dark text-white hover:brightness-100';
 
-  let stateClasses = idleClasses;
-  if (isRecording) stateClasses = recordingClasses;
-  else if (state === 'paused') stateClasses = pausedClasses;
+  const stateClasses =
+    state === 'recording'
+      ? 'bg-red-600 text-white border-red-600 hover:brightness-110'
+      : 'bg-primary-dark text-white border-primary-dark hover:brightness-110';
 
   return (
     <div className="w-full relative flex items-center justify-center">
@@ -35,7 +40,7 @@ const RecordButton: React.FC<RecordButtonProps> = ({ state, onClick, className =
       )}
       <button
         onClick={onClick}
-        className={`relative z-10 ${baseClasses} ${stateClasses} ${disabled ? disabledClasses : ''} ${className}`.trim()}
+        className={`relative z-10 ${baseClasses} ${stateClasses} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}`.trim()}
         type="button"
         disabled={disabled}
       >

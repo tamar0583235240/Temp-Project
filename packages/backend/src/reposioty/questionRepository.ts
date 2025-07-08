@@ -1,7 +1,5 @@
 import { pool } from '../config/dbConnection';
 import { Questions } from '../interfaces/entities/Questions';
-
-
 const getAllQuestions = async (): Promise<Questions[]> => {
   try {
     const query = `
@@ -16,6 +14,7 @@ const getAllQuestions = async (): Promise<Questions[]> => {
     throw error;
   }
 };
+
 
 const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
   try {
@@ -33,4 +32,11 @@ const getQuestionsByCategory = async (category_id: string): Promise<Questions[]>
   }
 };
 
+
 export default { getAllQuestions, getQuestionsByCategory };
+
+
+
+
+
+
