@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../shared/hooks/hook';
 import { answerQuestion, nextQuestion, resetQuestion } from '../store/simulationSlice';
 import { RootState } from '../../../shared/store/store';
 import { RotateCcw, Sparkles } from 'lucide-react';
+import { interviewType } from '../types/questionType';
 
 interface ButtonsProps {
   onShowAnalysis: () => void;
@@ -16,7 +17,7 @@ const Buttons: React.FC<ButtonsProps> = ({ onShowAnalysis, analysisVisible }) =>
   const { questions, currentIndex } = useAppSelector((state: RootState) => state.simulation);
   const [showEnd, setShowEnd] = useState(false);
   const currentQuestion = questions[currentIndex];
-  const answeredCount = questions.filter((q) => q.answered).length;
+  const answeredCount = questions.filter((q: interviewType) => q.answered).length;
 
   const handleTextChange = (value: string) => {
     dispatch(answerQuestion({ index: currentIndex, answer: value }));

@@ -1,69 +1,101 @@
-import { useState, useEffect } from "react";
-import { useGetAllQuestionsQuery, useGetQuestionsByCategoryQuery } from "../features/interview/services/questionsApi";
-import { useNavigate } from "react-router-dom";
+// InterviewPage.tsx
+
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { useGetQuestionsByCategoryQuery } from "../features/interview/services/questionsApi";
+import {
+  setQuestions,
+  goToQuestion,
+} from "../features/interview/store/simulationSlice";
+import { addAnsweredAnswer } from "../features/interview/store/answeredSlice";
+import { RootState } from "../shared/store/store";
+
 import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
 import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
 import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
-import ShowCategories from "../features/interview/components/showCategories";
+import CategoryDropdown from "../features/interview/components/showCategories";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const InterviewPage = () => {
-  const categoryId = "77777777-7777-7777-7777-777777777777"
-  const navigate = useNavigate();
-  const { data: questions = [], isLoading, isError } = useGetQuestionsByCategoryQuery(categoryId);
+  const dispatch = useDispatch();
+  const { currentCategoryId, currentIndex } = useSelector(
+    (state: RootState) => state.simulation
+  );
+  const { data: questions = [], isLoading, isError } =
+    useGetQuestionsByCategoryQuery(currentCategoryId || skipToken);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const answeredAnswers = useSelector(
+    (state: RootState) => state.answered.answeredAnswers
+  );
+
   const [showTips, setShowTips] = useState(false);
   const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
+  
 
-  useEffect(() => {
-    setShowTips(false);
-    setAnswerIdForAI(null);
-  }, [currentIndex]);
+  const answeredQuestionIds = useMemo(() => {
+    return answeredAnswers.map((a: { question: { id: any; }; }) => a.question.id);
+  }, [answeredAnswers]);
+
+  const questionsWithStatus = useMemo(() => {
+    return questions.map((q: any) => ({
+      ...q,
+      answered: answeredQuestionIds.includes(q.id),
+    }));
+  }, [questions, answeredQuestionIds]);
+
+  const isCurrentQuestionAnswered = questionsWithStatus[currentIndex]?.answered;
+
+  const totalQuestions = questions.length;
+  const answeredCount = questionsWithStatus.filter(q => q.answered).length;
+  const allAnswered = totalQuestions > 0 && answeredCount === totalQuestions;
+
 
   if (isLoading) return <p className="p-8 text-center">טוען שאלות...</p>;
-  if (isError || !questions.length) return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
+  if (isError || !questions.length)
+    return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
 
-  const currentQuestion = questions[currentIndex];
+  const handleAnswerSaved = (answerId: string) => {
+    const q = questions[currentIndex];
+    dispatch(
+      addAnsweredAnswer({
+        id: answerId,
+        question: { id: String(q.id), text: q.title || q.text },
+      })
+    );
+    setIsLoadingAI(true);
+    setTimeout(() => {
+      setAnswerIdForAI(answerId);
+      setIsLoadingAI(false);
+    }, 2000);
+  };
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
-      {/* Main content area */}
+      <CategoryDropdown />
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
-        <ShowCategories/>
         <div className="w-full max-w-2xl space-y-8">
           <Question
-            question={questions[currentIndex]}
-            index={currentIndex}
-            total={questions.length}
             onFinishRecording={() => setShowTips(true)}
-            onAnswerSaved={(id) => {
-              setIsLoadingAI(true);
-              setTimeout(() => {
-                setAnswerIdForAI(id);
-                setIsLoadingAI(false);
-              }, 2000);
-            }}
+            onAnswerSaved={handleAnswerSaved}
+            showTips={isCurrentQuestionAnswered}
+            answerIdForAI={isCurrentQuestionAnswered ? answerIdForAI : null}
+            isLoadingAI={isLoadingAI}
           />
-          {showTips && <TipsComponent />}
-          {isLoadingAI && <MagicLoader />}
-          {answerIdForAI && !isLoadingAI && <AnswerAI answerId={answerIdForAI} />}
         </div>
-
         <div className="mt-8 w-full max-w-2xl">
-          <EndSurvey />
+          <EndSurvey showEndButton={allAnswered} answeredCount={answeredCount} totalQuestions={totalQuestions} />
         </div>
       </main>
 
-      {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
         <Sidebar
-          questions={questions}
+          questions={questionsWithStatus}
           currentIndex={currentIndex}
-          onNavigate={(index) => setCurrentIndex(index)}
+          onNavigate={(index) => dispatch(goToQuestion(index))}
         />
       </aside>
     </div>
