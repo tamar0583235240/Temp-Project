@@ -1,11 +1,12 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Answers } from "./Answers";
 import { Users } from "./Users";
 import { SharedRecordings } from "./SharedRecordings";
 
-@Index("Feedback_pkey", ["id"], { unique: true })
+@Index("feedback_pkey", ["id"], { unique: true })
 @Entity("feedback", { schema: "public" })
 export class Feedback {
-  @Column("character varying", { primary: true, name: "id" })
+  @Column("uuid", { primary: true, name: "id" })
   id: string;
 
   @Column("text", { name: "comment" })
@@ -19,6 +20,10 @@ export class Feedback {
     default: () => "now()",
   })
   createdAt: Date;
+
+  @ManyToOne(() => Answers, (answers) => answers.feedbacks)
+  @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
+  answerCode: Answers;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])

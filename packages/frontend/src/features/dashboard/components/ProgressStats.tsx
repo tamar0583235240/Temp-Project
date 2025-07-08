@@ -1,13 +1,24 @@
-import React from 'react';
-import { useUserStore } from '../store/progressSlice';
-import { useGetProgressStatsQuery } from '../../../shared/api/api';
-import { CheckCircle } from 'lucide-react'; 
+import React, { useEffect } from "react";
+import { BarChart2 } from "lucide-react";
+import { useUserStore } from "../store/progressSlice";
+import { useGetProgressStatsQuery } from "../../../shared/api/api";
 
 const ProgressStats: React.FC = () => {
-  const userId = useUserStore((state) => state.userId) || "af95c702-1f97-41e2-857b-d5c0256aa845";
-  const { data, isLoading, isError } = useGetProgressStatsQuery(userId!, {
+  const userId =
+    useUserStore((state) => state.userId) || "00000000-0000-0000-0000-000000000000";
+  const setAnswered = useUserStore((state) => state.setAnswered);
+  const setTotal = useUserStore((state) => state.setTotal);
+
+  const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
     skip: !userId,
   });
+
+  useEffect(() => {
+    if (data) {
+      setAnswered(data.answeredQuestions);
+      setTotal(data.totalQuestions);
+    }
+  }, [data, setAnswered, setTotal]);
 
   if (!userId) return <p>אנא התחבר</p>;
   if (isLoading) return <p>טוען נתונים...</p>;
@@ -18,28 +29,29 @@ const ProgressStats: React.FC = () => {
   const percentage = total ? (answered / total) * 100 : 0;
 
   return (
-    <div
-      className="bg-white rounded-xl shadow-md p-6 max-w-sm mx-auto flex flex-col gap-4 items-center"
-      style={{ direction: 'rtl', textAlign: 'center' }}
-    >
-      <div className="flex items-center justify-center gap-2">
-        <CheckCircle className="text-gray-700 w-5 h-5" />
-        <span className="text-lg font-semibold">התקדמות כללית</span>
-      </div>
+    <section className="relative mx-auto max-w-md text-center p-6 bg-gradient-to-tr from-[--color-primary]/10 via-white to-[--color-primary]/20 rounded-3xl shadow-md">
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex items-center gap-2 text-[--color-text]">
+          <BarChart2 size={24} />
+          <h2 className="text-xl font-bold">התקדמות כללית</h2>
+        </div>
 
-      <div className="text-3xl font-bold text-black">
-        {answered}/{total}
-      </div>
+        <div className="font-semibold text-[--color-text]">
+          {answered} / {total} שאלות הושלמו
+        </div>
 
-      <div className="text-sm text-gray-500 -mt-2">שאלות שהושלמו</div>
+        <div className="w-full h-4 bg-[--color-border] rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[--color-primary] transition-all duration-700"
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
 
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-black transition-all duration-500"
-          style={{ width: `${percentage}%` }}
-        />
+        <div className="text-sm text-[--color-secondary-text]">
+          הושלמו {percentage.toFixed(1)}% מתוך כלל השאלות
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

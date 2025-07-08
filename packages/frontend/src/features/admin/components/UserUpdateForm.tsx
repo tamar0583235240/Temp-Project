@@ -1,26 +1,9 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { user } from '../types/userTypes';
-
-type UserFormFields = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string | null;
-  password: string;
-  role: 'student' | 'manager';
-};
-
-const schema: yup.ObjectSchema<UserFormFields> = yup.object({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  phone: yup.string().nullable().notRequired().matches(/^\d*$/, 'Phone number must contain only digits'),
-  password: yup.string().matches(/^(?=.*[A-Za-z\u0590-\u05FF])(?=.*\d)[A-Za-z\u0590-\u05FF\d]{6,}$/, 'Password must include letters (English or Hebrew) and numbers, at least 6 characters').required('Password is required'),
-  role: yup.mixed<UserFormFields['role']>().oneOf(['student', 'manager'], 'Invalid role').required('Role is required'),
-});
+import { userSchema, UserFormFields } from '../validation/userSchema';
+import { ChevronDown } from "lucide-react";
 
 interface Props {
   user: user;
@@ -37,11 +20,11 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: user.phone ?? null, 
+      phone: user.phone ?? '',
       password: user.password,
-      role: (user.role as UserFormFields['role']) || 'student', 
+      role: user.role === 'manager' ? 'manager' : 'student',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(userSchema),
     mode: 'onChange',
   });
 
@@ -49,8 +32,7 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
     const preparedData: Partial<user> = {
       ...user,
       ...data,
-      role: data.role === 'manager' ? 'manager' : data.role, 
-      phone: data.phone === null ? undefined : data.phone, 
+      phone: data.phone === '' ? undefined : data.phone,
     };
 
     await onSubmit(preparedData);
@@ -58,39 +40,85 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitAndClose)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 300 }}>
-      <input {...register('firstName')} placeholder="שם פרטי" />
-      {errors.firstName && <span style={{ color: 'red' }}>{errors.firstName.message}</span>}
+    <form
+      onSubmit={handleSubmit(submitAndClose)}
+      className="flex flex-col gap-2 w-80 mx-auto"
+      dir="rtl"
+    >
+      <input
+        {...register('firstName')}
+        placeholder="שם פרטי"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      {errors.firstName && (
+        <span className="text-red-600 text-sm">{errors.firstName.message}</span>
+      )}
 
-      <input {...register('lastName')} placeholder="שם משפחה" />
-      {errors.lastName && <span style={{ color: 'red' }}>{errors.lastName.message}</span>}
+      <input
+        {...register('lastName')}
+        placeholder="שם משפחה"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      {errors.lastName && (
+        <span className="text-red-600 text-sm">{errors.lastName.message}</span>
+      )}
 
-      <input {...register('email')} placeholder="אימייל" />
-      {errors.email && <span style={{ color: 'red' }}>{errors.email.message}</span>}
+      <input
+        {...register('email')}
+        placeholder="אימייל"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      {errors.email && (
+        <span className="text-red-600 text-sm">{errors.email.message}</span>
+      )}
 
-      <input {...register('phone')} placeholder="טלפון" />
-      {errors.phone && <span style={{ color: 'red' }}>{errors.phone.message}</span>}
+      <input
+        {...register('phone')}
+        placeholder="טלפון"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      {errors.phone && (
+        <span className="text-red-600 text-sm">{errors.phone.message}</span>
+      )}
 
-      <input {...register('password')} type="text" placeholder="סיסמא" />
-      {errors.password && <span style={{ color: 'red' }}>{errors.password.message}</span>}
+      <input
+        {...register('password')}
+        type="text"
+        placeholder="סיסמא"
+        className="text-right border border-gray-300 rounded px-3 py-2"
+      />
+      {errors.password && (
+        <span className="text-red-600 text-sm">{errors.password.message}</span>
+      )}
 
-      <select {...register('role')}>
-        <option value="">בחר תפקיד</option>
-        <option value="student">תלמיד</option>
-        <option value="manager">מנהל</option>
-      </select>
-      {errors.role && <span style={{ color: 'red' }}>{errors.role.message}</span>}
+      <div className="relative">
+        <select
+          {...register('role')}
+          className="text-right text-gray-400 border border-gray-300 rounded px-3 py-2 pr-10 w-full bg-white appearance-none"
+          defaultValue=""
+        >
+          <option value="" disabled hidden>
+            בחר תפקיד
+          </option>
+          <option className="text-black" value="student">
+            תלמיד
+          </option>
+          <option className="text-black" value="manager">
+            מנהל
+          </option>
+        </select>
+        <ChevronDown
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+          size={18}
+        />
+      </div>
+      {errors.role && (
+        <span className="text-red-600 text-sm">{errors.role.message}</span>
+      )}
 
       <button
         type="submit"
-        style={{
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '0.5rem 1rem',
-          borderRadius: '6px',
-          cursor: 'pointer',
-        }}
+        className="bg-primary text-white py-2 rounded-md hover:bg-primary/90 transition"
       >
         שמירה
       </button>

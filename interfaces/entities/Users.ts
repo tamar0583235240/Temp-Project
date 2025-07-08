@@ -11,10 +11,10 @@ export class Users {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("text", { name: "firstName" })
+  @Column("text", { name: "first_name" })
   firstName: string;
 
-  @Column("text", { name: "lastName" })
+  @Column("text", { name: "last_name" })
   lastName: string;
 
   @Column("text", { name: "email", unique: true })
@@ -27,12 +27,12 @@ export class Users {
   role: string;
 
   @Column("timestamp without time zone", {
-    name: "createdAt",
+    name: "created_at",
     default: () => "CURRENT_TIMESTAMP",
   })
   createdAt: Date;
 
-  @Column("boolean", { name: "isActive", default: () => "true" })
+  @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
   @Column("text", { name: "password", nullable: true })

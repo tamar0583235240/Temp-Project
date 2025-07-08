@@ -4,26 +4,26 @@ import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { SharedRecordings } from "./SharedRecordings";
 
-@Index("User_email_key", ["email"], { unique: true })
-@Index("User_pkey", ["id"], { unique: true })
+@Index("users_email_key", ["email"], { unique: true })
+@Index("users_pkey", ["id"], { unique: true })
 @Entity("users", { schema: "public" })
 export class Users {
-  @Column("character varying", { primary: true, name: "id" })
+  @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("character varying", { name: "first_name" })
+  @Column("text", { name: "first_name" })
   firstName: string;
 
-  @Column("character varying", { name: "last_name" })
+  @Column("text", { name: "last_name" })
   lastName: string;
 
-  @Column("character varying", { name: "email", unique: true })
+  @Column("text", { name: "email", unique: true })
   email: string;
 
-  @Column("character varying", { name: "phone", nullable: true })
+  @Column("text", { name: "phone", nullable: true })
   phone: string | null;
 
-  @Column("character varying", { name: "role" })
+  @Column("text", { name: "role" })
   role: string;
 
   @Column("timestamp without time zone", {
@@ -35,8 +35,8 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-  @Column("text", { name: "password", nullable: true })
-  password: string | null;
+  @Column("text", { name: "password" })
+  password: string;
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];

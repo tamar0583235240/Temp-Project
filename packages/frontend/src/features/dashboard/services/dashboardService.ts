@@ -1,4 +1,4 @@
-import { ProgressStats } from '../types/progress';
+import { ProgressStats } from '../types/aiInsightsType';
 
 export const getProgressStats = async (userId: string): Promise<ProgressStats> => {
 const response = await fetch(`http://localhost:5000/api/questions/`);
