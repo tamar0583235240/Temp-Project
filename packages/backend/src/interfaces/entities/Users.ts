@@ -59,4 +59,6 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
+  
 }

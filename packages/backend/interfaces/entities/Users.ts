@@ -5,6 +5,7 @@ import { PasswordResetTokens } from "./PasswordResetTokens";
 import { SharedRecordings } from "./SharedRecordings";
 import { UserReminderSettings } from "./UserReminderSettings";
 
+
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
 @Entity("users", { schema: "public" })
@@ -62,4 +63,6 @@ export class Users {
     (userReminderSettings) => userReminderSettings.user
   )
   userReminderSettings: UserReminderSettings[];
+  
+
 }
