@@ -101,27 +101,24 @@ const InterviewMaterialsList = () => {
         />
       )}
       {editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 relative">
-            <h3 className="text-xl font-semibold mb-4 text-right text-green-800">עריכת משאב</h3>
+        <MessageModal
+          title="עריכת משאב"
+          message={
             <EditInterviewMaterialsSubForm
               id={editingItem.id}
               defaultValues={{
                 title: editingItem.title,
                 shortDescription: editingItem.short_description || "",
               }}
+              fileUrl={editingItem.file_url}
+              thumbnail={editingItem.thumbnail}
               onSuccess={() => setEditingItem(null)}
               onCancel={() => setEditingItem(null)}
             />
-            <button
-              onClick={() => setEditingItem(null)}
-              className="absolute top-2 left-2 text-gray-500 hover:text-gray-700"
-              aria-label="סגור"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
+
+          }
+          onClose={() => setEditingItem(null)}
+        />
       )}
     </>
   );

@@ -27,13 +27,17 @@ const schema = yup.object({
             return allowedTypes.includes(value[0].type);
         }),
 }).required();
+
 type FormValues = yup.InferType<typeof schema>;
 interface EditInterviewMaterialsSubFormProps {
     id: string;
     defaultValues: Partial<FormValues>;
+    fileUrl?: string;
+    thumbnail?: string;
     onSuccess?: () => void;
     onCancel?: () => void;
 }
+
 export const EditInterviewMaterialsSubForm = ({
     id,
     defaultValues,
