@@ -23,6 +23,8 @@
       "jest",
       "node"
     ],
+    "strictPropertyInitialization": false,
+    "strict": true,
   },
   "include": [
     "src",
