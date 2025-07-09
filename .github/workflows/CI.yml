@@ -6,7 +6,7 @@ on:
     branches: [main]
 jobs:
   install-and-test:
-    name: Install, Lint, Build & Test
+    name: Install, Lint, run dev & Test
     runs-on: ubuntu-latest
     defaults:
       run:
