@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import ForgotPassword from "../ForgotPassword";
 import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../../../../features/auth/store/authSlice";
-import { MemoryRouter } from "react-router-dom";
 
 // משתנה גישה דינמית מתוך הטסטים
 let mockForgotPassword = jest.fn();
@@ -114,4 +114,3 @@ describe("ForgotPassword", () => {
     )).toBeInTheDocument();
   });
 });
-

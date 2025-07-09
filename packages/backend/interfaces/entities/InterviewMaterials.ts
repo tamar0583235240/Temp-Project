@@ -2,7 +2,7 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("interview_materials_sub_pkey", ["id"], { unique: true })
 @Entity("interview_materials_sub", { schema: "public" })
-export class InterviewMaterialsSub {
+export class InterviewMaterials {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
 
@@ -17,4 +17,11 @@ export class InterviewMaterialsSub {
 
   @Column("text", { name: "file_url" })
   fileUrl: string;
+
+  @Column("integer", {
+    name: "downloads_count",
+    nullable: true,
+    default: () => "0",
+  })
+  downloadsCount: number | null;
 }

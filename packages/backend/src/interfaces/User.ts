@@ -7,7 +7,7 @@ import { SharedRecordings } from "./entities/SharedRecordings";
 export interface User {
   id: string;
   first_name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   phone: string | null;
   role: string;

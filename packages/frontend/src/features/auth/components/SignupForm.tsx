@@ -33,7 +33,7 @@ export default function SignupForm() {
 
   const [form, setForm] = useState({
     first_name: "",
-    last_name: "",
+    lastName: "",
     email: "",
     password: "",
     phone: "",
@@ -120,7 +120,7 @@ export default function SignupForm() {
           {step === "form" && (
             <>
               <Input name="first_name" placeholder="שם פרטי" value={form.first_name} onChange={handleChange} required />
-              <Input name="last_name" placeholder="שם משפחה" value={form.last_name} onChange={handleChange} required />
+              <Input name="lastName" placeholder="שם משפחה" value={form.lastName} onChange={handleChange} required />
               <Input name="email" type="email" placeholder="אימייל" value={form.email} onChange={handleChange} required />
               <div className="relative">
                 <Input

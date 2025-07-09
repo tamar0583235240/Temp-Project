@@ -14,13 +14,16 @@ export class Users {
   id: string;
 
   @Column("text", { name: "first_name" })
-  first_name: string;
+  firstName: string;
 
   @Column("text", { name: "last_name" })
-  last_name: string;
+  lastName: string;
 
   @Column("text", { name: "email", unique: true })
   email: string;
+
+  @Column("text", { name: "password" })
+  password: string;
 
   @Column("text", { name: "phone", nullable: true })
   phone: string | null;
@@ -36,9 +39,6 @@ export class Users {
 
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
-
-  @Column("text", { name: "password", nullable: true })
-  password: string | null;
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];

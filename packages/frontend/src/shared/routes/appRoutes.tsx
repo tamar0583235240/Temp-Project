@@ -5,37 +5,31 @@ import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
-import { CreateInterviewMaterialsSubForm } from "../../features/knowledge-base/components/CreateInterviewMaterialsSubForm";
 import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
-import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
-import {WorkExperienceTab} from "../../features/profile/components/WorkExperienceTab";
-
+import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
+import ProjectsList from "../../features/profile/components/projects";
+import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
+
   return (
     <div dir="rtl">
       <Routes>
         {/* Routes without sidebar */}
-        {/* <Route path="/work-experience" element={<WorkExperienceTab />} /> */}
-        <Route path="/" element={<LandingPage />} />   
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
-        { <Route path="/signup" element={<SignupForm />} /> }
+        <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/reset-password"
-          element={
-              <ResetPassword />
-          }
-        />
-        {/* Routes with header */}
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* Routes with header (DashboardLayout) */}
         <Route element={<DashboardLayout />}>
           <Route
             path="/home"
@@ -54,7 +48,7 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path="settings"
+            path="/settings"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <SettingsPage />
@@ -105,7 +99,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialPage />
+                <InterviewMaterialsView />
               </RoleProtectedRoute>
             }
           />
@@ -137,10 +131,27 @@ export default function AppRoutes() {
             path="/manager/interview-materials"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <InterviewMaterialsHub />
+                <InterviewMaterialsView />
               </RoleProtectedRoute>
             }
           />
+          <Route
+            path="/personal-projects"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProjectsList userId={user?.id ?? ""} />
+              </RoleProtectedRoute>
+            }
+          />
+          {/* אם תרצי להוסיף נתיב ל-WorkExperienceTab, הוסיפי כאן */}
+          {/* <Route
+            path="/work-experience"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <WorkExperienceTab />
+              </RoleProtectedRoute>
+            }
+          /> */}
         </Route>
       </Routes>
     </div>
