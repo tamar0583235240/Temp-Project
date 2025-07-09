@@ -6,6 +6,7 @@ import { SearchComponents } from "../../features/recordings/components/searchCom
 import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
 import { SortComponents } from "../../features/recordings/components/sortComponents"
 import { AdminQuestions } from "../../features/admin/components/adminQuestions";
+import AdminTipsAndPractices from "../../features/admin/components/AdminTipsAndPractices";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
@@ -69,7 +70,12 @@ export default function AppRoutes() {
               <p>AdminResources</p>
             </RoleProtectedRoute>
           } />
-          </Route>
+          <Route path="/admin/reminders" element={
+            <RoleProtectedRoute allowedRoles={["admin"]}>
+              <AdminTipsAndPractices />
+            </RoleProtectedRoute>
+          } />
+        </Route>
       </Routes>
     </div>
   );

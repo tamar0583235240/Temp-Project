@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
   { label: "Resources", href: "/resources" },
   { label: "Admin", href: "", isSectionTitle: true },
   { label: "Manage Questions", href: "/admin/questions" },
+  { label: "Manage Tips & Practices", href: "/admin/reminders" },
   { label: "Manage Users", href: "/admin/users" },
   { label: "Manage Resources", href: "/admin/resources" },
 ];
