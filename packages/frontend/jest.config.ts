@@ -1,17 +1,6 @@
-// module.exports = {
-//   preset: 'ts-jest',
-//   testEnvironment: 'jsdom',
-//   transformIgnorePatterns: [
-//     "/node_modules/(?!@reduxjs|@standard-schema).+\\.js$"
-//   ],
-// };
-
-export default {
-  preset: 'ts-jest',
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['./src/setupTests.ts'],
+module.exports = {
   transformIgnorePatterns: [
-    '/node_modules/(?!(\\@standard-schema)/)',
+    "/node_modules/(?!(@reduxjs/toolkit|@standard-schema)/)"
   ],
 };
 
