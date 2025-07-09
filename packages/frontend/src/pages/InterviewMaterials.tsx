@@ -1,6 +1,5 @@
 import React from 'react'
-// import {InterviewMaterialsList} from '../features/infoItems/components/InterviewMaterialsList';
-import InterviewMaterialView from '../features/knowledge-base/components/interviewMaterialPage';
+import InterviewMaterialView from '../features/knowledge-base/components/InterviewMaterialsView';
 
 const InterviewMaterials = () => {
   return (

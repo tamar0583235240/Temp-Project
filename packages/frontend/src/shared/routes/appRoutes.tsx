@@ -14,26 +14,25 @@ import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterials";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 
+import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
+import ProjectsList from "../../features/profile/components/projects";
+import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
+
   return (
     <div dir="rtl">
       <Routes>
         {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
-     
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/reset-password"
-          element={
-              <ResetPassword />
-          }
-        />
-        {/* Routes with header */}
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* Routes with header (DashboardLayout) */}
         <Route element={<DashboardLayout />}>
           <Route
             path="/home"
@@ -52,7 +51,7 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path="settings"
+            path="/settings"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <SettingsPage />
@@ -103,7 +102,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialsHub />
+                <InterviewMaterialsView />
               </RoleProtectedRoute>
             }
           />
@@ -135,10 +134,27 @@ export default function AppRoutes() {
             path="/manager/interview-materials"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <InterviewMaterialPage />
+                <InterviewMaterialsView />
               </RoleProtectedRoute>
             }
           />
+          <Route
+            path="/personal-projects"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProjectsList userId={user?.id ?? ""} />
+              </RoleProtectedRoute>
+            }
+          />
+          {/* אם תרצי להוסיף נתיב ל-WorkExperienceTab, הוסיפי כאן */}
+          {/* <Route
+            path="/work-experience"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <WorkExperienceTab />
+              </RoleProtectedRoute>
+            }
+          /> */}
         </Route>
       </Routes>
     </div>

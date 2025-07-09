@@ -4,6 +4,7 @@ import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+import { WorkExperiences } from "./WorkExperiences";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -59,4 +60,7 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
+  @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
+  workExperiences: WorkExperiences[];
 }

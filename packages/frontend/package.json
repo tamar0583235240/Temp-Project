@@ -17,8 +17,11 @@
     "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
     "axios": "^1.4.0",
     "clsx": "^2.1.1",
+    "core-js-pure": "^3.43.0",
     "cross-fetch": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.522.0",
@@ -27,7 +30,7 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.1",
     "react-hot-toast": "^2.5.2",
-    "react-icons": "^4.10.1",
+    "react-icons": "^4.12.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.14.2",
     "react-scripts": "^5.0.1",
@@ -87,5 +90,4 @@
       "last 1 safari version"
     ]
   }
- 
 }
