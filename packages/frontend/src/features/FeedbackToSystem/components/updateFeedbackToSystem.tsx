@@ -109,7 +109,7 @@ export const UpdateFeedbackToSystem = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl h-[90vh] flex flex-col">
                 <CardSimple className="h-full flex flex-col p-0">
-                    {/* Header */}
+                    {/* Header - נעוץ למעלה */}
                     <div className="flex justify-between items-center p-6 border-b border-border flex-shrink-0">
                         <div className="flex items-center gap-3">
                             <IconWrapper color="primary-dark" size="sm">
@@ -127,7 +127,7 @@ export const UpdateFeedbackToSystem = ({
                         </Button>
                     </div>
 
-                    {/* Content */}
+                    {/* Content - גלילה */}
                     <div className="flex-1 overflow-y-auto">
                         <form onSubmit={handleEdit} className="p-6">
                             <div className="space-y-8">
@@ -221,7 +221,7 @@ export const UpdateFeedbackToSystem = ({
                                             htmlFor="file-upload"
                                             className="cursor-pointer text-sm text-text-secondary hover:text-primary-dark"
                                         >
-                                            לחץ לבחירת קובץ או גרור קובץ לכאן
+                                            לחץ להעלת קובץ אחר
                                         </label>
                                         
                                         {/* הצגת קובץ קודם */}
@@ -254,28 +254,29 @@ export const UpdateFeedbackToSystem = ({
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Footer */}
-                            <div className="flex justify-between gap-3 mt-8 pt-6 border-t border-border">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => onClose()}
-                                    disabled={isLoading}
-                                    className="flex-1"
-                                >
-                                    ביטול
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="primary-dark"
-                                    disabled={isLoading}
-                                    className="flex-1 min-w-[120px]"
-                                >
-                                    {isLoading ? <Spinner /> : "עדכן פידבק"}
-                                </Button>
-                            </div>
                         </form>
+                    </div>
+
+                    {/* Footer - נעוץ למטה */}
+                    <div className="flex justify-between gap-3 p-6 border-t border-border bg-gray-50 flex-shrink-0">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => onClose()}
+                            disabled={isLoading}
+                            className="flex-1"
+                        >
+                            ביטול
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="primary-dark"
+                            disabled={isLoading}
+                            className="flex-1 min-w-[120px]"
+                            onClick={handleEdit}
+                        >
+                            {isLoading ? <Spinner /> : "עדכן פידבק"}
+                        </Button>
                     </div>
                 </CardSimple>
             </div>
