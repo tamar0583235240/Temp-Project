@@ -11,7 +11,7 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // אם את צריכה את זה – תשאירי
-import WorkExperience from './features/profile/components/WorkExperienceTab';
+import {WorkExperienceTab} from './features/profile/components/WorkExperienceTab';
 // או אם את לא צריכה – אפשר למחוק
 
 function App() {
@@ -41,15 +41,30 @@ function App() {
   const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <Provider store={store}>
-        <MessageModalProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </MessageModalProvider>
-      </Provider>
-    </GoogleOAuthProvider>
+   
+    // <GoogleOAuthProvider clientId={clientId}>
+    //   <Provider store={store}>
+    //     <MessageModalProvider>
+    //       <BrowserRouter>
+    //         <AppRoutes />
+    //       </BrowserRouter>
+    //     </MessageModalProvider>
+    //   </Provider>
+    // </GoogleOAuthProvider>
+
+<GoogleOAuthProvider clientId={clientId}>
+  <Provider store={store}>
+    <MessageModalProvider>
+      <BrowserRouter>
+        <AppRoutes />
+        {/* כאן רק לצורך בדיקה - תורידי אם את כבר מציגה את זה בתוך Route */}
+        {!loading && <WorkExperienceTab />}
+      </BrowserRouter>
+    </MessageModalProvider>
+  </Provider>
+</GoogleOAuthProvider>
+
+
   );
 }
 

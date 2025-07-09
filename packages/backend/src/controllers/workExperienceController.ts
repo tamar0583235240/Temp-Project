@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const getAllWorkExperiences = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string;
+    const userId = req.query.user_id as string;
+
     if (!userId) {
       return res.status(400).json({ message: 'userId is required' });
     }
@@ -64,10 +65,15 @@ export const updateWorkExperience = async (req: Request, res: Response) => {
     const id = req.params.id;
     const data: Partial<WorkExperiences> = req.body;
 
+     console.log(`Received update for work experience ID: ${id}`);
+    console.log("Update data:", data);
+
     const updated = await workExperienceRepository.updateWorkExperience(id, data);
     if (!updated) {
+            console.warn(`Work experience with ID ${id} not found`);
       return res.status(404).json({ message: "Work experience not found" });
     }
+    console.log("Updated work experience:", updated);
 
     res.json(updated);
   } catch (error) {

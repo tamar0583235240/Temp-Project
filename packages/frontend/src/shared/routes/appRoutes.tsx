@@ -14,20 +14,20 @@ import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import {WorkExperienceTab} from "../../features/profile/components/WorkExperienceTab";
 
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
-
   return (
     <div dir="rtl">
       <Routes>
         {/* Routes without sidebar */}
-        <Route path="/" element={<LandingPage />} />
-     
+        {/* <Route path="/work-experience" element={<WorkExperienceTab />} /> */}
+        <Route path="/" element={<LandingPage />} />   
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupForm />} />
+        { <Route path="/signup" element={<SignupForm />} /> }
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/reset-password"

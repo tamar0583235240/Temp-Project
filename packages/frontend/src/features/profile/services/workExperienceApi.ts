@@ -3,7 +3,7 @@ import { api } from "../../../shared/api/api";
 export const workExperienceApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getWorkExperiences: builder.query({
-      query: (userId: string) => `/work-experience?userId=${userId}`,
+      query: (user_id: string) => `/work-experience?user_id=${user_id}`,
     }),
     createWorkExperience: builder.mutation({
       query: (data) => ({

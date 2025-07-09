@@ -219,8 +219,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       sharedRecordings: [],
       createdAt: new Date(),
-      resources: [],
-      userActivities: [],       
+      resources: [],     
      workExperiences: [] 
       
     },
@@ -309,8 +308,7 @@ export const signup = async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
-    resources: [],
-    userActivities: [],       
+    resources: [],     
     workExperiences: [] 
   };
 

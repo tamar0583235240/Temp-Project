@@ -6,7 +6,7 @@ export interface WorkExperience {
   description: string;
   startDate: string;
   endDate?: string;
-  isPublic: boolean;
+  is_public: boolean;
   createdAt: string;
   updatedAt: string;
 }
