@@ -39,11 +39,10 @@ export const updateProfileByUserIdHandler = async (
   req: Request,
   res: Response
 ) => {
-  const userId = req.params.userId; // This is the userId from the URL
+  const userId = req.params.userId;
   const data = req.body;
 
   try {
-    // Now we use `findProfileByUserId`, which looks for `user_id`
     const profile = await findProfileByUserId(userId);
 
     if (!profile) {

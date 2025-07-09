@@ -21,6 +21,7 @@ import InterviewMaterialPage from "../../features/knowledge-base/components/inte
 import ProfileList from "../../features/profile/components/ProfileList";
 import EditProfilePage from "../../pages/my-profile";
 import MyProfileViewPage from "../../pages/my-profile-view";
+import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -64,7 +65,7 @@ export default function AppRoutes() {
             path="/my-profile/edit"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <EditProfilePage />
+                <ProfileAccordionPage />
               </RoleProtectedRoute>
             }
           />

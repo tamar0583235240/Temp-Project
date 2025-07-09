@@ -32,8 +32,23 @@ const EditProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [linkErrors, setLinkErrors] = useState<string[]>([]);
 
   const API_BASE_URL = "http://localhost:5000";
+
+  const labelOptions = [
+    "LinkedIn",
+    "GitHub",
+    "Stack Overflow",
+    "Dev.to",
+    "Medium",
+    "Behance",
+    "Dribbble",
+    "CodePen",
+    "Notion",
+    "Google Drive / PDF",
+    "Other",
+  ];
 
   // Fetch profile data on component mount
   useEffect(() => {
@@ -83,10 +98,45 @@ const EditProfilePage = () => {
       ...updatedLinks[index],
       [field]: value.trim(),
     };
+
+    const updatedErrors = [...linkErrors];
+
+    // נקבל את הערכים אחרי העדכון
+    const currentLabel = updatedLinks[index].label;
+    const currentUrl = updatedLinks[index].url;
+
+    // נבצע ולידציה
+    updatedErrors[index] = validateLink(currentLabel, currentUrl);
+
     setFormData((prev: any) => ({
       ...prev,
       external_links: updatedLinks,
     }));
+    setLinkErrors(updatedErrors);
+  };
+
+  const isValidUrl = (url: string): boolean => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const validateLink = (label: string, url: string): string => {
+    if (!url) return "";
+    if (!isValidUrl(url)) return "כתובת לא תקינה";
+
+    if (
+      label !== "Other" &&
+      labelUrlMatchers[label] &&
+      !labelUrlMatchers[label](url)
+    ) {
+      return `כתובת ה-URL לא תואמת לתווית "${label}"`;
+    }
+
+    return "";
   };
 
   // Handle adding a new link
@@ -124,6 +174,17 @@ const EditProfilePage = () => {
     setSaving(true);
     setError("");
 
+    if (linkErrors.some((err) => err)) {
+      setError("אנא תקני את הקישורים הלא תקינים לפני שמירה.");
+      setSaving(false);
+      return;
+    }
+
+    if (linkErrors.some((err) => err)) {
+      setError("אנא תקני את הקישורים הלא תקינים לפני שמירה.");
+      return;
+    }
+
     try {
       await axios.put(`${API_BASE_URL}/profiles/user/${user.id}`, formData);
       showMessage("", "הפרופיל עודכן בהצלחה");
@@ -139,10 +200,27 @@ const EditProfilePage = () => {
     }
   };
 
+  const labelUrlMatchers: Record<string, (url: string) => boolean> = {
+    LinkedIn: (url) => url.includes("linkedin.com"),
+    GitHub: (url) => url.includes("github.com"),
+    "Stack Overflow": (url) => url.includes("stackoverflow.com"),
+    "Dev.to": (url) => url.includes("dev.to"),
+    Medium: (url) => url.includes("medium.com"),
+    Behance: (url) => url.includes("behance.net"),
+    Dribbble: (url) => url.includes("dribbble.com"),
+    CodePen: (url) => url.includes("codepen.io"),
+    Notion: (url) => url.includes("notion.so"),
+    "Google Drive / PDF": (url) =>
+      url.includes("drive.google.com") || url.endsWith(".pdf"),
+    Other: () => true, // Other - אין בדיקה מיוחדת
+  };
+
   // Loading states
   if (loading) return <p className="text-center mt-8">טוען פרופיל...</p>;
   if (!user) return <p className="text-center mt-8">אין משתמש מחובר</p>;
-  if (error) return <p className="text-center mt-8 text-red-500">{error}</p>;
+  if (error && !error.includes("קישורים")) {
+    return <p className="text-center mt-8 text-red-500">{error}</p>;
+  }
 
   // Disabled button logic to avoid empty URLs
   const isAddButtonDisabled = Object.values(formData.external_links).some(
@@ -150,10 +228,7 @@ const EditProfilePage = () => {
   );
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow mt-8">
-      <h1 className="text-2xl font-bold text-center mb-6">
-        <FaPen className="inline mr-2" /> עריכת פרופיל
-      </h1>
+    <div className="max-w-xl mx-auto p-6 bg-white rounded-xl">
       <div>
         <ToggleSwitch
           checked={formData.is_public}
@@ -206,25 +281,57 @@ const EditProfilePage = () => {
           <label className="block mb-1 font-medium">קישורים חיצוניים</label>
           {formData.external_links.map(
             (link: { url: string; label: string }, index: number) => (
-              <div key={index} className="mb-2">
+              <div key={index} className="mb-4">
+                {/* שדה כתובת URL כפי שהיה */}
                 <input
                   type="text"
-                  placeholder={`URL ${index}`}
+                  placeholder={`URL ${index + 1}`}
                   value={link.url || ""}
                   onChange={(e) =>
                     handleLinkChange(index, "url", e.target.value)
                   }
                   className="w-full border rounded px-3 py-2 mb-2"
                 />
-                <input
-                  type="text"
-                  placeholder={`Label ${index}`}
-                  value={link.label || ""}
+                {linkErrors[index] && (
+                  <p className="text-sm text-red-500 mb-1">
+                    {linkErrors[index]}
+                  </p>
+                )}
+
+                {/* select תווית */}
+                <select
+                  value={
+                    labelOptions.includes(link.label) ? link.label : "Other"
+                  }
                   onChange={(e) =>
                     handleLinkChange(index, "label", e.target.value)
                   }
                   className="w-full border rounded px-3 py-2 mb-2"
-                />
+                >
+                  <option value="" disabled hidden>
+                    תווית הקישור
+                  </option>
+                  {labelOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+
+                {/* אם נבחר "Other" - אפשר להקליד תווית חופשית */}
+                {(!labelOptions.includes(link.label) ||
+                  link.label === "Other") && (
+                  <input
+                    type="text"
+                    placeholder="הקלד תווית"
+                    value={labelOptions.includes(link.label) ? "" : link.label}
+                    onChange={(e) =>
+                      handleLinkChange(index, "label", e.target.value)
+                    }
+                    className="w-full border rounded px-3 py-2 mb-2"
+                  />
+                )}
+
                 <button
                   type="button"
                   onClick={() => handleRemoveLink(index)}
@@ -244,6 +351,8 @@ const EditProfilePage = () => {
             הוסף קישור חדש
           </button>
         </div>
+
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         {/* כפתור שמירה */}
         <button

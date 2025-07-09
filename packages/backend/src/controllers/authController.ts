@@ -220,7 +220,8 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       sharedRecordings: [],
       createdAt: new Date(),
-      resources: []
+      resources: [],
+      userReminderSettings: [],
     },
     code,
     expiresAt,
@@ -307,7 +308,8 @@ export const signup = async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
-    resources: []
+    resources: [],
+    userReminderSettings: [],
   };
 
   await authRepository.signup(newUser);

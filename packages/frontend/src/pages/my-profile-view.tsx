@@ -4,10 +4,18 @@ import { RootState } from "../shared/store/store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
+  FaBehance,
+  FaCodepen,
+  FaDev,
+  FaDribbble,
   FaExternalLinkAlt,
+  FaFileAlt,
+  FaFilePdf,
   FaGithub,
   FaGlobe,
   FaLinkedin,
+  FaMedium,
+  FaStackOverflow,
   FaUserCircle,
 } from "react-icons/fa";
 
@@ -39,12 +47,20 @@ const MyProfileViewPage = () => {
     fetchProfile();
   }, [user]);
 
-  const getIconForLink = (url: string) => {
-    if (url.includes("github.com")) return <FaGithub />;
-    if (url.includes("linkedin.com")) return <FaLinkedin />;
-    if (url.startsWith("http")) return <FaGlobe />;
-    return <FaExternalLinkAlt />;
-  };
+ const getIconForLink = (url: string) => {
+  if (url.includes("linkedin.com")) return <FaLinkedin />;
+  if (url.includes("github.com")) return <FaGithub />;
+  if (url.includes("stackoverflow.com")) return <FaStackOverflow />;
+  if (url.includes("dev.to")) return <FaDev />;
+  if (url.includes("medium.com")) return <FaMedium />;
+  if (url.includes("behance.net")) return <FaBehance />;
+  if (url.includes("dribbble.com")) return <FaDribbble />;
+  if (url.includes("codepen.io")) return <FaCodepen />;
+  if (url.includes("notion.so")) return <FaFileAlt />;
+  if (url.includes("drive.google.com") || url.endsWith(".pdf")) return <FaFilePdf />;
+  if (url.startsWith("http")) return <FaGlobe />;
+  return <FaExternalLinkAlt />;
+};
 
   if (loading) return <p>טוען פרופיל...</p>;
   if (error) return <p className="text-red-500">{error}</p>;

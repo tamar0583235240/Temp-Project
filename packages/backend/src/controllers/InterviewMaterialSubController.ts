@@ -30,7 +30,6 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
         
         let updatedThumbnail = existingMaterialSub.thumbnail;
         let updatedFileUrl = existingMaterialSub.fileUrl;
-        let updatedFileUrl = existingMaterialSub.fileUrl;
 
         if (files?.thumbnail?.[0]) {
             const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
@@ -39,7 +38,6 @@ export const updateInterviewMaterialSub = async (req: Request, res: Response): P
             updatedThumbnail = thumbnailResult.secure_url;
         }
         if (files?.file?.[0]) {
-            const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
             const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
             if (match && match[1]) { await deleteFileFromCloudinary(match[1]); }
             const fileResult = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
