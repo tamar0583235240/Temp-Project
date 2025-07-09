@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcrypt';
-import { createUserSchema, updateUserSchema } from '../utils/userValidation';
 import { insertUsersFromExcel } from '../reposioty/userRpository';
+import { createUserSchema, updateUserSchema } from '../validations/userValidation';
 
 function mapUserRowToCamelCase(row: any) {
   return {
@@ -164,10 +163,11 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 
-
 export const uploadUsersExcel = async (req: Request, res: Response) => {
   try {
-    if (!req.file) return res.status(400).send('לא נשלח קובץ');
+    if (!req.file) {
+      return res.status(400).send('לא נשלח קובץ');
+    }
 
     const { insertedUsers, skippedUsers } = await insertUsersFromExcel(req.file.path);
 
@@ -175,7 +175,7 @@ export const uploadUsersExcel = async (req: Request, res: Response) => {
       message: 'עיבוד הקובץ הסתיים',
       successCount: insertedUsers.length,
       skippedCount: skippedUsers.length,
-      skippedUsers,
+      skippedUsers: skippedUsers.map(({ email, reason }) => ({ email, reason })),
     });
   } catch (error) {
     console.error('Excel upload error:', error);

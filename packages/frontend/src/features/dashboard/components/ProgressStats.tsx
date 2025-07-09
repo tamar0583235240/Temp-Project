@@ -3,7 +3,6 @@ import { BarChart2 } from "lucide-react";
 import { useUserStore } from "../store/progressSlice";
 import { useGetProgressStatsQuery } from "../../../shared/api/question";
 
-
 const ProgressStats: React.FC = () => {
   const userId =
     useUserStore((state) => state.userId) || "00000000-0000-0000-0000-000000000000";

@@ -3,6 +3,9 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import AdminUser from "../../pages/AdminUser"; 
 import Dashboard from '../../pages/dashboard';
+import Activity_Monitoring from "../../pages/Activity_Monitoring";
+import States from "../../features/activity-Monitoring/hooks/States";
+import StatsDashboard from "../../pages/StatsDashboard";
 
 export default function AppRoutes() {
     return (
@@ -15,7 +18,7 @@ export default function AppRoutes() {
                 </RoleProtectedRoute>
             } />
             <Route path="/dashboard" element={
-                <RoleProtectedRoute allowedRoles={["student"]}>
+                <RoleProtectedRoute allowedRoles={["admin"]}>
                     <Dashboard />
                 </RoleProtectedRoute>
             } />
@@ -47,6 +50,12 @@ export default function AppRoutes() {
             <Route path="/admin/resources" element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
                     <p>AdminResources</p>
+                </RoleProtectedRoute>
+            } />
+               <Route path="/admin/monitoring" element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                {/* {<Activity_Monitoring />} */}
+                {<StatsDashboard/>}
                 </RoleProtectedRoute>
             } />
         </Routes>
