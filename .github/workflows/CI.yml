@@ -111,13 +111,3 @@ jobs:
             echo ":x: Found unexpected .env files:" && echo "$INVALID_ENVS" && exit 1
           fi
           echo ":white_check_mark: No unexpected .env files found."
-
-
-
-
-
-
-
-
-
-
