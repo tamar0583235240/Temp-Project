@@ -5,6 +5,7 @@ import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
 
+
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
 @Entity("users", { schema: "public" })
@@ -59,4 +60,5 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
 }
