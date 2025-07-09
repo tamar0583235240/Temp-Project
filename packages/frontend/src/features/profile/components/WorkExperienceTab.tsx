@@ -118,7 +118,7 @@ const payload = {
                   {data.company_name} – {data.position}
                 </div>
                 <div className="text-sm text-text-secondary">
-                  {data.start_date ? new Date(data.start_date).toLocaleDateString() : "לא ידוע"} עד{" "}
+                 {"מ-"} {data.start_date ? new Date(data.start_date).toLocaleDateString() : "לא ידוע"} עד{" "}
                   {data.end_date ? new Date(data.end_date).toLocaleDateString() : "היום"}
                 </div>
                 <p className="mt-1">{data.description}</p>

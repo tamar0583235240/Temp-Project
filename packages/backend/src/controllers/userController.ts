@@ -54,7 +54,7 @@ export const createUser = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName:first_name,
+    first_name:first_name,
     last_name,
     email,
     phone,

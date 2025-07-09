@@ -14,7 +14,7 @@ export class Users {
   id: string;
 
   @Column("text", { name: "first_name" })
-  firstName: string;
+  first_name: string;
 
   @Column("text", { name: "last_name" })
   last_name: string;

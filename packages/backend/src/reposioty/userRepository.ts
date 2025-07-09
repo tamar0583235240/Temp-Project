@@ -67,14 +67,14 @@ const updateUser = async (
   userData: Partial<Users>
 ): Promise<Users | null> => {
   try {
-    const { firstName, last_name, email, phone, role, isActive, password } =
+    const { first_name, last_name, email, phone, role, isActive, password } =
       userData;
 
         const res = await pool.query(`
             UPDATE users 
             SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password)
             WHERE id = $8 RETURNING *`,
-      [firstName, last_name, email, phone, role, isActive, password, id]
+      [first_name, last_name, email, phone, role, isActive, password, id]
     );
     return res.rows[0] || null;
   } catch (error) {
@@ -113,7 +113,7 @@ const createUser = async (user: Users): Promise<Users> => {
              VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7)
              RETURNING *`,
       [
-        user.firstName,
+        user.first_name,
         user.last_name,
         user.email,
         user.phone,
