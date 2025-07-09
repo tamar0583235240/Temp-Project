@@ -7,7 +7,7 @@ import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
 import AnswerAI from "../../interview/components/AnswerAI";
 import MagicLoader from "../../interview/components/MagicLoader";
-import { answerQuestion } from "../store/simulationSlice";
+// import { answeredQuestions } from "../store/simulationSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
@@ -15,18 +15,14 @@ import { RootState } from "../../../shared/store/store";
 interface QuestionProps {
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
-  showTips?: boolean;
-  answerIdForAI?: string | null;
-  isLoadingAI?: boolean;
+
 }
 
 const Question: React.FC<QuestionProps> = ({
   onFinishRecording,
   onAnswerSaved,
-  showTips,
-  answerIdForAI,
-  isLoadingAI
 }) => {
+  
   const dispatch = useDispatch();
   const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
@@ -79,11 +75,13 @@ const Question: React.FC<QuestionProps> = ({
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
               שאלה {currentIndex + 1}
             </span>
+            
           </div>
           <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
             {currentQuestion.title}
+           
           </div>
-
+ {/* <p>{currentQuestion.content}</p> */}
           <div className="flex gap-4 w-full">
             {/* העלאת קובץ */}
             <div className="w-1/2">
@@ -132,14 +130,14 @@ const Question: React.FC<QuestionProps> = ({
               {selectedFile && isUploading && (
                 <FileUpload
                   userId={currentUserId}
-                  questionId={String(currentQuestion.id)}
-                  file={selectedFile}
+                  // questionId={String(currentQuestion.id)}
+                  // file={selectedFile}
                   onUploaded={async (fileUrl, fileName) => {
                     setIsUploading(false);
                     setSelectedFile(null);
                     setShowFileActions(false);
                     if (fileInputRef.current) fileInputRef.current.value = "";
-                    dispatch(answerQuestion({ index: currentIndex, answer: 'טוען...' }));
+                    // dispatch(answeredQuestions({ index: currentIndex, answer: 'טוען...' }));
                     try {
                       await uploadAnswer({
                         userId: currentUserId,
@@ -148,7 +146,7 @@ const Question: React.FC<QuestionProps> = ({
                         amountFeedbacks: 0,
                         answerFileName: fileName,
                       }).unwrap();
-                      dispatch(answerQuestion({ index: currentIndex, answer: fileUrl }));
+                      // dispatch(answeredQuestions({ index: currentIndex, answer: fileUrl }));
                       setNotification({
                         message: "הקובץ נשמר בהצלחה!",
                         type: "success",
@@ -157,7 +155,7 @@ const Question: React.FC<QuestionProps> = ({
                       setTimeout(() => setNotification(null), 3500);
                       onAnswerSaved?.("id-from-response"); // כאן שימי את ה־id האמיתי אם יש לך
                     } catch (e) {
-                      dispatch(answerQuestion({ index: currentIndex, answer: '' }));
+                      // dispatch(answeredQuestions({ index: currentIndex, answer: '' }));
                       setNotification({
                         message: "שגיאה בשמירת התשובה",
                         type: "error",
@@ -193,10 +191,7 @@ const Question: React.FC<QuestionProps> = ({
           </div>
         </div>
       </div>
-      {/* כאן יוצג הטיפ וה-AI מתחת לשאלה
-      <div className="w-full flex flex-col items-center mt-4 gap-4">
-        {selectedFile && showFileActions && !isUploading && <TipsComponent />}
-      </div> */}
+
     </div>
   );
 };

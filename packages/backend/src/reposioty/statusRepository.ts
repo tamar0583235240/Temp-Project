@@ -8,7 +8,7 @@ const getUserAnsweredQuestions
   ): Promise<Questions[]> => {
     try {
       const query = `
-      SELECT q.id, q.title, q.content, q.category, q.tips, q.ai_guidance, q.is_active, q.options, q.question_type
+      SELECT q.id, q.title, q.content, q.category, q.tips, q.ai_guidance, q.is_active, 
       FROM "answers" a
       INNER JOIN "questions" q ON a.question_id = q.id
       WHERE a.user_id = $1 AND q.category = $2

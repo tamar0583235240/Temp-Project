@@ -18,19 +18,19 @@ const simulationSlice = createSlice({
     setQuestions(state, action: PayloadAction<interviewType[]>) {
       state.questions = action.payload;
     },
-    answerQuestion(
-      state,
-      action: PayloadAction<{ index: number; answer: string; answerId?: string }>
-    ) {
-      const { index, answer, answerId } = action.payload;
-      if (state.questions[index]) {
-        state.questions[index].answer = answer;
-        state.questions[index].answered = true;
-        if (answerId) {
-          state.currentAnswerId = answerId;
-        }
-      }
-    },
+    // answeredQuestions(
+    //   state,
+    //   action: PayloadAction<{ index: number; answer: string; answerId?: string }>
+    // ) {
+    //   const { index, answer, answerId } = action.payload;
+    //   if (state.questions[index]) {
+    //     state.questions[index].answer = answer;
+    //     state.questions[index].answered = true;
+    //     if (answerId) {
+    //       state.currentAnswerId = answerId;
+    //     }
+    //   }
+    // },
     setCurrentAnswerId(state, action: PayloadAction<string | null>) {
       state.currentAnswerId = action.payload ?? "";
     },
@@ -43,25 +43,25 @@ const simulationSlice = createSlice({
       state.currentUserId = action.payload ?? "";
     },
 
-    resetQuestion(state, action: PayloadAction<number>) {
-      const index = action.payload;
-      if (state.questions[index]) {
-        state.questions[index].answer = "";
-        state.questions[index].answered = false;
-      }
-    },
+    // resetQuestion(state, action: PayloadAction<number>) {
+    //   const index = action.payload;
+    //   if (state.questions[index]) {
+    //     state.questions[index].answer = "";
+    //     state.questions[index].answered = false;
+    //   }
+    // },
 
-    nextQuestion(state) {
-      if (state.currentIndex < state.questions.length - 1) {
-        state.currentIndex++;
-      }
-    },
+    // nextQuestion(state) {
+    //   if (state.currentIndex < state.questions.length - 1) {
+    //     state.currentIndex++;
+    //   }
+    // },
 
-    prevQuestion(state) {
-      if (state.currentIndex > 0) {
-        state.currentIndex--;
-      }
-    },
+    // prevQuestion(state) {
+    //   if (state.currentIndex > 0) {
+    //     state.currentIndex--;
+    //   }
+    // },
 
     goToQuestion(state, action: PayloadAction<number>) {
       state.currentIndex = action.payload;
@@ -70,10 +70,10 @@ const simulationSlice = createSlice({
 });
 export const {
   setQuestions,
-  answerQuestion,
-  resetQuestion,
-  nextQuestion,
-  prevQuestion,
+  // answeredQuestions,
+  // resetQuestion,
+  // nextQuestion,
+  // prevQuestion,
   goToQuestion,
   setCurrentAnswerId,
   setCurrentUserId,

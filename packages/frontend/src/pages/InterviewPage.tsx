@@ -25,8 +25,9 @@ const InterviewPage = () => {
   const { currentCategoryId, currentIndex } = useSelector(
     (state: RootState) => state.simulation
   );
-const { data: questions = [], isLoading, isError } =
-  useGetQuestionsByCategoryQuery(currentCategoryId || skipToken, {
+
+  const { data: questions = [], isLoading, isError } =
+    useGetQuestionsByCategoryQuery(currentCategoryId || skipToken, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -63,8 +64,8 @@ useEffect(() => {
 
 
   if (isLoading) return <p className="p-8 text-center">טוען שאלות...</p>;
-  if (isError || !questions.length)
-    return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
+  // if (isError || !questions.length)
+  //   return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
 
 const handleAnswerSaved = (answerId: string) => {
   const q = questions[currentIndex];
@@ -89,9 +90,6 @@ const handleAnswerSaved = (answerId: string) => {
           <Question
             onFinishRecording={() => setShowTips(true)}
             onAnswerSaved={handleAnswerSaved}
-            showTips={isCurrentQuestionAnswered}
-            answerIdForAI={isCurrentQuestionAnswered ? answerIdForAI : null}
-            isLoadingAI={isLoadingAI}
           />
         </div>
 
