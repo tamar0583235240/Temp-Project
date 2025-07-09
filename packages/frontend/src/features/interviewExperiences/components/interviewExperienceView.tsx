@@ -39,7 +39,7 @@ export const InterviewExperienceView = (props: { interviewExperience: interviewE
             <p>{interviewExperience.anonymous ? '💁‍♂️' +  getUserNameById(interviewExperience.user_id ?interviewExperience.user_id : '') : '👤אנונימית'}</p>
             <p>מתראיין לחברת {interviewExperience.company_name}</p>
             <p>התפקיד אליו התראיין: {interviewExperience.position}</p>
-            
+
             <p>:שאלות שנשאלו בראיון</p>
             <p>{interviewExperience.questions}</p>
             <p>תיאור החוויה: {interviewExperience.description}</p>
@@ -56,7 +56,7 @@ export const InterviewExperienceView = (props: { interviewExperience: interviewE
             <p>{interviewExperience.tips}</p>
             <p>{interviewExperience.hired ? 'התקבלה לעבודה! ✅' : 'לא התקבלה לעבודה ❌'}</p>
             <p> {experienceThanks.length} תודות </p>
-            <button onClick={addThunk} disabled={isThanks}>🙏 תודה על השיתוף</button>
+            <button onClick={addThunk} disabled={isThanks || experienceThanks.find(e => e.experience_id == interviewExperience.id && e.user_id == user?.id) != undefined}>🙏 תודה על השיתוף</button>
             <p>פורסם ב {new Date(interviewExperience.created_at ? interviewExperience.created_at : '')?.toLocaleDateString()}</p>
 
         </dialog>
