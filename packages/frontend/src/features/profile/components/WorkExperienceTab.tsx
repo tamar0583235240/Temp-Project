@@ -42,15 +42,6 @@ export const WorkExperienceTab = () => {
 
   const handleSave = async (id: string, updated: WorkExperienceItem) => {
     try {
-//       const payload = {
-//   user_id: userId,
-//   company_name: updated.company_name,
-//   position: updated.position,
-//   description: updated.description || "",
-//   start_date: updated.start_date,
-//   end_date: updated.end_date?.trim() === "" ? null : updated.end_date,
-//   is_public: updated.is_public ?? false,
-// };
 const payload = {
   user_id: userId,
   companyName: updated.company_name,
@@ -106,7 +97,7 @@ const payload = {
   };
 
   return (
-    <GridContainer maxWidth="lg" padding="px-4" mt="mt-10" mb="mb-10">
+    <GridContainer maxWidth="sm" padding="px-4" mt="mt-10" mb="mb-10">
       <div className="space-y-4 w-full">
         <Heading2>ניסיון תעסוקתי</Heading2>
 
