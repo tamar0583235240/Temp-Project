@@ -45,8 +45,8 @@ function App() {
           <AppRoutes />
         </BrowserRouter>
        {/* <EditInterviewMaterialsSubForm
-  id="some-id" 
-  defaultValues={{ title: "", shortDescription: "" }}
+  id="some-id"
+  defaultValues={{ title: "", short_description: "" }}
   onSuccess={() => console.log("Saved!")}
   onCancel={() => console.log("Cancelled")}
   /> */}

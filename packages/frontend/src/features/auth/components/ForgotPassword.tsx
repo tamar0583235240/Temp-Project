@@ -90,7 +90,7 @@ const ForgotPassword = () => {
       console.error(e);
     }
   };
-  
+
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-gray-50">
       <CardSimple className="max-w-md w-full p-8 space-y-6 shadow-md rounded-xl bg-white">
@@ -140,4 +140,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-

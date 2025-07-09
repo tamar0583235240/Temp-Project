@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { CreateInterviewMaterialsSubForm } from "./CreateInterviewMaterialsSubForm";
+import { CreateInterviewMaterialsForm } from "./CreateInterviewMaterialsForm";
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
-import { Plus } from "lucide-react"; 
-import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialApi";
-import { Provider } from "react-redux";
-import { store } from "../store/store";
-import { InterviewMaterialsList } from "./InterviewMaterialsList";
+import { Plus } from "lucide-react";
+import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
+import InterviewMaterialsList from "./interviewMaterialsList";
 
-const InterviewMaterialPage = () => {
+const InterviewMaterialsView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialSubMutation();
+  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialMutation();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -28,20 +26,20 @@ const InterviewMaterialPage = () => {
     <>
       <Button
         onClick={handleOpenModal}
-        variant="primary-dark" 
+        variant="primary-dark"
         size="md"
         icon={<Plus size={18} />}
         iconPosition="left"
         className="mb-4"
       >
-        הוסף פריט 
+        הוסף פריט
       </Button>
 
       {isModalOpen && (
         <MessageModal
           title="הוספת פריט"
           message={
-            <CreateInterviewMaterialsSubForm
+            <CreateInterviewMaterialsForm
               onSubmit={handleSubmit}
               onCancel={handleCloseModal}
             />
@@ -49,15 +47,9 @@ const InterviewMaterialPage = () => {
           onClose={handleCloseModal}
         />
       )}
-
-      
-      <Provider store={store}>
-        <InterviewMaterialsList />
-      </Provider>
-     
+      <InterviewMaterialsList />
     </>
   );
 };
 
-export default InterviewMaterialPage;
-
+export default InterviewMaterialsView;

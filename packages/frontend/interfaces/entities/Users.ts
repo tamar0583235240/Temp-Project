@@ -13,7 +13,11 @@ export class Users {
   id: string;
 
   @Column("text", { name: "first_name" })
+<<<<<<< HEAD
+  first_name: string;
+=======
   firstName: string;
+>>>>>>> 20745db88e952b52cd27ba186066ace407d854fa
 
   @Column("text", { name: "last_name" })
   lastName: string;

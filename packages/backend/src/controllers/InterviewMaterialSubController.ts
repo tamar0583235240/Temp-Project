@@ -1,147 +1,151 @@
-import { Request, Response } from 'express';
-import { deleteFileFromCloudinary, uploadFileToCloudinary } from '../config/cloudinary';
-import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
+import { Request, Response } from "express";
+import {
+    getInterviewMaterials,
+    getInterviewMaterialById,
+    createInterviewMaterial,
+    updateInterviewMaterial,
+    deleteInterviewMaterial
+} from "../reposioty/InterviewMaterialSubRepository";
+import {
+    uploadFileToCloudinary,
+    deleteFileFromCloudinary
+} from "../config/cloudinary";
 
-const getInterviewMaterialSubs = async (req: Request, res: Response): Promise<void> => {
+// 🟢 שליפת כל חומרי הריאיון
+export const getAllInterviewMaterials = async (req: Request, res: Response) => {
     try {
-        const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
-        res.json(items);
+        const items = await getInterviewMaterials();
+        const itemsWithUrls = items.map((item) => ({
+            ...item,
+            thumbnailUrl: item.thumbnail || null,
+            fileUrl: item.fileUrl || null,
+        }));
+        res.status(200).json(itemsWithUrls);
     } catch (error) {
-        console.error('Error in interview material sub controller:', error);
-        res.status(500).json({ error });
+        console.error("Error fetching interview materials:", error);
+        res.status(500).json({ message: "שגיאה בשליפת חומרי ריאיון" });
     }
 };
 
-const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { title, shortDescription } = req.body;
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-
-    try {
-        const existingMaterialSub = await InterviewMaterialSubRepository.getInterviewMaterialSubById(id);
-
-        if (!existingMaterialSub) {
-            res.status(404).json({ message: 'Interview material sub not found' });
-            return;
-        }
-
-        console.log('Existing Material Sub file:', existingMaterialSub.file_url);
-
-        let updatedThumbnail = existingMaterialSub.thumbnail;
-        let updatedFileUrl = existingMaterialSub.file_url;
-
-        if (files?.thumbnail?.[0]) {
-            const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) {
-                await deleteFileFromCloudinary(match[1]);
-            }
-            const thumbnailResult = await uploadFileToCloudinary(files.thumbnail[0], 'interviewMaterialsHub/thumbnails');
-            updatedThumbnail = thumbnailResult.secure_url;
-        }
-
-        if (files?.file?.[0]) {
-            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) {
-                await deleteFileFromCloudinary(match[1]);
-            }
-            const fileResult = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
-            updatedFileUrl = fileResult.secure_url;
-        }
-
-        const updatedInterviewMaterialSub = await InterviewMaterialSubRepository.updateInterviewMaterialSub(
-            id,
-            title || existingMaterialSub.title,
-            shortDescription || existingMaterialSub.short_description,
-            updatedThumbnail,
-            updatedFileUrl
-        );
-
-        res.json(updatedInterviewMaterialSub);
-
-    } catch (error) {
-        console.error('Error in update interview material sub controller:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-};
-
-const addInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
+// 🟢 יצירת חומר ריאיון חדש
+export const addInterviewMaterial = async (req: Request, res: Response) => {
     try {
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         const thumbnailFile = files?.thumbnail?.[0];
         const file = files?.file?.[0];
-
         if (!file) {
-            res.status(400).json({ message: 'No file uploaded' });
+            res.status(400).json({ message: "לא הועלה קובץ" });
             return;
         }
 
-        let thumbnail: string | undefined;
+        let thumbnailUrl = '';
         if (thumbnailFile) {
             const thumbnailResult = await uploadFileToCloudinary(thumbnailFile, 'interviewMaterialsHub/thumbnails');
-            thumbnail = thumbnailResult.secure_url;
+            thumbnailUrl = thumbnailResult.secure_url;
         }
 
-        const result = await uploadFileToCloudinary(file, 'interviewMaterialsHub/files');
 
-        const resultData = await InterviewMaterialSubRepository.createInterviewMaterialSub(
+        const fileResult = await uploadFileToCloudinary(file, 'interviewMaterialsHub/files');
+
+        const created = await createInterviewMaterial(
             req.body.title,
-            thumbnail ?? '',
-            req.body.shortDescription,
-            result.secure_url
+            thumbnailUrl,
+            req.body.short_description,
+            fileResult.secure_url
         );
 
-        if (!resultData) {
-            res.status(500).json({ message: 'Failed to save file data' });
-            return;
-        }
-
         res.status(201).json({
-            message: 'File uploaded successfully',
-            data: resultData,
+            message: "הפריט נשמר בהצלחה",
+            data: created,
         });
-
     } catch (err) {
-        console.error('Upload error:', err);
-        res.status(500).json({ message: 'Server error', error: err });
+        console.error("Upload error:", err);
+        if (err instanceof Error) {
+            console.error("Error message:", err.message);
+        }
+        res.status(500).json({ message: "שגיאה בשרת", error: err });
     }
 };
 
-const deleteInterviewMaterial = async (req: Request, res: Response): Promise<void> => {
+// 🟢 עדכון חומר ריאיון קיים
+export const updateInterviewMaterialController = async (req: Request, res: Response) => {
     const { id } = req.params;
+    const { title, short_description } = req.body;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
     try {
-        const existingMaterialSub = await InterviewMaterialSubRepository.getInterviewMaterialSubById(id);
-        if (!existingMaterialSub) {
-            res.status(404).json({ message: 'Interview material sub not found' });
+        const existingMaterial = await getInterviewMaterialById(id);
+        if (!existingMaterial) {
+            res.status(404).json({ message: "חומר ריאיון לא נמצא" });
             return;
         }
 
-        if (existingMaterialSub.thumbnail) {
-            const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) {
-                await deleteFileFromCloudinary(match[1]);
-            }
+        let updatedThumbnail = existingMaterial.thumbnail;
+        let updatedFileUrl = existingMaterial.fileUrl;
+
+        const extractPublicId = (url?: string | null) => {
+            if (typeof url !== "string") return null;
+            const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+            return match?.[1];
+        };
+
+        if (files?.thumbnail?.[0]) {
+            const publicId = extractPublicId(existingMaterial.thumbnail);
+            if (publicId) await deleteFileFromCloudinary(`interviewMaterialsHub/thumbnails/${publicId}`);
+            const thumbUpload = await uploadFileToCloudinary(files.thumbnail[0], 'interviewMaterialsHub/thumbnails');
+            updatedThumbnail = thumbUpload.secure_url;
         }
 
-        if (existingMaterialSub.file_url) {
-            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) {
-                await deleteFileFromCloudinary(match[1]);
-            }
+        if (files?.file?.[0]) {
+            const publicId = extractPublicId(existingMaterial.fileUrl);
+            if (publicId) await deleteFileFromCloudinary(`interviewMaterialsHub/files/${publicId}`);
+            const fileUpload = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
+            updatedFileUrl = fileUpload.secure_url;
         }
 
-        await InterviewMaterialSubRepository.deleteInterviewMaterialSub(id);
+        const updated = await updateInterviewMaterial(
+            id,
+            title || existingMaterial.title,
+            short_description || existingMaterial.short_description,
+            updatedThumbnail,
+            updatedFileUrl
+        );
 
-        res.json({ message: 'Interview material sub deleted successfully' });
-
+        res.json(updated);
     } catch (error) {
-        console.error('Error in delete interview material sub controller:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error("Error updating interview material:", error);
+        res.status(500).json({ message: "שגיאה בעדכון" });
     }
 };
 
-export{
-    getInterviewMaterialSubs,
-    updateInterviewMaterialSub,
-    addInterviewMaterialSub,
-    deleteInterviewMaterial
+// 🟢 מחיקת חומר ריאיון
+export const deleteInterviewMaterialController = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const material = await getInterviewMaterialById(id);
+        if (!material) {
+            return res.status(404).json({ message: "פריט לא נמצא" });
+        }
+
+        const extractPublicId = (url: string) => {
+            const match = url.match(/\/([^/]+)\.[a-zA-Z]+$/);
+            return match?.[1];
+        };
+
+        if (material.thumbnail) {
+            const thumbId = extractPublicId(material.thumbnail);
+            if (thumbId) await deleteFileFromCloudinary(`interviewMaterialsHub/thumbnails/${thumbId}`);
+        }
+
+        if (material.fileUrl) {
+            const fileId = extractPublicId(material.fileUrl);
+            if (fileId) await deleteFileFromCloudinary(`interviewMaterialsHub/files/${fileId}`);
+        }
+
+        await deleteInterviewMaterial(id);
+        res.status(200).json({ message: "הפריט נמחק בהצלחה" });
+    } catch (err) {
+        console.error("שגיאה במחיקת פריט:", err);
+        res.status(500).json({ message: "שגיאה במחיקה" });
+    }
 };

@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const schema = yup.object({
   title: yup.string().required("שדה חובה"),
-  shortDescription: yup.string().required("שדה חובה"),
+  short_description: yup.string().required("שדה חובה"),
   thumbnail: yup
     .mixed<FileList>()
     .test("imageType", "רק קובץ תמונה תקף", (value) => {
@@ -36,15 +36,15 @@ const schema = yup.object({
     }),
 });
 
-interface CreateInterviewMaterialsSubFormProps {
+interface CreateInterviewMaterialsFormProps {
   onSubmit: (formData: FormData) => void;
   onCancel?: () => void;
 }
 
-export const CreateInterviewMaterialsSubForm = ({
+export const CreateInterviewMaterialsForm = ({
   onSubmit,
   onCancel,
-}: CreateInterviewMaterialsSubFormProps) => {
+}: CreateInterviewMaterialsFormProps) => {
   const {
     register,
     handleSubmit,
@@ -59,7 +59,7 @@ export const CreateInterviewMaterialsSubForm = ({
   const onValid = (data: any) => {
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("short_description", data.shortDescription);
+    formData.append("short_description", data.short_description);
     if (data.thumbnail?.length) {
       formData.append("thumbnail", data.thumbnail[0]);
     }
@@ -69,8 +69,8 @@ export const CreateInterviewMaterialsSubForm = ({
 
     onSubmit(formData);
     setShowSuccessMessage(true);
-    reset(); 
-    setTimeout(() => setShowSuccessMessage(false), 4000); 
+    reset();
+    setTimeout(() => setShowSuccessMessage(false), 4000);
   };
 
   return (
@@ -94,21 +94,21 @@ export const CreateInterviewMaterialsSubForm = ({
       <div>
         <label
           className="block mb-1 font-semibold text-sm text-text-main"
-          htmlFor="shortDescription"
+          htmlFor="short_description"
         >
           תיאור קצר
         </label>
         <textarea
-          id="shortDescription"
-          {...register("shortDescription")}
+          id="short_description"
+          {...register("short_description")}
           className={cn(
             "w-full rounded-md border border-[--color-border] px-3 py-2 text-sm focus:ring-[--color-primary] focus:border-[--color-primary]",
-            errors.shortDescription && "border-red-500"
+            errors.short_description && "border-red-500"
           )}
           rows={3}
         />
-        {errors.shortDescription && (
-          <p className="text-sm text-red-600 mt-1">{errors.shortDescription.message}</p>
+        {errors.short_description && (
+          <p className="text-sm text-red-600 mt-1">{errors.short_description.message}</p>
         )}
       </div>
       <div>
@@ -138,8 +138,9 @@ export const CreateInterviewMaterialsSubForm = ({
       </div>
       <div className="flex gap-4">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          {isSubmitting ? "שולח..." : "שמור"}
+          {isSubmitting ? "שומר..." : "שמור"}
         </Button>
+
         {onCancel && (
           <Button
             type="button"
