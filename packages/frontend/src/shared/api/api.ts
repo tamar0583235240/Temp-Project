@@ -7,6 +7,6 @@ export const api = createApi({
         credentials: 'include',
     }),
     reducerPath: "api",
-    tagTypes: ["Item"],
+    tagTypes: ["Item", "InterviewMaterials"],
     endpoints: () => ({}),
 });

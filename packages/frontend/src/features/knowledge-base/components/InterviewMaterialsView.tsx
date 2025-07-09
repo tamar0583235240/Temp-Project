@@ -4,7 +4,7 @@ import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
 import { Plus } from "lucide-react";
 import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
-import InterviewMaterialsList from "./interviewMaterialsList";
+import InterviewMaterialsList from "./InterviewMaterialsList";
 
 const InterviewMaterialsView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,8 +15,9 @@ const InterviewMaterialsView = () => {
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      await createResource(formData).unwrap();
       setIsModalOpen(false);
+      await createResource(formData).unwrap();
+
     } catch (e) {
       console.error(e);
     }
