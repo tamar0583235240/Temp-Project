@@ -39,6 +39,7 @@ export const InterviewExperienceView = (props: { interviewExperience: interviewE
             <p>{interviewExperience.anonymous ? '💁‍♂️' +  getUserNameById(interviewExperience.user_id ?interviewExperience.user_id : '') : '👤אנונימית'}</p>
             <p>מתראיין לחברת {interviewExperience.company_name}</p>
             <p>התפקיד אליו התראיין: {interviewExperience.position}</p>
+            
             <p>:שאלות שנשאלו בראיון</p>
             <p>{interviewExperience.questions}</p>
             <p>תיאור החוויה: {interviewExperience.description}</p>
