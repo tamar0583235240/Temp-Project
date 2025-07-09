@@ -60,12 +60,12 @@
 // };
 
 // export default InterviewMaterialList;
-import { InterviewMaterial } from "../types/InterviewMaterial";
+import { InterviewMaterials } from "../types/InterviewMaterials";
 
 interface InterviewMaterialListItemProps {
-  item: InterviewMaterial;
-  onEdit: (item: InterviewMaterial) => void;
-  onDelete: (id: number) => void;
+  item: InterviewMaterials;
+  onEdit: (item: InterviewMaterials) => void;
+  onDelete: (id: string) => void;
 }
 
 export const InterviewMaterialListItem = ({
