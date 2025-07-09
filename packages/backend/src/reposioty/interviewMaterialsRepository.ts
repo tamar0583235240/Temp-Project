@@ -77,3 +77,6 @@ export const deleteInterviewMaterial = async (id: string): Promise<void> => {
     throw error;
   }
 };
+export async function c(id: string) {
+  await pool.query("DELETE FROM interview_materials WHERE id = $1", [id]);
+}

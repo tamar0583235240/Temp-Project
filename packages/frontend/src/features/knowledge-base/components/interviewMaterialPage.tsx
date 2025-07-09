@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { CreateInterviewMaterialsForm } from "./CreateInterviewMaterialsForm";
+import { CreateInterviewMaterialsSubForm } from "./CreateInterviewMaterialsSubForm";
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
 import { Plus } from "lucide-react"; 
-import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
-import InterviewMaterialsList from "./interviewMaterialsList";
+import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialApi";
+import { Provider } from "react-redux";
+import { store } from "../store/store";
+import { InterviewMaterialsList } from "./InterviewMaterialsList";
 
-const InterviewMaterialsView = () => {
+const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialMutation();
+  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialSubMutation();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -39,7 +41,7 @@ const InterviewMaterialsView = () => {
         <MessageModal
           title="הוספת פריט"
           message={
-            <CreateInterviewMaterialsForm
+            <CreateInterviewMaterialsSubForm
               onSubmit={handleSubmit}
               onCancel={handleCloseModal}
             />
@@ -47,9 +49,15 @@ const InterviewMaterialsView = () => {
           onClose={handleCloseModal}
         />
       )}
-      <InterviewMaterialsList/>
+
+      
+      <Provider store={store}>
+        <InterviewMaterialsList />
+      </Provider>
+     
     </>
   );
 };
 
-export default InterviewMaterialsView;
+export default InterviewMaterialPage;
+
