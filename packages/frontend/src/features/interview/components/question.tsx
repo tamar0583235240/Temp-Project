@@ -1,13 +1,12 @@
-import React, { useRef, useState } from "react";
-import { CheckCircle2, XCircle, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { interviewType } from "../types/questionType";
 import AudioRecorder from "../../recordings/components/AudioRecorder";
-import FileUpload from "../../recordings/components/FileUpload";
 import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
-import AnswerAI from "./AnswerAI";
 import MagicLoader from "./MagicLoader";
 import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
+import FileUpload from "../../recordings/components/FileUpload";
 
 interface QuestionProps {
   question: interviewType;
@@ -25,36 +24,13 @@ const Question: React.FC<QuestionProps> = ({
   onAnswerSaved,
 }) => {
   const [uploadAnswer] = useUploadAnswerMutation();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showFileActions, setShowFileActions] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const userId = "00000000-0000-0000-0000-000000000000"; // לשנות לפי משתמש אמיתי
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      setShowFileActions(true);
-    }
-  };
-
-  const handleApprove = () => {
-    setIsUploading(true);
-  };
-
-  const handleReupload = () => {
-    setSelectedFile(null);
-    setShowFileActions(false);
-    setIsUploading(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
 
   return (
     <div>
@@ -86,103 +62,42 @@ const Question: React.FC<QuestionProps> = ({
           <div className="flex gap-4 w-full">
             {/* העלאת קובץ */}
             <div className="w-1/2">
-              <button
-                type="button"
-                className={`w-full border border-[--color-border] bg-white text-[--color-text] px-6 py-3 rounded-lg font-semibold transition text-lg flex items-center justify-center gap-2 ${selectedFile || isUploading ? "opacity-50 cursor-not-allowed" : "hover:bg-[--color-background]"}`}
-                onClick={() => document.getElementById("file-upload-input")?.click()}
-                disabled={!!selectedFile || isUploading}
-              >
-                העלה קובץ
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
-                </svg>
-              </button>
-
-              <input
-                id="file-upload-input"
-                type="file"
-                style={{ display: "none" }}
-                accept="audio/*,video/*"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-              />
-
-              {selectedFile && showFileActions && !isUploading && (
-                <div className="flex flex-col items-center gap-2 mt-2 w-full">
-                  <div className="flex items-center gap-2 w-full justify-center">
-                    <button
-                      className="p-1 text-red-500 hover:text-red-700 order-1"
-                      onClick={handleReupload}
-                      title="מחק קובץ"
-                      style={{ marginLeft: 4 }}
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                    <span className="text-sm text-gray-700 order-2">{selectedFile.name}</span>
-                  </div>
-                  <div className="flex gap-2 mt-1">
-                    <button
-                      className="bg-[--color-primary] text-white px-4 py-2 rounded hover:bg-[--color-primary-dark] transition"
-                      onClick={handleApprove}
-                    >
-                      אישור
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {selectedFile && isUploading && (
-                <FileUpload
-                  userId={userId}
-                  questionId={String(question.id)}
-                  file={selectedFile}
-                  onUploaded={async (fileUrl, fileName) => {
-                    setIsUploading(false);
-                    setSelectedFile(null);
-                    setShowFileActions(false);
-                    if (fileInputRef.current) fileInputRef.current.value = "";
-
-                    try {
-                      await uploadAnswer({
-                        userId,
-                        questionId: String(question.id),
-                        fileUrl,
-                        amountFeedbacks: 0,
-                        answerFileName: fileName,
-                      }).unwrap();
-
-                      setNotification({
-                        message: "הקובץ נשמר בהצלחה!",
-                        type: "success",
-                        icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
-                      });
-
-                      setTimeout(() => setNotification(null), 3500);
-                      onAnswerSaved("fake-id-from-server"); // כאן שימי את ה־id האמיתי מהתשובה
-                    } catch (e) {
-                      setNotification({
-                        message: "שגיאה בשמירת התשובה",
-                        type: "error",
-                        icon: <XCircle className="w-6 h-6 text-red-500" />,
-                      });
-                      setTimeout(() => setNotification(null), 3500);
-                    }
-                  }}
-                  onError={() => {
-                    setIsUploading(false);
-                    setSelectedFile(null);
-                    setShowFileActions(false);
-                    if (fileInputRef.current) fileInputRef.current.value = "";
-
+              <FileUpload
+                userId={userId}
+                onUploaded={async (fileUrl, fileName) => {
+                  try {
+                    await uploadAnswer({
+                      userId,
+                      questionId: String(question.id),
+                      fileUrl,
+                      amountFeedbacks: 0,
+                      answerFileName: fileName,
+                    }).unwrap();
                     setNotification({
-                      message: "שגיאה בהעלאת קובץ",
+                      message: "הקובץ נשמר בהצלחה!",
+                      type: "success",
+                      icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+                    });
+                    setTimeout(() => setNotification(null), 3500);
+                    onAnswerSaved("fake-id-from-server");
+                  } catch (e) {
+                    setNotification({
+                      message: "שגיאה בשמירת התשובה",
                       type: "error",
                       icon: <XCircle className="w-6 h-6 text-red-500" />,
                     });
                     setTimeout(() => setNotification(null), 3500);
-                  }}
-                />
-              )}
+                  }
+                }}
+                onError={() => {
+                  setNotification({
+                    message: "שגיאה בהעלאת קובץ",
+                    type: "error",
+                    icon: <XCircle className="w-6 h-6 text-red-500" />,
+                  });
+                  setTimeout(() => setNotification(null), 3500);
+                }}
+              />
             </div>
 
             {/* הקלטה */}
@@ -199,7 +114,7 @@ const Question: React.FC<QuestionProps> = ({
 
       {/* טיפים / AI */}
       <div className="w-full flex flex-col items-center mt-4 gap-4">
-        {selectedFile && showFileActions && !isUploading && <TipsComponent />}
+        <TipsComponent />
       </div>
     </div>
   );
