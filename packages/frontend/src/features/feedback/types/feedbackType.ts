@@ -6,3 +6,4 @@ export interface feedbackType {
   rating: number;
   created_at: string;
 }
+

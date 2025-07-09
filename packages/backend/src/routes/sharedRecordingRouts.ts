@@ -8,7 +8,6 @@ import {
 import { sharedRecordingMiddleware } from '../middlewares/sharedRecordingMiddleware';
 
 const router = Router();
-
 // מפעיל את המידלוואר על כל הראוטים בקובץ הזה
 router.use(sharedRecordingMiddleware);
 

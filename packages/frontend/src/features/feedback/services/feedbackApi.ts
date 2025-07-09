@@ -3,12 +3,14 @@ import { feedbackType } from "../types/feedbackType";
 
 export const feedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({
+    // כרגע את לא משתמשת בזה בפועל — רק אם תציגי פידבקים של אחרים
     getFeedbacksBySharedRecordingId: builder.query<feedbackType[], string>({
       query: (sharedRecordingId) =>
-        `/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`, // ודאי שהנתיב הזה נכון בשרת
+        `/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`, // ודאי שזה נכון בשרת
       providesTags: ["Feedback"],
     }),
 
+    // יצירת פידבק חדש
     createFeedback: builder.mutation<void, {
       sharedRecordingId: string;
       givenByUserId: string;
@@ -23,6 +25,7 @@ export const feedbackApi = api.injectEndpoints({
       invalidatesTags: ["Feedback", "SharedRecordings"],
     }),
 
+    // עדכון פידבק קיים
     updateFeedback: builder.mutation<void, {
       id: string;
       comment: string;

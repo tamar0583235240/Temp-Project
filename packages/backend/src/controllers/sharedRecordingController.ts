@@ -27,15 +27,20 @@ export const getRecordingDetails = async (req: Request, res: Response) => {
 export const createFeedback = async (req: Request, res: Response) => {
   try {
     console.log('BODY RECEIVED:', req.body);
-    const { sharedRecordingId, comment, rating } = req.body;
+    const { sharedRecordingId, givenByUserId, comment, rating } = req.body;
 
-    if (!sharedRecordingId || !comment || typeof rating !== 'number') {
+    if (!sharedRecordingId || !givenByUserId || !comment || typeof rating !== 'number') {
       return res.status(400).json({ message: 'Missing or invalid fields in request body.' });
     }
 
-    const feedback = await sharedRepo.insertFeedback(sharedRecordingId, comment, rating);
-    res.status(201).json(feedback);
+    const feedback = await sharedRepo.insertFeedback(
+      sharedRecordingId,
+      givenByUserId,
+      comment,
+      rating
+    );
 
+    res.status(201).json(feedback);
   } catch (error: any) {
     console.error('Error creating feedback:', error);
     res.status(500).json({
@@ -44,6 +49,7 @@ export const createFeedback = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const updateFeedback = async (req: Request, res: Response) => {
   try {

@@ -9,14 +9,19 @@ export const getSharedRecordingsByUserId = async (userId: string) => {
       sr.date,
       sr.audio_url AS "audioUrl",
       sr.ai_summary AS "aiSummary",
-      f.comment AS "feedbackComment",
-      f.rating AS "feedbackRating"
+      json_build_object(
+        'id', f.id,
+        'shared_recording_id', f.shared_recording_id,
+        'given_by_user_id', f.given_by_user_id,
+        'comment', f.comment,
+        'rating', f.rating,
+        'created_at', f.created_at
+      ) AS feedback
     FROM shared_recordings sr
     JOIN users u ON sr.owner_id = u.id
     JOIN questions q ON sr.question_id = q.id
-    LEFT JOIN feedback f ON f.sharedrecordingid = sr.id
+    LEFT JOIN feedback f ON f.shared_recording_id = sr.id AND f.given_by_user_id = $1
     WHERE $1 = ANY(sr.sharedwith)
-
   `;
   const { rows } = await pool.query(query, [userId]);
   return rows;
@@ -24,11 +29,25 @@ export const getSharedRecordingsByUserId = async (userId: string) => {
 
 export const getRecordingDetailsById = async (recordingId: string) => {
   const query = `
-    SELECT sr.*, u.first_name, u.last_name, q.title AS question_title, f.comment, f.rating
+    SELECT
+      sr.id,
+      u.first_name || ' ' || u.last_name AS "userName",
+      q.title AS "questionTitle",
+      sr.date,
+      sr.audio_url AS "audioUrl",
+      sr.ai_summary AS "aiSummary",
+      json_build_object(
+        'id', f.id,
+        'shared_recording_id', f.shared_recording_id,
+        'given_by_user_id', f.given_by_user_id,
+        'comment', f.comment,
+        'rating', f.rating,
+        'created_at', f.created_at
+      ) AS feedback
     FROM shared_recordings sr
     JOIN users u ON sr.owner_id = u.id
     JOIN questions q ON sr.question_id = q.id
-    LEFT JOIN feedback f ON f.sharedrecordingid = sr.id
+    LEFT JOIN feedback f ON f.shared_recording_id = sr.id
     WHERE sr.id = $1
   `;
   const { rows } = await pool.query(query, [recordingId]);
@@ -44,17 +63,25 @@ export const getSharedRecordingIdByAnswerId = async (answerId: string) => {
   return rows[0]?.id;
 };
 
-
-export const insertFeedback = async (sharedRecordingId: string, comment: string, rating: number) => {
+export const insertFeedback = async (
+  sharedRecordingId: string,
+  givenByUserId: string,
+  comment: string,
+  rating: number
+) => {
   const query = `
-    INSERT INTO feedback (id, sharedrecordingid, comment, rating, createdat)
-    VALUES (gen_random_uuid(), $1, $2, $3, NOW())
+    INSERT INTO feedback (id, shared_recording_id, given_by_user_id, comment, rating, created_at)
+    VALUES (gen_random_uuid(), $1, $2, $3, $4, NOW())
     RETURNING *
   `;
-  const { rows } = await pool.query(query, [sharedRecordingId, comment, rating]);
+  const { rows } = await pool.query(query, [
+    sharedRecordingId,
+    givenByUserId,
+    comment,
+    rating,
+  ]);
   return rows[0];
 };
-
 
 export const updateFeedback = async (feedbackId: string, comment: string, rating: number) => {
   const query = `
@@ -66,4 +93,3 @@ export const updateFeedback = async (feedbackId: string, comment: string, rating
   const { rows } = await pool.query(query, [comment, rating, feedbackId]);
   return rows[0];
 };
-
