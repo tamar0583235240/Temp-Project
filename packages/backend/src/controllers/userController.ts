@@ -57,8 +57,24 @@ export const createUser = async (req: Request, res: Response) => {
   }
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
   console.log(hashedPassword);
+  const newUser: Users = {
+    id: uuidv4(),
+    firstName,
+    lastName,
+    email,
+    phone,
+    password: hashedPassword,
+    role: role || 'student',
+    createdAt: new Date(),
+    isActive: true,
+    answers: [],
+    feedbacks: [],
+    passwordResetTokens: [],
+    sharedRecordings: [],
+    resources: []
+  };
 
-  const createdUser = await userRepository.createUser();
+  const createdUser = await userRepository.createUser(newUser);
   res.status(201).json(createdUser);
 };
 

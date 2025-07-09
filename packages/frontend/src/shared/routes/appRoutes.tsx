@@ -7,6 +7,7 @@ import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import RecordingsList from "../../features/recordings/components/recordingsList";
+import QuestionsChart from "../../pages/QuestionsChart";
 
 export default function AppRoutes() {
   return (

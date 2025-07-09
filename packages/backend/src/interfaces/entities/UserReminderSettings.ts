@@ -30,15 +30,15 @@ export class UserReminderSettings {
   isEnabled: boolean;
 
   @Column("timestamp without time zone", {
-    name: "last_sent_at",
+    name: "created_at",
     nullable: true,
     default: () => "now()",
   })
-  lastSentAt: Date | null;
+  createdAt: Date | null;
 
-  @ManyToOne(() => Users, (users) => users.userReminderSettings, {
-    onDelete: "CASCADE",
-  })
+  // @ManyToOne(() => Users, (users) => users.userReminderSettings, {
+  //   onDelete: "CASCADE",
+  // })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 }
