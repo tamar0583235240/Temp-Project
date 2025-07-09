@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main, TamarBiton]
+    branches: [main, TamarBiton,sariWnewTask]
   pull_request:
     branches: [main]
 jobs:
