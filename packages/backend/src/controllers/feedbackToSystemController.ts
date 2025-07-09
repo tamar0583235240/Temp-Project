@@ -16,6 +16,8 @@ export const updateFeedbackToSystemController = async (req: Request, res: Respon
     console.log('updateFeedbackToSystemController called');
     try {
       const updates = req.body;
+      console.log(req.body);;
+      
       console.log('Received updates:', updates);
       const updatedFeedbackToSystem = await feedbackToSystemRepository.updateFeedbackToSystemById(updates);
       res.json(updatedFeedbackToSystem);

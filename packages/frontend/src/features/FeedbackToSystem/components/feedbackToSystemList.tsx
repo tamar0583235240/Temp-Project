@@ -90,6 +90,12 @@ export const FeedbackToSystemList: React.FC<{ allowedRoles: string[] }> = ({ all
 
 
 
+    const sortedFeedbacks = [...data].sort((a, b) => {
+        const numA = parseInt(a.id.split('-').pop() || '0', 10);
+        const numB = parseInt(b.id.split('-').pop() || '0', 10);
+        return numA - numB;
+    });
+
     return (
         <GridContainer maxWidth="xl" mt="mt-6" mb="mb-8">
             <div className="space-y-8">
@@ -176,9 +182,9 @@ export const FeedbackToSystemList: React.FC<{ allowedRoles: string[] }> = ({ all
                                 שלחי פידבק ראשון
                             </Button>
                         </CardSimple>
-                    ) : (
+                    ) : (          
                         <Grid cols={data.length === 1 ? 1 : data.length === 2 ? 2 : 3}>
-                            {data.map((feedback) => (
+                            {sortedFeedbacks.map((feedback) => (
                                 <CardSimple
                                     key={feedback.id}
                                     className="hover:shadow-lg transition-shadow duration-200 p-4 flex flex-col justify-between"

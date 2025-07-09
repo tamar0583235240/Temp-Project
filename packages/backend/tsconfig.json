@@ -21,7 +21,7 @@
     "baseUrl": "./src",
     "paths": {
       "@interfaces/*": [
-        "interfaces/*"
+        "src/interfaces/*"
       ]
     }
   },

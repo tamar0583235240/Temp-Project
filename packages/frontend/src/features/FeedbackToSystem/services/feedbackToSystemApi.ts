@@ -17,7 +17,7 @@ export const FeedbackToSystemApi = api.injectEndpoints({
         }),
         updateFeedbackToSystem: builder.mutation<FeedbackToSystem, Partial<FeedbackToSystem>>({
             query: (data) => ({
-                url: `feedbackToSystem/updateFeedbackToSystem`,
+                url: `feedbackToSystem//updateFeedbackToSystem`,
                 method: "PUT",
                 body: data,
             }),

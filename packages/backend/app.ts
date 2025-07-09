@@ -6,6 +6,11 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import questionRouter from './src/routes/questionRouts';
 import feedbackToSystemRouter from './src/routes/feedbackesToSystemRouts';
+// import exampleRouts from './src/routes/exampleRouts';
+import questionRoute from './src/routes/questionRouts';
+import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
+
+
 
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
@@ -29,22 +34,15 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);
 app.use('/question', questionRouter); 
-app.use(cookieParser());
-app.use('/users', userRouts);
+app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);
 app.use('/feedbackToSystem', feedbackToSystemRouter); 
 app.use('/interview-materials-hub', interviewMaterialsHub);
 
-
-
-export default app;
-
-
-
-
-
+export default app

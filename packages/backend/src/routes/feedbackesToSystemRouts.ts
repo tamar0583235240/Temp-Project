@@ -4,6 +4,6 @@ import { deleteFeedbackToSystemController, getFeedbackesToSystemByUserId, update
 const feedbackToSystemRouter = Router();
 
 feedbackToSystemRouter.get('/getFeedbackesByuserId/:user_id', getFeedbackesToSystemByUserId);
-feedbackToSystemRouter.put('/updateFeedbackToSystem:feedback_id', updateFeedbackToSystemController); 
+feedbackToSystemRouter.put('/updateFeedbackToSystem', updateFeedbackToSystemController); 
 feedbackToSystemRouter.delete('/deleteFeedbackToSystem/:feedback_id', deleteFeedbackToSystemController)  
 export default feedbackToSystemRouter; 
