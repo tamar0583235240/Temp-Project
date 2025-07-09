@@ -59,7 +59,7 @@ export const CreateInterviewMaterialsForm = ({
   const onValid = (data: any) => {
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("short_description", data.short_description);
+    formData.append("shortDescription", data.shortDescription);
     if (data.thumbnail?.length) {
       formData.append("thumbnail", data.thumbnail[0]);
     }
@@ -138,7 +138,10 @@ export const CreateInterviewMaterialsForm = ({
       </div>
       <div className="flex gap-4">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          {isSubmitting ? "שולח..." : "שמור"}
+          {isSubmitting ?
+            <span>"שולח"<div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div> </span>
+            : "שמור"}
+
         </Button>
         {onCancel && (
           <Button
