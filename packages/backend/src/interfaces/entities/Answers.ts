@@ -26,8 +26,8 @@ export class Answers {
   })
   submittedAt: Date;
 
-  @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
+  @Column("text", { name: "answer_file_name" })
+  answerFileName: string;
 
   @Column("numeric", { name: "amount_feedbacks", nullable: true })
   amountFeedbacks: string | null;

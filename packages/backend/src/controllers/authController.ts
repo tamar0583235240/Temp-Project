@@ -176,6 +176,7 @@ export const login = async (req: Request, res: Response) => {
 
 // רענון טוקן
 export const refreshToken = async (req: Request, res: Response) => {
+  
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(407).json({ message: "לא סופק refresh token" });
@@ -266,6 +267,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       sharedRecordings: [],
       createdAt: new Date(),
       resources: [],
+      userReminderSettings: [],
     },
     code,
     expiresAt,
@@ -346,6 +348,7 @@ export const signup = async (req: Request, res: Response) => {
     sharedRecordings: [],
     createdAt: new Date(),
     resources: [],
+    userReminderSettings: []
   };
 
   await authRepository.signup(newUser);

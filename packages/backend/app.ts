@@ -8,6 +8,10 @@ import questionRouter from './src/routes/questionRouts';
 import interviewExperiencesRouter from './src/routes/interviewExperiencesRouts';
 import experienceThanksRouter from './src/routes/experienceThanksRouts';
 import contentReportsRouter from './src/routes/contentReportsRouts';
+// import exampleRouts from './src/routes/exampleRouts';
+import questionRoute from './src/routes/questionRouts';
+import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
+
 
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
@@ -31,22 +35,18 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);
-app.use('/question', questionRouter); 
-app.use(cookieParser());
-app.use('/users', userRouts);
+app.use('/question', questionRoute); 
+app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);
 app.use('/interviewExperiences', interviewExperiencesRouter);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 app.use('/experienceThanks', experienceThanksRouter);
 app.use('/contentReports', contentReportsRouter);
+app.use('/interview-materials-hub', interviewMaterialsHub);
 
-export default app;
-
-
-
-
-
+export default app

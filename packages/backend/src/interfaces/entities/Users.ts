@@ -70,4 +70,10 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
+//   @OneToMany(
+//     () => UserReminderSettings,
+//     (userReminderSettings) => userReminderSettings.user
+//   )
+//   userReminderSettings: UserReminderSettings[];
 }

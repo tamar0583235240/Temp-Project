@@ -1,7 +1,12 @@
 import { Router } from 'express';
-import { getSharedRecordingIdByAnswerId } from '../controllers/sharedRecordingController'; 
+import { getSharedRecordingParticipants, getPreviouslySharedEmails, deleteParticipant, addParticipant } from '../controllers/sharedRecordingController';
 
-const sharedRecrdingRouter = Router();
+const router = Router();
 
-sharedRecrdingRouter.get('/sharedRecordings/getSharedRecordingIdByAnswerId/:answerId', getSharedRecordingIdByAnswerId);  
-export default sharedRecrdingRouter;        
+router.get('/getSharedRecordingParticipants/:answerId/:ownerId', getSharedRecordingParticipants);
+router.get('/sharedEmails/:userId', getPreviouslySharedEmails);
+router.delete('/deleteParticipant', deleteParticipant);
+router.post('/addParticipant', addParticipant);
+
+
+export default router;

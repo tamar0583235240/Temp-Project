@@ -5,7 +5,6 @@ import { Button } from "../../../shared/ui/button";
 import { CardSimple } from "../../../shared/ui/card";
 import { GridContainer } from "../../../shared/ui/GridContainer";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
-import { SummaryBox } from "../../../shared/ui/SummaryBox";
 import { Paragraph } from "../../../shared/ui/typography";
 
 

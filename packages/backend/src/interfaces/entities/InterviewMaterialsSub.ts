@@ -23,5 +23,5 @@ export class InterviewMaterialsSub {
   downloadsCount: number | null;
 
   @Column("text", { name: "file_url" })
-  file_url: string;
+  fileUrl: string;
 }
