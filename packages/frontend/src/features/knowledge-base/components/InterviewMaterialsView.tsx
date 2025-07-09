@@ -15,8 +15,8 @@ const InterviewMaterialsView = () => {
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      setIsModalOpen(false);
       await createResource(formData).unwrap();
+      setIsModalOpen(false);
 
     } catch (e) {
       console.error(e);
@@ -25,6 +25,7 @@ const InterviewMaterialsView = () => {
 
   return (
     <>
+    <div  className="fixed top-6 right-6 z-50">
       <Button
         onClick={handleOpenModal}
         variant="primary-dark"
@@ -35,7 +36,7 @@ const InterviewMaterialsView = () => {
       >
         הוסף פריט
       </Button>
-
+</div>
       {isModalOpen && (
         <MessageModal
           title="הוספת פריט"
