@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { Answer } from '../types/Answer';
+// import { Answer } from '../types/Answer';
 import { TitleQuestions } from './question';
 import { Button } from '../../../shared/ui/button';
 import { cn } from '../../../shared/utils/cn';
 import { Star } from 'lucide-react';
-
+export interface Answer {
+    id: string
+    user_id: string
+    question_id: string
+    file_url: string,
+    answer_file_name:string,
+    submitted_at: Date
+    amount_feedbacks:number
+}
 export const FilteringComponents = (props: {
   filterCriteria: {
     dateFilter: string;

@@ -9,12 +9,20 @@ import { Heading1 } from "../../../shared/ui/typography";
 import { CardSimple } from "../../../shared/ui/card";
 import { Button } from "../../../shared/ui/button";
 import { useEffect, useMemo, useState } from "react";
-import { Answer } from "../types/Answer";
+// import { Answer } from "../types/Answer";
 import { FilteringComponents } from "./filteringComponents";
 import { SearchComponents } from "./searchComponents";
 import { SortComponents } from "./sortComponents";
 import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
-
+export interface Answer {
+    id: string
+    user_id: string
+    question_id: string
+    file_url: string,
+    answer_file_name:string,
+    submitted_at: Date
+    amount_feedbacks:number
+}
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userId = user?.id ?? '';
