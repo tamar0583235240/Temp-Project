@@ -5,11 +5,14 @@ import { User } from "../../auth/types/types";
 import { RootState } from '../../../shared/store/store';
 import { useAddExperienceThanksMutation } from '../services/experienceThanksApi'
 import { useSelector } from "react-redux";
+import { useAddContentReportsMutation } from "../services/contentReportsApi";
 
 export const InterviewExperienceView = (props: { interviewExperience: interviewExperiences, experienceThanks: experienceThanks[], users: User[] }) => {
     const { interviewExperience, experienceThanks } = props;
     const user = useSelector((state: RootState) => state.auth.user);
     const [addExperienceThanks] = useAddExperienceThanksMutation();
+    const [addcontentReports] = useAddContentReportsMutation();
+
     const [openView, setOpenView] = useState(false);
     const [isThanks, setIsThanks] = useState(experienceThanks.find(thanks => thanks.user_id === user?.id) ? true : false);
 
@@ -23,6 +26,16 @@ export const InterviewExperienceView = (props: { interviewExperience: interviewE
         }
         addExperienceThanks(newThunk);
         setIsThanks(true);
+    }
+
+    function addReport(){
+        let newReport = {
+            id: '1',
+            experience_id: interviewExperience.id,
+            user_id: user ? user.id : '1',
+            created_at: new Date()
+        }
+        addcontentReports(newReport);
     }
 
     function getUserNameById(userId: string): string {
@@ -56,6 +69,7 @@ export const InterviewExperienceView = (props: { interviewExperience: interviewE
             <p>{interviewExperience.tips}</p>
             <p>{interviewExperience.hired ? 'התקבלה לעבודה! ✅' : 'לא התקבלה לעבודה ❌'}</p>
             <p> {experienceThanks.length} תודות </p>
+            <button onClick={addReport}>דיווח על תוכן לא הולם</button>
             <button onClick={addThunk} disabled={isThanks || experienceThanks.find(e => e.experience_id == interviewExperience.id && e.user_id == user?.id) != undefined}>🙏 תודה על השיתוף</button>
             <p>פורסם ב {new Date(interviewExperience.created_at ? interviewExperience.created_at : '')?.toLocaleDateString()}</p>
 

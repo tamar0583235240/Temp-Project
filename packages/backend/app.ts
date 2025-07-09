@@ -7,6 +7,8 @@ import cors from 'cors';
 import questionRouter from './src/routes/questionRouts';
 import interviewExperiencesRouter from './src/routes/interviewExperiencesRouts';
 import experienceThanksRouter from './src/routes/experienceThanksRouts';
+import contentReportsRouter from './src/routes/contentReportsRouts';
+
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
 import dotenv from 'dotenv';
@@ -40,7 +42,7 @@ app.use('/auth', authRouts);
 app.use('/interviewExperiences', interviewExperiencesRouter);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 app.use('/experienceThanks', experienceThanksRouter);
-
+app.use('/contentReports', contentReportsRouter);
 
 export default app;
 

@@ -27,9 +27,22 @@ export class ContentReports {
   @JoinColumn([{ name: "experience_id", referencedColumnName: "id" }])
   experience: InterviewExperiences;
 
-  @ManyToOne(() => Users, (users) => users.contentReports, {
-    onDelete: "CASCADE",
-  })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
+
+
+   @Column("uuid", {
+    primary: true,
+    name: "idUser",
+    default: () => "uuid_generate_v4()",
+  })
+  user_id: string;
+
+     @Column("uuid", {
+    primary: true,
+    name: "idExperience_id",
+    default: () => "uuid_generate_v4()",
+  })
+  experience_id: string;
+
 }
