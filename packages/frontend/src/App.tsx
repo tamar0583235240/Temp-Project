@@ -4,7 +4,6 @@ import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
-import { EditInterviewMaterialsSubForm } from './features/knowledge-base/components/EditInterviewMaterialsSubForm';
 import { Provider } from 'react-redux';
 import { store } from './shared/store/store';
 import { useAppDispatch } from './shared/hooks/reduxHooks';

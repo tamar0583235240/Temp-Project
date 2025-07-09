@@ -11,9 +11,7 @@ import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-
-import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
-import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import InterviewMaterialPage from "../../features/knowledge-base/components/InterviewMaterialPage";
 
 
 export default function AppRoutes() {
