@@ -1,7 +1,8 @@
 import "./App.css";
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
+// import { BrowserRouter } from "react-router-dom";
+
 
 
 import { MessageModalProvider } from "./shared/ui/MessageModalContext";
@@ -10,6 +11,7 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
 import { InterviewExperiencesList } from './features/interviewExperiences/components/interviewExperiencesList';
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   const dispatch = useAppDispatch();
