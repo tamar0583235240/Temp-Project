@@ -15,4 +15,5 @@ export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Eleme
     return <Navigate to="/login" replace />;
   }
   return children;
+  
 }
