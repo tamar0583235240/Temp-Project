@@ -36,10 +36,17 @@ export class ExperienceThanks {
 
 
 
-  //  @Column("uuid", {
-  //   primary: true,
-  //   name: "idUser",
-  //   default: () => "uuid_generate_v4()",
-  // })
-  // user_id: string;
+   @Column("uuid", {
+    primary: true,
+    name: "idUser",
+    default: () => "uuid_generate_v4()",
+  })
+  user_id: string;
+
+     @Column("uuid", {
+    primary: true,
+    name: "idExperience_id",
+    default: () => "uuid_generate_v4()",
+  })
+  experience_id: string;
 }

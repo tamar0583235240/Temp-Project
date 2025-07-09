@@ -11,3 +11,16 @@ export const getAllExperienceThanks = async (req: Request, res: Response): Promi
         res.status(500).json({ error });
     }
 };
+
+export const addExperienceThanks = async (req: Request, res: Response): Promise<ExperienceThanks | void> => {
+    try {
+        const experienceThanks:ExperienceThanks = req.body;
+        console.log('Received experienceThanks:', experienceThanks);
+        
+        const item = await experienceThanksRepository.addExperienceThanks(experienceThanks);
+        res.json(item);
+    } catch (error) {
+        console.error('Error in iexperienceThanks controller by addExperienceThanks:', error);
+        res.status(500).json({ error });
+    }
+};  
