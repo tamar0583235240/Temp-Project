@@ -1,8 +1,8 @@
-import { Navigate } from "react-router-dom";
 import type { JSX } from "react";
 import { RootState, store } from "../store/store";
 import { useSelector } from "react-redux";
 import { User } from "../../features/auth/types/types";
+import { Navigate } from "react-router-dom";
 
 interface Props {
   children: JSX.Element;
