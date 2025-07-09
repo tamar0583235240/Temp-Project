@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 // import {supabase} from '../config/dbConnection';
 // import { exampleInterface } from "../interfaces/exampleInterface";
+=======
+// import { pool } from '../config/dbConnection'; 
+// // import { exampleInterface } from "../interfaces/exampleInterface";
+>>>>>>> newTaskG4
 
-// const getAllExamples = async (): Promise<exampleInterface[]> => {
+// const getAllExamples = async (): Promise<any[]> => {
 //   try {
+<<<<<<< HEAD
 //     const { data, error } = await supabase
 //       .from("examples")
 //       .select("exampleField1, exampleField2, exampleField3");
@@ -12,11 +18,24 @@
 //     }
 
 //     return data as exampleInterface[];
+=======
+//     const query = `
+//       SELECT exampleField1, exampleField2, exampleField3
+//       FROM examples
+//     `;
+//     const result = await pool.query(query);
+//     return result.rows // as exampleInterface[];
+//   }
+>>>>>>> newTaskG4
 //   } catch (error) {
 //     console.error("Error fetching examples from Supabase:", error);
 //     throw error;
 //   }
 // };
 
+<<<<<<< HEAD
 // export default { getAllExamples };
 
+=======
+// // export default { getAllExamples };
+>>>>>>> newTaskG4

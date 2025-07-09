@@ -30,9 +30,12 @@ export class Answers {
   @Column("text", { name: "answer_file_name", nullable: true })
   answerFileName: string | null;
 
+<<<<<<< HEAD
   @Column("text", { name: "answerfilename", nullable: true })
   answerfilename: string | null;
 
+=======
+>>>>>>> newTaskG4
   @Column("integer", {
     name: "amount_feedbacks",
     nullable: true,

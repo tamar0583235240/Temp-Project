@@ -8,11 +8,14 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
+<<<<<<< HEAD
 // import SharedRecording from './features/shared-recordings/components/sharedRecording';
 import SharedRecordingsComponent from './features/shared-recordings/components/SharedRecordingsComponent';
 import QuestionsChart from './pages/QuestionsChart';
 
 import './App.css';
+=======
+>>>>>>> newTaskG4
 
 function App() {
   const dispatch = useAppDispatch();
@@ -40,6 +43,7 @@ function App() {
   if (loading) return <p>טוען...</p>;
 
   return (
+<<<<<<< HEAD
     <div className="App">
       
      <MessageModalProvider>
@@ -54,6 +58,13 @@ function App() {
       <QuestionsChart />
       </main>
     </div>
+=======
+    <MessageModalProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </MessageModalProvider>
+>>>>>>> newTaskG4
   );
 }
 

@@ -1,4 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+<<<<<<< HEAD
+=======
+import { Answer } from '../types/answer';
+>>>>>>> newTaskG4
 import { Question } from '../types/Question';
 import { Answer } from '../types/answer';
 import { Stats } from '../types/Stats';

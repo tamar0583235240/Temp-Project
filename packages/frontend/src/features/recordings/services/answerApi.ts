@@ -1,4 +1,8 @@
 import { api } from "../../../shared/api/api";
+<<<<<<< HEAD
+=======
+import { Answer } from "../types/answer";
+>>>>>>> newTaskG4
 import { Question } from "../types/Question";
 import { Stats } from "../types/Stats";
 import { Answer } from "../types/answer";

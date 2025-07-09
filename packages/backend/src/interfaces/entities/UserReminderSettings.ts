@@ -36,9 +36,18 @@ export class UserReminderSettings {
   })
   createdAt: Date | null;
 
+<<<<<<< HEAD
   // @ManyToOne(() => Users, (users) => users.userReminderSettings, {
   //   onDelete: "CASCADE",
   // })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 }
+=======
+  @ManyToOne(() => Users, (users) => users.userReminderSettings, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  user: Users;
+}
+>>>>>>> newTaskG4

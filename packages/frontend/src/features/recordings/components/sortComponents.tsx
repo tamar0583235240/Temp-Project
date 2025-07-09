@@ -1,6 +1,5 @@
 import React from 'react';
-import './sortComponents.css';
-
+import { cn } from '../../../shared/utils/cn';
 
 export const SortComponents = (props: {
   sortOption: string;
@@ -9,11 +8,20 @@ export const SortComponents = (props: {
   const { sortOption, setSortOption } = props;
 
   return (
-    <div className="sort-container">
-      <div className="sort-label-container">
-        <span className="sort-label">מיין לפי:</span>
+    <div className="flex justify-start mb-4 mt-4 max-w-2xl mx-auto
+                   xl:max-w-3xl
+                   lg:max-w-2xl  
+                   md:max-w-xl
+                   sm:max-w-lg
+                   max-sm:max-w-sm" dir="rtl">
+      <div className="flex items-center gap-3">
+        <span className="font-bold text-text-main">מיין לפי:</span>
         <select
-          className="sort-select"
+          className={cn(
+            "px-2 py-2 rounded-lg border border-border text-base bg-white w-64",
+            "shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-primary-dark",
+            "transition-colors duration-200"
+          )}
           value={sortOption}
           onChange={e => setSortOption(e.target.value)}
         >
@@ -26,5 +34,3 @@ export const SortComponents = (props: {
     </div>
   );
 };
-
-

@@ -10,4 +10,8 @@ export const answerController = async (req: Request, res: Response): Promise<voi
     console.error('Error in answerController:', error);
     res.status(500).json({ error });
   }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> newTaskG4

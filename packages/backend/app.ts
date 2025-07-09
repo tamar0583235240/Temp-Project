@@ -1,49 +1,44 @@
-import feedbackRouter from './src/routes/feedbackRouts';
-import AiInsightsRouter from './src/routes/aIInsightRouts';
-import answerRouts from './src/routes/answerRouts';
-import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
 import cors from 'cors';
-import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
-import dotenv from 'dotenv';
-import userRouts from './src/routes/userRouts';
-import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
-import questionRoute from './src/routes/questionRouts';
-import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
-// import {supabase} from './src/config/dbConnection';
+import dotenv from 'dotenv';
 
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
-};
+import feedbackRouter from './src/routes/feedbackRouts';
+import AiInsightsRouter from './src/routes/aIInsightRouts';
+import answerRouter from './src/routes/answerRouts';
+import questionRouter from './src/routes/questionRouts';
+import sharedRecordingRouter from './src/routes/sharedRecordingRouts';
+import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts'; // ← אם זה אותו קובץ, מחקי אחד מהם
+
+import interviewMaterialsHub from './src/routes/interview-materials-hub';
+import userRoutes from './src/routes/userRouts';
+import authRoutes from './src/routes/authRouts';
+
 dotenv.config();
-
-
-
 
 const app: Application = express();
 
+/* --- CORS --- */
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
-
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+/* --- Middleware --- */
 app.use(express.json());
 app.use(cookieParser());
-app.use('/users', userRouts);
-app.use('/auth', authRouts);
 
+/* --- Routes --- */
+app.use('/api', feedbackRouter);
+app.use('/api', AiInsightsRouter);
+app.use('/api', sharedRecordingRouter);      // ← אם שונה מ‑sharedRecordingsRoutes
+app.use('/answers', answerRouter);
+app.use('/question', questionRouter);
+app.use('/shared-recordings', sharedRecordingsRoutes); // ← או מחקי בהתאם
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 
-
-app.use(cors());
-app.use('/api' ,feedbackRouter )
-app.use('/api' , AiInsightsRouter ) 
-app.use('/api' , sharedRecrdingRouter )  
-app.use('/answers', answerRouts);
-app.use('/question', questionRoute); 
-app.use('/shared-recordings', sharedRecordingsRoutes);
-
-export default app
+export default app;

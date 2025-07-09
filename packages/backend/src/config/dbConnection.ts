@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+<<<<<<< HEAD
 import { createClient } from '@supabase/supabase-js';
 
 dotenv.config();
@@ -21,3 +22,17 @@ const pool = new Pool({
 console.log('Database connection pool created');
 export { pool };
 
+=======
+dotenv.config();
+import { createClient } from '@supabase/supabase-js';
+
+
+export const pool = new Pool({
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT),
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+ });
+console.log('Database connection pool created');
+>>>>>>> newTaskG4

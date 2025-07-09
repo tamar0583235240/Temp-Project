@@ -21,9 +21,12 @@ export class Feedback {
   })
   createdAt: Date;
 
+<<<<<<< HEAD
   @Column("text", { name: "answercode", nullable: true })
   answercode: string | null;
 
+=======
+>>>>>>> newTaskG4
   @ManyToOne(() => Answers, (answers) => answers.feedbacks)
   @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
   answerCode: Answers;
