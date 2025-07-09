@@ -26,8 +26,8 @@ const UserList = () => {
 
   const filteredUsers = users.filter((user) => {
     const matchName =
-      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchTerm.toLowerCase());
+      user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.last_name.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchStatus =
       statusFilter === 'all' ||

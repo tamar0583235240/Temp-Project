@@ -9,16 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "name": "interview-practice-frontend",
-  "version": "1.0.0",
-  "description": "Frontend for interview practice platform",
-  "main": "index.tsx",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "bcrypt": "^5.1.0",
@@ -43,11 +33,7 @@
     "yup": "^1.6.1",
     "framer-motion": "^12.20.2",
     "html2canvas": "^1.4.1",
-    "jspdf": "^3.0.1",
-    "lucide-react": "^0.522.0",
-    "react-icons": "^5.5.0",
-    "tailwind-merge": "^3.3.1",
-    "uuid": "^11.1.0"
+    "jspdf": "^3.0.1"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.3"

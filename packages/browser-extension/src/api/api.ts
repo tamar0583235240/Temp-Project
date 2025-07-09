@@ -1,7 +1,5 @@
-const url =
-  typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_URL
-    ? import.meta.env.VITE_API_URL
-    : "http://localhost:5000";
+const url = import.meta.env.VITE_API_URL
+  || "http://localhost:5000";
 
 async function login(email: string, password: string, rememberMe: boolean = false) {
   const res = await fetch(`${url}/auth/login`, {
@@ -10,9 +8,10 @@ async function login(email: string, password: string, rememberMe: boolean = fals
     credentials: "include",
     body: JSON.stringify({ email, password, rememberMe }),
   });
+  console.log("login response:", res);
+
   if (!res.ok) throw new Error("שגיאה בהתחברות");
-  const data = await res.json();
-  return data.token; // או data.user, לפי מה שהשרת מחזיר
+  return await res.json();
 }
 async function loginWithGoogle(credential: string) {
   const res = await fetch(`${url}/auth/google-auth`, {
@@ -23,28 +22,42 @@ async function loginWithGoogle(credential: string) {
       payload: { credential }
     }),
   });
+  console.log("loginWithGoogle response:", res);
   if (!res.ok) throw new Error("שגיאה בהתחברות עם Google");
   return await res.json();
 }
-async function getProgress(token: string) {
-  const res = await fetch(`${url}/progress`, {
+async function refreshToken() {
+  const res = await fetch(`${url}/auth/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  console.log("refreshToken response:", res);
+  if (!res.ok) throw new Error("שגיאה בהתחברות עם Google");
+  return await res.json();
+}
+
+async function getProgress(token: string, userId: string) {
+  const res = await fetch(`${url}/questions/progress/${userId}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  console.log("getProgress response:", res);
   if (!res.ok) throw new Error("שגיאה בשליפת התקדמות");
   return await res.json();
 }
 async function getTips(token: string) {
-  const res = await fetch(`${url}/tips`, {
+  const res = await fetch(`${url}/aiInsight`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  console.log("getTips response:", res);
   if (!res.ok) throw new Error("שגיאה בשליפת טיפים");
   return await res.json();
 }
 
-export { login, loginWithGoogle, getProgress, getTips };
+export { login, loginWithGoogle, refreshToken, getProgress, getTips };

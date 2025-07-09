@@ -4,6 +4,8 @@ import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+import { UserActivity } from "./UserActivity";
+import { UserReminderSettings } from "./UserReminderSettings";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -21,6 +23,9 @@ export class Users {
   @Column("text", { name: "email", unique: true })
   email: string;
 
+  @Column("text", { name: "password" })
+  password: string;
+
   @Column("text", { name: "phone", nullable: true })
   phone: string | null;
 
@@ -29,15 +34,12 @@ export class Users {
 
   @Column("timestamp without time zone", {
     name: "created_at",
-    default: () => "now()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdAt: Date;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
-
-  @Column("text", { name: "password", nullable: true })
-  password: string | null;
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
@@ -59,4 +61,13 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+
+  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+  userActivities: UserActivity[];
+
+  @OneToMany(
+    () => UserReminderSettings,
+    (userReminderSettings) => userReminderSettings.user
+  )
+  userReminderSettings: UserReminderSettings[];
 }

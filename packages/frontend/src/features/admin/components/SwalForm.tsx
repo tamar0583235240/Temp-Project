@@ -29,6 +29,8 @@ const SwalForm = () => {
       phone: data.phone || '',
       createdAt: new Date(),
       isActive: false,
+      first_name: '',
+      last_name: ''
     };
 
     try {

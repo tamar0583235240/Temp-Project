@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { BarChart2 } from "lucide-react";
 import { useUserStore } from "../store/progressSlice";
 import { useGetProgressStatsQuery } from "../../../shared/api/api";
+import { useSelector } from "react-redux";
 
 const ProgressStats: React.FC = () => {
-  const userId =
-    useUserStore((state) => state.userId) || "00000000-0000-0000-0000-000000000000";
+  const userId =useSelector(
+    (state: { auth: { user: { id?: string } } }) => state.auth.user.id
+  ) || "00000000-0000-0000-0000-000000000000";
+    // useUserStore((state) => state.userId) || "00000000-0000-0000-0000-000000000000";
   const setAnswered = useUserStore((state) => state.setAnswered);
   const setTotal = useUserStore((state) => state.setTotal);
 

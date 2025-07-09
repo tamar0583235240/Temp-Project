@@ -15,33 +15,33 @@ function App() {
   const [refreshTokenTrigger] = useRefreshTokenMutation();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-  dispatch(loginStart());
-  refreshTokenTrigger()
-    .unwrap()
-    .then((res) => {
-      console.log("הצלחה!", res);
-      dispatch(loginSuccess({ token: res.token, user: res.user }));
-    })
-    .catch((err) => {
-      console.log("נכשל ברענון הטוקן", err);
-      dispatch(logout());
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-}, []);
+    dispatch(loginStart());
+    refreshTokenTrigger()
+      .unwrap()
+      .then((res) => {
+        console.log("הצלחה!", res);
+        dispatch(loginSuccess({ token: res.token, user: res.user }));
+      })
+      .catch((err) => {
+        console.log("נכשל ברענון הטוקן", err);
+        dispatch(logout());
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
   if (loading) return <p>טוען...</p>;
- const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
+  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
   return (
     <GoogleOAuthProvider clientId={clientId}>
-    <Provider store={store}>
-     <MessageModalProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-    </MessageModalProvider>
-       </Provider>
-           </GoogleOAuthProvider>
+      <Provider store={store}>
+        <MessageModalProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </MessageModalProvider>
+      </Provider>
+    </GoogleOAuthProvider>
   );
 }
 export default App;

@@ -13,7 +13,7 @@ import { ImprovementSuggestions } from "./ImprovementSuggestions";
 
 const MainDashboard: React.FC = () => {
   const userName = useSelector(
-    (state: RootState) => state.auth?.user?.firstName !
+    (state: RootState) => state.user?.currentUser?.first_name !
   );
   const [showCertificate, setShowCertificate] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);

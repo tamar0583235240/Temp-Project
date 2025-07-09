@@ -114,7 +114,8 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password, rememberMe } = req.body;
+  try{
+     const { email, password, rememberMe } = req.body;
 
 
   const user = await userRepository.getUserByEmailAndPassword(email, password);
@@ -144,6 +145,11 @@ export const login = async (req: Request, res: Response) => {
 
 
   res.json({ user, token });
+  }catch (error) {
+    console.error('Login error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+ 
 };
 
 // רענון טוקן
@@ -219,7 +225,9 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       sharedRecordings: [],
       createdAt: new Date(),
-      resources: []
+      resources: [],
+      userActivities: [],
+      userReminderSettings: []
     },
     code,
     expiresAt,
@@ -306,7 +314,9 @@ export const signup = async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
-    resources: []
+    resources: [],
+    userActivities: [],
+    userReminderSettings: []
   };
 
   await authRepository.signup(newUser);

@@ -1,6 +1,5 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-import exampleRouts from './src/routes/exampleRouts';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
@@ -10,7 +9,6 @@ import dotenv from 'dotenv';
 import usersRoutes from './src/routes/userRouts';
 import answerRoutes from './src/routes/answerRouts';
 import aiInsightRoutes from './src/routes/aIInsightRouts';
-import { pool } from './src/config/dbConnection';
 
 dotenv.config();
 
@@ -48,18 +46,16 @@ app.use((req, res, next) => {
 });
 console.log('✅ i am here in app');
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/manager', interviewMaterialsRoutes);
 app.use('/interview-materials-hub', interviewMaterialsHub);
-app.use("/api/users", usersRoutes);
-app.use("/api/questions", answerRoutes);
-app.use("/api/aiInsight", aiInsightRoutes);
+app.use("/users", usersRoutes);
+app.use("/questions", answerRoutes);
+app.use("/aiInsight", aiInsightRoutes);
 
 export default app;
 
