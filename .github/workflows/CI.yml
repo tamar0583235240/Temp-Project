@@ -28,7 +28,7 @@ jobs:
         run: npm install
       - name: Build client (ignore warnings)
         working-directory: packages/frontend
-        run: CI=false npm run build
+        run: CI=false npm run dev
 
       - name: Test client
         working-directory: packages/frontend
