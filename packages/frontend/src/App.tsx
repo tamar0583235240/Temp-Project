@@ -4,12 +4,15 @@ import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
+import { EditInterviewMaterialsSubForm } from './features/knowledge-base/components/EditInterviewMaterialsSubForm';
 import { Provider } from 'react-redux';
 import { store } from './shared/store/store';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
+
 function App() {
   const dispatch = useAppDispatch();
   const [refreshTokenTrigger] = useRefreshTokenMutation();
@@ -32,9 +35,11 @@ function App() {
 }, []);
   if (loading) return <p>טוען...</p>;
  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
+ 
   return (
     <GoogleOAuthProvider clientId={clientId}>
     <Provider store={store}>
+        
      <MessageModalProvider>
       <>
         <BrowserRouter>
@@ -48,6 +53,7 @@ function App() {
   /> */}
    </>
     </MessageModalProvider>
+
        </Provider>
            </GoogleOAuthProvider>
   );
