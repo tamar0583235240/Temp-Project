@@ -14,6 +14,8 @@ const getAllQuestions = async (): Promise<Questions[]> => {
     throw error;
   }
 };
+
+
 const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
   try {
     const query = `
@@ -29,4 +31,12 @@ const getQuestionsByCategory = async (category_id: string): Promise<Questions[]>
     throw error;
   }
 };
+
+
 export default { getAllQuestions, getQuestionsByCategory };
+
+
+
+
+
+

@@ -1,38 +1,46 @@
-import React, { useState } from "react";
-import { CheckCircle2, XCircle } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { CheckCircle2, XCircle, Trash2 } from "lucide-react";
 import { interviewType } from "../types/questionType";
 import AudioRecorder from "../../recordings/components/AudioRecorder";
 import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
+// import { answeredQuestions } from "../store/simulationSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../shared/store/store";
 import MagicLoader from "./MagicLoader";
 import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
 import FileUpload from "../../recordings/components/FileUpload";
 
 interface QuestionProps {
-  question: interviewType;
-  index: number;
-  total: number;
   onFinishRecording: () => void;
-  onAnswerSaved: (id: string) => void;
+  onAnswerSaved: (answerId: string) => void;
+
 }
 
 const Question: React.FC<QuestionProps> = ({
-  question,
-  index,
-  total,
   onFinishRecording,
   onAnswerSaved,
 }) => {
+  
+  const dispatch = useDispatch();
+  const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
+  const currentQuestion = questions[currentIndex];
   const [uploadAnswer] = useUploadAnswerMutation();
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showFileActions, setShowFileActions] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
   const userId = "00000000-0000-0000-0000-000000000000"; // לשנות לפי משתמש אמיתי
 
-  return (
+    return (
     <div>
       {notification && (
         <Notification
@@ -47,16 +55,13 @@ const Question: React.FC<QuestionProps> = ({
         <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
-              שאלה {index + 1} מתוך {total}
+              שאלה {currentIndex + 1} 
             </span>
           </div>
 
-          <div>
-            <span>{question.category}</span>
-          </div>
-
+          
           <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
-            {question.content}
+            {currentQuestion.content}
           </div>
 
           <div className="flex gap-4 w-full">
@@ -68,7 +73,7 @@ const Question: React.FC<QuestionProps> = ({
                   try {
                     await uploadAnswer({
                       userId,
-                      questionId: String(question.id),
+                      questionId: String(currentQuestion.id),
                       fileUrl,
                       amountFeedbacks: 0,
                       answerFileName: fileName,
@@ -103,7 +108,7 @@ const Question: React.FC<QuestionProps> = ({
             {/* הקלטה */}
             <div className="w-1/2">
               <AudioRecorder
-                questionId={question.id.toString()}
+                questionId={currentQuestion.id.toString()}
                 onFinish={onFinishRecording}
                 onSaveSuccess={onAnswerSaved}
               />
@@ -112,10 +117,6 @@ const Question: React.FC<QuestionProps> = ({
         </div>
       </div>
 
-      {/* טיפים / AI */}
-      <div className="w-full flex flex-col items-center mt-4 gap-4">
-        <TipsComponent />
-      </div>
     </div>
   );
 };
