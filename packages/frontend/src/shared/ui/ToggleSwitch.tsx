@@ -1,75 +1,25 @@
-// import * as React from "react";
-// import { cn } from "../utils/cn";
-
-// interface ToggleSwitchProps {
-//   checked: boolean;
-//   onToggle: () => void;
-//   label?: string;
-//   disabled?: boolean;
-//   className?: string;
-// }
-// export const ToggleSwitch = ({
-//   checked,
-//   onToggle,
-//   label,
-//   disabled = false,
-//   className,
-// }: ToggleSwitchProps) => {
-//   return (
-//     <div className={cn("flex items-center gap-3", className)}>
-//       {label && (
-//         <span className="text-sm font-medium text-text-main">{label}</span>
-//       )}
-
-//       <button
-//         type="button"
-//         role="switch"
-//         aria-checked={checked}
-//         disabled={disabled}
-//         onClick={() => {
-//           if (!disabled) onToggle();
-//         }}
-//         className={cn(
-//           "relative w-9 h-5 flex items-center rounded-full transition-colors duration-300",
-//           checked ? "bg-primary-dark" : "bg-border",
-//           disabled && "opacity-60 cursor-not-allowed"
-//         )}
-//       >
-//         <span
-//           className={cn(
-//             "absolute top-[2px] left-[2px] h-[14px] w-[14px] rounded-full bg-white shadow-md transition-transform duration-300",
-//             checked ? "translate-x-[1rem]" : "translate-x-0"
-//           )}
-//         />
-//       </button>
-//     </div>
-//   );
-// };
 import * as React from "react";
 import { cn } from "../utils/cn";
 
 interface ToggleSwitchProps {
   checked: boolean;
   onToggle: () => void;
+  label?: string;
   disabled?: boolean;
   className?: string;
 }
-
 export const ToggleSwitch = ({
   checked,
   onToggle,
+  label,
   disabled = false,
   className,
 }: ToggleSwitchProps) => {
-
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <span
-        className="text-sm font-medium"
-        style={{ color: "var(--color-text)" }}
-      >
-        {checked ? "ציבורי" : "פרטי"}
-      </span>
+    <div className={cn("flex items-center gap-3", className)}>
+      {label && (
+        <span className="text-sm font-medium text-text-main">{label}</span>
+      )}
 
       <button
         type="button"
@@ -79,24 +29,17 @@ export const ToggleSwitch = ({
         onClick={() => {
           if (!disabled) onToggle();
         }}
-        style={{
-          backgroundColor: checked
-            ? "var(--color-primary)"
-            : "var(--color-border)",
-          transition: "background-color 0.3s",
-        }}
         className={cn(
-          "relative w-10 h-6 flex items-center rounded-full",
+          "relative w-9 h-5 flex items-center rounded-full transition-colors duration-300",
+          checked ? "bg-primary-dark" : "bg-border",
           disabled && "opacity-60 cursor-not-allowed"
         )}
       >
         <span
-          style={{
-            right: checked ? 4 : "auto",
-            left: checked ? "auto" : 4,
-            transition: "right 0.3s, left 0.3s",
-          }}
-          className="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-md"
+          className={cn(
+            "absolute top-[2px] left-[2px] h-[14px] w-[14px] rounded-full bg-white shadow-md transition-transform duration-300",
+            checked ? "translate-x-[1rem]" : "translate-x-0"
+          )}
         />
       </button>
     </div>

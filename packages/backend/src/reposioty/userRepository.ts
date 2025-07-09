@@ -17,7 +17,7 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
 };
 
 // קבלת כל המשתמשים
-export const getAllUsers = async (): Promise<Users[]> => {
+const getAllUsers = async (): Promise<Users[]> => {
   try {
     const res = await pool.query("SELECT * FROM users");
     return res.rows as Users[];
@@ -28,7 +28,7 @@ export const getAllUsers = async (): Promise<Users[]> => {
 };
 
 // קבלת משתמש לפי מזהה
-export const getUserById = async (id: string): Promise<Users | null> => {
+const getUserById = async (id: string): Promise<Users | null> => {
   try {
     const res = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
     return res.rows[0] || null;
@@ -73,7 +73,7 @@ export const updateUserPassword = async (
 };
 
 // עדכון פרטי משתמש
-export const updateUser = async (
+const updateUser = async (
   id: string,
   userData: Partial<Users>
 ): Promise<Users | null> => {
@@ -84,7 +84,7 @@ export const updateUser = async (
     const res = await pool.query(
       `
             UPDATE users 
-            SET first_name = $1, lastName = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password)
+            SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password)
             WHERE id = $8 RETURNING *`,
       [firstName, lastName, email, phone, role, isActive, password, id]
     );
@@ -95,7 +95,7 @@ export const updateUser = async (
   }
 };
 
-export const updateActiveUser = async (id: string): Promise<Users | null> => {
+const updateActiveUser = async (id: string): Promise<Users | null> => {
   try {
     const res = await pool.query(
       `
@@ -141,7 +141,7 @@ const createUser = async (user: Users): Promise<Users> => {
 const insertUser = async (user: {
   id: string;
   first_name: string;
-  lastName: string;
+  last_name: string;
   email: string;
   phone: string | null;
   role: string;
@@ -150,13 +150,13 @@ const insertUser = async (user: {
   created_at: Date;
 }) => {
   const result = await pool.query(
-    `INSERT INTO users (id, first_name, lastName, email, phone, role, is_active, password, created_at)
+    `INSERT INTO users (id, first_name, last_name, email, phone, role, is_active, password, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
      RETURNING *`,
     [
       user.id,
       user.first_name,
-      user.lastName,
+      user.last_name,
       user.email,
       user.phone,
       user.role,

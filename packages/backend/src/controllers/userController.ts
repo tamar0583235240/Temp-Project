@@ -40,7 +40,7 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  const { first_name, lastName, email, phone, password, role } = req.body;
+  const { first_name, last_name, email, phone, password, role } = req.body;
 
   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
@@ -55,7 +55,7 @@ export const createUser = async (req: Request, res: Response) => {
   const newUser: Users = {
     id: uuidv4(),
     firstName:first_name,
-    lastName,
+    lastName:last_name,
     email,
     phone,
     password: hashedPassword,
@@ -66,8 +66,7 @@ export const createUser = async (req: Request, res: Response) => {
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
-    resources: [],      
-     workExperiences: [] 
+    resources: []
   };
 
   const createdUser = await userRepository.createUser(newUser);

@@ -10,7 +10,6 @@ import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
 import { SharedRecordings } from "./SharedRecordings";
-import { Feedback } from "./Feedback"; // ודא שזה קיים אצלך
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
@@ -43,9 +42,9 @@ export class Answers {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 
-  @OneToMany(() => Feedback, (feedback) => feedback.answer)
-  feedbacks: Feedback[];
-
-  @OneToMany(() => SharedRecordings, (sharedRecordings) => sharedRecordings.answer)
+  @OneToMany(
+    () => SharedRecordings,
+    (sharedRecordings) => sharedRecordings.answer
+  )
   sharedRecordings: SharedRecordings[];
 }

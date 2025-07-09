@@ -28,7 +28,7 @@ const signup = async (userData: Users): Promise<Users> => {
     const { id, firstName, lastName, email, phone, role, createdAt, isActive, password} = userData;
 
     const res = await pool.query(
-      `INSERT INTO users (id, first_name, lastName, email, phone, role, created_at, is_active, password)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING *`,
       [id, firstName, lastName, email, phone, role, createdAt, isActive, password]

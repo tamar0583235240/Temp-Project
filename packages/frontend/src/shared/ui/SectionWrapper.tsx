@@ -31,18 +31,11 @@ export const SectionWrapper = ({
       <div className="flex justify-between items-center border-b border-[--color-border] pb-4 mb-4">
         <Heading2 className="!text-2xl !font-bold !m-0">{title}</Heading2>
         <div className="flex items-center gap-4">
-          {/* <ToggleSwitch
+          <ToggleSwitch
             checked={isPubliclyVisible}
             onToggle={onToggleVisibility}
-            // label={isPubliclyVisible ? "מוצג לציבור" : "פרטי"}
-          /> */}
-          <ToggleSwitch
-  checked={isPubliclyVisible}
-  onToggle={onToggleVisibility}
-/>
-<span className="text-sm font-medium text-text-main">
-  {isPubliclyVisible ? "ציבורי" : "פרטי"}
-</span>
+            label={isPubliclyVisible ? "מוצג לציבור" : "פרטי"}
+          />
           {showEditButton && onEditClick && (
             <Button variant="ghost" size="sm" onClick={onEditClick} aria-label={`ערוך ${title}`}>
               <FaEdit /> ערוך

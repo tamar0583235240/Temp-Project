@@ -2,13 +2,15 @@ import { useState } from "react";
 import { CreateInterviewMaterialsForm } from "./CreateInterviewMaterialsForm";
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
-import { Plus } from "lucide-react";
-import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
-import InterviewMaterialsList from "./interviewMaterialsList";
+import { Plus } from "lucide-react"; 
+import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialApi";
+import { Provider } from "react-redux";
+import { store } from "../store/store";
+import { InterviewMaterialsList } from "./interviewMaterialsList";
 
-const InterviewMaterialsView = () => {
+const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialMutation();
+  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialSubMutation();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -26,13 +28,13 @@ const InterviewMaterialsView = () => {
     <>
       <Button
         onClick={handleOpenModal}
-        variant="primary-dark"
+        variant="primary-dark" 
         size="md"
         icon={<Plus size={18} />}
         iconPosition="left"
         className="mb-4"
       >
-        הוסף פריט
+        הוסף פריט 
       </Button>
 
       {isModalOpen && (
@@ -47,9 +49,15 @@ const InterviewMaterialsView = () => {
           onClose={handleCloseModal}
         />
       )}
-      <InterviewMaterialsList />
+
+      
+      <Provider store={store}>
+        <InterviewMaterialsList />
+      </Provider>
+     
     </>
   );
 };
 
-export default InterviewMaterialsView;
+export default InterviewMaterialPage;
+
