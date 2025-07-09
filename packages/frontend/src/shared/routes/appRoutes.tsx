@@ -13,8 +13,9 @@ import { useSelector } from "react-redux";
 import AdminUser from "../../pages/AdminUser"; 
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
-import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import InterviewMaterialView from "../../features/knowledge-base/components/InterviewMaterialsView";
+import ProjectsList from "../../features/profile/components/projects";
+import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -24,13 +25,14 @@ export default function AppRoutes() {
       <Routes>
         {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
+     
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/reset-password"
           element={
-              <ResetPassword />
+            <ResetPassword />
           }
         />
         {/* Routes with header */}
@@ -103,7 +105,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialPage />
+                <InterviewMaterialView />
               </RoleProtectedRoute>
             }
           />
@@ -132,21 +134,22 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path="/manager/resources"
+            path="/manager/interview-materials"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>AdminResources</p>
+                <InterviewMaterialsView />
               </RoleProtectedRoute>
             }
           />
           <Route
-            path="/manager/interview-materials"
+            path="/personal-projects"
             element={
-              <RoleProtectedRoute allowedRoles={["manager"]}>
-                <InterviewMaterialsHub />
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProjectsList userId={user?.id ?? ""} />
               </RoleProtectedRoute>
             }
           />
+
         </Route>
       </Routes>
     </div>
