@@ -1,3 +1,5 @@
+// רק בסיעתא דשמיא //
+
 // // import React from "react";
 // // import { skipToken } from '@reduxjs/toolkit/query/react';
 // // import { useGetRemindersQuery } from "../services/remindersApi";
@@ -44,22 +46,54 @@
 //     </div>
 //   );
 // }
-import React from 'react';
-import { useGetSentTipsQuery } from '../services/remindersApi';
+// +++ //
+// import React from 'react';
+// import { useGetSentTipsQuery } from '../services/remindersApi';
+
+// export default function ReminderComponent() {
+//   const { data: tips, isLoading, error } = useGetSentTipsQuery();
+
+//   if (isLoading) return <p>טוען טיפים שנשלחו...</p>;
+//   if (error) return <p>שגיאה בטעינת הטיפים</p>;
+//   if (!tips || tips.length === 0) return <p>אין טיפים להצגה</p>;
+
+//   return (
+//     <div>
+//       <h2>טיפים שנשלחו עד היום</h2>
+//       <ul>
+//         {tips.map(tip => (
+//           <li key={tip.tip_id}>{tip.content}</li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// }
+// +++ //
+
+import React, { useEffect } from "react";
+import { useGetRemindersQuery } from "../services/remindersApi";
 
 export default function ReminderComponent() {
-  const { data: tips, isLoading, error } = useGetSentTipsQuery();
+  const { data: reminders, isLoading, error } = useGetRemindersQuery();
 
-  if (isLoading) return <p>טוען טיפים שנשלחו...</p>;
-  if (error) return <p>שגיאה בטעינת הטיפים</p>;
-  if (!tips || tips.length === 0) return <p>אין טיפים להצגה</p>;
+  useEffect(() => {
+    if (error) {
+      console.error("שגיאה בקריאת API:", error);
+    }
+  }, [error]);
+
+  if (isLoading) return <p>טוען תזכורות...</p>;
+  if (error) return <p>שגיאה בטעינה</p>;
+  if (!reminders || reminders.length === 0) return <p>אין טיפים להצגה כרגע</p>;
 
   return (
-    <div>
-      <h2>טיפים שנשלחו עד היום</h2>
+    <div className="border p-4 rounded bg-white shadow mt-6">
+      <h2 className="text-xl font-bold mb-2">טיפים</h2>
       <ul>
-        {tips.map(tip => (
-          <li key={tip.tip_id}>{tip.content}</li>
+        {reminders.map((reminder) => (
+          <li key={`${reminder.tip_id}-${reminder.tip_num}`}>{reminder.content}</li>
+          // <li key={`${reminder.tip_id}-${reminder.tip_num}`}>{reminder.content}</li>
+          // <li key={reminder.tip_id}>{reminder.content}</li>
         ))}
       </ul>
     </div>

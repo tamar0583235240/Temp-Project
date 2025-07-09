@@ -1,3 +1,4 @@
+// reminderSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import reminderType from '../types/tipType';
 

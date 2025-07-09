@@ -1,77 +1,43 @@
-// // // import { pool } from '../config/dbConnection';
+// // רק בסיעתא דשמיא //
 
-// // // async function getDueReminders() {
-// // //   const query = `
-// // //     SELECT 
-// // //       t.id AS tip_id,
-// // //       t.content,
-// // //       s.user_id,
-// // //       s.frequency,
-// // //       s.last_sent_at
-// // //     FROM tips t
-// // //     JOIN user_reminder_settings s ON s.tip_id = t.id
-// // //   `;
+// // import { pool } from '../config/dbConnection';
 
-// // //   const { rows } = await pool.query(query);
+// // async function getDueReminders() {
+// //   const query = `
+// //     SELECT 
+// //       t.id AS tip_id,
+// //       t.content,
+// //       s.user_id,
+// //       s.frequency,
+// //       s.last_sent_at
+// //     FROM tips t
+// //     JOIN user_reminder_settings s ON s.tip_num = t.id
+// //   `;
 
-// // //   return rows.map((row) => ({
-// // //     tip_id: row.tip_id,
-// // //     content: row.content,
-// // //     user_id: row.user_id,
-// // //     last_sent_at: row.last_sent_at,
-// // //     user: {
-// // //       user_reminder_settings: {
-// // //         tip_frequency: row.frequency,
-// // //       },
-// // //     },
-// // //   }));
-// // // }
-// // // export default {
-// // //   getDueReminders,
-// // // };
+// //   const { rows } = await pool.query(query);
 
-/*
-// 🔧 reminderRepository.ts
-import { pool } from '../config/dbConnection';
+// //   return rows.map((row) => ({
+// //     tip_id: row.tip_id,
+// //     content: row.content,
+// //     user_id: row.user_id,
+// //     last_sent_at: row.last_sent_at,
+// //     user: {
+// //       user_reminder_settings: {
+// //         tip_frequency: row.frequency,
+// //       },
+// //     },
+// //   }));
+// // }
+// // export default {
+// //   getDueReminders,
+// // };
 
-async function getDueReminders() {
-  const { rows } = await pool.query(`
-    SELECT 
-      s.user_id,
-      s.tip_num,
-      s.frequency,
-      s.last_sent_at,
-      t.id AS tip_id,
-      t.content
-    FROM user_reminder_settings s
-    JOIN tips t ON t.id = s.tip_num
-    WHERE s.is_enabled = true AND s.type = 'tip'
-  `);
 
-  return rows.map((row) => ({
-    user_id: row.user_id,
-    tip_id: row.tip_id,
-    content: row.content,
-    last_sent_at: row.last_sent_at,
-    frequency: row.frequency,
-    tip_num: row.tip_num,
-  }));
-}
-
-export default { getDueReminders };
-*/
 // // // 🔧 reminderRepository.ts
 // // import { pool } from '../config/dbConnection';
 
 // // async function getDueReminders() {
 // //   const { rows } = await pool.query(`
-// //     WITH numbered_tips AS (
-// //       SELECT 
-// //         id,
-// //         content,
-// //         ROW_NUMBER() OVER (ORDER BY id) AS row_num
-// //       FROM tips
-// //     )
 // //     SELECT 
 // //       s.user_id,
 // //       s.tip_num,
@@ -80,7 +46,7 @@ export default { getDueReminders };
 // //       t.id AS tip_id,
 // //       t.content
 // //     FROM user_reminder_settings s
-// //     JOIN numbered_tips t ON t.row_num = s.tip_num
+// //     JOIN tips t ON t.id = s.tip_num
 // //     WHERE s.is_enabled = true AND s.type = 'tip'
 // //   `);
 
@@ -95,9 +61,124 @@ export default { getDueReminders };
 // // }
 
 // // export default { getDueReminders };
-// // 🔧 reminderRepository.ts
+
+// // // // // // 🔧 reminderRepository.ts
+// // // // // import { pool } from '../config/dbConnection';
+
+// // // // // async function getDueReminders() {
+// // // // //   const { rows } = await pool.query(`
+// // // // //     WITH numbered_tips AS (
+// // // // //       SELECT 
+// // // // //         id,
+// // // // //         content,
+// // // // //         ROW_NUMBER() OVER (ORDER BY id) AS row_num
+// // // // //       FROM tips
+// // // // //     )
+// // // // //     SELECT 
+// // // // //       s.user_id,
+// // // // //       s.tip_num,
+// // // // //       s.frequency,
+// // // // //       s.last_sent_at,
+// // // // //       t.id AS tip_id,
+// // // // //       t.content
+// // // // //     FROM user_reminder_settings s
+// // // // //     JOIN numbered_tips t ON t.row_num = s.tip_num
+// // // // //     WHERE s.is_enabled = true AND s.type = 'tip'
+// // // // //   `);
+
+// // // // //   return rows.map((row) => ({
+// // // // //     user_id: row.user_id,
+// // // // //     tip_id: row.tip_id,
+// // // // //     content: row.content,
+// // // // //     last_sent_at: row.last_sent_at,
+// // // // //     frequency: row.frequency,
+// // // // //     tip_num: row.tip_num,
+// // // // //   }));
+// // // // // }
+
+// // // // // export default { getDueReminders };
+// // // // // 🔧 reminderRepository.ts
+// // // // import { pool } from '../config/dbConnection';
+
+// // // // async function getDueReminders() {
+// // // //   const { rows } = await pool.query(`
+// // // //     WITH numbered_tips AS (
+// // // //       SELECT id, content, ROW_NUMBER() OVER (ORDER BY id) AS number FROM tips
+// // // //     )
+// // // //     SELECT 
+// // // //       s.user_id,
+// // // //       s.tip_num,
+// // // //       s.frequency,
+// // // //       s.last_sent_at,
+// // // //       t.id AS tip_id,
+// // // //       t.content,
+// // // //       t.number
+// // // //     FROM user_reminder_settings s
+// // // //     JOIN numbered_tips t ON t.number = s.tip_num
+// // // //     WHERE s.is_enabled = true AND s.type = 'tip'
+// // // //   `);
+
+// // // //   return rows.map((row) => ({
+// // // //     user_id: row.user_id,
+// // // //     tip_id: row.tip_id,
+// // // //     content: row.content,
+// // // //     last_sent_at: row.last_sent_at,
+// // // //     frequency: row.frequency,
+// // // //     tip_num: row.tip_num,
+// // // //     number: row.number,
+// // // //   }));
+// // // // }
+
+// // // +++ // 
+
+// // import { pool } from '../config/dbConnection';
+
+// // async function getDueReminders(userId: string) {
+// //   const { rows } = await pool.query(`
+// //     WITH numbered_tips AS (
+// //       SELECT id, content, ROW_NUMBER() OVER (ORDER BY id) AS number FROM tips
+// //     )
+// //     SELECT 
+// //       s.user_id,
+// //       s.tip_num,
+// //       s.frequency,
+// //       s.last_sent_at,
+// //       t.id AS tip_id,
+// //       t.content,
+// //       t.number
+// //     FROM user_reminder_settings s
+// //     JOIN numbered_tips t ON t.number = s.tip_num
+// //     WHERE s.is_enabled = true AND s.type = 'tip' AND s.user_id = $1
+// //   `, [userId]);
+
+// //   return rows;
+// // }
+
+
+// // async function getSentTipsForUser(userId: string) {
+// //   const { rows } = await pool.query(`
+// //     SELECT t.id, t.content, MIN(st.sent_at) AS first_sent_at
+// //     FROM sent_tips st
+// //     JOIN tips t ON t.id = st.tip_id
+// //     WHERE st.user_id = $1
+// //     GROUP BY t.id, t.content
+// //     ORDER BY first_sent_at
+// //   `, [userId]);
+
+// //   return rows;
+// // }
+
+// // export default {
+// //   getDueReminders,
+// //   getSentTipsForUser,
+// // };
+
+// // // +++ // 
+
+// // reminderRepository.ts
 // import { pool } from '../config/dbConnection';
 
+// // יש לוודא שליחה נכונה של הטיפים
 // async function getDueReminders() {
 //   const { rows } = await pool.query(`
 //     WITH numbered_tips AS (
@@ -127,20 +208,71 @@ export default { getDueReminders };
 //   }));
 // }
 
-// export default { getDueReminders };
+
+// async function getAllSentTips() {
+//   const { rows } = await pool.query(`
+//     SELECT t.id, t.content
+//     FROM sent_tips st
+//     JOIN tips t ON t.id = st.tip_id
+//     ORDER BY st.sent_at
+//   `);
+
+//   return rows;
+// }
+
+// export default {
+//   getDueReminders,
+//   getAllSentTips,
+// };
+// reminderRepository.ts
 import { pool } from '../config/dbConnection';
+
+// reminderRepository.ts
+async function getDueReminders() {
+  const { rows } = await pool.query(`
+WITH numbered_tips AS (
+  SELECT id, content, ROW_NUMBER() OVER (ORDER BY id) AS number
+  FROM tips
+)
+SELECT 
+  s.user_id,
+  s.tip_num,
+  s.frequency,
+  s.last_sent_at,
+  t.id AS tip_id,
+  t.content
+FROM user_reminder_settings s
+JOIN numbered_tips t ON t.number = s.tip_num
+WHERE s.is_enabled = true
+ORDER BY t.number;
+
+
+  `);
+
+  return rows.map((row) => ({
+    user_id: row.user_id,
+    tip_id: row.tip_id,
+    content: row.content,
+    last_sent_at: row.last_sent_at,
+    frequency: row.frequency,
+    tip_num: row.tip_num,
+    number: row.number,
+  }));
+}
+
 
 async function getAllSentTips() {
   const { rows } = await pool.query(`
-    SELECT t.id, t.content, MIN(st.sent_at) AS first_sent_at
+    SELECT t.id, t.content
     FROM sent_tips st
     JOIN tips t ON t.id = st.tip_id
-    GROUP BY t.id, t.content
-    ORDER BY first_sent_at
+    ORDER BY st.sent_at
   `);
+
   return rows;
 }
 
 export default {
+  getDueReminders,
   getAllSentTips,
 };
