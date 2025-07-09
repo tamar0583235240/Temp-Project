@@ -39,7 +39,7 @@ jobs:
         run: npm install
       - name: Build server
         working-directory: packages/backend
-        run: npm run build
+        run: npm start
       - name: Test server (skipped if not available)
         working-directory: packages/backend
         run: |
