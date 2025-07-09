@@ -61,7 +61,6 @@ export const ToggleSwitch = ({
   disabled = false,
   className,
 }: ToggleSwitchProps) => {
-  console.log("ToggleSwitch checked:", checked);
 
   return (
     <div className={cn("flex items-center gap-2", className)}>

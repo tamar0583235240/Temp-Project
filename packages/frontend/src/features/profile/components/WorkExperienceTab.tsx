@@ -12,20 +12,19 @@ import { GridContainer } from "../../../shared/ui/GridContainer";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
 import { IconButton } from "../../../shared/ui/IconButon";
+
 export interface WorkExperienceItem {
   id: string;
-  companyName: string;
+  company_name: string;
   position: string;
   description?: string;
-  startDate: string;
-  endDate?: string;
-  is_public: boolean;  // שונה מ-isPublic ל-is_public
+  start_date: string;
+  end_date?: string | null;
+  is_public: boolean;
 }
 
 export const WorkExperienceTab = () => {
   const userId = useSelector((state: RootState) => state.auth.user?.id);
-  console.log("Redux userId:", userId);
-
   const {
     data = [],
     refetch,
@@ -35,41 +34,38 @@ export const WorkExperienceTab = () => {
     skip: !userId,
   });
 
-  console.log("WorkExperience data:", data);
-  if (error) {
-    console.error("Error fetching work experiences:", error);
-  }
-  console.log("isLoading:", isLoading);
-
   const [create] = useCreateWorkExperienceMutation();
   const [update] = useUpdateWorkExperienceMutation();
   const [remove] = useDeleteWorkExperienceMutation();
 
   const [editingId, setEditingId] = React.useState<string | null>(null);
 
-  if (!userId) {
-    console.warn("No userId available yet, skipping work experience display.");
-    return null;
-  }
-
   const handleSave = async (id: string, updated: WorkExperienceItem) => {
     try {
-      const payload = {
-        user_id: userId,
-        companyName: updated.companyName,
-        position: updated.position,
-        description: updated.description || "",
-        startDate: updated.startDate,
-        endDate: updated.endDate || null,
-        is_public: updated.is_public ?? false,  
-      };
-
+//       const payload = {
+//   user_id: userId,
+//   company_name: updated.company_name,
+//   position: updated.position,
+//   description: updated.description || "",
+//   start_date: updated.start_date,
+//   end_date: updated.end_date?.trim() === "" ? null : updated.end_date,
+//   is_public: updated.is_public ?? false,
+// };
+const payload = {
+  user_id: userId,
+  companyName: updated.company_name,
+  position: updated.position,
+  description: updated.description || "",
+  startDate: updated.start_date,
+  endDate: updated.end_date?.trim() === "" ? null : updated.end_date,
+  isPublic: updated.is_public ?? false,
+};
       if (id === "new") {
+        console.log("payload:", payload);
         await create(payload).unwrap();
       } else {
         await update({ id, ...payload }).unwrap();
       }
-
       setEditingId(null);
       refetch();
     } catch (err) {
@@ -88,24 +84,21 @@ export const WorkExperienceTab = () => {
 
   const handleToggleVisibility = async (id: string | number) => {
     const item = data.find((x: WorkExperienceItem) => x.id === id);
-
     if (!item || !userId) return;
 
-    const newIsPublic = !item.is_public;
     const payload = {
       id: String(item.id),
       user_id: userId,
-      companyName: item.companyName,
+      company_name: item.company_name,
       position: item.position,
       description: item.description || "",
-      startDate: item.startDate,
-      endDate: item.endDate || null,
-      is_public: newIsPublic,  // שינוי כאן
+      start_date: item.start_date,
+      end_date: item.end_date || null,
+      is_public: !item.is_public,
     };
 
     try {
-      const res = await update(payload).unwrap();
-      console.log("Update response:", res);
+      await update(payload).unwrap();
       refetch();
     } catch (err) {
       console.error("Failed toggling visibility:", err);
@@ -113,7 +106,7 @@ export const WorkExperienceTab = () => {
   };
 
   return (
-    <GridContainer maxWidth="lg" gridClasses="" padding="px-4" mt="mt-10" mb="mb-10">
+    <GridContainer maxWidth="lg" padding="px-4" mt="mt-10" mb="mb-10">
       <div className="space-y-4 w-full">
         <Heading2>ניסיון תעסוקתי</Heading2>
 
@@ -127,14 +120,15 @@ export const WorkExperienceTab = () => {
             onSave={(id, updated) => void handleSave(String(id), updated)}
             onDelete={(id) => void handleDelete(String(id))}
             onToggleVisibility={(id) => handleToggleVisibility(id)}
-            isPubliclyVisible={item.is_public} 
+            isPubliclyVisible={item.is_public}
             renderDisplay={(data) => (
               <div>
                 <div className="font-semibold">
-                  {data.companyName} – {data.position}
+                  {data.company_name} – {data.position}
                 </div>
                 <div className="text-sm text-text-secondary">
-                  {data.startDate} עד {data.endDate || "היום"}
+                  {data.start_date ? new Date(data.start_date).toLocaleDateString() : "לא ידוע"} עד{" "}
+                  {data.end_date ? new Date(data.end_date).toLocaleDateString() : "היום"}
                 </div>
                 <p className="mt-1">{data.description}</p>
               </div>
@@ -142,8 +136,8 @@ export const WorkExperienceTab = () => {
             renderEditForm={(data, onChange) => (
               <div className="space-y-2">
                 <Input
-                  value={data.companyName}
-                  onChange={(e) => onChange("companyName", e.target.value)}
+                  value={data.company_name}
+                  onChange={(e) => onChange("company_name", e.target.value)}
                   placeholder="שם מקום עבודה"
                 />
                 <Input
@@ -160,13 +154,13 @@ export const WorkExperienceTab = () => {
                 <div className="flex gap-2">
                   <Input
                     type="date"
-                    value={data.startDate}
-                    onChange={(e) => onChange("startDate", e.target.value)}
+                    value={data.start_date}
+                    onChange={(e) => onChange("start_date", e.target.value)}
                   />
                   <Input
                     type="date"
-                    value={data.endDate ?? ""}
-                    onChange={(e) => onChange("endDate", e.target.value)}
+                    value={data.end_date ?? ""}
+                    onChange={(e) => onChange("end_date", e.target.value)}
                   />
                 </div>
               </div>
@@ -187,12 +181,12 @@ export const WorkExperienceTab = () => {
           <EditableListItem<WorkExperienceItem>
             itemData={{
               id: "new",
-              companyName: "",
+              company_name: "",
               position: "",
               description: "",
-              startDate: "",
-              endDate: "",
-              is_public: true,  // שינוי כאן
+              start_date: "",
+              end_date: "",
+              is_public: true,
             }}
             isEditing={true}
             onEdit={() => {}}
@@ -205,8 +199,8 @@ export const WorkExperienceTab = () => {
             renderEditForm={(data, onChange) => (
               <div className="space-y-2">
                 <Input
-                  value={data.companyName}
-                  onChange={(e) => onChange("companyName", e.target.value)}
+                  value={data.company_name}
+                  onChange={(e) => onChange("company_name", e.target.value)}
                   placeholder="שם מקום עבודה"
                 />
                 <Input
@@ -223,19 +217,18 @@ export const WorkExperienceTab = () => {
                 <div className="flex gap-2">
                   <Input
                     type="date"
-                    value={data.startDate}
-                    onChange={(e) => onChange("startDate", e.target.value)}
+                    value={data.start_date}
+                    onChange={(e) => onChange("start_date", e.target.value)}
                   />
                   <Input
                     type="date"
-                    value={data.endDate ?? ""}
-                    onChange={(e) => onChange("endDate", e.target.value)}
+                    value={data.end_date ?? ""}
+                    onChange={(e) => onChange("end_date", e.target.value)}
                   />
                 </div>
               </div>
             )}
           />
-          
         )}
       </div>
     </GridContainer>
