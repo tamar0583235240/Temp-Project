@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { saveTimeSpent} from '../controllers/activity-Monitoring';
+import { recordMetric,getStatsInRange} from '../controllers/activity-Monitoring';
 
 const router = Router();
-router.post('/',saveTimeSpent)
+router.get("/state", getStatsInRange);
+router.post('/',recordMetric)
 
 export default router;
