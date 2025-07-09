@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreateInterviewMaterialsSubForm } from "./CreateInterviewMaterialsSubForm";
+import { CreateInterviewMaterialsForm } from "./CreateInterviewMaterialsForm";
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
 import { Plus } from "lucide-react"; 
@@ -41,7 +41,7 @@ const InterviewMaterialPage = () => {
         <MessageModal
           title="הוספת פריט"
           message={
-            <CreateInterviewMaterialsSubForm
+            <CreateInterviewMaterialsForm
               onSubmit={handleSubmit}
               onCancel={handleCloseModal}
             />

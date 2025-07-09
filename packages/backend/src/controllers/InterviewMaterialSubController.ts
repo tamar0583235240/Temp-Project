@@ -25,10 +25,10 @@ const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<
             return;
         }
 
-        console.log('Existing Material Sub file:', existingMaterialSub.file_url);
+        console.log('Existing Material Sub file:', existingMaterialSub.fileUrl);
 
         let updatedThumbnail = existingMaterialSub.thumbnail;
-        let updatedFileUrl = existingMaterialSub.file_url;
+        let updatedFileUrl = existingMaterialSub.fileUrl;
 
         if (files?.thumbnail?.[0]) {
             const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
@@ -40,7 +40,7 @@ const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<
         }
 
         if (files?.file?.[0]) {
-            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+            const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
             if (match && match[1]) {
                 await deleteFileFromCloudinary(match[1]);
             }
@@ -122,8 +122,8 @@ const deleteInterviewMaterial = async (req: Request, res: Response): Promise<voi
             }
         }
 
-        if (existingMaterialSub.file_url) {
-            const match = existingMaterialSub.file_url.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
+        if (existingMaterialSub.fileUrl) {
+            const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
             if (match && match[1]) {
                 await deleteFileFromCloudinary(match[1]);
             }

@@ -12,7 +12,7 @@ export const InterviewMaterialsList = () => {
   const [deleteMaterial] = useDeleteInterviewMaterialMutation();
 
   // ניהול ID של פריט שממתין לאישור מחיקה
-  const [confirmingId, setConfirmingId] = useState<number | null>(null);
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   if (isLoading)
     return (
@@ -32,10 +32,10 @@ export const InterviewMaterialsList = () => {
       </p>
     );
   }
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setConfirmingId(id);
   };
-  const handleEditClick = (id: number) => {
+  const handleEditClick = (id: string) => {
 
   }
   const handleConfirmDelete = async () => {

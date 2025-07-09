@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterials";
-import InterviewMaterialView from "../../features/knowledge-base/components/InterviewMaterialsView";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 
 
@@ -104,7 +103,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialView />
+                <InterviewMaterialsHub />
               </RoleProtectedRoute>
             }
           />

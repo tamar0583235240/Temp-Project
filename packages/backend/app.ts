@@ -32,5 +32,6 @@ app.use('/api', exampleRouts);
 app.use('/users', userRouts);
 app.use('/auth', authRouts);
 app.use('/manager/interview-materials', interviewMaterialsHub);
+app.use('/interview-materials-hub', interviewMaterialsHub);
 
 export default app;

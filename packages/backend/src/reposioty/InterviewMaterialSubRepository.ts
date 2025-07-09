@@ -1,19 +1,19 @@
-import { InterviewMaterial } from '@interfaces/entities/InterviewMaterial ';
+// import { InterviewMaterialsSub } from '@interfaces/entities/InterviewMaterialsSub';
 import { pool } from '../config/dbConnection';
 import { InterviewMaterialsSub } from '../interfaces/entities/InterviewMaterialsSub';
 import { Console } from 'console';
 
-const getInterviewMaterialSubs = async (): Promise<InterviewMaterial[]> => {
+const getInterviewMaterialSubs = async (): Promise<InterviewMaterialsSub[]> => {
     try {
         const result = await pool.query('SELECT * FROM interview_materials_sub');
-        return result.rows as InterviewMaterial[];
+        return result.rows as InterviewMaterialsSub[];
     } catch (error) {
         console.error('Error fetching AIInsight from PostgreSQL:', error);
         throw error;
     }
 };
 
-const getInterviewMaterialSubById = async (id: string): Promise<InterviewMaterial | null> => {
+const getInterviewMaterialSubById = async (id: string): Promise<InterviewMaterialsSub | null> => {
     try {
         const result = await pool.query('SELECT * FROM interview_materials_sub WHERE id = $1', [id]);
         return result.rows[0] || null;
