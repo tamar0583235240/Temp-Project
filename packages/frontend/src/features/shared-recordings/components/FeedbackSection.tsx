@@ -14,7 +14,7 @@ interface Props {
 export default function FeedbackSection({ recordingId, userId, onSubmitted }: Props) {
   const { data: feedbacks = [] } = useGetFeedbacksBySharedRecordingIdQuery(recordingId);
   const existingFeedback = feedbacks[0]; // נניח שיש רק אחד לכל משתמש
-
+  // const existingFeedback = feedbacks.find(fb => fb.given_by_user_id === userId);
   const [rating, setRating] = useState<number>(existingFeedback?.rating || 0);
   const [comment, setComment] = useState<string>(existingFeedback?.comment || '');
 

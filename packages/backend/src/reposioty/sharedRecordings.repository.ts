@@ -1,5 +1,26 @@
 import { pool } from '../config/dbConnection';
 
+// export const getSharedRecordingsByUserId = async (userId: string) => {
+//   const query = `
+//     SELECT
+//       sr.id,
+//       u.first_name || ' ' || u.last_name AS "userName",
+//       q.title AS "questionTitle",
+//       sr.date,
+//       sr.audio_url AS "audioUrl",
+//       sr.ai_summary AS "aiSummary",
+//       f.comment AS "feedbackComment",
+//       f.rating AS "feedbackRating"
+//     FROM shared_recordings sr
+//     JOIN users u ON sr.owner_id = u.id
+//     JOIN questions q ON sr.question_id = q.id
+//     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+//     WHERE $1 = ANY(sr.shared_with)
+
+//   `;
+//   const { rows } = await pool.query(query, [userId]);
+//   return rows;
+// };
 export const getSharedRecordingsByUserId = async (userId: string) => {
   const query = `
     SELECT
@@ -14,13 +35,13 @@ export const getSharedRecordingsByUserId = async (userId: string) => {
     FROM shared_recordings sr
     JOIN users u ON sr.owner_id = u.id
     JOIN questions q ON sr.question_id = q.id
-    LEFT JOIN feedback f ON f.sharedrecordingid = sr.id
-    WHERE $1 = ANY(sr.sharedwith)
-
+    LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+    WHERE $1 = ANY(sr.shared_with)
   `;
   const { rows } = await pool.query(query, [userId]);
   return rows;
 };
+
 
 export const getRecordingDetailsById = async (recordingId: string) => {
   const query = `
@@ -28,7 +49,7 @@ export const getRecordingDetailsById = async (recordingId: string) => {
     FROM shared_recordings sr
     JOIN users u ON sr.owner_id = u.id
     JOIN questions q ON sr.question_id = q.id
-    LEFT JOIN feedback f ON f.sharedrecordingid = sr.id
+    LEFT JOIN feedback f ON f.shared_recording_id = sr.id
     WHERE sr.id = $1
   `;
   const { rows } = await pool.query(query, [recordingId]);
@@ -47,7 +68,7 @@ export const getSharedRecordingIdByAnswerId = async (answerId: string) => {
 
 export const insertFeedback = async (sharedRecordingId: string, comment: string, rating: number) => {
   const query = `
-    INSERT INTO feedback (id, sharedrecordingid, comment, rating, createdat)
+    INSERT INTO feedback (id, shared_recording_id, comment, rating, createdat)
     VALUES (gen_random_uuid(), $1, $2, $3, NOW())
     RETURNING *
   `;

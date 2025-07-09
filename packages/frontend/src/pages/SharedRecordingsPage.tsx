@@ -6,7 +6,7 @@ import { SharedRecording } from '../features/shared-recordings/types/types';
 import { useCreateFeedbackMutation } from '../features/feedback/services/feedbackApi';
 
 export default function SharedRecordingsPage() {
-  const userId = 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77'; // זמני
+  const userId = '427a9195-b05e-44e9-922d-8c79c9774e35'; // זמני
   const { data, isLoading, error } = useGetSharedRecordingsQuery(userId);
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
 
