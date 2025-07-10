@@ -16,11 +16,7 @@ export class Feedback {
   rating: number | null;
 
   @Column("timestamp without time zone", {
-<<<<<<< HEAD
-    name: "created_dat",
-=======
     name: "created_at",
->>>>>>> 9f041a36ae71909367bf95aaecde1288be92f2be
     default: () => "now()",
   })
   createdAt: Date;
