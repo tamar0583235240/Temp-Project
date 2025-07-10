@@ -45,7 +45,7 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         </p>
 
         <p className="font-semibold">
-          {user.first_name} {user.last_name}
+          {user.first_name} {user.lastName}
         </p>
         <p>{user.email}</p>
         <p>{user.phone || 'אין טלפון'}</p>

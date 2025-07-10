@@ -30,7 +30,7 @@ const SwalForm = () => {
       createdAt: new Date(),
       isActive: false,
       first_name: '',
-      last_name: ''
+      lastName: ''
     };
 
     try {
