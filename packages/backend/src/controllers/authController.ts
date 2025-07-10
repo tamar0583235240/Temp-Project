@@ -188,6 +188,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       createdAt: new Date(),
       resources: [],
       workExperiences: [],
+        userReminderSettings: [],
     },
     code,
     expiresAt,
@@ -270,6 +271,7 @@ export const signup = async (req: Request, res: Response) => {
     createdAt: new Date(),
     resources: [],
     workExperiences: [],
+      userReminderSettings: [],
   };
 
   await authRepository.signup(newUser);

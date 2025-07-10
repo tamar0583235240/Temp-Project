@@ -179,7 +179,9 @@ export default function AppRoutes() {
             path="/work-experience"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <WorkExperienceTab userId={user?.id ?? ""} />
+                {/* <WorkExperienceTab userId={user?.id ?? ""} /> */}
+                     <WorkExperienceTab  />
+
               </RoleProtectedRoute>
             }
           />

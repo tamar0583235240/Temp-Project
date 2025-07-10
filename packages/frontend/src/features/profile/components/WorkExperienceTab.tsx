@@ -99,7 +99,6 @@ const payload = {
   return (
     <GridContainer maxWidth="sm" padding="px-4" mt="mt-10" mb="mb-10">
       <div className="space-y-4 w-full">
-        <Heading2>ניסיון תעסוקתי</Heading2>
 
         {data.map((item: WorkExperienceItem) => (
           <EditableListItem<WorkExperienceItem>

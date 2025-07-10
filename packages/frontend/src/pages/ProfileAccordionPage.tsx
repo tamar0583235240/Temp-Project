@@ -1,7 +1,7 @@
 import { FaPen } from "react-icons/fa";
 import { Accordion } from "../shared/ui/Accordion";
 import EditProfilePage from "./my-profile";
-
+import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
 const ProfileAccordionPage = () => {
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -14,9 +14,10 @@ const ProfileAccordionPage = () => {
       </Accordion>
 
       {/* דוגמא, צריך להוריד */}
-      <Accordion title="פרטים נוספים">
-        <p>פרטים נוספים על המשתמש</p>
+      <Accordion title="ניסיון תעסוקתי">
+        <WorkExperienceTab />
       </Accordion>
+
     </div>
   );
 };
