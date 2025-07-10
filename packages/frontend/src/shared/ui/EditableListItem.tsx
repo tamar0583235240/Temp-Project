@@ -62,9 +62,9 @@ export function EditableListItem<T extends { id?: string | number }>({
           checked={isPubliclyVisible}
           onToggle={() => onToggleVisibility(itemId)}
         />
-        <span className="text-sm font-medium text-text-main">
-          {isPubliclyVisible ? "ציבורי" : "פרטי"}
-        </span>
+        {/* <span className="text-sm font-medium text-text-main">
+          {isPubliclyVisible ? "" : ""}
+        </span> */}
         {!isPubliclyVisible && (
           <span className="text-xs text-text-secondary">
             (לא יוצג בפרופיל הציבורי)
