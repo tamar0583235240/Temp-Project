@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { store } from "../shared/store/store";
+import AdminTipsAndPractices from "../features/admin/components/AdminTipsAndPractices";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -47,7 +48,11 @@ const HomePage = () => {
           </Button>
         </>
       )}
+      {/* AdminTipsAndPractices */}
+      <AdminTipsAndPractices />
+      {/* AdminTipsAndPractices */}
     </GridContainer>
+
     // <GridContainer maxWidth="lg" mt="mt-8" mb="mb-16">
     //   <Heading1 className="mb-2">ברוכה הבאה!</Heading1>
     //   <Paragraph className="mb-6">
@@ -102,6 +107,7 @@ const HomePage = () => {
     //     הצג הודעה
     //   </Button> */}
     // </GridContainer>
+
   );
 };
 
