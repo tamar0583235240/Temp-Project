@@ -61,7 +61,7 @@ const InterviewMaterialsList = () => {
           רשימת משאבים לראיונות
         </h2>
 
-      {items && items.length > 0 ? (
+        {items && items.length > 0 ? (
           items.map((item) => (
             <InterviewMaterialsItem
               key={item.id}
@@ -70,32 +70,32 @@ const InterviewMaterialsList = () => {
               onDelete={handleDeleteClick}
             />
           ))
-      ) : (
+        ) : (
           <p className="text-gray-500 text-center">אין משאבים להצגה כרגע.</p>
-      )}
+        )}
       </section>
 
       {confirmingId && (
-          <MessageModal
-            title="אישור מחיקה"
+        <MessageModal
+          title="אישור מחיקה"
           message={
             <div>
               <p>בטוחה שברצונך למחוק את הפריט הזה?</p>
               <div className="mt-6 flex justify-end gap-4">
-              <button
-                onClick={handleConfirmDelete}
+                <button
+                  onClick={handleConfirmDelete}
                   className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-              >
-                מחק
-              </button>
-              <button
-                onClick={handleCancelDelete}
-                className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
-              >
-                ביטול
-              </button>
+                >
+                  מחק
+                </button>
+                <button
+                  onClick={handleCancelDelete}
+                  className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
+                >
+                  ביטול
+                </button>
+              </div>
             </div>
-          </div>
           }
           onClose={handleCancelDelete}
         />
