@@ -25,7 +25,7 @@ export class Resources {
   })
   createdAt: Date;
 
-  @ManyToOne(() => Users, (users) => users.resources)
+  @ManyToOne(() => Users, (users) => users.resources, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 }

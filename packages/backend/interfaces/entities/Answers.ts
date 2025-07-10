@@ -9,7 +9,6 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
-import { SharedRecordings } from "./SharedRecordings";
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
@@ -17,7 +16,7 @@ export class Answers {
   @Column("uuid", {
     primary: true,
     name: "id",
-    default: () => "uuid_generate_v4()",
+    default: () => "gen_random_uuid()",
   })
   id: string;
 
@@ -33,7 +32,11 @@ export class Answers {
   })
   submittedAt: Date;
 
-  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  @Column("integer", {
+    name: "amount_feedbacks",
+    nullable: true,
+    default: () => "0",
+  })
   amountFeedbacks: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
@@ -48,10 +51,4 @@ export class Answers {
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
-
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.answer
-  )
-  sharedRecordings: SharedRecordings[];
 }

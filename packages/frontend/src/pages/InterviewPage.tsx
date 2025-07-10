@@ -38,7 +38,7 @@ const InterviewPage = () => {
   const [showTips, setShowTips] = useState(false);
   const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
-  
+
   const answeredQuestionIds = useMemo(() => {
     return answeredAnswers.map((a: { question: { id: any; }; }) => a.question.id);
   }, [answeredAnswers]);
@@ -55,50 +55,56 @@ const InterviewPage = () => {
   const totalQuestions = questions.length;
   const answeredCount = questionsWithStatus.filter(q => q.answered).length;
   const allAnswered = totalQuestions > 0 && answeredCount === totalQuestions;
-useEffect(() => {
-  if (questions.length > 0) {
-    dispatch(setQuestions(questions)); // ⬅️ מעדכן את השאלות ב־Redux
-    dispatch(goToQuestion(0));         // ⬅️ מאפס את האינדקס לשאלה הראשונה
-  }
-}, [questions, dispatch]);
 
+  // Reset answerIdForAI & isLoadingAI when moving to another question
+  useEffect(() => {
+    setAnswerIdForAI(null);
+    setIsLoadingAI(false);
+    setShowTips(false);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      dispatch(setQuestions(questions));
+      dispatch(goToQuestion(0));
+    }
+  }, [questions, dispatch]);
 
   if (isLoading) return <p className="p-8 text-center">טוען שאלות...</p>;
-  // if (isError || !questions.length)
-  //   return <p className="p-8 text-center">שגיאה בטעינת שאלות</p>;
 
-const handleAnswerSaved = (answerId: string) => {
-  const q = questions[currentIndex];
-  dispatch(
-    addAnsweredAnswer({
-      id: answerId,
-      question: { id: String(q.id), text: q.title || q.text },
-    })
-  );
-  dispatch(setCurrentAnswerId(answerId)); // עדכון Redux
-  setIsLoadingAI(true);
-  setTimeout(() => {
-    setIsLoadingAI(false);
-  }, 2000);
-};
+  const handleAnswerSaved = (answerId: string) => {
+    const q = questions[currentIndex];
+    dispatch(
+      addAnsweredAnswer({
+        id: answerId,
+        question: { id: String(q.id), text: q.title || q.text },
+      })
+    );
+    setAnswerIdForAI(answerId); // ניתוח AI תמיד לפי ה-id האחרון
+    setIsLoadingAI(true);
+    setTimeout(() => {
+      setIsLoadingAI(false);
+    }, 800); // אפשר לקצר את זמן ההמתנה
+  };
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
       <CategoryDropdown />
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
         <div className="w-full max-w-2xl space-y-8">
-          <Question
-            onFinishRecording={() => setShowTips(true)}
-            onAnswerSaved={handleAnswerSaved}
-          />
+<Question
+  question={questionsWithStatus[currentIndex]}
+  onFinishRecording={() => setShowTips(true)}
+  onAnswerSaved={handleAnswerSaved}
+/>
         </div>
 
-           {showTips && <TipsComponent />}
-          {isLoadingAI && <MagicLoader />}
-          {answerIdForAI && !isLoadingAI && (
-            <AnswerAI />
-          )}
-        
+        {showTips && <TipsComponent />}
+        {isLoadingAI && <MagicLoader />}
+        {answerIdForAI && !isLoadingAI && (
+          <AnswerAI answerId={"2151d5f9-6266-42e9-b7ee-c47a680d3a63"} />
+        )}
+      
         <div className="mt-8 w-full max-w-2xl">
           <EndSurvey showEndButton={allAnswered} answeredCount={answeredCount} totalQuestions={totalQuestions} />
         </div>

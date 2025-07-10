@@ -6,9 +6,9 @@ const initialState: InitialState = {
   questions: [],
   currentIndex: 0,
   loading: false,
-  currentAnswerId: "", //מזהה תשובה נוכחית
+  currentAnswerId: "2151d5f9-6266-42e9-b7ee-c47a680d3a63", //מזהה תשובה נוכחית
   currentCategoryId: "",
-  currentUserId: "00000000-0000-0000-0000-000000000000", //מזהה משתמש נוכחי
+  currentUserId: "cccc3333-3333-3333-3333-333333333333", //מזהה משתמש נוכחי
 };
 
 const simulationSlice = createSlice({
