@@ -11,7 +11,7 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 import AppRoutes from "./shared/routes/appRoutes";
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 
-import { WorkExperienceTab } from './features/profile/components/WorkExperienceTab'; // לבדיקה זמנית
+// import { WorkExperienceTab } from './features/profile/components/WorkExperienceTab'; // לבדיקה זמנית
 
 function AppWrapper() {
   const dispatch = useAppDispatch();

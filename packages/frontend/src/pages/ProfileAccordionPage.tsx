@@ -1,6 +1,7 @@
 import { FaPen } from "react-icons/fa";
 import { Accordion } from "../shared/ui/Accordion";
 import EditProfilePage from "./my-profile";
+// import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
 import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
 const ProfileAccordionPage = () => {
   return (
@@ -14,9 +15,9 @@ const ProfileAccordionPage = () => {
       </Accordion>
 
       {/* דוגמא, צריך להוריד */}
-      <Accordion title="ניסיון תעסוקתי">
+      {/* <Accordion title="ניסיון תעסוקתי">
         <WorkExperienceTab />
-      </Accordion>
+      </Accordion> */}
 
     </div>
   );
