@@ -72,7 +72,7 @@ const Question: React.FC<QuestionProps> = ({
                 userId={currentUserId}
                 onUploaded={async (fileUrl, fileName) => {
                   try {
-                    await uploadAnswer({
+                    const answer = await uploadAnswer({
                       userId: currentUserId,
                       questionId: String(currentQuestion.id),
                       fileUrl,
@@ -85,7 +85,7 @@ const Question: React.FC<QuestionProps> = ({
                       icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
                     });
                     setTimeout(() => setNotification(null), 3500);
-                    onAnswerSaved("fake-id-from-server");
+                    if (answer?.id) onAnswerSaved(answer.id);
                   } catch (e) {
                     setNotification({
                       message: "שגיאה בשמירת התשובה",
