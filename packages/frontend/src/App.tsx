@@ -40,8 +40,6 @@ function AppWrapper() {
   return (
     <BrowserRouter>
       <AppRoutes />
-      {/* בדיקה זמנית - להסיר לאחר שילוב מלא ב־Route */}
-      {/* <WorkExperienceTab /> */}
     </BrowserRouter>
   );
 }
