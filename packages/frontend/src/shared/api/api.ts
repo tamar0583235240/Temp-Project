@@ -7,7 +7,7 @@ export const api = createApi({
         credentials: 'include',
     }),
     reducerPath: "api",
-    tagTypes: ["Item", "InterviewMaterials","users", "questions", "answers", "insights"],
+    tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings", "InterviewMaterials","users", "questions", "answers", "insights"],
     endpoints: (builder) => ({
     getProgressStats: builder.query<ProgressStats, string>({
       query: (userId) => `questions/progress/${userId}`,

@@ -132,7 +132,7 @@ const createUser = async (user: Users): Promise<Users> => {
 const insertUser = async (user: {
   id: string;
   first_name: string;
-  lastName: string;
+  last_name: string;
   email: string;
   phone: string | null;
   role: string;
@@ -142,13 +142,13 @@ const insertUser = async (user: {
   slug: string | null;
 }) => {
   const result = await pool.query(
-    `INSERT INTO users (id, first_name, lastName, email, phone, role, is_active, password, created_at, slug)
+    `INSERT INTO users (id, first_name, last_name, email, phone, role, is_active, password, created_at, slug)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
      RETURNING *`,
     [
       user.id,
       user.first_name,
-      user.lastName,
+      user.last_name,
       user.email,
       user.phone,
       user.role,

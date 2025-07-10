@@ -154,6 +154,7 @@ export const login = async (req: Request, res: Response) => {
 
 // רענון טוקן
 export const refreshToken = async (req: Request, res: Response) => {
+  
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(407).json({ message: 'לא סופק refresh token' });
@@ -193,9 +194,9 @@ export const logout = (req: Request, res: Response) => {
 const pendingSignups = new Map<string, { userData: Users; code: string; expiresAt: number }>();
 
 export const requestSignup = async (req: Request, res: Response) => {
-  const { first_name, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
-  if (!email || !password || !first_name || !lastName) {
+  if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
@@ -214,7 +215,7 @@ export const requestSignup = async (req: Request, res: Response) => {
     userData: {
       id: uuidv4(),
       firstName: first_name,
-      lastName,
+      lastName: last_name,
       email,
       phone,
       password: hashedPassword,
@@ -296,7 +297,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
 // הרשמה
 export const signup = async (req: Request, res: Response) => {
-  const { first_name, lastName, email, phone, password } = req.body;
+  const { first_name, last_name, email, phone, password } = req.body;
 
   const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
   if (existing) {
@@ -349,6 +350,10 @@ export const authWithGoogle = async (req: Request, res: Response) => {
     if (!payload?.credential) {
       return res.status(400).json({ message: 'Missing Google credential' });
     }
+
+    console.log('START');
+console.log('payload:', payload);
+console.log('credential:', payload.credential);
 
     const ticket = await client.verifyIdToken({
       idToken: payload.credential,

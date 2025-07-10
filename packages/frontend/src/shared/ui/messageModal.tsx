@@ -1,5 +1,5 @@
+import { X } from "lucide-react";
 import { ReactNode } from "react";
-import { X } from "lucide-react"; 
 
 type MessageModalProps = {
     title: string;

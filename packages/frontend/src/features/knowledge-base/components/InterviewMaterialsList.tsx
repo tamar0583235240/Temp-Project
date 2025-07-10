@@ -13,7 +13,7 @@ const InterviewMaterialsList = () => {
   const [deleteMaterial] = useDeleteInterviewMaterialMutation();
 
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<InterviewMaterial| null>(null);
+  const [editingItem, setEditingItem] = useState<InterviewMaterial | null>(null);
 
   const handleDeleteClick = (id: string) => setConfirmingId(id);
   const handleCancelDelete = () => setConfirmingId(null);

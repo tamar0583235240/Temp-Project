@@ -6,6 +6,8 @@ import interviewMaterialsHub from './src/routes/interview-materials-sub';
 import cookieParser from 'cookie-parser';
 import projectsRoutes from './src/routes/projectsRoutes';
 import dotenv from 'dotenv';
+import profileRoutes from "./src/routes/profileRouts";
+
 import answerRoutes from './src/routes/answerRouts';
 import aiInsightRoutes from './src/routes/aIInsightRouts';
 
@@ -53,5 +55,7 @@ app.use("/questions", answerRoutes);
 app.use("/aiInsight", aiInsightRoutes);
 app.use('/manager/interview-materials', interviewMaterialsHub);
 app.use('/personal-projects', projectsRoutes);
+app.use('/profiles', profileRoutes);
+
 
 export default app;

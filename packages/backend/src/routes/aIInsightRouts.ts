@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { getAiInsigths} from '../controllers/aIInsightController';
+import {  getAiInsightsByAnswerId ,getAiInsights} from "../controllers/aIInsightController";
 
-const router = Router();
+const AiInsightsRouter = Router();
 
-router.get('/',getAiInsigths);
-router.get('/aiInsight',getAiInsigths);
+AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+AiInsightsRouter.get('/aiInsight',getAiInsights);
+export default AiInsightsRouter;        
 
-export default router;
