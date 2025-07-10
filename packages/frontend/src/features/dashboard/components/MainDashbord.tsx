@@ -153,12 +153,13 @@ export const MainDashboard: React.FC = () => {
   const authState = useSelector((state: RootState) => state.auth);
 
   // המרה של המשתמש ל-camelCase
-  const user = authState.user
-    ? {
-        firstName: authState.user.first_name ?? authState.user.firstName,
-        lastName: authState.user.last_name ?? authState.user.lastName,
-      }
-    : null;
+const user = authState.user
+  ? {
+      firstName: (authState.user as any).first_name ?? authState.user.firstName,
+      lastName: (authState.user as any).last_name ?? authState.user.lastName,
+    }
+  : null;
+
 
   const userName = user?.firstName || "משתמש ללא שם";
   const userLastName = user?.lastName || "";
@@ -206,7 +207,7 @@ export const MainDashboard: React.FC = () => {
           onClick={handleOverlayClick}
         >
           <div ref={certificateRef}>
-            <Certificate first_name={userName ?? ""} />
+<Certificate first_name={user?.firstName ?? ""} last_name={user?.lastName ?? ""} />
           </div>
         </div>
       )}
@@ -247,7 +248,7 @@ export const MainDashboard: React.FC = () => {
         >
           <ProgressStats />
         </motion.div>
-        {isComplete && !showCertificate && (
+        {/* {isComplete && !showCertificate && ( */}
 
         <motion.div
           className="max-w-md mx-auto text-center"
@@ -262,7 +263,7 @@ export const MainDashboard: React.FC = () => {
             תעודת מוכנות לראיון
           </button>
         </motion.div>
-       )}
+       {/* )} */}
       </motion.div>
     </>
   );
