@@ -225,8 +225,13 @@ export const requestSignup = async (req: Request, res: Response) => {
       sharedRecordings: [],
       createdAt: new Date(),
       resources: [],
-      userActivities: [],
-      userReminderSettings: []
+      userReminderSettings: [],
+      slug: null,
+      contentReports: [],
+      experienceThanks: [],
+      interviewExperiences: [],
+      userSessions: [],
+      workExperiences: []
     },
     code,
     expiresAt,
@@ -301,7 +306,7 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName:first_name,
+    firstName: first_name,
     lastName,
     email,
     phone,
@@ -314,8 +319,13 @@ export const signup = async (req: Request, res: Response) => {
     sharedRecordings: [],
     createdAt: new Date(),
     resources: [],
-    userActivities: [],
-    userReminderSettings: []
+    userReminderSettings: [],
+    slug: null,
+    contentReports: [],
+    experienceThanks: [],
+    interviewExperiences: [],
+    userSessions: [],
+    workExperiences: []
   };
 
   await authRepository.signup(newUser);
