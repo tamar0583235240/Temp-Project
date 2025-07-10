@@ -12,7 +12,7 @@ import { useAppDispatch } from "./shared/hooks/reduxHooks";
 =======
 import React from 'react';
 import './App.css';
-import AIInsightsList from './features/dashboard/components/AIInsightsList';
+import AIInsightsList from './features/dashboard/components/aiInsightsList';
 
 >>>>>>> bc82c02 (Merge branch 'Group3' of https://github.com/tamar0583235240/Temp-Project into Tehila-Fried)
 

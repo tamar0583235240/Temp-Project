@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-<<<<<<< HEAD
 import aiInsightsRepository from '../reposioty/AiInsightsReposiory';
 
 export const getAiInsights = async (req: Request, res: Response): Promise<void> => {
@@ -22,5 +21,3 @@ export const getAiInsightsByAnswerId = async (req: Request, res: Response): Prom
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-=======
->>>>>>> b9cae16 (AI Insights)

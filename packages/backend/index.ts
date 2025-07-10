@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import dotenv from 'dotenv';
-import app from './app';
-dotenv.config();
-
-const PORT = process.env.PORT || 5000;
-=======
 // import dotenv from 'dotenv';
 // dotenv.config();
 // import app from './app';
@@ -25,8 +18,7 @@ dotenv.config();
 // console.log('SUPABASE_URL:', process.env.SUPABASE_URL,'index');
 // console.log('SERVICE_ROLE_KEY:', process.env.SERVICE_ROLE_KEY);
 
-const PORT = process.env.PORT;
->>>>>>> b9cae16 (AI Insights)
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
