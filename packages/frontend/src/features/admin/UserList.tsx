@@ -15,6 +15,9 @@ import {
 } from '../../shared/api/adminApi';
 import { createRoot } from 'react-dom/client';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { AdminUsersTitle } from './components/AdminQuestionsTitle';
+
+
 const MySwal = withReactContent(Swal);
 const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -115,7 +118,7 @@ const UserList = () => {
   }
   return (
     <div className="max-w-7xl mx-auto my-8 px-4">
-      <h2 className="text-center text-2xl font-bold mb-8">רשימת משתמשים</h2>
+      <h2 className="text-center text-2xl font-bold mb-8"><AdminUsersTitle /></h2>
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
         <div className="flex flex-wrap gap-4 items-center">
           <select

@@ -46,12 +46,12 @@ export const updateUserByAdminSchema = Joi.object({
     .messages({
       'string.pattern.base': 'Phone number must contain only digits',
     }),
-  password: Joi.string()
-    .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/)
-    .optional()
-    .messages({
-      'string.pattern.base': 'Password must contain letters and numbers',
-    }),
+  // password: Joi.string()
+  //   .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/)
+  //   .optional()
+  //   .messages({
+  //     'string.pattern.base': 'Password must contain letters and numbers',
+  //   }),
   role: Joi.string()
     .valid('student', 'manager', 'admin')
     .optional()

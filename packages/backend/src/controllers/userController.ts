@@ -279,4 +279,3 @@ export const uploadUsersExcel = async (req: Request, res: Response) => {
   }
 };
 
-

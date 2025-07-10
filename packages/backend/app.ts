@@ -13,7 +13,9 @@ import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
 // import {supabase} from './src/config/dbConnection';
-
+import usedynamicContentRouter from './src/routes/DynamicContentRoutes'; // ודאי שזה שם הקובץ המדויק
+import answerRoutes from './src/routes/answerRouts';
+import aiInsightRoutes from './src/routes/aIInsightRouts';
 import userAdminRouts from './src/routes/userAdminRouts';
 
 const corsOptions = {
@@ -41,5 +43,8 @@ app.use('/auth', authRouts);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
+app.use('/api/dynamic-contents', usedynamicContentRouter);
+app.use("/api/questions", answerRoutes);
+app.use("/api/aiInsight", aiInsightRoutes);
 
 export default app
