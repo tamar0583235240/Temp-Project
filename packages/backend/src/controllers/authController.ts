@@ -9,13 +9,14 @@ import { createToken, getToken, deleteToken } from '../reposioty/passwordResetRe
 import userRepository from '../reposioty/userRepository';
 import authRepository from '../reposioty/authRepository';
 import { sendResetEmail, sendVerificationCodeEmail } from '../utils/emailSender';
+import { generateUniqueSlug } from 'utils/generateSlug';
 
 
 type CodeData = { code: string, expiresAt: number };
 const codesPerEmail = new Map<string, CodeData>();//שמירת הקודים לפי המיילים שאליהם נשלחו
 // ניקוי המפות שפג תוקפן -כל שעה
 const cleanExpiredCodes = () => {
-     const now = Date.now();
+  const now = Date.now();
   for (const [email, data] of codesPerEmail.entries()) {
     if (data.expiresAt < now) {
       codesPerEmail.delete(email);
@@ -26,36 +27,36 @@ setInterval(cleanExpiredCodes, 60 * 60 * 1000);
 
 
 export const generateAndSendCode = async (req: Request, res: Response) => {
-     const email = req.body.email;
-     if (!email) return res.status(400).json({sent:false, message: "Email is required" });
-     // יצירת קוד אקראי בן 6 ספרות
-     const code = Math.floor(100000 + Math.random() * 900000).toString();
-     const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
-     codesPerEmail.set(email, { code, expiresAt });
-     // בקוד הזה צריך לטפל...
-    await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`)
-    res.status(200).json({sent:true, message: "הקוד נשלח בהצלחה!"});
+  const email = req.body.email;
+  if (!email) return res.status(400).json({ sent: false, message: "Email is required" });
+  // יצירת קוד אקראי בן 6 ספרות
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
+  codesPerEmail.set(email, { code, expiresAt });
+  // בקוד הזה צריך לטפל...
+  await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`)
+  res.status(200).json({ sent: true, message: "הקוד נשלח בהצלחה!" });
 }
 
 export const validateCode = async (req: Request, res: Response) => {
-    const email = req.body.email;
-    const  code  = req.body.code;
+  const email = req.body.email;
+  const code = req.body.code;
 
-    if (!email || !code)
-         return res.status(400).json({ error: "Email and code are required" });
+  if (!email || !code)
+    return res.status(400).json({ error: "Email and code are required" });
 
-    const validCode = codesPerEmail.get(email);
-    if(!validCode){
-        return res.status(200).json({ valid: false, message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית." });
-    }
-    if( Date.now() > validCode.expiresAt){
-        return res.status(200).json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
-    }
-    if (code === validCode.code) {
-        return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
-    } else {
-        return res.status(200).json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
-    }
+  const validCode = codesPerEmail.get(email);
+  if (!validCode) {
+    return res.status(200).json({ valid: false, message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית." });
+  }
+  if (Date.now() > validCode.expiresAt) {
+    return res.status(200).json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
+  }
+  if (code === validCode.code) {
+    return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
+  } else {
+    return res.status(200).json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
+  }
 };
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -113,42 +114,42 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  try{
-     const { email, password, rememberMe } = req.body;
+  try {
+    const { email, password, rememberMe } = req.body;
 
 
-  const user = await userRepository.getUserByEmailAndPassword(email, password);
-  if (!user) {
-    return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
-  }
+    const user = await userRepository.getUserByEmailAndPassword(email, password);
+    if (!user) {
+      return res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
+    }
 
-  const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: rememberMe ? '7d' : '1h' }
-  );
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: rememberMe ? '7d' : '1h' }
+    );
 
-  const refreshToken = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    REFRESH_SECRET,
-    { expiresIn: rememberMe ? '7d' : '2h' }
-  );
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      REFRESH_SECRET,
+      { expiresIn: rememberMe ? '7d' : '2h' }
+    );
 
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000
-  });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000
+    });
 
 
-  res.json({ user, token });
-  }catch (error) {
+    res.json({ user, token });
+  } catch (error) {
     console.error('Login error:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
- 
+
 };
 
 // רענון טוקן
@@ -270,24 +271,24 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
   // יוצרים טוקן
   const token = jwt.sign(
-      { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
+    { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
 
-    const refreshToken = jwt.sign(
-      { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
-      REFRESH_SECRET,
-      { expiresIn: '2h' }
-    );
+  const refreshToken = jwt.sign(
+    { id: pending.userData.id, email: pending.userData.email, role: pending.userData.role },
+    REFRESH_SECRET,
+    { expiresIn: '2h' }
+  );
 
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge:  2 * 60 * 60 * 1000
-    });
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 2 * 60 * 60 * 1000
+  });
 
   res.status(201).json({ user: pending.userData, token });
 };
@@ -303,6 +304,7 @@ export const signup = async (req: Request, res: Response) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  const slug = await generateUniqueSlug(first_name, lastName);
 
   const newUser: Users = {
     id: uuidv4(),
@@ -320,7 +322,7 @@ export const signup = async (req: Request, res: Response) => {
     createdAt: new Date(),
     resources: [],
     userReminderSettings: [],
-    slug: null,
+    slug,
     contentReports: [],
     experienceThanks: [],
     interviewExperiences: [],
@@ -361,16 +363,21 @@ export const authWithGoogle = async (req: Request, res: Response) => {
     let user = await userRepository.getUserByEmail(googleUser.email);
 
     if (!user) {
+      const first_name = googleUser.given_name ?? '';
+      const lastName = googleUser.family_name ?? '';
+      const slug = await generateUniqueSlug(first_name, lastName);
+
       user = await userRepository.insertUser({
         id: uuidv4(),
-        first_name: googleUser.given_name ?? '',
-        lastName: googleUser.family_name ?? '',
+        first_name,
+        lastName,
         email: googleUser.email,
         phone: null,
         role: 'student',
         is_active: true,
         password: '',
         created_at: new Date(),
+        slug
       });
     }
 

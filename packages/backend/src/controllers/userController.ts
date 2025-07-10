@@ -3,7 +3,7 @@ import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-
+import { generateUniqueSlug } from '../utils/generateSlug';
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -51,7 +51,7 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Password is required' });
   }
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
+  const slug = await generateUniqueSlug(first_name, lastName);
   const newUser: Users = {
     id: uuidv4(),
     firstName: first_name,
@@ -68,7 +68,7 @@ export const createUser = async (req: Request, res: Response) => {
     sharedRecordings: [],
     resources: [],
     userReminderSettings: [],
-    slug: null,
+    slug,
     contentReports: [],
     experienceThanks: [],
     interviewExperiences: [],
@@ -87,7 +87,10 @@ export const updateUser = async (req: Request, res: Response) => {
   if (userData.password) {
     userData.password = await bcrypt.hash(userData.password, 10);
   }
-
+  if (userData.firstName || userData.lastName) {
+    const slug = await generateUniqueSlug(userData.firstName || '', userData.lastName || '');
+    userData.slug = slug;
+  }
   const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
   if (!updatedUser) {
     return res.status(404).json({ message: 'User not found' });
