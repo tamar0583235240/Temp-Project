@@ -11,13 +11,13 @@ import RecordButton from './RecordButton';
 import { RootState } from "../../../shared/store/store";
 
 type AudioRecorderProps = {
-  userId?: string;
-  questionId?: string;
+  answered?: boolean;
   onFinish?: () => void;
   onSaveSuccess?: (answerId: string) => void;
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
+  answered,
   onFinish,
   onSaveSuccess,
 }) => {
@@ -97,8 +97,13 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       <>
         {!showRecordingModal && (
           <button
-            className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3"
-            onClick={() => setShowRecordingModal(true)}
+            className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => {
+              setRecordingPhase('idle');
+              setShowRecordingModal(true)}
+            }
+
+            disabled={answered}
           >
             <FiIcons.FiMic size={20} />
             התחל הקלטה

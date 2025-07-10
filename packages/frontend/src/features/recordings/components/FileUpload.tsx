@@ -4,12 +4,14 @@ import { useUploadRecordingMutation } from "../services/resourceApi";
 import { Spinner } from "../../../shared/ui/Spinner";
 
 interface FileUploadProps {
+  answered?: boolean;
   userId: string;
   onUploaded: (fileUrl: string, fileName: string) => void;
   onError?: (error: any) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ 
+  answered,
   userId, 
   onUploaded, 
   onError
@@ -103,14 +105,15 @@ const FileUpload: React.FC<FileUploadProps> = ({
         
         <button
           type="button"
-          className="w-full border border-[--color-border] bg-white text-[--color-text] px-6 py-3 rounded-lg font-semibold transition text-lg flex items-center justify-center gap-2 hover:bg-[--color-background]"
+          className="w-full bg-white text-[var(--color-primary)] border border-[var(--color-primary)] rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={() => fileInputRef.current?.click()}
-          disabled={isUploading}
+          disabled={answered}
         >
           העלה קובץ
           <FiIcons.FiUpload className="w-5 h-5" />
         </button>
       </div>
+
 
       {/* פופאפ מודל */}
       {showModal && (

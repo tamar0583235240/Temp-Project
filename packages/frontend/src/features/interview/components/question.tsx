@@ -13,12 +13,14 @@ import { useUploadAnswerMutation } from "../../recordings/services/recordingApi"
 import FileUpload from "../../recordings/components/FileUpload";
 
 interface QuestionProps {
+    question: interviewType & { answered?: boolean };
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
 
 }
 
 const Question: React.FC<QuestionProps> = ({
+  question,
   onFinishRecording,
   onAnswerSaved,
 }) => {
@@ -32,11 +34,7 @@ const Question: React.FC<QuestionProps> = ({
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showFileActions, setShowFileActions] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
 
 
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
@@ -69,6 +67,7 @@ const Question: React.FC<QuestionProps> = ({
             {/* העלאת קובץ */}
             <div className="w-1/2">
               <FileUpload
+                answered={question.answered}
                 userId={currentUserId}
                 onUploaded={async (fileUrl, fileName) => {
                   try {
@@ -109,7 +108,7 @@ const Question: React.FC<QuestionProps> = ({
             {/* הקלטה */}
             <div className="w-1/2">
               <AudioRecorder
-                questionId={currentQuestion.id.toString()}
+                answered={question.answered}
                 onFinish={onFinishRecording}
                 onSaveSuccess={onAnswerSaved}
               />

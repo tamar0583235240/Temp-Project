@@ -79,6 +79,7 @@ const InterviewPage = () => {
         question: { id: String(q.id), text: q.title || q.text },
       })
     );
+    dispatch(setCurrentAnswerId(answerId)); // עדכון הסטייט של currentAnswerId
     setIsLoadingAI(true);
     setTimeout(() => {
       setIsLoadingAI(false);
@@ -87,23 +88,16 @@ const InterviewPage = () => {
 
   return (
     <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
-      {/* Sidebar - Right */}
-      <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10 order-3">
-        <Sidebar
-          questions={questionsWithStatus}
-          currentIndex={currentIndex}
-          onNavigate={(index) => dispatch(goToQuestion(index))}
-        />
-      </aside>
+      <CategoryDropdown />
+      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
+        <div className="w-full max-w-2xl space-y-8">
+<Question
+  question={questionsWithStatus[currentIndex]}
+  onFinishRecording={() => setShowTips(true)}
+  onAnswerSaved={handleAnswerSaved}
+/>
 
-      {/* Main Content - Center */}
-      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10 order-2">
-        <CategoryDropdown />
-        <div className="w-full max-w-2xl">
-          <Question
-            onFinishRecording={() => setShowTips(true)}
-            onAnswerSaved={handleAnswerSaved}
-          />
+
         </div>
         <div className="mt-8 w-full max-w-2xl">
           <EndSurvey
@@ -113,6 +107,13 @@ const InterviewPage = () => {
           />
         </div>
       </main>
+      <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
+        <Sidebar
+          questions={questionsWithStatus}
+          currentIndex={currentIndex}
+          onNavigate={(index) => dispatch(goToQuestion(index))}
+        />
+      </aside>
 
       {/* Left Panel - Tips & AI Analysis */}
       <aside className="w-96 flex-shrink-0 border-r border-[--color-border] bg-white shadow-lg overflow-y-auto order-1">
