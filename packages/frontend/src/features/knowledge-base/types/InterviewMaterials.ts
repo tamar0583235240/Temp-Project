@@ -1,4 +1,4 @@
-export type InterviewMaterials = {
+export type InterviewMaterial = {
   id: string;
   title: string;
   thumbnail: string; // URL לתמונה מ-Supabase Storage
