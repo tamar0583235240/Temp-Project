@@ -11,7 +11,7 @@ import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
-
+import { ManagerInterview } from "../../features/interviewExperiences/components/managerInterview";
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -69,15 +69,13 @@ export default function AppRoutes() {
               <p>AdminResources</p>
             </RoleProtectedRoute>
           } />
-          </Route>
+        </Route>
+        <Route path="/admin/manageInterviewExperiences" element={
+          <ManagerInterview allowedRoles={["admin"]}>
+            <p>ניהול חוויות מראיונות</p>
+          </ManagerInterview>
+        } />
       </Routes>
     </div>
   );
 }
-
-
-
-
-
-
-

@@ -9,11 +9,17 @@ export const contentReportsApi = api.injectEndpoints({
         method: 'POST',
         body: contentReport,
       }),
-    //   invalidatesTags: ["contentReports"],
+      //   invalidatesTags: ["contentReports"],
+    }),
+    getAllContentReports: builder.query<ContentReports[], void>({
+      query: () => ({
+        url: `/contentReports/getAllContentReports`,
+      }),
+      providesTags: ["contentReports"],
     }),
   }),
 });
 
 export const {
-   useAddContentReportsMutation
+  useAddContentReportsMutation, useGetAllContentReportsQuery
 } = contentReportsApi;

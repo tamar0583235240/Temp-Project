@@ -9,6 +9,7 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
 import { InterviewExperiencesList } from './features/interviewExperiences/components/interviewExperiencesList';
+import { ManagerInterview } from './features/interviewExperiences/components/managerInterview';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ function App() {
     <MessageModalProvider>
       <BrowserRouter>
         <AppRoutes />
-        <InterviewExperiencesList></InterviewExperiencesList>
+        {/* <InterviewExperiencesList></InterviewExperiencesList> */}
       </BrowserRouter>
     </MessageModalProvider>
   );

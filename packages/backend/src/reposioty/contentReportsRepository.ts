@@ -12,8 +12,18 @@ const addContentReports = async (contentReports: ContentReports): Promise<Conten
         console.error('Error adding ContentReports:', error);
         throw error;
     }
-};  
+}; 
+
+const getAllContentReports = async (): Promise<ContentReports[]> => {
+    try {
+         const { rows } = await pool.query( `SELECT * FROM "Content_Reports"`);
+         return rows as ContentReports[];
+     } catch (error) {
+         console.error('Error adding ContentReports:', error);
+         throw error;
+     }
+ }; 
 
 export default {
-    addContentReports
+    addContentReports,getAllContentReports
 };

@@ -4,9 +4,7 @@ import { ContentReports } from '../interfaces/entities/ContentReports';
 
 export const addContentReports = async (req: Request, res: Response): Promise<ContentReports | void> => {
     try {
-        const contentReport:ContentReports = req.body;
-        console.log('Received ontentReports:', contentReport);
-        
+        const contentReport:ContentReports = req.body;        
         const item = await contentReportsRepository.addContentReports(contentReport);
         res.json(item);
     } catch (error) {
@@ -14,3 +12,13 @@ export const addContentReports = async (req: Request, res: Response): Promise<Co
         res.status(500).json({ error });
     }
 };  
+
+export const getAllContentReportsController = async (req: Request, res: Response): Promise<ContentReports[] | void> => {
+    try {
+        const items = await contentReportsRepository.getAllContentReports();
+        res.json(items);
+    } catch (error) {
+        console.error('Error in ContentReports controller by getAllContentReports:', error);
+        res.status(500).json({ error });
+    }
+};
