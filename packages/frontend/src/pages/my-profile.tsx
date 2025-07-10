@@ -23,6 +23,10 @@ const EditProfilePage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [profile, setProfile] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
     status: "",
     preferred_job_type: "",
     external_links: [] as { url: string; label: string }[],
@@ -58,6 +62,9 @@ const EditProfilePage = () => {
         const res = await axios.get(`${API_BASE_URL}/profiles/user/${user.id}`);
         setProfile(res.data);
         setFormData({
+          first_name: res.data.first_name || "",
+          last_name: res.data.last_name || "",
+          email: res.data.email || "",
           status: res.data.status || "",
           preferred_job_type: res.data.preferred_job_type || "",
           external_links: Array.isArray(res.data.external_links)
@@ -241,6 +248,41 @@ const EditProfilePage = () => {
           label="האם הפרופיל ציבורי?"
         />
       </div>
+      
+      <input
+        type="text"
+        name="first_name"
+        placeholder="הקלד שם פרטי"
+        value={formData.first_name}
+        onChange={handleChange}
+        className="w-full border rounded px-3 py-2 mb-2"
+      />
+
+      <input
+        type="text"
+        name="last_name"
+        placeholder="הקלד שם משפחה"
+        value={formData.last_name}
+        onChange={handleChange}
+        className="w-full border rounded px-3 py-2 mb-2"
+      />
+
+      <input
+        type="email"
+        name="email"
+        placeholder="הקלד מייל"
+        value={formData.email}
+        onChange={handleChange}
+        className="w-full border rounded px-3 py-2 mb-2"
+      />
+      <input
+        type="string"
+        name="phone"
+        placeholder="הקלד טלפון"
+        value={formData.phone}
+        onChange={handleChange}
+        className="w-full border rounded px-3 py-2 mb-2"
+      />
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* סטטוס */}

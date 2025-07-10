@@ -10,6 +10,9 @@ export class Profiles {
   })
   id: string;
 
+  @Column("uuid", { name: "user_id" })
+  userId: string;
+
   @Column("text", { name: "full_name" })
   fullName: string;
 
@@ -35,6 +38,13 @@ export class Profiles {
     default: () => "'Any'",
   })
   preferredJobType: string | null;
+
+  @Column("boolean", {
+    name: "is_public",
+    nullable: true,
+    default: () => "false",
+  })
+  isPublic: boolean | null;
 
   @Column("timestamp without time zone", {
     name: "created_at",

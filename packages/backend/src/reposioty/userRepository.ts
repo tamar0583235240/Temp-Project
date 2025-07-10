@@ -83,6 +83,24 @@ const updateUser = async (
   }
 };
 
+export const updateUsersNameAndContactInfo = async (userId: string, data: any) => {
+  const { first_name, last_name, email } = data;
+
+  const result = await pool.query(
+    `
+    UPDATE users
+    SET first_name = $1,
+        last_name = $2,
+        email = $3
+    WHERE id = $4
+    RETURNING *;
+    `,
+    [first_name, last_name, email, userId]
+  );
+
+  return result.rows[0] || null;
+};
+
 const updateActiveUser = async (
   id: string,
 ): Promise<Users | null> => {
