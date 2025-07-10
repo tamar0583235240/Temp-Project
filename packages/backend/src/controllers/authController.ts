@@ -9,7 +9,7 @@ import { createToken, getToken, deleteToken } from '../reposioty/passwordResetRe
 import userRepository from '../reposioty/userRepository';
 import authRepository from '../reposioty/authRepository';
 import { sendResetEmail, sendVerificationCodeEmail } from '../utils/emailSender';
-import { generateUniqueSlug } from 'utils/generateSlug';
+import { generateUniqueSlug } from '../utils/generateSlug';
 
 
 type CodeData = { code: string, expiresAt: number };
