@@ -15,6 +15,7 @@ import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import tipsRouts from './src/routes/tipsRouts';
+import practicesRouts from './src/routes/practicesRouts';
 import cookieParser from 'cookie-parser';
 // import {supabase} from './src/config/dbConnection';
 
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api' ,feedbackRouter )
 app.use('/api/tips-manager' ,tipsRouts )
+app.use('/api/practices-manager' ,practicesRouts )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);

@@ -1,9 +1,8 @@
 import request from 'supertest';
 import express from 'express';
 import { addTip, adminTipController, updateTipController, deleteTipController } from '../controllers/tipsController';
-import tipsRepository from '../reposioty/tipsRepository';  // הייבוא הנכון של הרפוזיטורי
+import tipsRepository from '../reposioty/tipsRepository'; 
 
-// מוקא את הפונקציות כjest.fn
 jest.mock('../reposioty/tipsRepository', () => ({
   addTip: jest.fn(),
   getAllTips: jest.fn(),
