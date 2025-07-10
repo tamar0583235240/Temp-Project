@@ -14,7 +14,7 @@ interface LoginResponse {
 
 interface SignupRequest {
   first_name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   password: string;
 }

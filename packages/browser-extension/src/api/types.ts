@@ -1,6 +1,6 @@
 export interface ProgressData {
   first_name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   percent: number;
   answered: number;
