@@ -23,10 +23,10 @@ const ProfileList = () => {
 
   const { data: profiles, error, isLoading } = useGetProfilesQuery();
 
-  if (isLoading) return <div>Loading profiles...</div>;
+  if (isLoading) return <div>טוען פרופילים...</div>;
   if (error) {
     console.error("Profiles query error:", error);
-    return <div>Failed to load profiles</div>;
+    return <div>שגיאה בטעינת פרופילים</div>;
   }
   if (!profiles || profiles.length === 0) return <div>לא נמצאו פרופילים</div>;
 

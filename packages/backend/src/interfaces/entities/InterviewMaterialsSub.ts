@@ -13,14 +13,7 @@ export class InterviewMaterialsSub {
   thumbnail: string;
 
   @Column("text", { name: "short_description", nullable: true })
-  shortDescription: string | null;
-
-  @Column("integer", {
-    name: "downloads_count",
-    nullable: true,
-    default: () => "0",
-  })
-  downloadsCount: number | null;
+  short_description: string | null;
 
   @Column("text", { name: "file_url" })
   fileUrl: string;

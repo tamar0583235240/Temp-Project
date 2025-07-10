@@ -14,7 +14,7 @@ interface LoginResponse {
 
 interface SignupRequest {
   first_name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   password: string;
 }
@@ -51,8 +51,34 @@ export const authApi = api.injectEndpoints({
         body: { user },
         credentials: 'include', // חשוב כדי לשלוח cookie
       }),
-    })
+    }),
+    signupRequest: builder.mutation<{ message: string }, Omit<SignupRequest, "phone"> & { phone?: string }>(
+  {
+    query: (user) => ({
+      url: "/auth/signup/request",
+      method: "POST",
+      body: user,
+    }),
+  }
+),
+signupConfirm: builder.mutation<LoginResponse, { email: string; code: string }>(
+  {
+    query: (data) => ({
+      url: "/auth/signup/confirm",
+      method: "POST",
+      body: data,
+    }),
+  }
+),
+
   }),
 });
+export const {
+  useLoginMutation,
+  useSignupMutation,
+  useRefreshTokenMutation,
+  useLogoutMutation,
+  useSignupRequestMutation,
+  useSignupConfirmMutation,
+} = authApi;
 
-export const { useLoginMutation, useSignupMutation, useRefreshTokenMutation, useLogoutMutation } = authApi;

@@ -10,6 +10,8 @@ import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
+
 function App() {
   const dispatch = useAppDispatch();
   const [refreshTokenTrigger] = useRefreshTokenMutation();
@@ -32,9 +34,11 @@ function App() {
 }, []);
   if (loading) return <p>טוען...</p>;
  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
+ 
   return (
     <GoogleOAuthProvider clientId={clientId}>
     <Provider store={store}>
+        
      <MessageModalProvider>
       <>
         <BrowserRouter>
@@ -42,12 +46,13 @@ function App() {
         </BrowserRouter>
        {/* <EditInterviewMaterialsSubForm
   id="some-id"
-  defaultValues={{ title: "", shortDescription: "" }}
+  defaultValues={{ title: "", short_description: "" }}
   onSuccess={() => console.log("Saved!")}
   onCancel={() => console.log("Cancelled")}
   /> */}
    </>
     </MessageModalProvider>
+
        </Provider>
            </GoogleOAuthProvider>
   );
