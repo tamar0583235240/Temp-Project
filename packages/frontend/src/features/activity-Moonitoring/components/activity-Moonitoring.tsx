@@ -1,71 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-
-// type PopularQuestion = {
-//   id: string;
-//   question: string;
-//   popularity: number;
-// };
-
-// const PopularQuestions: React.FC = () => {
-//   const [questions, setQuestions] = useState<PopularQuestion[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState('');
-
-//   // useEffect(() => {
-//   //   const fetchPopularQuestions = async () => {
-//   //     try {
-//   //       const response = await fetch('/api/questions/popular?limit=10');
-//   //       if (!response.ok) throw new Error('שגיאה בטעינת שאלות');
-//   //       const data: PopularQuestion[] = await response.json();
-//   //       setQuestions(data);
-//   //     } catch (err) {
-//   //       setError('נכשל בטעינת שאלות פופולריות');
-//   //     } finally {
-//   //       setLoading(false);
-//   //     }
-//   //   };
-
-//   //   fetchPopularQuestions();
-//   // }, []);
-//   useEffect(() => {
-//     const fetchPopularQuestions = async () => {
-//       try {
-//         console.log('טוען שאלות...');
-//         const response = await fetch('/api/questions/popular?limit=10');
-//         if (!response.ok) throw new Error('שגיאה בטעינת שאלות');
-//         const data: PopularQuestion[] = await response.json();
-//         console.log('שאלות שהתקבלו:', data);
-//         setQuestions(data);
-//       } catch (err) {
-//         console.error('שגיאה:', err);
-//         setError('נכשל בטעינת שאלות פופולריות');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-  
-//     fetchPopularQuestions();
-//   }, []);
-  
-//   if (loading) return <p>טוען שאלות פופולריות...</p>;
-//   if (error) return <p>{error}</p>;
-
-//   return (
-//     <div className="p-4 rounded shadow bg-white">
-//       <h2 className="text-xl font-bold mb-4">שאלות פופולריות</h2>
-//       <ul className="space-y-2 list-decimal rtl text-right">
-//         {questions.map((q) => (
-//           <li key={q.id} className="text-gray-800">
-//             <span className="font-medium">{q.question}</span>
-//             <span className="text-sm text-gray-500 ml-2">(פופולריות: {q.popularity})</span>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default PopularQuestions;
 import React, { useEffect, useState } from 'react';
 
 interface PopularQuestion {
@@ -82,19 +14,22 @@ const PopularQuestions = () => {
   const limit = 10;
 
   const fetchQuestions = async () => {
+    if (loading || !hasMore) return; // מניעת טעינה כפולה
     setLoading(true);
     try {
       const response = await fetch(`/api/questions/popular?limit=${limit}&offset=${offset}`);
       const data: PopularQuestion[] = await response.json();
 
+      setQuestions(prev => [...prev, ...data]);
+      setOffset(prev => prev + limit);
+
+      // אם חזרו פחות מ־limit שאלות, סימן שלא נשארו שאלות נוספות
       if (data.length < limit) {
         setHasMore(false);
       }
-
-      setQuestions(prev => [...prev, ...data]);
-      setOffset(prev => prev + limit);
     } catch (error) {
       console.error('שגיאה בטעינת שאלות פופולריות:', error);
+      setHasMore(false); // במקרה שגיאה, לא לנסות שוב
     } finally {
       setLoading(false);
     }
@@ -127,7 +62,7 @@ const PopularQuestions = () => {
             backgroundColor: '#007bff',
             color: 'white',
             border: 'none',
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             marginTop: '1rem'
           }}
         >
@@ -135,7 +70,7 @@ const PopularQuestions = () => {
         </button>
       )}
 
-      {!hasMore && (
+      {!hasMore && questions.length > 0 && (
         <p style={{ color: 'gray', marginTop: '1rem' }}>לא נמצאו שאלות נוספות</p>
       )}
     </div>
