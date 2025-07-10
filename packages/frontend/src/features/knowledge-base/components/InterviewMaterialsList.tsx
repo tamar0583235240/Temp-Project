@@ -3,7 +3,11 @@ import {
   useGetInterviewMaterialsQuery,
   useDeleteInterviewMaterialMutation,
 } from "../../../shared/api/interviewMaterialsApi";
-import { InterviewMaterials } from "../types/InterviewMaterials";
+
+// import { InterviewMaterials } from "../types/InterviewMaterials";
+
+import { InterviewMaterial } from "../types/InterviewMaterials";
+
 import MessageModal from "../../../shared/ui/messageModal";
 import { InterviewMaterialsItem } from "./interviewMaterialsItem";
 import { EditInterviewMaterialsForm } from "./EditInterviewMaterialsForm";
@@ -13,7 +17,11 @@ const InterviewMaterialsList = () => {
   const [deleteMaterial] = useDeleteInterviewMaterialMutation();
 
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<InterviewMaterials | null>(null);
+
+  // const [editingItem, setEditingItem] = useState<InterviewMaterials | null>(null);
+
+  const [editingItem, setEditingItem] = useState<InterviewMaterial| null>(null);
+
 
   const handleDeleteClick = (id: string) => setConfirmingId(id);
   const handleCancelDelete = () => setConfirmingId(null);
@@ -29,7 +37,10 @@ const InterviewMaterialsList = () => {
     }
   };
 
-  const handleEdit = (item: InterviewMaterials) => {
+
+
+  const handleEdit = (item: InterviewMaterial) => {
+
     setEditingItem(item);
   };
 

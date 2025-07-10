@@ -4,7 +4,7 @@ import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
 import { Plus } from "lucide-react";
 import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
-import InterviewMaterialsList from "./interviewMaterialsList";
+import InterviewMaterialsList from "./InterviewMaterialsList";
 
 const InterviewMaterialsView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,6 +17,7 @@ const InterviewMaterialsView = () => {
     try {
       await createResource(formData).unwrap();
       setIsModalOpen(false);
+
     } catch (e) {
       console.error(e);
     }
@@ -24,6 +25,7 @@ const InterviewMaterialsView = () => {
 
   return (
     <>
+    <div  className="fixed top-6 right-6 z-50">
       <Button
         onClick={handleOpenModal}
         variant="primary-dark"
@@ -34,7 +36,7 @@ const InterviewMaterialsView = () => {
       >
         הוסף פריט
       </Button>
-
+</div>
       {isModalOpen && (
         <MessageModal
           title="הוספת פריט"

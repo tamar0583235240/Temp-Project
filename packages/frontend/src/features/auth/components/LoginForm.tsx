@@ -10,7 +10,7 @@ import { Button } from "../../../shared/ui/button";
 import GoogleLoginButton from "./GoogleAuthButton";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
 import { Heading2, Paragraph } from "../../../shared/ui/typography";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ const LoginForm = () => {
   const [showValidation, setShowValidation] = useState(false);
   const [tempEmail, setTempEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(loginStart());
@@ -74,7 +74,7 @@ const LoginForm = () => {
           {/* Password */}
           <div className="relative">
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="סיסמה"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -86,6 +86,14 @@ const LoginForm = () => {
                 <FaLock />
               </IconWrapper>
             </div>
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500"
+              aria-label={showPassword ? "הסתר סיסמה" : "הצג סיסמה"}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Remember Me + Forgot */}
