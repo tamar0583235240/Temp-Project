@@ -29,9 +29,7 @@ import authRouts from './src/routes/authRouts';
 import usedynamicContentRouter from './src/routes/DynamicContentRoutes';
 import userAdminRouts from './src/routes/userAdminRouts';
 import popularQuestionsRoute from './src/routes/popularQuestionsRoute';
-// אם קיים:
-import exampleRouts from './src/routes/exampleRouts';
-
+import exampleRouts from './src/routes/exampleRouts'
 // רישום ראוטים
 app.use('/api/feedback', feedbackRouter);
 app.use('/api/ai-insights', AiInsightsRouter);

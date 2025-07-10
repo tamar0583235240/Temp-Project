@@ -1,11 +1,18 @@
-// import { Router } from 'express';
-// import { exampleController } from '../controllers/exampleController';
-// import { exampleMiddleware } from '../middlewares/exampleMiddlewares';
+import { Router, Request, Response, NextFunction } from 'express';
 
-// const router = Router();
-// // example for implemantaion
-// router.get('/exampleURL', exampleMiddleware, exampleController);
-// const router = Router();
-// router.get('/exampleURL', exampleMiddleware, exampleController);
+const router = Router();
 
-// export default router;
+// דוגמת Middleware
+const exampleMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  console.log("Middleware רץ");
+  next();
+};
+
+// דוגמת Controller
+const exampleController = (req: Request, res: Response) => {
+  res.send("הכל עובד תקין!");
+};
+
+router.get('/exampleURL', exampleMiddleware, exampleController);
+
+export default router;

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+// הגדרת הממשק של תובנה אחת מה-AI
 export interface AIInsight {
   id: string;
   answer_id: string;
@@ -8,15 +8,11 @@ export interface AIInsight {
   improvements: string;
 }
 
+// טיפוס אחד בודד של תובנה – פשוטה (יכול להיות שזה מיותר אם כבר יש את AIInsight)
 export type aiInsightsType = AIInsight;
 
+// ממשק לסטטיסטיקות של התקדמות המשתמש
 export interface ProgressStats {
   totalQuestions: number;
   answeredQuestions: number;
-=======
-import {AIInsight} from '../../../../../backend/src/interfaces/AIInsight'
-
-export interface aiInsightsType extends AIInsight {
-  
->>>>>>> 7671d8f (AI Insights List fronted)
 }
