@@ -1,6 +1,6 @@
 import contentReportsRepository from '../reposioty/contentReportsRepository';
 import { Request, Response } from 'express';
-import { ContentReports } from '@interfaces/entities/ContentReports';
+import { ContentReports } from '../interfaces/entities/ContentReports';
 
 export const addContentReports = async (req: Request, res: Response): Promise<ContentReports | void> => {
     try {

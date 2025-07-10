@@ -1,4 +1,4 @@
-import { ExperienceThanks } from '@interfaces/entities/ExperienceThanks';
+import { ExperienceThanks } from '../interfaces/entities/ExperienceThanks';
 import experienceThanksRepository from '../reposioty/experienceThanksRepository';
 import { Request, Response } from 'express';
 

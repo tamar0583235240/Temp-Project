@@ -1,4 +1,4 @@
-import { ContentReports } from '@interfaces/entities/ContentReports';
+import { ContentReports } from '../interfaces/entities/ContentReports';
 import { pool } from '../config/dbConnection';
 
 const addContentReports = async (contentReports: ContentReports): Promise<ContentReports | void> => {
