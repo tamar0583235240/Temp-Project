@@ -257,27 +257,36 @@ export const requestSignup = async (req: Request, res: Response) => {
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  pendingSignups.set(email, {
-    userData: {
-      id: uuidv4(),
-      firstName,
-      lastName,
-      email,
-      phone,
-      password: hashedPassword,
-      role: "student",
-      isActive: true,
-      answers: [],
-      feedbacks: [],
-      passwordResetTokens: [],
-      sharedRecordings: [],
-      createdAt: new Date(),
-      resources: [],
-      userReminderSettings: [],
-    },
-    code,
-    expiresAt,
-  });
+pendingSignups.set(email, {
+  userData: {
+  id: uuidv4(),
+  firstName,
+  lastName,
+  email,
+  phone,
+  password: hashedPassword,
+  role: "student",
+  isActive: true,
+  createdAt: new Date(),
+  slug: null,
+
+  contentReports: [],
+  experienceThanks: [],
+  interviewExperiences: [],
+  answers: [],
+  feedbacks: [],
+  passwordResetTokens: [],
+  resources: [],
+  sharedRecordings: [],
+  userActivities: [],
+  userReminderSettings: [],
+  userSessions: [],
+  workExperiences: [],
+  },
+  code,
+  expiresAt,
+});
+
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
@@ -336,32 +345,48 @@ export const signup = async (req: Request, res: Response) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+const newUser: Users = {
+  id: uuidv4(),
+  firstName,
+  lastName,
+  email,
+  phone,
+  password: hashedPassword,
+  role: "student",
+  isActive: true,
+  createdAt: new Date(),
+  slug: null,
 
-  const newUser: Users = {
-    id: uuidv4(),
-    firstName,
-    lastName,
-    email,
-    phone,
-    password: hashedPassword,
-    role: "student",
-    isActive: true,
-    answers: [],
-    feedbacks: [],
-    passwordResetTokens: [],
-    sharedRecordings: [],
-    createdAt: new Date(),
-    resources: [],
-    userReminderSettings: [],
-  };
+  contentReports: [],
+  experienceThanks: [],
+  interviewExperiences: [],
+  answers: [],
+  feedbacks: [],
+  passwordResetTokens: [],
+  resources: [],
+  sharedRecordings: [],
+  userActivities: [],
+  userReminderSettings: [],
+  userSessions: [],
+  workExperiences: [],
+};
 
-  await authRepository.signup(newUser);
+
+
+await authRepository.signup(newUser);
 
   const token = jwt.sign(
     { id: newUser.id, email: newUser.email, role: newUser.role },
     JWT_SECRET,
     { expiresIn: "1h" }
   );
+
+
+res.status(201).json({ user: newUser, token });
+
+
+  await authRepository.signup(newUser);
+
 
   res.status(201).json({ user: newUser, token });
 };
