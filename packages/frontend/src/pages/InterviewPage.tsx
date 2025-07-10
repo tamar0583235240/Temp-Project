@@ -22,21 +22,21 @@ import { skipToken } from "@reduxjs/toolkit/query";
 
 const InterviewPage = () => {
   const dispatch = useDispatch();
-  const { currentCategoryId, currentIndex } = useSelector(
+  const { currentCategoryId, currentIndex, currentAnswerId } = useSelector(
     (state: RootState) => state.simulation
   );
 
   const { data: questions = [], isLoading, isError } =
     useGetQuestionsByCategoryQuery(currentCategoryId || skipToken, {
-    refetchOnMountOrArgChange: true,
-  });
+      refetchOnMountOrArgChange: true,
+    });
 
   const answeredAnswers = useSelector(
     (state: RootState) => state.answered.answeredAnswers
   );
 
   const [showTips, setShowTips] = useState(false);
-  const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
+  // const [answerIdForAI, setAnswerIdForAI] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
 
   const answeredQuestionIds = useMemo(() => {
@@ -58,7 +58,7 @@ const InterviewPage = () => {
 
   // Reset answerIdForAI & isLoadingAI when moving to another question
   useEffect(() => {
-    setAnswerIdForAI(null);
+    dispatch(setCurrentAnswerId(null));
     setIsLoadingAI(false);
     setShowTips(false);
   }, [currentIndex]);
@@ -80,7 +80,7 @@ const InterviewPage = () => {
         question: { id: String(q.id), text: q.title || q.text },
       })
     );
-    setAnswerIdForAI(answerId); // ניתוח AI תמיד לפי ה-id האחרון
+    // setAnswerIdForAI(answerId); // ניתוח AI תמיד לפי ה-id האחרון
     setIsLoadingAI(true);
     setTimeout(() => {
       setIsLoadingAI(false);
@@ -100,10 +100,12 @@ const InterviewPage = () => {
 
         {showTips && <TipsComponent />}
         {isLoadingAI && <MagicLoader />}
-        {answerIdForAI && !isLoadingAI && (
-          <AnswerAI answerId={"2151d5f9-6266-42e9-b7ee-c47a680d3a63"} />
+        {currentAnswerId && !isLoadingAI && (
+          // <AnswerAI answerId={currentAnswerId} />
+          <AnswerAI answerId={"1379f739-611b-4b7e-b84a-77fca43f7489"} />
+
         )}
-      
+
         <div className="mt-8 w-full max-w-2xl">
           <EndSurvey showEndButton={allAnswered} answeredCount={answeredCount} totalQuestions={totalQuestions} />
         </div>

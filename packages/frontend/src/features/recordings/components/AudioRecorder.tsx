@@ -4,9 +4,11 @@ import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
 import * as FiIcons from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 
 import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
+import { RootState } from "../../../shared/store/store";
 
 type AudioRecorderProps = {
   userId?: string;
@@ -16,11 +18,12 @@ type AudioRecorderProps = {
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
-  userId = '00000000-0000-0000-0000-000000000000',
-  questionId = '00000000-0000-0000-0000-000000000010',
   onFinish,
   onSaveSuccess,
 }) => {
+  const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
+  const currentQuestion = questions[currentIndex];
+
   const {
     currentRecording,
     isLoading,
@@ -64,7 +67,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const handleSaveRecording = async () => {
     try {
       setShowRecordingModal(false);
-      const answer = await saveRecording(userId, questionId, fileName);
+      const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName);
       setShowSaveModal(false);
       setFileName('');
       if (onSaveSuccess && answer?.id) {

@@ -36,9 +36,10 @@ const Question: React.FC<QuestionProps> = ({
   const [showFileActions, setShowFileActions] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+
 
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
-  const userId = "00000000-0000-0000-0000-000000000000"; // לשנות לפי משתמש אמיתי
 
     return (
     <div>
@@ -68,11 +69,11 @@ const Question: React.FC<QuestionProps> = ({
             {/* העלאת קובץ */}
             <div className="w-1/2">
               <FileUpload
-                userId={userId}
+                userId={currentUserId}
                 onUploaded={async (fileUrl, fileName) => {
                   try {
                     await uploadAnswer({
-                      userId,
+                      userId: currentUserId,
                       questionId: String(currentQuestion.id),
                       fileUrl,
                       amountFeedbacks: 0,
