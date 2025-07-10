@@ -16,6 +16,13 @@ import userAdminRouts from './src/routes/userAdminRouts';
 import popularQuestionsRoute from './src/routes/popularQuestionsRoute';
 import exampleRouts from './src/routes/exampleRouts';
 
+// אם אתה רוצה להשתמש בסופבייס (supabase), תייבא אותו כאן:
+// import { supabase } from './src/config/dbConnection';
+
+// אם יש לך ראוטרים נוספים מה-backend, תייבא אותם בהתאם
+// import usersRoutes from '../backend/src/routes/userRouts';
+// import answerRouts from '../backend/src/routes/answerRouts';
+
 dotenv.config();
 
 const app: Application = express();
@@ -42,5 +49,9 @@ app.use('/api/admin', userAdminRouts);
 app.use('/api/dynamic-contents', usedynamicContentRouter);
 app.use('/api/popular-questions', popularQuestionsRoute);
 app.use('/api/example', exampleRouts);
+
+// אם תרצה להוסיף ראוטים נוספים מה-backend, תוכל לעשות זאת פה
+// app.use('/users', usersRoutes);
+// app.use('/questions', answerRouts);
 
 export default app;

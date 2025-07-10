@@ -71,6 +71,37 @@ console.log('DB_PORT:', process.env.DB_PORT);
 console.log('DB_NAME:', process.env.DB_NAME);
 console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
+<<<<<<< HEAD
 // This code connects to a PostgreSQL database using the pg library.
 // It creates a new client with the specified connection parameters and connects to the database.
 >>>>>>> b9cae16 (AI Insights)
+=======
+export const supabase = createClient(supabaseUrl, supabaseKey);
+// src/config/pgClient.ts
+import { Pool } from 'pg';
+
+
+dotenv.config();
+
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+// בדיקת חיבור עם async/await
+async function testConnection() {
+  try {
+    const res = await pool.query('SELECT NOW()');
+    console.log('✅ Connected to PostgreSQL at:', res.rows[0].now);
+  } catch (error) {
+    console.error('❌ PostgreSQL connection failed:', error);
+  }
+}
+
+testConnection();
+
+export default pool;
+>>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)

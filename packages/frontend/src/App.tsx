@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
@@ -10,6 +11,33 @@ import { useAppDispatch } from "./shared/hooks/reduxHooks";
 
 // במידה ותרצי להוסיף את הרכיב של המסקנות:
 import AIInsightsList from './features/dashboard/components/AIInsightsList';
+=======
+// import React from 'react';
+// import './App.css';
+// import UserList from './features/admin/UserList';
+// import ProgressStats from './features/dashboard/components/ProgressStats'
+// function App() {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <h1>Project base viewer</h1>
+//       </header>
+//       <main>
+//                 <UserList />
+//                 <ProgressStats/>
+
+//       </main>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import React from 'react';
+import './App.css';
+import UserList from './features/admin/UserList';
+import ProgressStats from './features/dashboard/components/ProgressStats';
+>>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,6 +65,7 @@ function App() {
   if (loading) return <p>טוען...</p>;
 
   return (
+<<<<<<< HEAD
     <MessageModalProvider>
       <BrowserRouter>
         {/* אם את רוצה לראות את AIInsightsList, תוסיפי כאן זמנית */}
@@ -44,7 +73,22 @@ function App() {
         <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>
+=======
+    <div className="App">
+      <header className="App-header">
+        <h1>Project base viewer</h1>
+      </header>
+      <main>
+        <UserList />
+        <ProgressStats /> {/* בלי userId */}
+      </main>
+    </div>
+>>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
   );
 }
 
 export default App;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
