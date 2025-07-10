@@ -11,35 +11,34 @@ import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
-import { createConsumer, createProducer, kafka } from './src/kafkaService';
-// import {supabase} from './src/config/dbConnection';
-
+import { createConsumer, kafka } from './src/kafkaService';
+import http from 'http';
+import { Server } from 'socket.io';
 
 dotenv.config();
+let io: Server;
 
-const createApp = async (): Promise<Application>  => {
+const createApp = async (): Promise<Application> => {
   const app = express();
-  
-  await kafka.connect();
+
   const consumer = await createConsumer();
   const run = async () => {
     await consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        // כאן תוכל להוסיף לוגיקה לעיבוד ההודעה
+      eachMessage: async ({ topic, message }: { topic: string; message: { value: Buffer; } }) => {
         console.log(`Received message: ${message.value.toString()} from topic: ${topic}`);
       },
     });
   };
 
-  run().catch(console.error); 
+  run().catch(console.error);
 
   app.use(cors({
     origin: [
       'http://localhost:3000',
       'http://localhost:3001'
-    ],    credentials: true,
+    ], credentials: true,
   }));
- 
+
   app.use(express.json());
   app.use(cookieParser());
   app.use('/api', feedbackRouter);
@@ -50,10 +49,44 @@ const createApp = async (): Promise<Application>  => {
   app.use('/users', userRouts);
   app.use('/auth', authRouts);
   app.use('/interview-materials-hub', interviewMaterialsHub);
-  
+
+  const server = http.createServer(app);
+  io = new Server(server, {
+    cors: {
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:3001'
+      ],
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    }
+  });
+
+  io.on('connection', (socket) => {
+    console.log('Client connected');
+
+    socket.on('message', (message) => {
+      console.log(`Received: ${message}`);
+      socket.emit('message', `Server received: ${message}`);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Client disconnected');
+    });
+  });
+
+  const shutdownConsumer = async () => {
+    if (consumer) {
+      await consumer.disconnect();
+    }
+  };
+
+  process.on('SIGINT', shutdownConsumer); 
+  process.on('SIGTERM', shutdownConsumer);
   return app;
 };
-export  { createApp };
+export { createApp, io };
 
 
 
