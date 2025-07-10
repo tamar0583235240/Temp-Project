@@ -14,9 +14,6 @@ export class Questions {
   @Column("text", { name: "content" })
   content: string;
 
-  @Column("text", { name: "category" })
-  category: string;
-
   @Column("text", { name: "tips" })
   tips: string;
 

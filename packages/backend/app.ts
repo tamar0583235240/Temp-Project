@@ -11,6 +11,7 @@ import aIInsightRouts from './src/routes/aIInsightRouts';
 dotenv.config();
 import "reflect-metadata";
 import questionRoutes from './src/routes/questionRoutes';
+import statusRoutes from '../backend/src/routes/statusRouts';
 
 const app: Application = express();
 console.log('i am here in app');
@@ -24,7 +25,10 @@ app.use(express.json());
 app.use('/api', resourceRouts);
 app.use('/api/simulation', questionRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api/status', statusRoutes);
 app.use('/api/answers', answerRoutes);
+
+
 app.use('/api/status', statusRouts);
 app.use('/api/categories', categoryRoutes)
 app.use('/api/insights',aIInsightRouts) ;
