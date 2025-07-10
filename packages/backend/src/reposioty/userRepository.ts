@@ -1,6 +1,6 @@
 import { pool } from "../config/dbConnection";
 import { Users } from "../interfaces/entities/Users";
-import { User } from "../interfaces/User";
+// import { Users } from "../interfaces/User";
 import bcrypt from "bcrypt";
 
 import xlsx from "xlsx";
@@ -10,7 +10,7 @@ import { createUserByAdminSchema } from "../validations/userValidations";
 const SALT_ROUNDS = 10;
 
 // קבלת משתמש לפי אימייל בלבד
-export const getUserByEmail = async (email: string): Promise<User | null> => {
+export const getUserByEmail = async (email: string): Promise<Users | null> => {
   try {
     const result = await pool.query(
       "SELECT * FROM users WHERE email = $1 LIMIT 1",
@@ -48,7 +48,7 @@ const getUserById = async (id: string): Promise<Users | null> => {
 export const getUserByEmailAndPassword = async (
   email: string,
   password: string
-): Promise<User | null> => {
+): Promise<Users | null> => {
   try {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
