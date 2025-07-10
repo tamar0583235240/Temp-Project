@@ -58,8 +58,6 @@ export default AIInsightsList;
 //   );
 // };
 
-// export default AIInsightsList;
-
 import React from 'react';
 import { useGetItemsQuery } from '../services/aiInsightsApi';
 import { aiInsightsType } from '../types/aiInsightsType';
