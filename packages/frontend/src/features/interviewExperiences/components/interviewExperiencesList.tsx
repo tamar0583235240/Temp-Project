@@ -13,14 +13,28 @@ import { EmptyState } from "../../../shared/ui/EmptyState";
 import { Heading1, Paragraph } from "../../../shared/ui/typography";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
 import { FaBriefcase, FaHeart, FaCalendarAlt, FaEye } from "react-icons/fa";
+import { useState } from "react"; // ✅ חדש לצורך סינון
 
 export const InterviewExperiencesList = () => {
   const { data: interviewExperiences, isLoading, isError } = useGetAllInterviewExperiencesQuery();
-  const { data: experienceThanks, isLoading: thanksLoading, isError: thanksError } = useGetAllExperienceThanksQuery();  
+  const { data: experienceThanks, isLoading: thanksLoading, isError: thanksError } = useGetAllExperienceThanksQuery();
   const { data: users, isLoading: usersLoading, isError: usersError } = useGetUsersQuery();
 
+  // ✅ משתני סינון
+  const [companyFilter, setCompanyFilter] = useState("");
+  const [positionFilter, setPositionFilter] = useState("");
+  const [minThanksFilter, setMinThanksFilter] = useState(0);
+
+  // ✅ חישוב החוויות המסוננות
+  const filteredExperiences = interviewExperiences?.filter((exp) => {
+    const companyMatch = exp.company_name?.toLowerCase().includes(companyFilter.toLowerCase());
+    const positionMatch = exp.position?.toLowerCase().includes(positionFilter.toLowerCase());
+    const thanksMatch = getThunksByInterviewExperienceId(exp.id).length >= minThanksFilter;
+    return companyMatch && positionMatch && thanksMatch;
+  });
+
   function getThunksByInterviewExperienceId(interviewExperienceId: string): experienceThanks[] {
-    return ( experienceThanks? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : [] );
+    return (experienceThanks ? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : []);
   }
 
   if (isLoading) {
@@ -59,6 +73,7 @@ export const InterviewExperiencesList = () => {
   }
 
   return (
+
     <GridContainer maxWidth="xl" className="space-y-8">
       {/* כותרת ראשית */}
       <div className="text-center space-y-4">
@@ -69,19 +84,45 @@ export const InterviewExperiencesList = () => {
           למדו מחוויות של נשים אחרות וקבלו השראה להצלחה בראיונות העבודה שלכן
         </Paragraph>
       </div>
+      {/* ✅ שדות סינון */}
+      <div className="bg-white border border-[--color-border] rounded-xl p-4 space-y-4">
+        <div className="flex flex-col md:flex-row gap-4">
+          <input
+            type="text"
+            value={companyFilter}
+            onChange={(e) => setCompanyFilter(e.target.value)}
+            placeholder="שם חברה"
+            className="border px-3 py-2 rounded w-full"
+          />
+          <input
+            type="text"
+            value={positionFilter}
+            onChange={(e) => setPositionFilter(e.target.value)}
+            placeholder="תפקיד"
+            className="border px-3 py-2 rounded w-full"
+          />
+          <input
+            type="number"
+            value={minThanksFilter}
+            onChange={(e) => setMinThanksFilter(Number(e.target.value))}
+            placeholder="מינימום תודות"
+            className="border px-3 py-2 rounded w-full"
+          />
+        </div>
+      </div>
 
       {/* רשימת החוויות */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {interviewExperiences.map((interviewExperience) => (
-          <CardSimple 
+          <CardSimple
             key={interviewExperience.id}
             className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white border border-[--color-border] overflow-hidden"
           >
             {/* Header עם אייקון אנונימי/לא אנונימי */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <IconWrapper 
-                  size="sm" 
+                <IconWrapper
+                  size="sm"
                   color={interviewExperience.anonymous ? "muted" : "primary-dark"}
                 >
                   {interviewExperience.anonymous ? "💁‍♂️" : "👤"}
@@ -90,7 +131,7 @@ export const InterviewExperiencesList = () => {
                   {interviewExperience.anonymous ? "אנונימית" : "משתמשת רשומה"}
                 </span>
               </div>
-              
+
               {/* תאריך פרסום */}
               <div className="flex items-center gap-1 text-xs text-[--color-secondary-text]">
                 <FaCalendarAlt />
@@ -130,11 +171,10 @@ export const InterviewExperiencesList = () => {
                 {Array.from({ length: 5 }, (_, index) => {
                   const rating = interviewExperience.rating || 0;
                   return (
-                    <span 
-                      key={index} 
-                      className={`text-xl transition-colors ${
-                        index < rating ? 'text-yellow-500' : 'text-gray-300'
-                      }`}
+                    <span
+                      key={index}
+                      className={`text-xl transition-colors ${index < rating ? 'text-yellow-500' : 'text-gray-300'
+                        }`}
                     >
                       {index < rating ? '★' : '☆'}
                     </span>
@@ -156,10 +196,10 @@ export const InterviewExperiencesList = () => {
                   {getThunksByInterviewExperienceId(interviewExperience.id).length} תודות
                 </span>
               </div>
-              
-              <InterviewExperienceView 
-                interviewExperience={interviewExperience} 
-                experienceThanks={getThunksByInterviewExperienceId(interviewExperience.id)} 
+
+              <InterviewExperienceView
+                interviewExperience={interviewExperience}
+                experienceThanks={getThunksByInterviewExperienceId(interviewExperience.id)}
                 users={users || []}
               />
             </div>

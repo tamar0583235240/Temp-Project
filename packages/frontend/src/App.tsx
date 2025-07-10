@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
+import { InterviewExperiencesListDemo } from './pages/InterviewExperiencesListDemo';
+
 
 import "./App.css";
 import { MessageModalProvider } from "./shared/ui/MessageModalContext";
@@ -40,6 +42,7 @@ function App() {
       <BrowserRouter>
         <AppRoutes />
         <InterviewExperiencesList></InterviewExperiencesList>
+        <InterviewExperiencesListDemo></InterviewExperiencesListDemo>
       </BrowserRouter>
     </MessageModalProvider>
   );
