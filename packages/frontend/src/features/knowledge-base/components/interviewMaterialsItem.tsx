@@ -1,10 +1,10 @@
 import React from "react";
 import { Pencil, Trash2, Download } from "lucide-react";
-import { InterviewMaterials } from "../types/InterviewMaterials";
+import { InterviewMaterial } from "../types/InterviewMaterials";
 
 interface InterviewMaterialsItemProps {
-  item: InterviewMaterials;
-  onEdit: (item: InterviewMaterials) => void;
+  item: InterviewMaterial;
+  onEdit: (item: InterviewMaterial) => void;
   onDelete: (id: string) => void;
 }
 

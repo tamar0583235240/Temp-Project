@@ -1,4 +1,4 @@
-import { InterviewMaterials } from "../../features/knowledge-base/types/InterviewMaterials";
+import { InterviewMaterial } from "../../features/knowledge-base/types/InterviewMaterials";
 import { api } from "./api";
 
 interface deleteRes {
@@ -29,7 +29,7 @@ export const interviewMaterialsApi = api.injectEndpoints({
       ],
     }),
 
-    getInterviewMaterials: builder.query<InterviewMaterials[], void>({
+    getInterviewMaterials: builder.query<InterviewMaterial[], void>({
       query: () => ({
         url: "/manager/interview-materials",
         method: "GET",
