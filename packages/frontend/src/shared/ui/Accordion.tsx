@@ -1,10 +1,13 @@
 import { useState } from "react";
+
 interface AccordionProps {
   title: string;
   children: React.ReactNode;
 }
+
 export const Accordion = ({ title, children }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="border rounded-xl mb-4 overflow-hidden shadow-sm">
       <button
@@ -20,14 +23,3 @@ export const Accordion = ({ title, children }: AccordionProps) => {
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
-
-

@@ -7,7 +7,6 @@ import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  // טען את המשתמשים כולל הקשרים (relations) שצריך - זה צריך להיעשות בתוך ה-repository
   const users = await userRepository.getAllUsers();
   if (!users || users.length === 0) {
     return res.status(404).json({ message: 'No users found' });
@@ -54,7 +53,7 @@ export const createUser = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    first_name:first_name,
+    first_name,
     last_name,
     email,
     phone,
@@ -66,8 +65,8 @@ export const createUser = async (req: Request, res: Response) => {
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
-    resources: [],      
-     workExperiences: [] 
+    resources: [],
+    workExperiences: []
   };
 
   const createdUser = await userRepository.createUser(newUser);
@@ -79,7 +78,7 @@ export const updateUser = async (req: Request, res: Response) => {
   const userData: Partial<Users> = req.body;
 
   if (userData.password) {
-    userData.password = await bcrypt.hash(userData.password, 10);
+    userData.password = await bcrypt.hash(userData.password, SALT_ROUNDS);
   }
 
   const updatedUser: Users | null = await userRepository.updateUser(userId, userData);

@@ -1,6 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
+import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { SearchComponents } from "../../features/recordings/components/searchComponents";
+import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
+import { SortComponents } from "../../features/recordings/components/sortComponents";
+import { AdminQuestions } from "../../features/admin/components/adminQuestions";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
@@ -14,6 +19,9 @@ import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
 import ProjectsList from "../../features/profile/components/projects";
 import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
+import ProfileList from "../../features/profile/components/ProfileList";
+import MyProfileViewPage from "../../pages/my-profile-view";
+import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -44,6 +52,22 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <ProfilePage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-profile"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <MyProfileViewPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-profile/edit"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfileAccordionPage />
               </RoleProtectedRoute>
             }
           />
@@ -104,6 +128,14 @@ export default function AppRoutes() {
             }
           />
           <Route
+            path="/profiles"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfileList />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
             path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
@@ -143,15 +175,14 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-          {/* אם תרצי להוסיף נתיב ל-WorkExperienceTab, הוסיפי כאן */}
-          {/* <Route
+          <Route
             path="/work-experience"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <WorkExperienceTab />
+                <WorkExperienceTab userId={user?.id ?? ""} />
               </RoleProtectedRoute>
             }
-          /> */}
+          />
         </Route>
       </Routes>
     </div>
