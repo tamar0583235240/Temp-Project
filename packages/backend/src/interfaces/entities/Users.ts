@@ -37,6 +37,7 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+
   @Column("text", { name: "password", nullable: true })
   password: string | null;
 
