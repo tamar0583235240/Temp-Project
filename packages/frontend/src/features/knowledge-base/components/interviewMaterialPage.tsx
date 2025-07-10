@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialApi";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
-import { InterviewMaterialsList } from "./interviewMaterialsList";
+import { InterviewMaterialsList } from "./InterviewMaterialsList";
 
 const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
