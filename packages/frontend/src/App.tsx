@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
@@ -8,6 +9,11 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
+=======
+import React from 'react';
+import './App.css';
+
+>>>>>>> bc82c02 (Merge branch 'Group3' of https://github.com/tamar0583235240/Temp-Project into Tehila-Fried)
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,11 +41,21 @@ function App() {
   if (loading) return <p>טוען...</p>;
 
   return (
+<<<<<<< HEAD
     <MessageModalProvider>
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
     </MessageModalProvider>
+=======
+    <div className="App">
+      <header className="App-header">
+        <h1>Project base viewer</h1>
+      </header>
+      <main>
+      </main>
+    </div>
+>>>>>>> bc82c02 (Merge branch 'Group3' of https://github.com/tamar0583235240/Temp-Project into Tehila-Fried)
   );
 }
 
