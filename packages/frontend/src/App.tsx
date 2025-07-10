@@ -37,7 +37,11 @@ import React from 'react';
 import './App.css';
 import UserList from './features/admin/UserList';
 import ProgressStats from './features/dashboard/components/ProgressStats';
+<<<<<<< HEAD
 >>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
+=======
+import AddUserForm from './features/admin/components/AddNewUser';
+>>>>>>> f54d24c (הוספה מחיקה ועדכון)
 
 function App() {
   const dispatch = useAppDispatch();
@@ -79,6 +83,8 @@ function App() {
         <h1>Project base viewer</h1>
       </header>
       <main>
+                <AddUserForm />
+
         <UserList />
         <ProgressStats /> {/* בלי userId */}
       </main>

@@ -1,14 +1,12 @@
-// shared/api/api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ProgressStats } from "../../features/dashboard/types/progress";
 
 export const api = createApi({
-<<<<<<< HEAD
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api", 
-    credentials: 'include', 
-  }),
   reducerPath: "api",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5000/api", // שמור על הכתובת עם /api בסוף
+    credentials: 'include', // חשוב להעביר credentials אם משתמשים בעוגיות או session
+  }),
   tagTypes: [
     "Item",
     "Feedback",
@@ -20,20 +18,12 @@ export const api = createApi({
     "users",
     "DynamicContents"
   ],
-  endpoints: () => ({}),
-});
-=======
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/",
-  }),
-  tagTypes: ["User", "Item", "Progress"],
   endpoints: (builder) => ({
     getProgressStats: builder.query<ProgressStats, string>({
       query: (userId) => `questions/progress/${userId}`,
     }),
+    // אפשר להוסיף כאן עוד endpoints בעתיד
   }),
 });
 
 export const { useGetProgressStatsQuery } = api;
->>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)

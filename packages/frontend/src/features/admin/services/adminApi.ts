@@ -18,6 +18,16 @@ export const adminApi = api.injectEndpoints({
       }),
       invalidatesTags: ["User"], // ✅ יעדכן את המטמון
     }),
+    
+createUser: builder.mutation<User, Partial<User>>({
+  query: (newUser) => ({
+    url: "users/add",
+    method: "POST",
+    body: newUser,
+  }),
+  invalidatesTags: ["User"],
+}),
+
 
     // מחיקת משתמש
     deleteUser: builder.mutation<void, string>({
@@ -34,4 +44,5 @@ export const {
   useGetUsersQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useCreateUserMutation,
 } = adminApi;

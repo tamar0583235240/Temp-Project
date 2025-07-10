@@ -1,83 +1,3 @@
-// import { Request, Response } from 'express';
-// import fs from 'fs';
-// import path from 'path';
-// import pool from '../config/pgClient'; // מניח שאת משתמשת בקובץ pgClient.ts
-
-// const usersPath = path.join(__dirname, '../data/users.json');
-
-// // פונקציית עזר לקריאת קובץ
-// function readUsersFile(): any[] {
-//   try {
-//     const raw = fs.readFileSync(usersPath, 'utf-8');
-//     return JSON.parse(raw);
-//   } catch (err) {
-//     console.error('שגיאה בקריאת קובץ המשתמשים:', err);
-//     return [];
-//   }
-// }
-
-// // פונקציית עזר לכתיבת קובץ
-// function writeUsersFile(users: any[]) {
-//   try {
-//     fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-//   } catch (err) {
-//     console.error('שגיאה בכתיבת קובץ המשתמשים:', err);
-//   }
-// }
-
-// // קבלת כל המשתמשים
-// export function getAllUsers(req: Request, res: Response): void {
-//   try {
-//     const users = readUsersFile();
-//     res.status(200).json(users);
-//   } catch (err) {
-//     console.error('שגיאה בקבלת כל המשתמשים:', err);
-//     res.status(500).json({ error: 'אירעה שגיאה בעת טעינת המשתמשים' });
-//   }
-// }
-
-// // עדכון משתמש לפי ID
-// export function updateUser(req: Request, res: Response): void {
-//   try {
-//     const { id } = req.params;
-//     const users = readUsersFile();
-//     const index = users.findIndex(user => user.id === id);
-
-//     if (index === -1) {
-//       res.status(404).json({ error: 'משתמש לא נמצא' });
-//     } else {
-//       users[index] = {
-//         ...users[index],
-//         ...req.body,
-//         updatedAt: new Date().toISOString()
-//       };
-//       writeUsersFile(users);
-//       res.status(200).json(users[index]);
-//     }
-//   } catch (err) {
-//     console.error('שגיאה בעדכון משתמש:', err);
-//     res.status(500).json({ error: 'אירעה שגיאה בעת עדכון המשתמש' });
-//   }
-// }
-
-// // מחיקת משתמש לפי ID
-// export function deleteUser(req: Request, res: Response): void {
-//   try {
-//     const { id } = req.params;
-//     const users = readUsersFile();
-//     const filtered = users.filter(user => user.id !== id);
-
-//     if (filtered.length === users.length) {
-//       res.status(404).json({ error: 'משתמש לא נמצא' });
-//     } else {
-//       writeUsersFile(filtered);
-//       res.status(200).json({ message: 'המשתמש נמחק בהצלחה' });
-//     }
-//   } catch (err) {
-//     console.error('שגיאה במחיקת משתמש:', err);
-//     res.status(500).json({ error: 'אירעה שגיאה בעת מחיקת המשתמש' });
-//   }
-// }
 import { Request, Response } from 'express';
 <<<<<<< HEAD
 import { Users } from '../interfaces/entities/Users';
@@ -101,17 +21,23 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 =======
 import pool from '../config/dbConnection'; // חיבור למסד הנתונים
+import { v4 as uuidv4 } from 'uuid';
 
+<<<<<<< HEAD
 // ממיר שורות DB (snake_case) ל-camelCase
 >>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
+=======
+// ממיר שורות DB (camelCase) ל־camelCase בקוד
+>>>>>>> f54d24c (הוספה מחיקה ועדכון)
 function mapUserRowToCamelCase(row: any) {
   return {
     id: row.id,
-    firstName: row.first_name,
-    lastName: row.last_name,
+    firstName: row.firstName,
+    lastName: row.lastName,
     email: row.email,
     phone: row.phone,
     role: row.role,
+<<<<<<< HEAD
 <<<<<<< HEAD
     password: row.password,
     createdAt: row.created_dat,
@@ -317,6 +243,10 @@ export const updateUserByAdmin = async (req: Request, res: Response) => {
 =======
     createdAt: row.created_at,
     isActive: row.is_active,
+=======
+    createdAt: row.createdAt,
+    isActive: row.isActive,
+>>>>>>> f54d24c (הוספה מחיקה ועדכון)
   };
 }
 
@@ -340,9 +270,14 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
 
     const result = await pool.query(
       `UPDATE users SET 
+<<<<<<< HEAD
 >>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
         first_name = $1,
         last_name = $2,
+=======
+        "firstName" = $1,
+        "lastName" = $2,
+>>>>>>> f54d24c (הוספה מחיקה ועדכון)
         email = $3,
         phone = $4,
 <<<<<<< HEAD
@@ -415,12 +350,36 @@ export const uploadUsersExcel = async (req: Request, res: Response) => {
       return;
     }
 
-    const updatedUser = mapUserRowToCamelCase(result.rows[0]);
-    res.status(200).json(updatedUser);
+
+  const updatedUser = mapUserRowToCamelCase(result.rows[0]);
+  res.status(200).json(updatedUser);
+} catch (err) {
+  console.error('שגיאה בעדכון משתמש:', err);
+  res.status(500).json({ error: 'אירעה שגיאה בעת עדכון המשתמש' });
+}
+}
+
+// יצירת משתמש חדש
+export async function createUser(req: Request, res: Response): Promise<void> {
+  try {
+    const { firstName, lastName, email, phone, role } = req.body;
+    const id = uuidv4();
+    const createdAt = new Date().toISOString();
+    const isActive = true;
+
+const result = await pool.query(
+  `INSERT INTO users (id, "firstName", "lastName", email, phone, role, "createdAt", "isActive")
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+   RETURNING *`,
+  [id, firstName, lastName, email, phone, role, createdAt, isActive]
+  );
+
+    const newUser = mapUserRowToCamelCase(result.rows[0]);
+    res.status(201).json(newUser);
 
   } catch (err) {
-    console.error('שגיאה בעדכון משתמש:', err);
-    res.status(500).json({ error: 'אירעה שגיאה בעת עדכון המשתמש' });
+    console.error('שגיאה ביצירת משתמש:', err);
+    res.status(500).json({ error: 'אירעה שגיאה בעת יצירת המשתמש' });
   }
 }
 
