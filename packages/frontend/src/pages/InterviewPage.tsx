@@ -91,13 +91,15 @@ const InterviewPage = () => {
       <CategoryDropdown />
       <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
         <div className="w-full max-w-2xl space-y-8">
-<Question
-  question={questionsWithStatus[currentIndex]}
-  onFinishRecording={() => setShowTips(true)}
-  onAnswerSaved={handleAnswerSaved}
-/>
-
-
+          {questionsWithStatus[currentIndex] ? (
+            <Question
+              question={questionsWithStatus[currentIndex]}
+              onFinishRecording={() => setShowTips(true)}
+              onAnswerSaved={handleAnswerSaved}
+            />
+          ) : (
+            <div>אין שאלות להצגה</div>
+          )}
         </div>
         <div className="mt-8 w-full max-w-2xl">
           <EndSurvey
