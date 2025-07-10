@@ -13,6 +13,7 @@ import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import EducationExperienceTab from "../../features/profile/components/EducationEntriesList";
 
 
 
@@ -22,11 +23,19 @@ export default function AppRoutes() {
   return (
     <div dir="rtl">
       <Routes>
-        {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
-     
         <Route path="/login" element={<LoginPage />} />
-         <Route path="/signup" element={<SignupForm />} />
+        {/* <Route
+          path="/signup"
+          element={
+            user ? (
+              <EducationExperienceTab userId={user.id} />
+            ) : (
+              <SignupForm />
+            )
+          }
+        /> */}
+                  <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/reset-password"
@@ -44,14 +53,29 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/profile"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <ProfilePage />
+
               </RoleProtectedRoute>
             }
-          />
+              
+          /> */}
+          <Route
+  path="/profile"
+  element={
+    user ? (
+      <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+        <EducationExperienceTab userId={user.id} />
+      </RoleProtectedRoute>
+    ) : (
+      <ProfilePage />
+    )
+  }
+/>
+
           <Route
             path="settings"
             element={
