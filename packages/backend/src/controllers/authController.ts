@@ -305,12 +305,12 @@ export const signup = async (req: Request, res: Response) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const slug = await generateUniqueSlug(first_name, lastName);
+  const slug = await generateUniqueSlug(first_name, last_name);
 
   const newUser: Users = {
     id: uuidv4(),
     firstName: first_name,
-    lastName,
+    lastName: last_name,
     email,
     phone,
     password: hashedPassword,
@@ -369,13 +369,13 @@ console.log('credential:', payload.credential);
 
     if (!user) {
       const first_name = googleUser.given_name ?? '';
-      const lastName = googleUser.family_name ?? '';
-      const slug = await generateUniqueSlug(first_name, lastName);
+      const last_name = googleUser.family_name ?? '';
+      const slug = await generateUniqueSlug(first_name, last_name);
 
       user = await userRepository.insertUser({
         id: uuidv4(),
         first_name,
-        lastName,
+        last_name,
         email: googleUser.email,
         phone: null,
         role: 'student',

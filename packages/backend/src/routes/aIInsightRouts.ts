@@ -3,7 +3,7 @@ import {  getAiInsightsByAnswerId ,getAiInsights} from "../controllers/aIInsight
 
 const AiInsightsRouter = Router();
 
-AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
-AiInsightsRouter.get('/aiInsight',getAiInsights);
+AiInsightsRouter.get('/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+AiInsightsRouter.get('/',getAiInsights);
 export default AiInsightsRouter;        
 
