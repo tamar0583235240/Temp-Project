@@ -14,22 +14,21 @@ import aiInsightRoutes from './src/routes/aIInsightRouts';
 
 dotenv.config();
 
-const allowedOrigins = (process.env.CORS_ORIGIN || '')
-  .split(',')
-  .map(o => o.trim())
-  .filter(Boolean);
+const allowedOrigins = process.env.CORS_ORIGIN || 'http://localhost:3000';
 
 console.log('Allowed CORS origins:', allowedOrigins);
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     console.log('Origin:', origin);
-    if (!origin) return callback(null, true); // למשל Postman שאין לו origin
-    if (allowedOrigins.includes(origin)) {
+    if (!origin) return callback(null, true);
+    if (
+      origin.startsWith('chrome-extension://') ||
+      allowedOrigins.includes(origin)
+    ) {
       return callback(null, true);
-    } else {
-      return callback(new Error('CORS blocked: Origin not allowed'));
     }
+    callback(new Error('CORS blocked: Origin not allowed'));
   },
   credentials: true,
 };
