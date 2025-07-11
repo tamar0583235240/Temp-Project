@@ -4,7 +4,7 @@ import HomePage from "../../pages/homePage";
 import { RecordingsList } from "../../features/recordings/components/recordingsList";
 import { SearchComponents } from "../../features/recordings/components/searchComponents";
 import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
-import { SortComponents } from "../../features/recordings/components/sortComponents"
+import { SortComponents } from "../../features/recordings/components/sortComponents";
 import { AdminQuestions } from "../../features/admin/components/adminQuestions";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
@@ -20,6 +20,7 @@ import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
 import ProjectsList from "../../features/profile/components/projects";
+import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
 import ProfileList from "../../features/profile/components/ProfileList";
 import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
@@ -27,22 +28,18 @@ import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
+
   return (
     <div dir="rtl">
       <Routes>
         {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
-     
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/reset-password"
-          element={
-            <ResetPassword />
-          }
-        />
-        {/* Routes with header */}
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* Routes with header (DashboardLayout) */}
         <Route element={<DashboardLayout />}>
           <Route
             path="/home"
@@ -77,7 +74,7 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path="settings"
+            path="/settings"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <SettingsPage />
@@ -180,7 +177,16 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          <Route
+            path="/work-experience"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                {/* <WorkExperienceTab userId={user?.id ?? ""} /> */}
+                     <WorkExperienceTab  />
 
+              </RoleProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </div>

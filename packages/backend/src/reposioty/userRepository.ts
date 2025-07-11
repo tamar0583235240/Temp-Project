@@ -67,13 +67,13 @@ const updateUser = async (
   userData: Partial<Users>
 ): Promise<Users | null> => {
   try {
-    const { firstName, lastName, email, phone, role, isActive, password, slug } =
+    const { first_name, last_name, email, phone, role, isActive, password, slug } =
       userData;
         const res = await pool.query(`
             UPDATE users 
-            SET first_name = $1, lastName = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password), slug =COALESCE($8, slug)
+            SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password), slug =COALESCE($8, slug)
             WHERE id = $9 RETURNING *`,
-      [firstName, lastName, email, phone, role, isActive, password, slug, id]
+      [first_name, last_name, email, phone, role, isActive, password, slug, id]
     );
     return res.rows[0] || null;
   } catch (error) {
@@ -108,12 +108,12 @@ const createUser = async (user: Users): Promise<Users> => {
             throw new Error("Password is required to create a user");
         }
         const res = await pool.query(
-            `INSERT INTO users (id, first_name, lastName, email, phone, role, created_at, is_active, password, slug)
+            `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password, slug)
              VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7,$8)
              RETURNING *`,
       [
-        user.firstName,
-        user.lastName,
+        user.first_name,
+        user.last_name,
         user.email,
         user.phone,
         user.role,

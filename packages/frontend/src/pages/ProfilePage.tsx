@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
-
+import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
 const ProfilePage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -11,7 +11,7 @@ const ProfilePage = () => {
       <h1 className="text-2xl font-bold text-center mb-6">פרופיל משתמש</h1>
       <div className="space-y-4">
         <ProfileField label="שם פרטי" value={user.first_name} />
-        <ProfileField label="שם משפחה" value={user.lastName} />
+        <ProfileField label="שם משפחה" value={user.last_name} />
         <ProfileField label="אימייל" value={user.email} />
         <ProfileField label="טלפון" value={user.phone || "לא הוזן"} />
         <ProfileField
@@ -20,7 +20,8 @@ const ProfilePage = () => {
         />
       </div>
     </div>
-  );
+  );   
+
 };
 
 const ProfileField = ({ label, value }: { label: string; value: string }) => (

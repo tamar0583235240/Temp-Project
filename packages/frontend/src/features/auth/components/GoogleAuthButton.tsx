@@ -14,17 +14,13 @@ const GoogleAuthButton = () => {
   const dispatch = useDispatch();
   const [authWithGoogle] = useAuthWithGoogleMutation();
 
-  const onSuccess = (googleUser: any) => {
-    const token = googleUser.credential;
+  const onSuccess = (credentialResponse: any) => {
+    const token = credentialResponse.credential;
 
     authWithGoogle(token)
       .unwrap()
       .then((res) => {
-        const user = res.user;
-        console.log('Google user:', user);
-
-        dispatch(loginSuccess({ user: user, token: token }));
-
+        dispatch(loginSuccess({ user: res.user, token }));
         navigate('/home');
       })
       .catch((error: any) => {

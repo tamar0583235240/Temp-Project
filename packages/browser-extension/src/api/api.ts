@@ -41,7 +41,7 @@ async function getProgress(token: string, userId: string) {
   const res = await fetch(`${url}/questions/progress/${userId}`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
     },
   });
   console.log("getProgress response:", res);

@@ -7,9 +7,9 @@ import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+import { WorkExperiences } from "./WorkExperiences";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
-import { WorkExperiences } from "./WorkExperiences";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -20,10 +20,10 @@ export class Users {
   id: string;
 
   @Column("text", { name: "first_name" })
-  firstName: string;
+  first_name: string;
 
   @Column("text", { name: "last_name" })
-  lastName: string;
+  last_name: string;
 
   @Column("text", { name: "email", unique: true })
   email: string;
@@ -70,30 +70,21 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(
-    () => PasswordResetTokens,
-    (passwordResetTokens) => passwordResetTokens.user
-  )
+  @OneToMany(() => PasswordResetTokens, (token) => token.user)
   passwordResetTokens: PasswordResetTokens[];
 
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
 
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.owner
-  )
+  @OneToMany(() => SharedRecordings, (rec) => rec.owner)
   sharedRecordings: SharedRecordings[];
 
-  @OneToMany(
-    () => UserReminderSettings,
-    (userReminderSettings) => userReminderSettings.user
-  )
+  @OneToMany(() => WorkExperiences, (exp) => exp.user)
+  workExperiences: WorkExperiences[];
+
+  @OneToMany(() => UserReminderSettings, (setting) => setting.user)
   userReminderSettings: UserReminderSettings[];
 
   @OneToMany(() => UserSessions, (userSessions) => userSessions.user)
   userSessions: UserSessions[];
-
-  @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
-  workExperiences: WorkExperiences[];
 }
