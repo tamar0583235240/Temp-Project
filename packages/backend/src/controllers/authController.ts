@@ -9,9 +9,9 @@ import {
   createToken,
   getToken,
   deleteToken,
-} from "../reposioty/passwordResetRepository";
-import userRepository from "../reposioty/userRepository";
-import authRepository from "../reposioty/authRepository";
+} from "../repository/passwordResetRepository";
+import userRepository from "../repository/userRepository";
+import authRepository from "../repository/authRepository";
 import {
   sendResetEmail,
   sendVerificationCodeEmail,
@@ -249,7 +249,6 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       sharedRecordings: [],
       createdAt: new Date(),
-      resources: [],
     },
     code,
     expiresAt,
@@ -349,7 +348,6 @@ export const signup = async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
-    resources: [],
   };
 
   await authRepository.signup(newUser);

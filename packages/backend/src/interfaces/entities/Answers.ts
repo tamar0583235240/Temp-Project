@@ -9,6 +9,7 @@ import {
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
+import { Feedback } from "./Feedback";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("answers_pkey", ["id"], { unique: true })
@@ -20,8 +21,8 @@ export class Answers {
   @Column("text", { name: "file_url" })
   fileUrl: string;
 
-  @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
+  @Column("text", { name: "answer_file_name" })
+  answerFileName: string;
 
   @Column("timestamp without time zone", {
     name: "submitted_at",
@@ -41,6 +42,9 @@ export class Answers {
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
+
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
+  feedbacks: Feedback[];
 
   @OneToMany(
     () => SharedRecordings,

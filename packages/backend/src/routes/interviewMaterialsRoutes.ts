@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import multer from 'multer';
 import {
-    getInterviewMaterialSubs,
+    getInterviewMaterialSub,
     addInterviewMaterialSub,
     updateInterviewMaterialSub,
-    deleteInterviewMaterial,
+    deleteInterviewMaterialSub,
 } from '../controllers/InterviewMaterialSubController';
+import { downloadInterviewMaterial } from '../controllers/downloadController';
 
 const router = Router();
 
@@ -14,8 +15,8 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
-router.get('/', getInterviewMaterialSubs);
-router.delete('/:id', deleteInterviewMaterial);
+router.get('/', getInterviewMaterialSub);
+router.delete('/:id', deleteInterviewMaterialSub);
 router.post('/',
     upload.fields([
         { name: 'thumbnail', maxCount: 1 },
@@ -31,6 +32,7 @@ router.put(
     ]),
     updateInterviewMaterialSub
 );
+router.get('/download/:id', downloadInterviewMaterial);
 
 export default router;
 

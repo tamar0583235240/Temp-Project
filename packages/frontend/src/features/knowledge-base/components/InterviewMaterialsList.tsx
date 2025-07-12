@@ -7,6 +7,7 @@ import { InterviewMaterial } from "../types/InterviewMaterials";
 import MessageModal from "../../../shared/ui/messageModal";
 import { InterviewMaterialsItem } from "./interviewMaterialsItem";
 import { EditInterviewMaterialsForm } from "./EditInterviewMaterialsForm";
+// import { EditInterviewMaterialsForm } from "./EditInterviewMaterialsForm";
 
 export const InterviewMaterialsList = () => {
   const { data: items, error, isLoading } = useGetInterviewMaterialsQuery();

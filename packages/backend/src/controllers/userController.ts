@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Users } from '../interfaces/entities/Users';
-import userRepository from '../reposioty/userRepository';
+import userRepository from '../repository/userRepository';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 
@@ -66,7 +66,6 @@ export const createUser = async (req: Request, res: Response) => {
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
-    resources: []
   };
 
   const createdUser = await userRepository.createUser(newUser);
