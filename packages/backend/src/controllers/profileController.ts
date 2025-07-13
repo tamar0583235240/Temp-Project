@@ -7,6 +7,9 @@ import {
 import { updateUsersNameAndContactInfo } from "../reposioty/userRepository";
 
 export const getAllProfilesHandler = async (_req: Request, res: Response) => {
+  console.log("-----controller----------");
+
+
   try {
     const profiles = await getAllProfiles();
     res.json(profiles);

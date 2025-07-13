@@ -2,7 +2,7 @@ import { pool } from "../config/dbConnection";
 
 export const getAllProfiles = async () => {
   const result = await pool.query(`
-    SELECT profiles.*, users.first_name, users.last_name, users.email, user.phone
+    SELECT profiles.*, users.first_name, users.last_name, users.email, users.phone
     FROM profiles
     JOIN users ON profiles.user_id = users.id
     ORDER BY profiles.created_at DESC

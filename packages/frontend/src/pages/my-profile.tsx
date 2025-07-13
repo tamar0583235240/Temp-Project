@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
 import axios from "axios";
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiOutlineClose, AiOutlineSave } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
-import { FaPen } from "react-icons/fa";
+import { FaPen, FaSave } from "react-icons/fa";
 import { useMessageModal } from "../shared/ui/MessageModalContext";
 import { useNavigate } from "react-router-dom";
 import { ToggleSwitch } from "../shared/ui/ToggleSwitch";
+import { Button } from "../shared/ui/button";
+import { Card } from "../shared/ui/card";
 
 // Type for external links
 interface ExternalLink {
@@ -28,6 +30,7 @@ const EditProfilePage = () => {
     email: "",
     phone: "",
     status: "",
+    location: "",
     preferred_job_type: "",
     external_links: [] as { url: string; label: string }[],
     bio: "",
@@ -37,6 +40,7 @@ const EditProfilePage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [linkErrors, setLinkErrors] = useState<string[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const API_BASE_URL = "http://localhost:5000";
 
@@ -207,6 +211,10 @@ const EditProfilePage = () => {
     }
   };
 
+  const onCancelEdit = () => {
+    navigate("/my-profile");
+  };
+
   const labelUrlMatchers: Record<string, (url: string) => boolean> = {
     LinkedIn: (url) => url.includes("linkedin.com"),
     GitHub: (url) => url.includes("github.com"),
@@ -219,7 +227,7 @@ const EditProfilePage = () => {
     Notion: (url) => url.includes("notion.so"),
     "Google Drive / PDF": (url) =>
       url.includes("drive.google.com") || url.endsWith(".pdf"),
-    Other: () => true, // Other - אין בדיקה מיוחדת
+    Other: () => true,
   };
 
   // Loading states
@@ -236,55 +244,70 @@ const EditProfilePage = () => {
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-xl">
-      <div>
-        <ToggleSwitch
-          checked={formData.is_public}
-          onToggle={() =>
-            setFormData((prev: any) => ({
-              ...prev,
-              is_public: !prev.is_public,
-            }))
-          }
-          label="האם הפרופיל ציבורי?"
-        />
-      </div>
-      
-      <input
-        type="text"
-        name="first_name"
-        placeholder="הקלד שם פרטי"
-        value={formData.first_name}
-        onChange={handleChange}
-        className="w-full border rounded px-3 py-2 mb-2"
-      />
-
-      <input
-        type="text"
-        name="last_name"
-        placeholder="הקלד שם משפחה"
-        value={formData.last_name}
-        onChange={handleChange}
-        className="w-full border rounded px-3 py-2 mb-2"
-      />
-
-      <input
-        type="email"
-        name="email"
-        placeholder="הקלד מייל"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-full border rounded px-3 py-2 mb-2"
-      />
-      <input
-        type="string"
-        name="phone"
-        placeholder="הקלד טלפון"
-        value={formData.phone}
-        onChange={handleChange}
-        className="w-full border rounded px-3 py-2 mb-2"
-      />
-
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex items-center gap-4">
+          <span>ציבורי</span>
+          <ToggleSwitch
+            checked={formData.is_public}
+            onToggle={() =>
+              setFormData((prev: any) => ({
+                ...prev,
+                is_public: !prev.is_public,
+              }))
+            }
+          />
+          <span className="flex items-center">
+            פרטי
+            {!formData.is_public && (
+              <span className="text-sm text-gray-500 ml-2">
+                 (המידע הזה לא יפורסם בפרופילים.) 
+              </span>
+            )}
+          </span>
+        </div>
+
+        <input
+          type="text"
+          name="first_name"
+          placeholder="הקלד שם פרטי"
+          value={formData.first_name}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2 mb-2"
+        />
+
+        <input
+          type="text"
+          name="last_name"
+          placeholder="הקלד שם משפחה"
+          value={formData.last_name}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2 mb-2"
+        />
+
+        <input
+          type="email"
+          name="email"
+          placeholder="הקלד מייל"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2 mb-2"
+        />
+        <input
+          type="string"
+          name="phone"
+          placeholder="הקלד טלפון"
+          value={formData.phone}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2 mb-2"
+        />
+        <input
+          type="string"
+          name="location"
+          placeholder="הקלד עיר"
+          value={formData.location}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2 mb-2"
+        />
         {/* סטטוס */}
         <div>
           <label className="block mb-1 font-medium">סטטוס</label>
@@ -300,7 +323,6 @@ const EditProfilePage = () => {
             <option value="working">עובדת כרגע</option>
           </select>
         </div>
-
         {/* סוג משרה מועדף */}
         <div>
           <label className="block mb-1 font-medium">סוג משרה מועדף</label>
@@ -317,13 +339,12 @@ const EditProfilePage = () => {
             <option value="Any">כל האפשרויות</option>
           </select>
         </div>
-
         {/* קישורים חיצוניים */}
         <div>
           <label className="block mb-1 font-medium">קישורים חיצוניים</label>
           {formData.external_links.map(
             (link: { url: string; label: string }, index: number) => (
-              <div key={index} className="mb-4">
+              <div key={index} className="p-6 shadow-md">
                 {/* שדה כתובת URL כפי שהיה */}
                 <input
                   type="text"
@@ -393,17 +414,26 @@ const EditProfilePage = () => {
             הוסף קישור חדש
           </button>
         </div>
-
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
         {/* כפתור שמירה */}
-        <button
-          type="submit"
-          disabled={saving}
-          className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark transition"
-        >
-          {saving ? "שומר..." : "שמור שינויים"}
-        </button>
+        <div className="flex gap-2 justify-start ltr">
+          <button
+            type="submit"
+            disabled={saving}
+            className="bg-primary text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-primary-dark transition"
+          >
+            <AiOutlineSave className="w-5 h-5" />
+            {saving ? "שומר..." : "שמור שינויים"}
+          </button>
+          <button
+            type="button"
+            onClick={onCancelEdit}
+            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-gray-300 transition"
+          >
+            <AiOutlineClose className="w-5 h-5" />
+            בטל
+          </button>
+        </div>
       </form>
     </div>
   );
