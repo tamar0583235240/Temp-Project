@@ -22,7 +22,6 @@ const addInterviewExperiences = async (
 ): Promise<InterviewExperiences> => {
   try {
     const id = uuid4();
-
     const query = `
       INSERT INTO "Interview_Experiences" (
         id, company_name, position, interview_date, questions, tips, description,
@@ -31,7 +30,6 @@ const addInterviewExperiences = async (
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
     `;
-
     const values = [
       id,
       interviewExperiences.company_name,
@@ -46,7 +44,6 @@ const addInterviewExperiences = async (
       interviewExperiences.created_at ?? new Date(), // ברירת מחדל
       interviewExperiences.user_id
     ];
-
     const result = await pool.query(query, values);
     return result.rows[0] as InterviewExperiences;
   } catch (error) {
