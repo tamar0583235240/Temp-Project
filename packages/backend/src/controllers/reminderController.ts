@@ -1,13 +1,14 @@
-import { Request, Response } from 'express';
-import reminderRepository from '../reposioty/reminderRepository';
 
-export const reminderController = async (req: Request, res: Response): Promise<void> => {
-  console.log('exampleController called');
+import { Request, Response } from 'express';
+import reminderService from '../services/reminderService';
+
+export const saveUserReminderSettings = async (req: Request, res: Response) => {
   try {
-    const items = await reminderRepository.getAllReminders();
-    res.json(items);
+    const { userId, settings } = req.body;
+    await reminderService.saveUserSettings(userId, settings);
+    res.status(200).json({ message: 'Settings saved successfully' });
   } catch (error) {
-    console.error('Error in exampleController:', error);
-    res.status(500).json({ error });
+    console.error('Error in controller:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };

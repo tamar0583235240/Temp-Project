@@ -1,20 +1,17 @@
-import { pool } from '../config/dbConnection'; 
-import { ReminderInterface } from '../interfaces/reminderInterfaces';
+import { pool } from '../config/dbConnection';
 
-const getAllReminders = async (): Promise<ReminderInterface[]> => {
-  try {
-    const query = `
-      SELECT exampleField1, exampleField2, exampleField3
-      FROM examples
-    `;
-
-    const result = await pool.query(query);
-    return result.rows as ReminderInterface[];
-
-  } catch (error) {
-    console.error("Error fetching examples from PostgreSQL:", error);
-    throw error;
-  }
+const upsertReminder = async (
+  userId: string,
+  type: 'practice' | 'tip',
+  frequency: string
+) => {
+  const query = `
+    INSERT INTO user_reminder_settings (user_id, type, frequency, is_enabled)
+    VALUES ($1, $2, $3, true)
+    ON CONFLICT (user_id, type)
+    DO UPDATE SET frequency = EXCLUDED.frequency, is_enabled = true
+  `;
+  await pool.query(query, [userId, type, frequency]);
 };
 
-export default { getAllReminders };
+export default { upsertReminder };
