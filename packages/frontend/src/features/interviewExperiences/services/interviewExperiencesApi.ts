@@ -6,10 +6,17 @@ export const interviewExperiencesApi = api.injectEndpoints({
     getAllInterviewExperiences: builder.query<interviewExperiences[] , void>({
       query: () => `/interviewExperiences/getAllInterviewExperiences`,
       providesTags: ["interviewExperiences"],
-    })
+    }),
+    deleteInterviewExperiencesById: builder.mutation<void , string>({
+      query: (id) => ({
+        url: `/interviewExperiences/deleteInterviewExperience/${id}`,
+        method: 'DELETE', 
+    }),
+    invalidatesTags: [{ type: 'interviewExperiences'}],})
   }),
+  
 });
 
 export const {
-  useGetAllInterviewExperiencesQuery
+  useGetAllInterviewExperiencesQuery, useDeleteInterviewExperiencesByIdMutation
 } = interviewExperiencesApi;
