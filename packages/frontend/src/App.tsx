@@ -9,9 +9,9 @@ function App() {
     <MessageModalProvider>  
       <BrowserRouter>
         <div className="App">
-          <header className="App-header">
+          {/* <header className="App-header">
             <h1>Project base viewer</h1>
-          </header>
+          </header> */}
           <main>
             <AppRoutes />
           </main>
