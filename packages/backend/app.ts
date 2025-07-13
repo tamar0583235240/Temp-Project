@@ -11,6 +11,7 @@ import projectsRoutes from './src/routes/projectsRoutes';
 import profileRoutes from "./src/routes/profileRouts";
 import answerRoutes from './src/routes/answerRouts';
 import aiInsightRoutes from './src/routes/aIInsightRouts';
+import publicProfileRoutes from './src/routes/publicProfileRoutes';
 
 dotenv.config();
 
@@ -51,5 +52,5 @@ app.use('/manager/interview-materials', interviewMaterialsHub);
 app.use('/work-experience', workExperienceRoutes);
 app.use('/personal-projects', projectsRoutes);
 app.use('/profiles', profileRoutes);
-
+app.use('/public-profile', publicProfileRoutes);
 export default app;
