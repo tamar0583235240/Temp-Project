@@ -45,9 +45,8 @@ export const deleteTipController = async (req: Request, res: Response): Promise<
     console.log('deleteTipController called');
     try {
         const tipId = req.params.tip_id;
-        const is_active = false;
-        await tipsAndPracticesRepository.deleteTipById(tipId, is_active);
-        res.status(200).send("Tip deleted successfully");
+        await tipsAndPracticesRepository.deleteTipById(tipId);
+        res.status(200).send({ message: 'Tip deleted successfully' });
     } catch (error) {
         console.error('Error in deleteTipController:', error);
         res.status(500).json({ error: 'DELETE_TIP_FAILED', details: (error as Error).message });

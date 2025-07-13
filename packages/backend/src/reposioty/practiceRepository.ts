@@ -61,11 +61,11 @@ const updatePracticeById = async (updates: Practices): Promise<Practices> => {
   }
 };
 
-const deletePracticeById = async (id: string, is_active: boolean): Promise<string> => {
+const deletePracticeById = async (id: string): Promise<string> => {
   try {
-    const query = 'UPDATE practices SET is_active = $1 WHERE id = $2 RETURNING *';
-    const { rows } = await pool.query(query, [is_active, id]);
-    if (rows.length === 0) {
+    const query = 'DELETE FROM practices WHERE id = $1';
+    const { rowCount } = await pool.query(query, [id]);
+    if (rowCount === 0) {
       throw new Error("PRACTICE_NOT_FOUND");
     }
     return "Practice deleted successfully";

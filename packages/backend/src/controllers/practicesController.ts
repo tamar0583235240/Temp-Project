@@ -45,9 +45,8 @@ export const deletePracticeController = async (req: Request, res: Response): Pro
     console.log('deletePracticeController called');
     try {
         const practiceId = req.params.practice_id;
-        const is_active = false;
-        await practiceRepository.deletePracticeById(practiceId, is_active);
-        res.status(200).send("Practice deleted successfully");
+        await practiceRepository.deletePracticeById(practiceId);
+        res.status(200).send({ message: 'Practice deleted successfully' });
     } catch (error) {
         console.error('Error in deletePracticeController:', error);
         res.status(500).json({ error: 'DELETE_PRACTICE_FAILED', details: (error as Error).message });

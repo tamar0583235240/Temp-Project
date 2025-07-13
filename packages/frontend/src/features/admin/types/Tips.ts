@@ -1,5 +1,5 @@
 export interface Tip {
     id: string,
 	content: string,
-    created_at: Date
+    created_at: string
 }
