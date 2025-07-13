@@ -6,10 +6,18 @@ export const interviewExperiencesApi = api.injectEndpoints({
     getAllInterviewExperiences: builder.query<interviewExperiences[] , void>({
       query: () => `/interviewExperiences/getAllInterviewExperiences`,
       providesTags: ["interviewExperiences"],
-    })
+    }),
+    adddInterviewExperiences: builder.mutation<void, interviewExperiences>({
+      query: (interviewExperiences) => ({
+        url: `/interviewExperiences/addInterviewExperiences`,
+        method: 'POST',
+        body: interviewExperiences,
+      }),
+      invalidatesTags: ["interviewExperiences"],
+    }),
   }),
 });
 
 export const {
-  useGetAllInterviewExperiencesQuery
+  useGetAllInterviewExperiencesQuery,useAdddInterviewExperiencesMutation
 } = interviewExperiencesApi;

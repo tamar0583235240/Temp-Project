@@ -1,5 +1,5 @@
 // בס"ד
-
+import { useEffect, useState } from "react";
 import { data } from "react-router-dom";
 import { useGetAllInterviewExperiencesQuery } from "../services/interviewExperiencesApi";
 import { useGetAllExperienceThanksQuery } from '../services/experienceThanksApi';
@@ -12,12 +12,14 @@ import { Spinner } from "../../../shared/ui/Spinner";
 import { EmptyState } from "../../../shared/ui/EmptyState";
 import { Heading1, Paragraph } from "../../../shared/ui/typography";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
-import { FaBriefcase, FaHeart, FaCalendarAlt, FaEye } from "react-icons/fa";
+import { FaBriefcase, FaHeart, FaCalendarAlt, FaEye, FaPlus } from "react-icons/fa";
+import { AddInterviewExperience } from "./addInterviewExperience";
 
 export const InterviewExperiencesList = () => {
   const { data: interviewExperiences, isLoading, isError } = useGetAllInterviewExperiencesQuery();
   const { data: experienceThanks, isLoading: thanksLoading, isError: thanksError } = useGetAllExperienceThanksQuery();  
   const { data: users, isLoading: usersLoading, isError: usersError } = useGetUsersQuery();
+  const [addInterviewExperiences, setAddInterviewExperiences] = useState(false);
 
   function getThunksByInterviewExperienceId(interviewExperienceId: string): experienceThanks[] {
     return ( experienceThanks? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : [] );
@@ -58,6 +60,10 @@ export const InterviewExperiencesList = () => {
     );
   }
 
+  const handleAddInterviewExperience=()=>{
+    setAddInterviewExperiences(true);
+  }
+
   return (
     <GridContainer maxWidth="xl" className="space-y-8">
       {/* כותרת ראשית */}
@@ -69,7 +75,14 @@ export const InterviewExperiencesList = () => {
           למדו מחוויות של נשים אחרות וקבלו השראה להצלחה בראיונות העבודה שלכן
         </Paragraph>
       </div>
-
+      {/* כפתור הוספה */}
+      <div className="flex justify-center">
+        <button className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[--color-primary] to-[--color-primary-dark] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105 border border-[--color-border]"
+       onClick={()=>setAddInterviewExperiences(true)}>  
+          הוסף חוויה
+          <FaPlus />
+        </button>
+      </div>
       {/* רשימת החוויות */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {interviewExperiences.map((interviewExperience) => (
@@ -166,6 +179,18 @@ export const InterviewExperiencesList = () => {
           </CardSimple>
         ))}
       </div>
+      {addInterviewExperiences && (
+        <AddInterviewExperience
+          onClose={() => setAddInterviewExperiences(false)}
+          onSubmit={handleAddInterviewExperience}
+        />
+      )}
     </GridContainer>
+    
   );
 }
+
+
+// בס"ד
+
+
