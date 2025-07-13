@@ -45,10 +45,10 @@
 
 // src/features/example/exampleSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { reminderType } from '../types/reminderType';
+import { UserReminderSetting } from '../types/reminderType';
 
 interface ExampleState {
-  data: reminderType[];
+  data: UserReminderSetting[];
   loading: boolean;
 }
 
@@ -61,10 +61,10 @@ const exampleSlice = createSlice({
   name: 'example',
   initialState,
   reducers: {
-    setItems(state, action: PayloadAction<reminderType[]>) {
+    setItems(state, action: PayloadAction<UserReminderSetting[]>) {
       state.data = action.payload;
     },
-    addItem(state, action: PayloadAction<reminderType>) {
+    addItem(state, action: PayloadAction<UserReminderSetting>) {
       state.data.push(action.payload);
     },
     deleteItem(state, action: PayloadAction<string>) {

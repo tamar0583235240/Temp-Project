@@ -1,15 +1,15 @@
 
 import { api } from "../../../shared/api/api";
-import { reminderType } from "../types/reminderType";
+import { UserReminderSetting } from "../types/reminderType";
 
 
 export const remainderApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getItems: builder.query<reminderType[], void>({
+    getItems: builder.query<UserReminderSetting[], void>({
       query: () => "items",
       providesTags: ["Reminders"],
     }),
-    addItem: builder.mutation<reminderType, Partial<reminderType>>({
+    addItem: builder.mutation<UserReminderSetting, Partial<UserReminderSetting>>({
       query: (item) => ({
         url: "items",
         method: "POST",

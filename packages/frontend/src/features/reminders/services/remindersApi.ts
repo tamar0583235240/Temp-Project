@@ -1,6 +1,6 @@
 // shared/api/api.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { reminderType } from '../types/reminderType';
+import { UserReminderSetting } from '../types/reminderType';
 
 
 export const api = createApi({
@@ -8,7 +8,7 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api' }),
   tagTypes: ['Reminders'],
   endpoints: (builder) => ({
-    getReminders: builder.query<reminderType[], void>({
+    getReminders: builder.query<UserReminderSetting[], void>({
       query: () => '/tips',
       providesTags: ['Reminders'],
     }),
