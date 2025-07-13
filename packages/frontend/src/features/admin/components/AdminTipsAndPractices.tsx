@@ -83,20 +83,20 @@ const AdminTipsAndPractices: React.FC = () => {
     }, SwalTipForm);
   };
 
-  const handleDeleteTip = async (id: string) => {
-    const result = await Swal.fire({
-      title: 'מחיקת טיפ',
-      text: 'האם אתה בטוח שברצונך למחוק את הטיפ?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'מחק',
-      cancelButtonText: 'בטל',
-    });
-    if (result.isConfirmed) {
-      await deleteTip(id).unwrap();
-      Swal.fire('נמחק', 'הטיפ נמחק בהצלחה', 'success');
-    }
-  };
+const handleDeleteTip = async (id: string, content: string) => {
+  const result = await Swal.fire({
+    title: 'מחיקת טיפ',
+    text: `האם אתה בטוח שברצונך למחוק את הטיפ "${content}"?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'מחק',
+    cancelButtonText: 'בטל',
+  });
+  if (result.isConfirmed) {
+    await deleteTip(id).unwrap();
+    Swal.fire('נמחק', `הטיפ "${content}" נמחק בהצלחה`, 'success');
+  }
+};
 
   const handleAddPractice = () => {
     openSwalForm('הוספת שאלה לתרגול', '', async (content) => {
@@ -110,10 +110,10 @@ const AdminTipsAndPractices: React.FC = () => {
     }, SwalPracticeForm);
   };
 
-  const handleDeletePractice = async (id: string) => {
+  const handleDeletePractice = async (id: string, content: string) => {
     const result = await Swal.fire({
       title: 'מחיקת שאלה לתרגול',
-      text: 'האם אתה בטוח שברצונך למחוק את השאלה?',
+      text: `האם אתה בטוח שברצונך למחוק את השאלה "${content}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'מחק',
@@ -121,7 +121,7 @@ const AdminTipsAndPractices: React.FC = () => {
     });
     if (result.isConfirmed) {
       await deletePractice(id).unwrap();
-      Swal.fire('נמחק', 'השאלה נמחקה בהצלחה', 'success');
+      Swal.fire('נמחק', `השאלה "${content}" נמחקה בהצלחה`, 'success');
     }
   };
 
@@ -156,7 +156,7 @@ const AdminTipsAndPractices: React.FC = () => {
             {filteredTips.length === 0 && <li>לא נמצאו טיפים לפי החיפוש שלך.</li>}
             {filteredTips.map((tip) => (
               <li key={tip.id} className="mb-3 p-3 bg-gray-50 rounded shadow-sm flex justify-between items-center">
-               💡 <span>{tip.content}</span>
+              💡  <span>{tip.content}</span>
                 <div className="flex gap-2">
                   <button
                     className="btn btn-edit text-blue-600 hover:text-blue-800"
@@ -168,7 +168,7 @@ const AdminTipsAndPractices: React.FC = () => {
                   </button>
                   <button
                     className="btn btn-delete text-red-600 hover:text-red-800"
-                    onClick={() => handleDeleteTip(tip.id)}
+                    onClick={() => handleDeleteTip(tip.id, tip.content)}
                     aria-label="מחק טיפ"
                     title="מחק"
                   >
@@ -204,7 +204,7 @@ const AdminTipsAndPractices: React.FC = () => {
             {filteredPractices.length === 0 && <li>לא נמצאו שאלות לפי החיפוש שלך.</li>}
             {filteredPractices.map((practice) => (
               <li key={practice.id} className="mb-3 p-3 bg-gray-50 rounded shadow-sm flex justify-between items-center">
-               📌 <span>{practice.content}</span>
+              📌  <span>{practice.content}</span>
                 <div className="flex gap-2">
                   <button
                     className="btn btn-edit text-blue-600 hover:text-blue-800"
@@ -216,7 +216,7 @@ const AdminTipsAndPractices: React.FC = () => {
                   </button>
                   <button
                     className="btn btn-delete text-red-600 hover:text-red-800"
-                    onClick={() => handleDeletePractice(practice.id)}
+                    onClick={() => handleDeletePractice(practice.id, practice.content)}
                     aria-label="מחק שאלה"
                     title="מחק"
                   >
