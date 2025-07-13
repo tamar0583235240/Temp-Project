@@ -129,6 +129,7 @@ import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
+import InterviewPage from "../../pages/InterviewPage";
 import Dashboard from "../../pages/dashboard"
 export default function AppRoutes() {
   return (
@@ -148,19 +149,19 @@ export default function AppRoutes() {
             path="/simulation"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Simulation</p>
+                <InterviewPage/>
               </RoleProtectedRoute>
             }
           />
 
-<Route
-  path="/dashboard"
-  element={
-    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-      <Dashboard />
-    </RoleProtectedRoute>
-  }
-/>
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <Dashboard />
+              </RoleProtectedRoute>
+            }
+          />
 
 
           <Route

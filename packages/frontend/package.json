@@ -34,6 +34,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.3",
     "react-scripts": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "shadcn": "^2.6.1",
     "sweetalert2": "^11.22.2",
     "sweetalert2-react-content": "^5.1.0",
