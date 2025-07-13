@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import questionRepository from '../reposioty/questionRepository'
+// import questionRepository from '../reposioty/questionRepository'
 
 export const questionController = async (req: Request, res: Response): Promise<void> => {
 
@@ -12,4 +12,3 @@ export const questionController = async (req: Request, res: Response): Promise<v
     res.status(500).json({ error });
   }
 };
-
