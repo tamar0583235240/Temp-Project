@@ -303,7 +303,7 @@ export const InterviewExperienceView = (props: { interviewExperience: interviewE
                             padding: '8px'
                         }}
                     >
-                        🚩 דווח
+                        🚩 דווח על תוכן לא הולם     
                     </button>
                     
                     <div style={{ display: 'flex', gap: '12px' }}>

@@ -6,7 +6,7 @@ export interface interviewExperiences{
 
   position: string;
 
-  interviewDate: string | null;
+  interviewDate: Date | null;
 
   questions: string | null;
 

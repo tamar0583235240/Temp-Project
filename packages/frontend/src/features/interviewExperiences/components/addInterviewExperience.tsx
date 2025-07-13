@@ -24,13 +24,13 @@ export const AddInterviewExperience = (props: {
         id: '',
         company_name: '',
         position: '',
-        interviewDate: '',
+        interviewDate: new Date(),
         questions: '',
         tips: '',
         description: '',
         hired: false,
         rating: 0,
-        anonymous: false,
+        anonymous: true,
         created_at: new Date(),
         user_id: userId,
     });
@@ -52,13 +52,13 @@ export const AddInterviewExperience = (props: {
                 id: '',
                 company_name: '',
                 position: '',
-                interviewDate: '',
+                interviewDate: new Date(),
                 questions: '',
                 tips: '',
                 description: '',
                 hired: false,
                 rating: 0,
-                anonymous: false,
+                anonymous: true,
                 created_at: new Date(),
                 user_id: '',
             });
@@ -139,10 +139,9 @@ export const AddInterviewExperience = (props: {
                                     <IconWrapper size="sm" color="primary-dark" className="inline ml-2">
                                         <FaCalendarAlt />
                                     </IconWrapper>
-                                    תאריך הראיון *
+                                    תאריך הראיון 
                                 </label>
                                 <input
-                                    required
                                     type="date"
                                     onChange={(e) => handleInputChange('interviewDate', e.target.value)}
                                     className="w-full px-4 py-3 border border-[--color-border] rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-primary] focus:border-transparent transition-all"
@@ -152,10 +151,9 @@ export const AddInterviewExperience = (props: {
                             {/* תיאור החוויה */}
                             <div>
                                 <label className="block text-sm font-semibold text-[--color-text] mb-2">
-                                    תיאור החוויה *
+                                    תיאור החוויה 
                                 </label>
                                 <textarea
-                                    required
                                     rows={4}
                                     onChange={(e) => handleInputChange('description', e.target.value)}
                                     className="w-full px-4 py-3 border border-[--color-border] rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-primary] focus:border-transparent transition-all resize-none"
@@ -166,10 +164,9 @@ export const AddInterviewExperience = (props: {
                             {/* שאלות שנשאלו */}
                             <div>
                                 <label className="block text-sm font-semibold text-[--color-text] mb-2">
-                                    שאלות שנשאלו בראיון *
+                                    שאלות שנשאלו בראיון 
                                 </label>
                                 <textarea
-                                    required
                                     rows={3}
                                     onChange={(e) => handleInputChange('questions', e.target.value)}
                                     className="w-full px-4 py-3 border border-[--color-border] rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-primary] focus:border-transparent transition-all resize-none"
@@ -180,10 +177,9 @@ export const AddInterviewExperience = (props: {
                             {/* טיפים */}
                             <div>
                                 <label className="block text-sm font-semibold text-[--color-text] mb-2">
-                                    טיפים והמלצות *
+                                    טיפים והמלצות 
                                 </label>
                                 <textarea
-                                    required
                                     rows={3}
                                     onChange={(e) => handleInputChange('tips', e.target.value)}
                                     className="w-full px-4 py-3 border border-[--color-border] rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-primary] focus:border-transparent transition-all resize-none"
@@ -194,7 +190,7 @@ export const AddInterviewExperience = (props: {
                             {/* דירוג */}
                             <div>
                                 <label className="block text-sm font-semibold text-[--color-text] mb-2">
-                                    רמת ההנאה מהראיון: *
+                                    רמת ההנאה מהראיון: 
                                 </label>
                                 <div className="flex items-center gap-1">
                                     {Array.from({ length: 5 }, (_, index) => {
@@ -221,26 +217,24 @@ export const AddInterviewExperience = (props: {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="flex items-center gap-3">
                                     <input
-                                        required
                                         type="checkbox"
                                         id="hired"
                                         onChange={(e) => handleInputChange('hired', e.target.checked)}
                                         className="w-5 h-5 text-[--color-primary] border-[--color-border] rounded focus:ring-[--color-primary]"
                                     />
                                     <label htmlFor="hired" className="text-sm font-medium text-[--color-text]">
-                                        התקבלתי לעבודה *
+                                        התקבלתי לעבודה 
                                     </label>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <input
-                                        required
                                         type="checkbox"
                                         id="anonymous"
                                         onChange={(e) => handleInputChange('anonymous', e.target.checked)}
                                         className="w-5 h-5 text-[--color-primary] border-[--color-border] rounded focus:ring-[--color-primary]"
                                     />
                                     <label htmlFor="anonymous" className="text-sm font-medium text-[--color-text]">
-                                        פרסום אנונימי *
+                                        פרסום אנונימי 
                                     </label>
                                 </div>
                             </div>
@@ -267,7 +261,7 @@ export const AddInterviewExperience = (props: {
                                     ) : (
                                         <>
                                             <FaSave />
-                                            הוסף חוויה
+                                            פרסם חוויה
                                         </>
                                     )}
                                 </button>
