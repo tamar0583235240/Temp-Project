@@ -1,5 +1,7 @@
 // import { Users } from "../../../../../backend/src/interfaces/entities/Users";
-import {User} from "../../../../../backend/src/interfaces/User";
+
+import { User } from "../../auth/types/types";
+
 export interface user extends User {
   isSelected?: boolean; // שדה פנימי לצרכי UI בלבד
 }
