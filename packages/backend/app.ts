@@ -48,5 +48,6 @@ app.use('/interview-materials-hub', interviewMaterialsHub);
 app.use('/experienceThanks', experienceThanksRouter);
 app.use('/contentReports', contentReportsRouter);
 app.use('/interview-materials-hub', interviewMaterialsHub);
+app.use('/users', userRouts);
 
 export default app

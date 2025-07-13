@@ -84,7 +84,7 @@ export const InterviewExperiencesList = () => {
                   size="sm" 
                   color={interviewExperience.anonymous ? "muted" : "primary-dark"}
                 >
-                  {interviewExperience.anonymous ? "💁‍♂️" : "👤"}
+                  {interviewExperience.anonymous ? "👤" : "💁‍♂️"}
                 </IconWrapper>
                 <span className="text-sm text-[--color-secondary-text]">
                   {interviewExperience.anonymous ? "אנונימית" : "משתמשת רשומה"}
