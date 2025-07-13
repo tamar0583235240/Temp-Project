@@ -87,99 +87,42 @@ const Question: React.FC<QuestionProps> = ({
           <div className="flex gap-4 w-full">
             {/* העלאת קובץ */}
             <div className="w-1/2">
-              <button
-                type="button"
-                className={`w-full border border-[--color-border] bg-white text-[--color-text] px-6 py-3 rounded-lg font-semibold transition text-lg flex items-center justify-center gap-2 ${selectedFile || isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[--color-background]'}`}
-                onClick={() => document.getElementById('file-upload-input')?.click()}
-                disabled={!!selectedFile || isUploading}
-              >
-                העלה קובץ
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
-                </svg>
-              </button>
-              <input
-                id="file-upload-input"
-                type="file"
-                style={{ display: "none" }}
-                accept="audio/*,video/*"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-              />
-              {selectedFile && showFileActions && !isUploading && (
-                <div className="flex flex-col items-center gap-2 mt-2 w-full">
-                  <div className="flex items-center gap-2 w-full justify-center">
-                    <button
-                      className="p-1 text-red-500 hover:text-red-700 order-1"
-                      onClick={handleReupload}
-                      title="מחק קובץ"
-                      style={{ marginLeft: 4 }}
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                    <span className="text-sm text-gray-700 order-2">{selectedFile.name}</span>
-                  </div>
-                  <div className="flex gap-2 mt-1">
-                    <button
-                      className="bg-[--color-primary] text-white px-4 py-2 rounded hover:bg-[--color-primary-dark] transition"
-                      onClick={handleApprove}
-                    >
-                      אישור
-                    </button>
-                  </div>
-                </div>
-              )}
-              {selectedFile && isUploading && (
-                <FileUpload
-                  userId={userId}
-                  questionId={String(currentQuestion.id)}
-                  file={selectedFile}
-                  onUploaded={async (fileUrl, fileName) => {
-                    setIsUploading(false);
-                    setSelectedFile(null);
-                    setShowFileActions(false);
-                    if (fileInputRef.current) fileInputRef.current.value = "";
-                    dispatch(answerQuestion({ index: currentIndex, answer: 'טוען...' }));
-                    try {
-                      await uploadAnswer({
-                        userId,
-                        questionId: String(currentQuestion.id),
-                        fileUrl,
-                        amountFeedbacks: 0,
-                        answerFileName: fileName,
-                      }).unwrap();
-                      dispatch(answerQuestion({ index: currentIndex, answer: fileUrl }));
-                      setNotification({
-                        message: "הקובץ נשמר בהצלחה!",
-                        type: "success",
-                        icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />
-                      });
-                      setTimeout(() => setNotification(null), 3500);
-                      onAnswerSaved?.("id-from-response"); // כאן שימי את ה־id האמיתי אם יש לך
-                    } catch (e) {
-                      dispatch(answerQuestion({ index: currentIndex, answer: '' }));
-                      setNotification({
-                        message: "שגיאה בשמירת התשובה",
-                        type: "error",
-                        icon: <XCircle className="w-6 h-6 text-red-500" />
-                      });
-                      setTimeout(() => setNotification(null), 3500);
-                    }
-                  }}
-                  onError={() => {
-                    setIsUploading(false);
-                    setSelectedFile(null);
-                    setShowFileActions(false);
-                    if (fileInputRef.current) fileInputRef.current.value = "";
+              <FileUpload
+                userId={userId}
+                onUploaded={async (fileUrl, fileName) => {
+                  try {
+                    await uploadAnswer({
+                      userId,
+                      questionId: String(currentQuestion.id),
+                      fileUrl,
+                      amountFeedbacks: 0,
+                      answerFileName: fileName,
+                    }).unwrap();
                     setNotification({
-                      message: "שגיאה בהעלאת קובץ",
-                      type: "error",
-                      icon: <XCircle className="w-6 h-6 text-red-500" />
+                      message: "הקובץ נשמר בהצלחה!",
+                      type: "success",
+                      icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
                     });
                     setTimeout(() => setNotification(null), 3500);
-                  }}
-                />
-              )}
+                    onAnswerSaved("fake-id-from-server");
+                  } catch (e) {
+                    setNotification({
+                      message: "שגיאה בשמירת התשובה",
+                      type: "error",
+                      icon: <XCircle className="w-6 h-6 text-red-500" />,
+                    });
+                    setTimeout(() => setNotification(null), 3500);
+                  }
+                }}
+                onError={() => {
+                  setNotification({
+                    message: "שגיאה בהעלאת קובץ",
+                    type: "error",
+                    icon: <XCircle className="w-6 h-6 text-red-500" />,
+                  });
+                  setTimeout(() => setNotification(null), 3500);
+                }}
+              />
             </div>
 
             {/* הקלטה */}
