@@ -230,6 +230,7 @@ export const AddInterviewExperience = (props: {
                                     <input
                                         type="checkbox"
                                         id="anonymous"
+                                        checked={interviewExperience.anonymous}
                                         onChange={(e) => handleInputChange('anonymous', e.target.checked)}
                                         className="w-5 h-5 text-[--color-primary] border-[--color-border] rounded focus:ring-[--color-primary]"
                                     />
