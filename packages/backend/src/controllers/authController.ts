@@ -12,72 +12,58 @@ import {
 } from "../reposioty/passwordResetRepository";
 import userRepository from "../reposioty/userRepository";
 import authRepository from "../reposioty/authRepository";
+import sessionRepository from "../reposioty/sessionRepository";
 import {
   sendResetEmail,
   sendVerificationCodeEmail,
 } from "../utils/emailSender";
 
 const SALT_ROUNDS = 10;
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+const REFRESH_SECRET = process.env.REFRESH_SECRET || "your_refresh_secret";
+const TOKEN_EXPIRATION_HOURS = 1;
 
 type CodeData = { code: string; expiresAt: number };
-const codesPerEmail = new Map<string, CodeData>(); //שמירת הקודים לפי המיילים שאליהם נשלחו
-// ניקוי המפות שפג תוקפן -כל שעה
-const cleanExpiredCodes = () => {
+const codesPerEmail = new Map<string, CodeData>();
+
+// ניקוי המפות שפג תוקפן - כל שעה
+setInterval(() => {
   const now = Date.now();
   for (const [email, data] of codesPerEmail.entries()) {
-    if (data.expiresAt < now) {
-      codesPerEmail.delete(email);
-    }
+    if (data.expiresAt < now) codesPerEmail.delete(email);
   }
-};
-setInterval(cleanExpiredCodes, 60 * 60 * 1000);
+}, 60 * 60 * 1000);
 
 export const generateAndSendCode = async (req: Request, res: Response) => {
   const email = req.body.email;
   if (!email)
     return res.status(400).json({ sent: false, message: "Email is required" });
-  // יצירת קוד אקראי בן 6 ספרות
+
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
+  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
   codesPerEmail.set(email, { code, expiresAt });
-  // בקוד הזה צריך לטפל...
+
   await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`);
-  console.log(`Sending code ${code} to email ${email}`);
   res.status(200).json({ sent: true, message: "הקוד נשלח בהצלחה!" });
 };
 
 export const validateCode = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const code = req.body.code;
-
+  const { email, code } = req.body;
   if (!email || !code)
     return res.status(400).json({ error: "Email and code are required" });
 
   const validCode = codesPerEmail.get(email);
-  if (!validCode) {
-    return res.status(200).json({
-      valid: false,
-      message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
-    });
-  }
-  if (Date.now() > validCode.expiresAt) {
-    return res
-      .status(200)
-      .json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
-  }
-  if (code === validCode.code) {
-    return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
-  } else {
-    return res
-      .status(200)
-      .json({ valid: false, message: "הקוד שגוי. אנא נסה שנית." });
-  }
+  if (!validCode)
+    return res.status(200).json({ valid: false, message: "לא נמצא קוד" });
+
+  if (Date.now() > validCode.expiresAt)
+    return res.status(200).json({ valid: false, message: "הקוד פג תוקף" });
+
+  return res.status(200).json({
+    valid: code === validCode.code,
+    message: code === validCode.code ? "הקוד אומת בהצלחה" : "הקוד שגוי",
+  });
 };
-
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "your_refresh_secret";
-
-const TOKEN_EXPIRATION_HOURS = 1;
 
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -85,23 +71,15 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
   try {
     const user = await userRepository.getUserByEmail(email);
-    if (!user) {
-      return res
-        .status(200)
-        .json({ message: "If email exists, reset link sent" });
-    }
+    if (!user) return res.status(200).json({ message: "If email exists, reset link sent" });
 
     const token = crypto.randomBytes(32).toString("hex");
-    const expiresAt = new Date(
-      Date.now() + TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000
-    );
+    const expiresAt = new Date(Date.now() + TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000);
 
     await createToken(user.id, token, expiresAt);
     await sendResetEmail(email, token);
 
-    return res
-      .status(200)
-      .json({ message: "If email exists, reset link sent" });
+    return res.status(200).json({ message: "If email exists, reset link sent" });
   } catch (error) {
     console.error("Forgot Password error:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -115,16 +93,10 @@ export const resetPassword = async (req: Request, res: Response) => {
 
   try {
     const tokenData = await getToken(token);
-
-    if (!tokenData) {
+    if (!tokenData || new Date(tokenData.expires_at) < new Date())
       return res.status(400).json({ message: "Invalid or expired token" });
-    }
 
-    if (new Date(tokenData.expires_at) < new Date()) {
-      return res.status(400).json({ message: "דרוש טוקן" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     await userRepository.updateUserPassword(tokenData.user_id, hashedPassword);
     await deleteToken(token);
 
@@ -135,28 +107,81 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
+// export const login = async (req: Request, res: Response) => {
+//   const { email, password, rememberMe } = req.body;
+
+//   try {
+//     const user = await authRepository.login(email, password);
+//     if (!user) throw new Error("אימייל או סיסמה שגויים");
+
+//     const sessionId = uuidv4();
+//     await sessionRepository.createSession(user.id, sessionId);
+
+//     console.log("🔐 [authController] JWT_SECRET loaded:", JWT_SECRET);
+//     console.log("🔐 [authController] REFRESH_SECRET loaded:", REFRESH_SECRET);
+
+//     const token = jwt.sign(
+//       { id: user.id, email: user.email, role: user.role, sessionId },
+//       JWT_SECRET,
+//       { expiresIn: rememberMe ? "7d" : "1h" }
+//     );
+
+//     const refreshToken = jwt.sign(
+//       { id: user.id, email: user.email, role: user.role, sessionId },
+//       REFRESH_SECRET,
+//       { expiresIn: rememberMe ? "7d" : "2h" }
+//     );
+
+//     console.log("✅ טוקן נוצר:", token);
+//     console.log("✅ ריפרש טוקן נוצר:", refreshToken);
+
+//     res.cookie("refreshToken", refreshToken, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "lax",
+//       path: "/",
+//       maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
+//     });
+
+//     res.json({ user, token });
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     return res.status(401).json({ message: error instanceof Error ? error.message : "Login failed" });
+//   }
+// };
+// בקובץ authController.ts - תיקון פונקציית login
 export const login = async (req: Request, res: Response) => {
   const { email, password, rememberMe } = req.body;
 
   try {
     const user = await authRepository.login(email, password);
-    console.log("User found:", user);
-    if (!user) {
-      // return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
-      throw new Error("אימייל או סיסמה שגויים");
-    }
+    if (!user) throw new Error("אימייל או סיסמה שגויים");
 
+    // יצירת sessionId ייחודי
+    const sessionId = uuidv4();
+    console.log("🔐 יוצר session עבור משתמש:", { userId: user.id, sessionId });
+    
+    // שמירת session בדטאבייס
+    await sessionRepository.createSession(user.id, sessionId);
+
+    console.log("🔐 [authController] JWT_SECRET loaded:", JWT_SECRET);
+    console.log("🔐 [authController] REFRESH_SECRET loaded:", REFRESH_SECRET);
+
+    // הוספת sessionId לטוקן
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, role: user.role, sessionId },
       JWT_SECRET,
       { expiresIn: rememberMe ? "7d" : "1h" }
     );
 
     const refreshToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, role: user.role, sessionId },
       REFRESH_SECRET,
       { expiresIn: rememberMe ? "7d" : "2h" }
     );
+
+    console.log("✅ טוקן נוצר עם sessionId:", { sessionId, token: token.substring(0, 50) + "..." });
+    console.log("✅ ריפרש טוקן נוצר:", refreshToken.substring(0, 50) + "...");
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -168,15 +193,12 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({ user, token });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
     console.error("Login error:", error);
-    return res.status(500).json({ message: message });
+    return res.status(401).json({ message: error instanceof Error ? error.message : "Login failed" });
   }
 };
 
-// רענון טוקן
 export const refreshToken = async (req: Request, res: Response) => {
-  
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(407).json({ message: "לא סופק refresh token" });
@@ -184,11 +206,8 @@ export const refreshToken = async (req: Request, res: Response) => {
 
   try {
     const userData = jwt.verify(refreshToken, REFRESH_SECRET) as any;
-    const user = await userRepository.getUserById(userData.id); // חשוב!
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = await userRepository.getUserById(userData.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     const newToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
@@ -196,34 +215,106 @@ export const refreshToken = async (req: Request, res: Response) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ token: newToken, user }); // 👈 מחזיר גם user
+    res.json({ token: newToken, user });
   } catch (err) {
     return res.status(403).json({ message: "refresh token לא תקין" });
   }
 };
 
-// התנתקות
-export const logout = async (req: Request, res: Response) => {
-  try {
-    const userId = req.body.user?.id;
+// export const logout = async (req: Request, res: Response) => {
+//   const token = req.headers['authorization']?.split(' ')[1];
+//   if (!token) return res.status(401).json({ message: "Token is missing" });
 
-    if (!userId) {
-      return res.status(401).json({ message: "לא מחובר" });
+//   try {
+//     const decoded: any = jwt.verify(token, JWT_SECRET);
+//     if (decoded?.sessionId) {
+//       await sessionRepository.endSession(decoded.sessionId);
+//     }
+//   } catch (e) {
+//     console.error("בעיה בפענוח טוקן ב־logout:", e);
+//   }
+
+//   res.clearCookie("refreshToken", {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     sameSite: "strict",
+//   });
+
+//   res.json({ message: "התנתקת בהצלחה" });
+// };
+
+// בקובץ authController.ts
+// export const logout = async (req: Request, res: Response) => {
+//   const token = req.headers['authorization']?.split(' ')[1];
+//   if (!token) return res.status(401).json({ message: "Token is missing" });
+
+//   try {
+//     const decoded: any = jwt.verify(token, JWT_SECRET);
+//     console.log("🔐 פענוח טוקן ב-logout:", decoded);
+    
+//     if (decoded?.sessionId) {
+//       console.log("🔄 מעדכן session logout time עבור sessionId:", decoded.sessionId);
+//       await sessionRepository.endSession(decoded.sessionId);
+//     }
+    
+//     // גם מעדכן את המשתמש לא פעיל
+//     if (decoded?.id) {
+//       // await authRepository.logout(decoded.id);  // מחקתי
+//       console.warn("לא נמצא sessionId בטוקן. לא בוצע עדכון ל־logout_time.");
+//     }
+    
+//   } catch (e) {
+//     console.error("בעיה בפענוח טוקן ב־logout:", e);
+//   }
+
+//   res.clearCookie("refreshToken", {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     sameSite: "strict",
+//   });
+
+//   res.json({ message: "התנתקת בהצלחה" });
+// };
+
+export const logout = async (req: Request, res: Response) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) {
+    console.warn("⚠️ אין טוקן בבקשה להתנתקות.");
+    return res.status(401).json({ message: "Token is missing" });
+  }
+
+  try {
+    const decoded: any = jwt.verify(token, JWT_SECRET);
+    console.log("🔐 פענוח טוקן ב־logout:", decoded);
+
+    if (decoded?.sessionId) {
+      console.log("➡️ קורא ל־endSession עם:", decoded.sessionId);
+      await sessionRepository.endSession(decoded.sessionId);
+      console.log("✅ logout_time עודכן עבור sessionId:", decoded.sessionId);
+    } else {
+      console.warn("⚠️ לא נמצא sessionId בטוקן. לא בוצע עדכון ל־logout_time.");
     }
 
-    await authRepository.logout(userId);
+    // אם תרצה בהמשך לעדכן את המשתמש כלא פעיל
+    // if (decoded?.id) {
+    //   await authRepository.logout(decoded.id);
+    //   console.log("🔄 המשתמש סומן כלא פעיל במערכת:", decoded.id);
+    // }
 
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
-    res.json({ message: "התנתקת בהצלחה" });
-  } catch (error) {
-    console.error("Logout failed:", error);
-    res.status(500).json({ message: "שגיאה בהתנתקות" });
+  } catch (e) {
+    console.error("❌ שגיאה בפענוח טוקן ב־logout:", e);
   }
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+
+  res.json({ message: "התנתקת בהצלחה" });
 };
+
+
 
 const pendingSignups = new Map<
   string,
@@ -237,20 +328,15 @@ export const requestSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
-  const existing = (await userRepository.getAllUsers()).find(
-    (u) => u.email === email
-  );
+  const existing = (await userRepository.getAllUsers()).find(u => u.email === email);
   if (existing) {
     return res.status(409).json({ message: "אימייל כבר קיים" });
   }
 
-  // יצירת קוד אימות
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות
-
+  const expiresAt = Date.now() + 5 * 60 * 1000;
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  // שמירת פרטי המשתמש והקוד זמנית
   pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
@@ -273,12 +359,9 @@ export const requestSignup = async (req: Request, res: Response) => {
     expiresAt,
   });
 
-  // שליחת הקוד למייל
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
-  res.status(200).json({
-    message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
-  });
+  res.status(200).json({ message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה." });
 };
 
 export const confirmSignup = async (req: Request, res: Response) => {
@@ -302,11 +385,9 @@ export const confirmSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "הקוד שגוי." });
   }
 
-  // יוצרים את המשתמש האמיתי במסד
   await authRepository.signup(pending.userData);
   pendingSignups.delete(email);
 
-  // יוצרים טוקן
   const token = jwt.sign(
     {
       id: pending.userData.id,
@@ -320,18 +401,15 @@ export const confirmSignup = async (req: Request, res: Response) => {
   res.status(201).json({ user: pending.userData, token });
 };
 
-//הרשמה
 export const signup = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find(
-    (user) => user.email === email
-  );
+  const existing = (await userRepository.getAllUsers()).find(u => u.email === email);
   if (existing) {
     return res.status(409).json({ message: "אימייל כבר קיים" });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
   const newUser: Users = {
     id: uuidv4(),
@@ -378,9 +456,7 @@ export const authWithGoogle = async (req: Request, res: Response) => {
 
     const googleUser = ticket.getPayload();
     if (!googleUser?.email) {
-      return res
-        .status(400)
-        .json({ message: "Invalid token or email not found" });
+      return res.status(400).json({ message: "Invalid token or email not found" });
     }
 
     let user = await userRepository.getUserByEmail(googleUser.email);
@@ -397,8 +473,7 @@ export const authWithGoogle = async (req: Request, res: Response) => {
         password: "",
         created_at: new Date(),
       });
-    }
-    else {
+    } else {
       await userRepository.updateActiveUser(user.id);
     }
 

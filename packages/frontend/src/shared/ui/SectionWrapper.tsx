@@ -6,6 +6,7 @@ import { Heading2 } from "./typography";
 import { Button } from "./button"; 
 import { ToggleSwitch } from "./ToggleSwitch"; 
 import { FaEdit } from "react-icons/fa"; 
+// import { Heading2 } from "lucide-react";
 
 interface SectionWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
