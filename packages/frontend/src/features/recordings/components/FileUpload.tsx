@@ -16,9 +16,15 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploaded, onError }) 
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadRecording] = useUploadRecordingMutation();
+  const [newFileName, setNewFileName] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(e.target.files?.[0] || null);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setNewFileName(selectedFile.name); // אתחל את השם החדש לשם המקורי
+    }
   };
   const handleRemove = () => {
     setFile(null);
@@ -27,14 +33,24 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploaded, onError }) 
   const handleUpload = async () => {
     if (!file) return;
     setIsUploading(true);
+
+    // קבלת הסיומת המקורית של הקובץ
+    const fileExtension = file.name.split('.').pop();
+
+    // בדיקת אם הסיומת קיימת בשם החדש
+    let finalFileName = newFileName.trim();
+    if (!finalFileName.includes('.')) {
+      finalFileName += fileExtension ? `.${fileExtension}` : '.wav'; // הוספת הסיומת המקורית או .wav
+    }
+
     const formData = new FormData();
     formData.append("userId", userId);
-    formData.append("title", file.name);
+    formData.append("title", finalFileName); // השתמש בשם החדש והסופי
     formData.append("description", "");
     formData.append("file", file);
     try {
       const res = await uploadRecording(formData).unwrap();
-      onUploaded(res.url, file.name);
+      onUploaded(res.url, finalFileName); // השתמש בשם החדש והסופי
       handleRemove();
     } catch (e) {
       onError?.(e);
@@ -42,6 +58,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploaded, onError }) 
       setIsUploading(false);
     }
   };
+
   return (
     <div className="flex flex-col items-center gap-2 w-full">
       <input
@@ -67,6 +84,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploaded, onError }) 
       )}
       {file && (
         <div className="flex flex-col items-center gap-2 w-full">
+          <input
+            type="text"
+            value={newFileName}
+            onChange={(e) => setNewFileName(e.target.value)} // עדכון שם הקובץ
+            className="border border-gray-300 rounded p-2"
+            placeholder="שם הקובץ החדש"
+          />
           <div className="flex items-center gap-2 w-full justify-center">
             <button
               className="p-1 text-red-500 hover:text-red-700 order-1"
@@ -77,7 +101,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ userId, onUploaded, onError }) 
             >
               <Trash2 className="w-5 h-5" />
             </button>
-            <span className="text-sm text-gray-700 order-2">{file.name}</span>
+            <span className="text-sm text-gray-700 order-2">{newFileName}</span>
           </div>
           <div className="flex gap-2 mt-1">
             <button
