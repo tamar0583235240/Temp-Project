@@ -1,5 +1,4 @@
 import { pool } from '../config/dbConnection'; 
-import { Answer } from "../interfaces/entities/Answer";
 
 
 export const createAnswer = async (

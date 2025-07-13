@@ -94,17 +94,19 @@ export const uploadRecording = async (req: Request, res: Response) => {
 
     const fileUrl = (result as any).secure_url;
 
-    const query = `
-      INSERT INTO "resources" (id, title, type, description, "file_url", "user_id", "created_at")
-      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW())
-    `;
-    const values = [
-      req.body.title || 'Recording',
-      'link',
-      req.body.description || '',
-      fileUrl,
-      userId,
-    ];
+ const query = `
+  INSERT INTO "resources" (id, user_id, title, type, description, "file_url", "created_at")
+  VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW())
+`;
+
+const values = [
+  userId,                     // $1
+  req.body.title || 'Recording',  // $2
+  'link',                    // $3
+  req.body.description || '', // $4
+  fileUrl                    // $5
+];
+
 
     await pool.query(query, values);
 

@@ -1,69 +1,45 @@
-import React, { useState, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../shared/store/store";
-import { answerQuestion } from "../store/simulationSlice";
+import React, { useRef, useState } from "react";
 import { CheckCircle2, XCircle, Trash2 } from "lucide-react";
+import { interviewType } from "../types/questionType";
 import AudioRecorder from "../../recordings/components/AudioRecorder";
-import FileUpload from "../../recordings/components/FileUpload";
-import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
 import Notification from "./Notification";
 import TipsComponent from "./tipsComponent";
-import AnswerAI from "../../interview/components/AnswerAI";
-import MagicLoader from "../../interview/components/MagicLoader";
+// import { answeredQuestions } from "../store/simulationSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../shared/store/store";
+import MagicLoader from "./MagicLoader";
+import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
+import FileUpload from "../../recordings/components/FileUpload";
 
 interface QuestionProps {
+    question: interviewType & { answered?: boolean };
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
-  showTips?: boolean;
-  answerIdForAI?: string | null;
-  isLoadingAI?: boolean;
+
 }
 
 const Question: React.FC<QuestionProps> = ({
+  question,
   onFinishRecording,
   onAnswerSaved,
-  showTips,
-  answerIdForAI,
-  isLoadingAI
 }) => {
+  
   const dispatch = useDispatch();
-  const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
+  const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
-  const [uploadAnswer, { isLoading: isSaving }] = useUploadAnswerMutation();
+  const [uploadAnswer] = useUploadAnswerMutation();
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showFileActions, setShowFileActions] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+
 
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
 
-  const userId = "00000000-0000-0000-0000-000000000000"; // שימי את ה־userId הנכון שלך
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      setShowFileActions(true);
-    }
-  };
-
-  const handleApprove = () => {
-    setIsUploading(true);
-  };
-
-  const handleReupload = () => {
-    setSelectedFile(null);
-    setShowFileActions(false);
-    setIsUploading(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  return (
+    return (
     <div>
       {notification && (
         <Notification
@@ -73,13 +49,16 @@ const Question: React.FC<QuestionProps> = ({
           onClose={() => setNotification(null)}
         />
       )}
+
       <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl">
         <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
-              שאלה {currentIndex + 1}
+              שאלה {currentIndex + 1} 
             </span>
           </div>
+
+          
           <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
             {currentQuestion.content}
           </div>
@@ -88,11 +67,12 @@ const Question: React.FC<QuestionProps> = ({
             {/* העלאת קובץ */}
             <div className="w-1/2">
               <FileUpload
-                userId={userId}
+                answered={question.answered}
+                userId={currentUserId}
                 onUploaded={async (fileUrl, fileName) => {
                   try {
-                    await uploadAnswer({
-                      userId,
+                    const answer = await uploadAnswer({
+                      userId: currentUserId,
                       questionId: String(currentQuestion.id),
                       fileUrl,
                       amountFeedbacks: 0,
@@ -104,7 +84,7 @@ const Question: React.FC<QuestionProps> = ({
                       icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
                     });
                     setTimeout(() => setNotification(null), 3500);
-                    onAnswerSaved("fake-id-from-server");
+                    if (answer?.id) onAnswerSaved(answer.id);
                   } catch (e) {
                     setNotification({
                       message: "שגיאה בשמירת התשובה",
@@ -128,7 +108,7 @@ const Question: React.FC<QuestionProps> = ({
             {/* הקלטה */}
             <div className="w-1/2">
               <AudioRecorder
-                questionId={currentQuestion.id.toString()}
+                answered={question.answered}
                 onFinish={onFinishRecording}
                 onSaveSuccess={onAnswerSaved}
               />
@@ -136,23 +116,7 @@ const Question: React.FC<QuestionProps> = ({
           </div>
         </div>
       </div>
-      {/* כאן יוצג הטיפ וה-AI מתחת לשאלה */}
-      <div className="w-full flex flex-col items-center mt-4 gap-4">
-        {/* טיפ זמני אחרי בחירת קובץ ולפני אישור */}
-        {selectedFile && showFileActions && !isUploading && (
-          <TipsComponent />
-        )}
-        {/* טיפ קבוע אחרי הקלטה/שמירה */}
-        {showTips && <TipsComponent />}
-        {/* הצגת ניתוח AI */}
-        {answerIdForAI && !isLoadingAI && (
-          <div className="w-full flex justify-center">
-            <AnswerAI />
-          </div>
-        )}
-        {/* חיווי טעינה ל-AI */}
-        {isLoadingAI && <MagicLoader />}
-      </div>
+
     </div>
   );
 };
