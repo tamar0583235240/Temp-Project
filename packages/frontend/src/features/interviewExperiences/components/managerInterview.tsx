@@ -1,9 +1,11 @@
 import { useGetAllContentReportsQuery } from "../services/contentReportsApi";
 import { CardSimple } from "../../../shared/ui/card";
 import { Heading1 } from "../../../shared/ui/typography";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGetAllInterviewExperiencesQuery } from "../services/interviewExperiencesApi";
 import { CancelDisplayingReport } from "./CancelDisplayingReport";
+import { FilterByField } from './filterByField';
+import { FaFilter } from 'react-icons/fa';
 
 type AdminQuestionsProps = {
     allowedRoles: string[];
@@ -14,6 +16,24 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
     const { data: contentReports, isLoading: isContentReportsLoading } = useGetAllContentReportsQuery();
     const { data: allInterview, isLoading: isInterviewLoading } = useGetAllInterviewExperiencesQuery();
     const [selectedDescription, setSelectedDescription] = useState<string | null>(null);
+    const [filteredInterviews, setFilteredInterviews] = useState<any[]>([]);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    const handleFilteredResults = useCallback((filtered: any[]) => {
+        setFilteredInterviews(filtered);
+    }, []);
+
+    useEffect(() => {
+        setFilteredInterviews(allInterview || []);
+    }, [allInterview]);
+
+    const toggleFilter = () => {
+        setIsFilterOpen(!isFilterOpen);
+    };
+
+    const closeFilter = () => {
+        setIsFilterOpen(false);
+    };
 
     if (isContentReportsLoading || isInterviewLoading) {
         return (
@@ -70,15 +90,36 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
 
     return (
         <div className="min-h-screen bg-[--color-background]" dir="rtl">
+            {/* כותרת עם כפתור סינון */}
             <div className="bg-[--color-background] border-b border-[--color-border]">
                 <div className="py-8 px-4">
-                    <div className="text-center">
+                    <div className="text-center relative">
                         <Heading1 className="text-[--color-text] mb-2">ניהול חוויות מראיונות</Heading1>
+
+                        {/* כפתור סינון */}
+                        <button
+                            onClick={toggleFilter}
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
+                        >
+                            <FaFilter className="w-4 h-4" />
+                            <span className="text-sm font-medium">סינון</span>
+                        </button>
+
                     </div>
                 </div>
             </div>
 
+            {/* קומפוננטת הסינון */}
+            <FilterByField
+                allInterview={allInterview || []}
+                contentReports={contentReports || []}
+                onFilteredResults={handleFilteredResults}
+                isOpen={isFilterOpen}
+                onClose={closeFilter}
+            />
+
             <div className="py-8 px-4">
+                {/* כרטיסי סטטיסטיקה */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
                     <CardSimple className="bg-blue-50 border-blue-200 text-blue-700 border-2 text-center">
                         <div className="space-y-2">
@@ -100,13 +141,14 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                     </CardSimple>
                 </div>
 
-                {allInterview && allInterview.length > 0 ? (
+                {/* רשימת הראיונות */}
+                {filteredInterviews.length > 0 ? (
                     <div className="max-w-7xl mx-auto">
                         <h2 className="text-xl font-semibold text-[--color-text] mb-6 text-center">
                             רשימת חוויות מראיונות
                         </h2>
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {allInterview.map((interview, index) => {
+                            {filteredInterviews.map((interview, index) => {
                                 const hasReports = hasContentReports(interview.id!);
 
                                 return (
@@ -114,7 +156,7 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                                         key={interview.id || index}
                                         className="hover:shadow-lg transition-shadow duration-200 border-l-4 border-l-[#00D6AD] bg-[#00D6AD]/5"
                                     >
-                                        <CancelDisplayingReport idExpericence={interview.id}/>
+                                        <CancelDisplayingReport idExpericence={interview.id} />
                                         {hasReports && (
                                             <div className="flex items-center gap-2 p-2 bg-red-100 border border-red-200 rounded-md mb-4">
                                                 <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,12 +216,15 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <h3 className="text-lg font-medium text-[--color-text] mb-2">אין ראיונות במערכת</h3>
-                        <p className="text-[--color-secondary-text]">לא נמצאו ראיונות במערכת כרגע.</p>
+                        <h3 className="text-lg font-medium text-[--color-text] mb-2">
+                            {numberOfInterviews === 0 ? 'אין ראיונות במערכת' : 'לא נמצאו ראיונות מתאימים'}
+                        </h3>
+                        <p className="text-[--color-secondary-text]">
+                            {numberOfInterviews === 0 ? 'לא נמצאו ראיונות במערכת כרגע.' : 'נסה לשנות את הסינון כדי לראות תוצאות נוספות.'}
+                        </p>
                     </div>
                 )}
             </div>
-
             {/* פופאפ לתיאור */}
             {selectedDescription && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" dir="rtl">
