@@ -22,7 +22,6 @@ import { WorkExperienceTab } from "../../features/profile/components/WorkExperie
 import ProfileList from "../../features/profile/components/ProfileList";
 import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
-
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;

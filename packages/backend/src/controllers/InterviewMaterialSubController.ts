@@ -106,7 +106,7 @@ export const updateInterviewMaterialController = async (req: Request, res: Respo
         const updated = await updateInterviewMaterial(
             id,
             title || existingMaterial.title,
-            short_description || existingMaterial.short_description,
+            short_description || existingMaterial.shortDescription,
             updatedThumbnail,
             updatedFileUrl
         );

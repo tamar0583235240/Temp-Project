@@ -189,6 +189,10 @@ export const requestSignup = async (req: Request, res: Response) => {
       resources: [],
       workExperiences: [],
         userReminderSettings: [],
+        contentReports: [],
+experienceThanks: [],
+interviewExperiences: [],
+profiles: null,
     },
     code,
     expiresAt,
@@ -272,6 +276,10 @@ export const signup = async (req: Request, res: Response) => {
     resources: [],
     workExperiences: [],
       userReminderSettings: [],
+      contentReports: [],
+experienceThanks: [],
+interviewExperiences: [],
+profiles: null,
   };
 
   await authRepository.signup(newUser);

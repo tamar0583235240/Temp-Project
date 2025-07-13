@@ -24,9 +24,9 @@ export class UserActivity {
   })
   timestamp: Date | null;
 
-  @ManyToOne(() => Users, (users) => users.userActivities, {
-    onDelete: "CASCADE",
-  })
+  // @ManyToOne(() => Users, (users) => users.userActivities, {
+  //   onDelete: "CASCADE",
+  // })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 }
