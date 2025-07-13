@@ -1,26 +1,5 @@
 import { pool } from '../config/dbConnection';
 
-// export const getSharedRecordingsByUserId = async (userId: string) => {
-//   const query = `
-//     SELECT
-//       sr.id,
-//       u.first_name || ' ' || u.last_name AS "userName",
-//       q.title AS "questionTitle",
-//       sr.date,
-//       sr.audio_url AS "audioUrl",
-//       sr.ai_summary AS "aiSummary",
-//       f.comment AS "feedbackComment",
-//       f.rating AS "feedbackRating"
-//     FROM shared_recordings sr
-//     JOIN users u ON sr.owner_id = u.id
-//     JOIN questions q ON sr.question_id = q.id
-//     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
-//     WHERE $1 = ANY(sr.shared_with)
-
-//   `;
-//   const { rows } = await pool.query(query, [userId]);
-//   return rows;
-// };
 export const getSharedRecordingsByUserId = async (userId: string) => {
   const query = `
     SELECT
@@ -37,10 +16,31 @@ export const getSharedRecordingsByUserId = async (userId: string) => {
     JOIN questions q ON sr.question_id = q.id
     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
     WHERE $1 = ANY(sr.shared_with)
+
   `;
   const { rows } = await pool.query(query, [userId]);
   return rows;
 };
+// export const getSharedRecordingsByUserId = async (userId: string) => {
+//   const query = `
+//     SELECT
+//       sr.id,
+//       u.first_name || ' ' || u.last_name AS "userName",
+//       q.title AS "questionTitle",
+//       sr.date,
+//       sr.audio_url AS "audioUrl",
+//       sr.ai_summary AS "aiSummary",
+//       f.comment AS "feedbackComment",
+//       f.rating AS "feedbackRating"
+//     FROM shared_recordings sr
+//     JOIN users u ON sr.owner_id = u.id
+//     JOIN questions q ON sr.question_id = q.id
+//     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+//     WHERE $1 = ANY(sr.shared_with)
+//   `;
+//   const { rows } = await pool.query(query, [userId]);
+//   return rows;
+// };
 
 
 export const getRecordingDetailsById = async (recordingId: string) => {

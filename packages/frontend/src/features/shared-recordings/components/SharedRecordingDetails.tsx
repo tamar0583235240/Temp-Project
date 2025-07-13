@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { feedbackType } from '../../feedback/types/feedbackType';
+import { FiTrash2 } from 'react-icons/fi';
 
 interface Props {
   userName: string;
@@ -39,7 +40,7 @@ export default function SharedRecordingDetails({
   };
 
   return (
-    <div className="p-6 bg-gray-50 rounded-xl shadow">
+    <div className="p-6 bg-gray-50 rounded-xl shadow relative">
       <button
         onClick={onBack}
         className="mb-4 text-sm text-blue-600 underline hover:text-blue-800"
@@ -83,12 +84,21 @@ export default function SharedRecordingDetails({
         {rating === 0 && <span className="text-sm text-gray-500 ml-2">מחכה לדירוג שלך 😊</span>}
       </div>
 
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        onClick={handleSubmit}
-      >
-        {feedback ? 'עדכון פידבק' : 'שלחי פידבק'}
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={handleSubmit}
+        >
+          {feedback ? 'עדכון פידבק' : 'שלחי פידבק'}
+        </button>
+        <button
+          className="text-gray-600 hover:text-red-500 transition-colors"
+          title="מחק הקלטה"
+          // onClick={handleDelete} // TODO: add logic if needed
+        >
+          <FiTrash2 size={22} />
+        </button>
+      </div>
     </div>
   );
 }

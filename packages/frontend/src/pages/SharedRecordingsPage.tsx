@@ -4,13 +4,16 @@ import SharedRecordingCard from '../features/shared-recordings/components/Shared
 import SharedRecordingDetails from '../features/shared-recordings/components/SharedRecordingDetails';
 import { SharedRecording } from '../features/shared-recordings/types/types';
 import { useCreateFeedbackMutation } from '../features/feedback/services/feedbackApi';
+import { FiTrash2 } from 'react-icons/fi'; 
 
 export default function SharedRecordingsPage() {
   const userId = '427a9195-b05e-44e9-922d-8c79c9774e35'; // זמני
+  //  const userId = '9f94bdeb-5b16-482d-8625-e9ee912ea6b4'; // זה ה-UserId של תמר ספקר, משתמשת בדוגמה
   const { data, isLoading, error } = useGetSharedRecordingsQuery(userId);
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
 
   const [createFeedback] = useCreateFeedbackMutation();
+  console.log("📥 shared recordings data:", data);
 
   const selectedRecording = data?.find((rec: SharedRecording) => rec.id === selectedRecordingId);
 
@@ -49,14 +52,19 @@ export default function SharedRecordingsPage() {
       ) : (
         <div className="grid gap-4">
           {data?.map((rec: SharedRecording) => (
-            <SharedRecordingCard
-              key={rec.id}
-              id={rec.id}
-              sharedBy={rec.userName}
-              sharedAt={rec.date}
-              feedbackRating={rec.feedbackRating}
-              onClick={() => setSelectedRecordingId(rec.id)}
-            />
+            <div key={rec.id} className="relative">
+              <SharedRecordingCard
+                id={rec.id}
+                sharedBy={rec.userName}
+                sharedAt={rec.date}
+                feedbackRating={rec.feedbackRating}
+                onClick={() => setSelectedRecordingId(rec.id)}
+              />
+              {/* אייקון פח בפינה הימנית התחתונה */}
+              <div className="absolute bottom-2 right-2">
+                <FiTrash2 size={16} className="text-black hover:text-red-700 cursor-pointer" title="מחק פידבק" />
+              </div>
+            </div>
           ))}
         </div>
       )}
