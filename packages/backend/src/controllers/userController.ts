@@ -5,17 +5,17 @@ import bcrypt from 'bcrypt';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
 import { insertUsersFromExcel } from '../reposioty/userRepository';
-import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
+import { createUserByAdminSchema, updateUserByAdminSchema } from '../validations/userValidations';
 
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
-    // טען את המשתמשים כולל הקשרים (relations) שצריך - זה צריך להיעשות בתוך ה-repository
-    const users = await userRepository.getAllUsers();
-    if (!users || users.length === 0) {
-        return res.status(404).json({ message: 'No users found' });
-    }
-    res.json(users);
+  // טען את המשתמשים כולל הקשרים (relations) שצריך - זה צריך להיעשות בתוך ה-repository
+  const users = await userRepository.getAllUsers();
+  if (!users || users.length === 0) {
+    return res.status(404).json({ message: 'No users found' });
+  }
+  res.json(users);
 };
 
 function mapUserRowToCamelCase(row: any) {
@@ -31,6 +31,7 @@ function mapUserRowToCamelCase(row: any) {
     isActive: row.is_active,
   };
 }
+
 export const getAllUsersByAdmin = async (req: Request, res: Response) => {
   const { isActive, search, startDate, endDate } = req.query;
 
@@ -49,10 +50,10 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
     conditions.push(`(first_name ILIKE $${values.length} OR last_name ILIKE $${values.length})`);
   }
 
-//   if (startDate && endDate) {
-//     values.push(startDate, endDate);
-//     conditions.push(`created_at BETWEEN $${values.length - 1} AND $${values.length}`);  // בדוק את שם העמודה כאן
-//   }
+  //   if (startDate && endDate) {
+  //     values.push(startDate, endDate);
+  //     conditions.push(`created_at BETWEEN $${values.length - 1} AND $${values.length}`);  // בדוק את שם העמודה כאן
+  //   }
 
   if (conditions.length > 0) {
     baseQuery += ' WHERE ' + conditions.join(' AND ');
@@ -67,44 +68,45 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
+
 export const getMe = async (req: Request, res: Response) => {
-    const userId = (req as any).user?.id;
+  const userId = (req as any).user?.id;
 
-    if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }
+  const user = await userRepository.getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    res.json({ user });
+  res.json({ user });
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-    const userId = req.params.id;
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user);
+  const userId = req.params.id;
+  const user = await userRepository.getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  res.json(user);
 };
 
 export const createUser = async (req: Request, res: Response) => {
-    const { first_name, last_name, email, phone, password, role } = req.body;
+  const { first_name, last_name, email, phone, password, role } = req.body;
 
-    const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
-    if (existing) {
-        return res.status(409).json({ message: 'אימייל כבר קיים' });
-    }
+  const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
+  if (existing) {
+    return res.status(409).json({ message: 'אימייל כבר קיים' });
+  }
 
-    if (!password) {
-        return res.status(400).json({ message: 'Password is required' });
-    }
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-const newUser: Users = {
+  const newUser: Users = {
     id: uuidv4(),
     firstName: first_name,
     lastName: last_name,
@@ -128,32 +130,31 @@ const newUser: Users = {
     userReminderSettings: [],
     userSessions: [],
     workExperiences: [],
-};
+  }; 
 
-
-    const createdUser = await userRepository.createUser(newUser);
-    res.status(201).json(createdUser);
+  const createdUser = await userRepository.createUser(newUser);
+  res.status(201).json(createdUser);
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-    const userId = req.params.id;
-    const userData: Partial<Users> = req.body;
+  const userId = req.params.id;
+  const userData: Partial<Users> = req.body;
 
-    if (userData.password) {
-        userData.password = await bcrypt.hash(userData.password, 10);
-    }
+  if (userData.password) {
+    userData.password = await bcrypt.hash(userData.password, 10);
+  }
 
-    const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
-    if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(updatedUser);
+  const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
+  if (!updatedUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  res.json(updatedUser);
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const userId = req.params.id;
-    await userRepository.deleteUser(userId);
-    res.status(204).send();
+  const userId = req.params.id;
+  await userRepository.deleteUser(userId);
+  res.status(204).send();
 };
 
 export const createUserByAdmin = async (req: Request, res: Response) => {
@@ -170,9 +171,9 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
 
     // בדיקת אימייל כפול
     const checkEmail = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
-  if ((checkEmail.rowCount ?? 0) > 0) {
-  return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
-}
+    if ((checkEmail.rowCount ?? 0) > 0) {
+      return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
+    }
 
 
     // hash לסיסמה

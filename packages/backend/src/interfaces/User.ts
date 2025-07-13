@@ -10,29 +10,59 @@ import { UserActivity } from "./entities/UserActivity";
 import { UserReminderSettings } from "./entities/UserReminderSettings";
 import { UserSessions } from "./entities/UserSessions";
 import { WorkExperiences } from "./entities/WorkExperiences";
-export interface User {
+
+// export interface User {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: string | null;
+//   role: string;
+//   createdAt: Date;
+//   isActive: boolean;
+//   password: string | null;
+//   slug: string | null;
+
+//   contentReports: ContentReports[];
+//   experienceThanks: ExperienceThanks[];
+//   interviewExperiences: InterviewExperiences[];
+//   answers: Answers[];
+//   feedbacks: Feedback[];
+//   passwordResetTokens: PasswordResetTokens[];
+//   resources: Resources[];
+//   sharedRecordings: SharedRecordings[];
+//   userActivities: UserActivity[];
+//   userReminderSettings: any[]; // ולא userReminderSetting
+//   userSessions: UserSessions[];
+//   workExperiences: WorkExperiences[];
+//   // userReminderSettings: null; // או אובייקט, תלוי מה מצופה
+// }
+
+
+export interface Users {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  phone: string | null;
+  phone: string;
+  password: string;
   role: string;
   createdAt: Date;
   isActive: boolean;
-  password: string | null;
   slug: string | null;
 
-  contentReports: ContentReports[];
-  experienceThanks: ExperienceThanks[];
-  interviewExperiences: InterviewExperiences[];
-  answers: Answers[];
-  feedbacks: Feedback[];
-  passwordResetTokens: PasswordResetTokens[];
-  resources: Resources[];
-  sharedRecordings: SharedRecordings[];
-  userActivities: UserActivity[];
-  userReminderSettings: any[]; // ולא userReminderSetting
-  userSessions: UserSessions[];
-  workExperiences: WorkExperiences[];
-  // userReminderSettings: null; // או אובייקט, תלוי מה מצופה
+  // כל השדות הבאים הם קשרים לקומפוננטות אחרות
+  contentReports: any[];
+  experienceThanks: any[];
+  interviewExperiences: any[];
+  answers: any[];
+  feedbacks: any[];
+  passwordResetTokens: any[];
+  resources: any[]; // ← זו השורה שגרמה לשגיאה אם היא חסרה!
+  sharedRecordings: any[];
+  userActivities: any[];
+  userReminderSettings: any[];
+  userSessions: any[];
+  workExperiences: any[];
 }
+

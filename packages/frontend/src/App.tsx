@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
 
@@ -19,11 +19,11 @@ function App() {
 
   refreshTokenTrigger()
     .unwrap()
-    .then((res) => {
+    .then((res: { token: any; user: any; }) => {
       console.log("הצלחה!", res);
       dispatch(loginSuccess({ token: res.token, user: res.user }));
     })
-    .catch((err) => {
+    .catch((err: any) => {
       console.log("נכשל ברענון הטוקן", err);
       dispatch(logout());
     })
