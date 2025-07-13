@@ -11,3 +11,13 @@ export const getAllInterviewExperiences = async (req: Request, res: Response): P
         res.status(500).json({ error });
     }
 };
+
+export const deleteInterviewExperience = async (req: Request, res: Response): Promise<void> => {
+    try{
+        await InterviewExperiencesRepository.deleteInterviewExperienceById(req.params.id);
+        res.status(204).send();
+    }catch (error) {
+        console.error('Error in interview experiences controller by deleteInterviewExperience:', error);
+        res.status(500).json({ error });
+    }
+}

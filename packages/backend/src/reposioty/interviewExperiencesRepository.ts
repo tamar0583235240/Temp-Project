@@ -15,6 +15,17 @@ JOIN "users" u ON ie.user_id = u.id`);
     }
 };
 
+const deleteInterviewExperienceById = async (id: string): Promise<void> => {
+    try{
+        await pool.query('DELETE FROM "Interview_Experiences" WHERE id = $1', [id]);
+        await pool.query('DELETE FROM "Content_Reports" WHERE user_id = $1', [id]);
+
+    }catch (error) {
+        console.error('Error deleting interview experience:', error);
+        throw error;
+    }
+}
+
 export default {
-    getAllInterviewExperiences,
+    getAllInterviewExperiences,deleteInterviewExperienceById,
 };
