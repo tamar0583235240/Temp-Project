@@ -18,7 +18,7 @@ export interface interviewExperiences{
 
   rating: number | null;
 
-  anonymous: boolean | null;
+  anonymous: boolean;
   
   created_at: Date | null;
 
