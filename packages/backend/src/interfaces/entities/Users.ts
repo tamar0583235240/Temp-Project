@@ -1,4 +1,7 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
+import { ContentReports } from "./ContentReports";
+import { ExperienceThanks } from "./ExperienceThanks";
+import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
@@ -6,16 +9,17 @@ import { SharedRecordings } from "./SharedRecordings";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
+@Index("users_slug_key", ["slug"], { unique: true })
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
   @Column("text", { name: "first_name" })
-  firstName: string;
+  first_name: string;
 
   @Column("text", { name: "last_name" })
-  lastName: string;
+  last_name: string;
 
   @Column("text", { name: "email", unique: true })
   email: string;
@@ -28,7 +32,7 @@ export class Users {
 
   @Column("timestamp without time zone", {
     name: "created_at",
-    default: () => "now()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdAt: Date;
 
@@ -44,10 +48,7 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(
-    () => PasswordResetTokens,
-    (passwordResetTokens) => passwordResetTokens.user
-  )
+  @OneToMany(() => PasswordResetTokens, (token) => token.user)
   passwordResetTokens: PasswordResetTokens[];
 
   @OneToMany(

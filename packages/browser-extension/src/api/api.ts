@@ -1,60 +1,63 @@
+const url = import.meta.env.VITE_API_URL
+  || "http://localhost:5000";
 
-// src/shared/api/authApi.ts
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { User } from '../types';
-import type { ProgressData } from './types';
+async function login(email: string, password: string, rememberMe: boolean = false) {
+  const res = await fetch(`${url}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ email, password, rememberMe }),
+  });
+  console.log("login response:", res);
 
-interface LoginRequest {
-  email: string;
-  password: string;
+  if (!res.ok) throw new Error("שגיאה בהתחברות");
+  return await res.json();
+}
+async function loginWithGoogle(credential: string) {
+  const res = await fetch(`${url}/auth/google-auth`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // כדי לקבל עוגיות מהשרת
+    body: JSON.stringify({
+      payload: { credential }
+    }),
+  });
+  console.log("loginWithGoogle response:", res);
+  if (!res.ok) throw new Error("שגיאה בהתחברות עם Google");
+  return await res.json();
+}
+async function refreshToken() {
+  const res = await fetch(`${url}/auth/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  console.log("refreshToken response:", res);
+  if (!res.ok) throw new Error("שגיאה בהתחברות עם Google");
+  return await res.json();
 }
 
-interface LoginResponse {
-  user: User;
-  token: string;
+async function getProgress(token: string, userId: string) {
+  const res = await fetch(`${url}/questions/progress/${userId}`, {
+    method: "GET",
+    headers: {
+    Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log("getProgress response:", res);
+  if (!res.ok) throw new Error("שגיאה בשליפת התקדמות");
+  return await res.json();
+}
+async function getTips(token: string) {
+  const res = await fetch(`${url}/aiInsight`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log("getTips response:", res);
+  if (!res.ok) throw new Error("שגיאה בשליפת טיפים");
+  return await res.json();
 }
 
-export const api = createApi({
-  reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://localhost:5000', // שנה בהתאם לשרת שלך
-    credentials: 'include', // שולח את הקוקי
-  }),
-  endpoints: (builder) => ({
-    login: builder.mutation<LoginResponse, LoginRequest>({
-      query: (credentials) => ({
-        url: '/api/auth/login',
-        method: 'POST',
-        body: credentials,
-      }),
-    }),
-    refreshToken: builder.query<LoginResponse, void>({
-      query: () => ({
-        url: '/auth/refresh',
-        method: 'POST',
-      }),
-    }),
-    getProgress: builder.query<ProgressData, string>({
-      query: (token) => ({
-        url: '/progress',
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-    }),
-
-    getTips: builder.query<string[], string>({
-      query: (token) => ({
-        url: '/tips',
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-    }),
-  }),
-});
-
-export const { useLoginMutation, useRefreshTokenQuery, useGetProgressQuery, useGetTipsQuery } = api;
-
+export { login, loginWithGoogle, refreshToken, getProgress, getTips };

@@ -45,7 +45,7 @@ export const uploadFileToCloudinary = (
 };
 export const deleteFileFromCloudinary = (publicId: string) => {
   return new Promise<void>((resolve, reject) => {
-    cloudinary.uploader.destroy(publicId, (error, result) => {
+    cloudinary.uploader.destroy(publicId, (error: any, result: any) => {
       if (error) {
         reject(error);
       } else {

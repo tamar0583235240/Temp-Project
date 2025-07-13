@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginSuccess } from "../store/authSlice";
 import { useAuthWithGoogleMutation } from "../../../shared/api/userApi";
-import { FcGoogle } from "react-icons/fc";
 
 const clientId = "412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com";
 

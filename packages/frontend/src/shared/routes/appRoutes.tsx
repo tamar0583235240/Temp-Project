@@ -1,19 +1,31 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
+import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { SearchComponents } from "../../features/recordings/components/searchComponents";
+import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
+import { SortComponents } from "../../features/recordings/components/sortComponents";
+import { AdminQuestions } from "../../features/admin/components/adminQuestions";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
+import Dashboard from '../../pages/dashboard';
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
+import AdminUser from "../../pages/AdminUser"; 
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-import InterviewMaterialsHub from "../../pages/InterviewMaterials";
+// import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
+// import ProjectsList from "../../features/profile/components/projects";
+import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
+import ProfileList from "../../features/profile/components/ProfileList";
+import MyProfileViewPage from "../../pages/my-profile-view";
+import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
+import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
-
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -52,7 +64,23 @@ export default function AppRoutes() {
             }
           />
           <Route
-            path="settings"
+            path="/my-profile"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <MyProfileViewPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-profile/edit"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfileAccordionPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <SettingsPage />
@@ -71,7 +99,7 @@ export default function AppRoutes() {
             path="/dashboard"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Dashboard</p>
+                    <Dashboard />
               </RoleProtectedRoute>
             }
           />
@@ -108,6 +136,14 @@ export default function AppRoutes() {
             }
           />
           <Route
+            path="/profiles"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <ProfileList />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
             path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
@@ -119,7 +155,7 @@ export default function AppRoutes() {
             path="/manager/users"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>AdminUsers</p>
+                    <AdminUser />
               </RoleProtectedRoute>
             }
           />
@@ -136,6 +172,25 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <InterviewMaterialPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/personal-projects"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                {/* <ProjectsList userId={user?.id ?? ""} /> */}
+                <p>ProjectsList</p>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/work-experience"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                {/* <WorkExperienceTab userId={user?.id ?? ""} /> */}
+                     <WorkExperienceTab  />
+
               </RoleProtectedRoute>
             }
           />

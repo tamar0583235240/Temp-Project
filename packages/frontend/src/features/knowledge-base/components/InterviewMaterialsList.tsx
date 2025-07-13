@@ -3,7 +3,9 @@ import {
   useGetInterviewMaterialsQuery,
   useDeleteInterviewMaterialMutation,
 } from "../../../shared/api/interviewMaterialsApi";
+
 import { InterviewMaterial } from "../types/InterviewMaterials";
+
 import MessageModal from "../../../shared/ui/messageModal";
 import { InterviewMaterialsItem } from "./interviewMaterialsItem";
 import { EditInterviewMaterialsForm } from "./EditInterviewMaterialsForm";
@@ -14,7 +16,7 @@ export const InterviewMaterialsList = () => {
   const [deleteMaterial] = useDeleteInterviewMaterialMutation();
 
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<InterviewMaterial| null>(null);
+  const [editingItem, setEditingItem] = useState<InterviewMaterial | null>(null);
 
   const handleDeleteClick = (id: string) => setConfirmingId(id);
   const handleCancelDelete = () => setConfirmingId(null);
@@ -101,6 +103,7 @@ export const InterviewMaterialsList = () => {
           onClose={handleCancelDelete}
         />
       )}
+
       {editingItem && (
         <MessageModal
           title="עריכת משאב"
@@ -116,7 +119,6 @@ export const InterviewMaterialsList = () => {
               onSuccess={() => setEditingItem(null)}
               onCancel={() => setEditingItem(null)}
             />
-
           }
           onClose={() => setEditingItem(null)}
         />

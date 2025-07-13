@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { ReactNode } from "react";
 
 type MessageModalProps = {

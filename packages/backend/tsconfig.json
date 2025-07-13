@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "lib": [
       "ES2020"
     ],
@@ -21,7 +22,7 @@
     "baseUrl": "./src",
     "paths": {
       "@interfaces/*": [
-        "interfaces/*"
+        "src/interfaces/*"
       ]
     }
   },

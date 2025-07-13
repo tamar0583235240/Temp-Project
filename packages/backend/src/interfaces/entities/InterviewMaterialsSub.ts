@@ -20,4 +20,11 @@ export class InterviewMaterialsSub {
 
   @Column("text", { name: "original_file_name", nullable: true })
   originalFileName: string | null;
+
+  @Column("integer", {
+    name: "downloads_count",
+    nullable: true,
+    default: () => "0",
+  })
+  downloadsCount: number | null;
 }
