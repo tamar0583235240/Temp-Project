@@ -10,6 +10,11 @@ import { useNavigate } from "react-router-dom";
 import { ToggleSwitch } from "../shared/ui/ToggleSwitch";
 import { Button } from "../shared/ui/button";
 import { Card } from "../shared/ui/card";
+import {
+  useGetProfileByIdQuery,
+  useUpdateProfileMutation,
+} from "../features/profile/services/profileApi";
+import { Profile } from "../features/profile/types/profileTypes";
 
 // Type for external links
 interface ExternalLink {
@@ -36,11 +41,17 @@ const EditProfilePage = () => {
     bio: "",
     is_public: false,
   });
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [linkErrors, setLinkErrors] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+
+  const {
+    data: profileData,
+    isLoading,
+    error: fetchProfileError,
+    refetch,
+  } = useGetProfileByIdQuery(user?.id || "");
 
   const API_BASE_URL = "http://localhost:5000";
 
@@ -60,31 +71,24 @@ const EditProfilePage = () => {
 
   // Fetch profile data on component mount
   useEffect(() => {
-    if (!user) return;
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get(`${API_BASE_URL}/profiles/user/${user.id}`);
-        setProfile(res.data);
-        setFormData({
-          first_name: res.data.first_name || "",
-          last_name: res.data.last_name || "",
-          email: res.data.email || "",
-          status: res.data.status || "",
-          preferred_job_type: res.data.preferred_job_type || "",
-          external_links: Array.isArray(res.data.external_links)
-            ? res.data.external_links
-            : [],
-          bio: res.data.bio || "",
-          is_public: res.data.is_public ?? false,
-        });
-      } catch (err) {
-        setError("שגיאה בטעינת הפרופיל.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProfile();
-  }, [user]);
+    if (profileData) {
+      setFormData({
+        first_name: profileData.first_name || "",
+        last_name: profileData.last_name || "",
+        email: profileData.email || "",
+        status: profileData.status || "",
+        preferred_job_type: profileData.preferred_job_type || "",
+        external_links: Array.isArray(profileData.external_links)
+          ? profileData.external_links
+          : [],
+        bio: profileData.bio || "",
+        is_public: profileData.is_public ?? false,
+      });
+    }
+  }, [profileData]);
+
+  const [updateProfile, { isLoading: isUpdating, error: updateError }] =
+    useUpdateProfileMutation();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -92,7 +96,7 @@ const EditProfilePage = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({
+    setFormData((prev: Profile) => ({
       ...prev,
       [name]: value,
     }));
@@ -177,17 +181,9 @@ const EditProfilePage = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!user) {
       setError("אין משתמש מחובר.");
-      return;
-    }
-
-    setSaving(true);
-    setError("");
-
-    if (linkErrors.some((err) => err)) {
-      setError("אנא תקני את הקישורים הלא תקינים לפני שמירה.");
-      setSaving(false);
       return;
     }
 
@@ -197,18 +193,23 @@ const EditProfilePage = () => {
     }
 
     try {
-      await axios.put(`${API_BASE_URL}/profiles/user/${user.id}`, formData);
-      showMessage("", "הפרופיל עודכן בהצלחה");
-      setTimeout(() => {
-        hideMessage();
-      }, 2000);
-      navigate("/my-profile");
-    } catch (err) {
-      console.error("Update error:", err);
-      setError("שגיאה בעדכון הפרופיל.");
-    } finally {
-      setSaving(false);
-    }
+    await updateProfile({
+      id: user.id,
+      ...formData,
+    }).unwrap();
+
+    await refetch();
+
+    showMessage("", "הפרופיל עודכן בהצלחה");
+    setTimeout(() => {
+      hideMessage();
+      navigate("/my-profile", { replace: true });
+    }, 2000);
+  } catch (err) {
+    setError("שגיאה בעדכון הפרופיל.");
+  } finally {
+    setSaving(false);
+  }
   };
 
   const onCancelEdit = () => {
@@ -231,8 +232,13 @@ const EditProfilePage = () => {
   };
 
   // Loading states
-  if (loading) return <p className="text-center mt-8">טוען פרופיל...</p>;
+  if (isLoading) return <p className="text-center mt-8">טוען פרופיל...</p>;
   if (!user) return <p className="text-center mt-8">אין משתמש מחובר</p>;
+  if (fetchProfileError) {
+    return (
+      <p className="text-center mt-8 text-red-500">שגיאה בטעינת הפרופיל</p>
+    );
+  }
   if (error && !error.includes("קישורים")) {
     return <p className="text-center mt-8 text-red-500">{error}</p>;
   }
@@ -260,7 +266,7 @@ const EditProfilePage = () => {
             פרטי
             {!formData.is_public && (
               <span className="text-sm text-gray-500 ml-2">
-                 (המידע הזה לא יפורסם בפרופילים.) 
+                (המידע הזה לא יפורסם בפרופילים.)
               </span>
             )}
           </span>

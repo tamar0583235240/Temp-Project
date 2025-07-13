@@ -1,52 +1,21 @@
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {
-  FaBehance,
-  FaCodepen,
-  FaDev,
-  FaDribbble,
-  FaExternalLinkAlt,
-  FaFileAlt,
-  FaFilePdf,
-  FaGithub,
-  FaGlobe,
-  FaLinkedin,
-  FaMedium,
-  FaStackOverflow,
-  FaUserCircle,
-} from "react-icons/fa";
-import { Profile } from "../features/profile/types/profileTypes";
+import { FaBehance, FaCodepen, FaDev, FaDribbble, FaExternalLinkAlt, FaFileAlt, FaFilePdf, FaGithub, FaGlobe, FaLinkedin, FaMedium, FaStackOverflow, FaUserCircle } from "react-icons/fa";
+import { ExternalLink, Profile } from "../features/profile/types/profileTypes";
+import { useGetProfileByIdQuery } from "../features/profile/services/profileApi";
 
 const MyProfileViewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const [profile, setProfile] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  type ExternalLink = string | { url: string; label?: string };
+  // Fetch profile data from RTK Query using useGetProfileByIdQuery
+  const { data: profile, error, isLoading } = useGetProfileByIdQuery(user?.id ?? "", {
+    skip: !user, // Skip the query if no user
+  });
 
-  useEffect(() => {
-    if (!user) return;
-
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:5000/profiles/user/${user.id}`
-        );
-        setProfile(res.data);
-      } catch (err) {
-        setError("שגיאה בטעינת פרופיל.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
+  // If no user exists, return null immediately (do not render the profile view)
+  if (!user) return <p>לא נמצא פרופיל.</p>;
 
   const getIconForLink = (url: string) => {
     if (url.includes("linkedin.com")) return <FaLinkedin />;
@@ -58,17 +27,16 @@ const MyProfileViewPage = () => {
     if (url.includes("dribbble.com")) return <FaDribbble />;
     if (url.includes("codepen.io")) return <FaCodepen />;
     if (url.includes("notion.so")) return <FaFileAlt />;
-    if (url.includes("drive.google.com") || url.endsWith(".pdf"))
-      return <FaFilePdf />;
+    if (url.includes("drive.google.com") || url.endsWith(".pdf")) return <FaFilePdf />;
     if (url.startsWith("http")) return <FaGlobe />;
     return <FaExternalLinkAlt />;
   };
 
-  const getFullName = (profile: Profile) =>
-    `${profile.first_name} ${profile.last_name}`;
+  const getFullName = (profile: Profile) => `${profile.first_name} ${profile.last_name}`;
 
-  if (loading) return <p>טוען פרופיל...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  // Conditional rendering based on the loading, error, or profile state
+  if (isLoading) return <p>טוען פרופיל...</p>;
+  if (error) return <p className="text-red-500">שגיאה בטעינת פרופיל.</p>;
   if (!profile) return <p>לא נמצא פרופיל.</p>;
 
   return (
@@ -89,31 +57,29 @@ const MyProfileViewPage = () => {
         <span className="font-medium">סטטוס:</span> {profile.status}
       </p>
       <p className="text-sm text-gray-600">
-        <span className="font-medium">סוג משרה:</span>{" "}
-        {profile.preferred_job_type}
+        <span className="font-medium">סוג משרה:</span> {profile.preferred_job_type}
       </p>
 
-      {Array.isArray(profile.external_links) &&
-        profile.external_links.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-3 mt-4">
-            {profile.external_links.map((link: ExternalLink, i: number) => {
-              const url = typeof link === "string" ? link : link.url;
-              const label = typeof link === "string" ? link : link.label || url;
-              return (
-                <a
-                  key={i}
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 text-primary hover:text-primary/80 transition ltr"
-                >
-                  {getIconForLink(url)}
-                  <span>{label}</span>
-                </a>
-              );
-            })}
-          </div>
-        )}
+      {Array.isArray(profile.external_links) && profile.external_links.length > 0 && (
+        <div className="flex flex-wrap justify-center gap-3 mt-4">
+          {profile.external_links.map((link: ExternalLink, i: number) => {
+            const url = typeof link === "string" ? link : link.url;
+            const label = typeof link === "string" ? link : link.label || url;
+            return (
+              <a
+                key={i}
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1 text-primary hover:text-primary/80 transition ltr"
+              >
+                {getIconForLink(url)}
+                <span>{label}</span>
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       <button
         onClick={() => navigate("/my-profile/edit")}
