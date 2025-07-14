@@ -6,11 +6,20 @@ export const feedbackApi = api.injectEndpoints({
     getFeedbackesBysharedRecordingId: builder.query<feedbackType[], string>({
       query: (sharedRecordingId) => `api/feedbackes/getFeedbackesByanswerId/${sharedRecordingId}`,
       providesTags: ["Feedback"],
-    })
+    }),
+    getFeedbackAverages: builder.query<{
+      relevance: string;
+      tips: string;
+      ai: string;
+      usability: string;
+    }, void>({
+      query: () => "api/admin/feedbackes/averages",
+    }),
 
   }),
 });
 
 export const {
-  useGetFeedbackesBysharedRecordingIdQuery
+  useGetFeedbackesBysharedRecordingIdQuery,
+  useGetFeedbackAveragesQuery,
 } = feedbackApi;

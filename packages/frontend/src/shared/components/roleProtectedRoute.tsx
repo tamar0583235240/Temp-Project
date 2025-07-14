@@ -14,26 +14,17 @@ interface Props {
   allowedRoles: string[];
 }
 
-export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Element | null {
+export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Element {
   const user = useSelector((state: RootState) => state.auth.user);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      console.log("משתמש לא מחובר");
-      navigate("/login");
-    } else if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-      console.log("אין הרשאה");
-      navigate("/not-authorized");
-    }
-  }, [user, allowedRoles, navigate]);
 
   if (!user) {
-    return null;
+    console.log("משתמש לא מחובר - redirect to login");
+    return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-    return null;
+    console.log("אין הרשאה - redirect to not-authorized");
+    return <Navigate to="/not-authorized" replace />;
   }
 
   console.log("הרשאה מאושרת, מציג תוכן");

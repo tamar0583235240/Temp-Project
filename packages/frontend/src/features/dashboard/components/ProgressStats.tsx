@@ -1,21 +1,19 @@
-import React, { useEffect } from "react";
-import { BarChart2 } from "lucide-react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../shared/store/store";
-// import { useUserStore } from "../store/progressSlice";
 import { useGetProgressStatsQuery } from "../../../shared/api/progressStatsApi";
-
+import { RootState } from "../../../shared/store/store";
+import { useEffect } from "react";
+import { BarChart2 } from "lucide-react";
 const ProgressStats: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  if (!user) return <p>אנא התחבר</p>;
+  const userId = user?.id ?? ""; // תמיד מגדירה userId
 
-const userId = user.id;
-
-  const { data, isLoading, isError } = useGetProgressStatsQuery(user.id);
+  const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
+    skip: !userId, // מונע שליחה אם אין user
+  });
 
   useEffect(() => {
     if (data) {
-      // actions לפי הנתונים
+      // פעולות לפי הנתונים
     }
   }, [data]);
 
