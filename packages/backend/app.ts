@@ -42,6 +42,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/categories', categoryRoutes)
+app.use('/api', resourceRouts);
 app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  

@@ -7,6 +7,7 @@ import {
   setQuestions,
   goToQuestion,
   setCurrentAnswerId,
+  setCurrentUserId,
 } from "../features/interview/store/simulationSlice";
 import { addAnsweredAnswer } from "../features/interview/store/answeredSlice";
 import { RootState } from "../shared/store/store";
@@ -21,6 +22,9 @@ import CategoryDropdown from "../features/interview/components/showCategories";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 const InterviewPage = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
+
   const dispatch = useDispatch();
   const { currentCategoryId, currentIndex, currentAnswerId } = useSelector(
     (state: RootState) => state.simulation
@@ -55,6 +59,13 @@ const InterviewPage = () => {
   const answeredCount = questionsWithStatus.filter(q => q.answered).length;
   const allAnswered = totalQuestions > 0 && answeredCount === totalQuestions;
 
+  useEffect(() => {
+    if (user?.id) {
+      console.log(user.id);
+      
+      dispatch(setCurrentUserId(user.id));
+    }
+  }, [user, dispatch]);
   // Reset answerIdForAI & isLoadingAI when moving to another question
   useEffect(() => {
     dispatch(setCurrentAnswerId(null));

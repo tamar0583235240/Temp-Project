@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { interviewType } from "../types/questionType";
 import { InitialState } from "../types/initialState";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../shared/store/store";
-  const user = useSelector((state: RootState) => state.auth.user);
+
 
 
 // מצב התחלתי
@@ -13,7 +11,7 @@ const initialState: InitialState = {
   loading: false,
   currentAnswerId: "", //מזהה תשובה נוכחית
   currentCategoryId: "",
-  currentUserId: user?.id||" ", //מזהה משתמש נוכחי
+  currentUserId: " ", //מזהה משתמש נוכחי
 };
 
 // יצירת הסלייס
