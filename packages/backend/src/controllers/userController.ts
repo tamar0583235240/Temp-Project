@@ -100,6 +100,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
   const userData: Partial<Users> = req.body;
+  
 
   if (userData.password) {
     userData.password = await bcrypt.hash(userData.password, SALT_ROUNDS);

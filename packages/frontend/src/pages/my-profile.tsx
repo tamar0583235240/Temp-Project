@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
 import { AiFillDelete, AiOutlineClose, AiOutlineSave } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
-import { FaPen, FaSave, FaUserCircle } from "react-icons/fa";
+import { FaPen, FaSave, FaTimes, FaUserCircle } from "react-icons/fa";
 import { useMessageModal } from "../shared/ui/MessageModalContext";
 import { useNavigate } from "react-router-dom";
 import { ToggleSwitch } from "../shared/ui/ToggleSwitch";
@@ -270,8 +270,7 @@ const EditProfilePage = () => {
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-xl">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex items-center gap-4">
-          <span>ציבורי</span>
+        <div className="">
           <ToggleSwitch
             checked={formData.is_public}
             onToggle={() =>
@@ -281,14 +280,11 @@ const EditProfilePage = () => {
               }))
             }
           />
-          <span className="flex items-center">
-            פרטי
-            {!formData.is_public && (
-              <span className="text-sm text-gray-500 ml-2">
-                (המידע הזה לא יפורסם בפרופילים.)
-              </span>
-            )}
-          </span>
+          {!formData.is_public && (
+            <span className="text-xs text-text-secondary">
+              (לא יוצג בפרופיל הציבורי)
+            </span>
+          )}
         </div>
 
         <div className="flex justify-center mb-4">
@@ -480,22 +476,22 @@ const EditProfilePage = () => {
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         {/* כפתור שמירה */}
         <div className="flex gap-2 justify-start ltr">
-          <button
+          <Button
+            size="sm"
+            variant="primary-dark"
             type="submit"
             disabled={saving}
-            className="bg-primary text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-primary-dark transition"
           >
-            <AiOutlineSave className="w-5 h-5" />
-            {saving ? "שומר..." : "שמור שינויים"}
-          </button>
-          <button
+            <FaSave /> שמור
+          </Button>
+          <Button
+            size="sm"
             type="button"
+            variant="outline"
             onClick={onCancelEdit}
-            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md flex items-center gap-2 hover:bg-gray-300 transition"
           >
-            <AiOutlineClose className="w-5 h-5" />
-            בטל
-          </button>
+            <FaTimes /> בטל
+          </Button>
         </div>
       </form>
     </div>
