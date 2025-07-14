@@ -17,6 +17,7 @@ import {
   sendVerificationCodeEmail,
 } from "../utils/emailSender";
 import { generateUniqueSlug } from "../utils/generateSlug";
+import { createProfile } from "../repository/profileRepository";
 
 type CodeData = { code: string; expiresAt: number };
 const codesPerEmail = new Map<string, CodeData>(); //שמירת הקודים לפי המיילים שאליהם נשלחו
@@ -32,10 +33,10 @@ const cleanExpiredCodes = () => {
 setInterval(cleanExpiredCodes, 60 * 60 * 1000);
 
 export const generateAndSendCode = async (req: Request, res: Response) => {
-  const email = req.body.email;
+  const { email } = req.body;
   if (!email)
     return res.status(400).json({ sent: false, message: "Email is required" });
-  // יצירת קוד אקראי בן 6 ספרות
+
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
   codesPerEmail.set(email, { code, expiresAt });
@@ -45,20 +46,16 @@ export const generateAndSendCode = async (req: Request, res: Response) => {
 };
 
 export const validateCode = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const code = req.body.code;
-
+  const { email, code } = req.body;
   if (!email || !code)
     return res.status(400).json({ error: "Email and code are required" });
 
   const validCode = codesPerEmail.get(email);
   if (!validCode) {
-    return res
-      .status(200)
-      .json({
-        valid: false,
-        message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
-      });
+    return res.status(200).json({
+      valid: false,
+      message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
+    });
   }
   if (Date.now() > validCode.expiresAt) {
     return res
@@ -89,7 +86,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         .json({ message: "If email exists, reset link sent" });
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
     await createToken(user.id, token, expiresAt);
@@ -112,13 +109,10 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     const tokenData = await getToken(token);
 
-    if (!tokenData) {
+    if (!tokenData)
       return res.status(400).json({ message: "Invalid or expired token" });
-    }
-
-    if (new Date(tokenData.expires_at) < new Date()) {
+    if (new Date(tokenData.expires_at) < new Date())
       return res.status(400).json({ message: "Token expired" });
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await userRepository.updateUserPassword(tokenData.user_id, hashedPassword);
@@ -139,20 +133,23 @@ export const login = async (req: Request, res: Response) => {
       email,
       password
     );
-    if (!user) {
+    if (!user)
       return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
-    }
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
-      { expiresIn: rememberMe ? "7d" : "1h" }
+      {
+        expiresIn: rememberMe ? "7d" : "1h",
+      }
     );
 
     const refreshToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       REFRESH_SECRET,
-      { expiresIn: rememberMe ? "7d" : "2h" }
+      {
+        expiresIn: rememberMe ? "7d" : "2h",
+      }
     );
 
     res.cookie("refreshToken", refreshToken, {
@@ -171,18 +168,14 @@ export const login = async (req: Request, res: Response) => {
 
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) {
+  if (!refreshToken)
     return res.status(407).json({ message: "לא סופק refresh token" });
-  }
 
   try {
     const userData = jwt.verify(refreshToken, REFRESH_SECRET) as any;
     const user = await userRepository.getUserById(userData.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
 
     const newToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
@@ -217,7 +210,9 @@ export const requestSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
-  const existing = (await userRepository.getAllUsers()).find((u: Users) => u.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (u: Users) => u.email === email
+  );
   if (existing) {
     return res.status(409).json({ message: "אימייל כבר קיים" });
   }
@@ -268,33 +263,45 @@ export const requestSignup = async (req: Request, res: Response) => {
   });
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
-
-  res
-    .status(200)
-    .json({
-      message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
-    });
+  res.status(200).json({
+    message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
+  });
 };
 
 export const confirmSignup = async (req: Request, res: Response) => {
   const { email, code } = req.body;
 
-  if (!email || !code) return res.status(400).json({ message: "אימייל וקוד דרושים" });
+  if (!email || !code)
+    return res.status(400).json({ message: "אימייל וקוד דרושים" });
 
   const pending = pendingSignups.get(email);
-  if (!pending) return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
+  if (!pending)
+    return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
 
   if (pending.expiresAt < Date.now()) {
     pendingSignups.delete(email);
     return res.status(400).json({ message: "הקוד פג תוקף. נא לבקש קוד חדש." });
   }
 
-  if (pending.code !== code) return res.status(400).json({ message: "הקוד שגוי." });
+  if (pending.code !== code)
+    return res.status(400).json({ message: "הקוד שגוי." });
 
   await authRepository.signup(pending.userData);
+  try {
+    await createProfile(pending.userData.id, {
+      image_url: null,
+      location: "",
+      external_links: [],
+      status: "Available",
+      preferred_job_type: "Any",
+      is_public: false,
+    });
+  } catch (err) {
+    console.error("Create profile failed:", err);
+    return res.status(500).json({ message: "Failed to create profile" });
+  }
   pendingSignups.delete(email);
 
-  // יוצרים טוקן
   const token = jwt.sign(
     {
       id: pending.userData.id,
@@ -329,7 +336,9 @@ export const confirmSignup = async (req: Request, res: Response) => {
 export const signup = async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find((user: Users) => user.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (user: Users) => user.email === email
+  );
   if (existing) {
     return res.status(409).json({ message: "אימייל כבר קיים" });
   }
@@ -375,6 +384,20 @@ export const signup = async (req: Request, res: Response) => {
 
   await authRepository.signup(newUser);
 
+  try {
+    await createProfile(newUser.id, {
+      image_url: null,
+      location: "",
+      external_links: [],
+      status: "Available",
+      preferred_job_type: "Any",
+      is_public: false,
+    });
+  } catch (err) {
+    console.error("Create profile failed:", err);
+    return res.status(500).json({ message: "Failed to create profile" });
+  }
+
   const token = jwt.sign(
     { id: newUser.id, email: newUser.email, role: newUser.role },
     JWT_SECRET,
@@ -384,14 +407,13 @@ export const signup = async (req: Request, res: Response) => {
   res.status(201).json({ user: newUser, token });
 };
 
-const client = new OAuth2Client();
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const authWithGoogle = async (req: Request, res: Response) => {
   try {
     const { payload, rememberMe } = req.body;
-    if (!payload?.credential) {
+    if (!payload?.credential)
       return res.status(400).json({ message: "Missing Google credential" });
-    }
 
     const ticket = await client.verifyIdToken({
       idToken: payload.credential,
@@ -399,20 +421,19 @@ export const authWithGoogle = async (req: Request, res: Response) => {
     });
 
     const googleUser = ticket.getPayload();
-    if (!googleUser?.email) {
+    if (!googleUser?.email)
       return res
         .status(400)
         .json({ message: "Invalid token or email not found" });
-    }
 
-    let user = await userRepository.getUserByEmail(googleUser.email);
+    const existingUser = await userRepository.getUserByEmail(googleUser.email);
 
-    if (!user) {
-      const first_name = googleUser.given_name ?? '';
-      const last_name = googleUser.family_name ?? '';
+    if (!existingUser) {
+      const first_name = googleUser.given_name ?? "";
+      const last_name = googleUser.family_name ?? "";
       const slug = await generateUniqueSlug(first_name, last_name);
 
-      user = await userRepository.insertUser({
+      const newUser = await userRepository.insertUser({
         id: uuidv4(),
         first_name,
         last_name,
@@ -424,24 +445,75 @@ export const authWithGoogle = async (req: Request, res: Response) => {
         created_at: new Date(),
         slug,
       });
+
+      if (!newUser) {
+        return res.status(500).json({ message: "Failed to create user" });
+      }
+
+      try {
+        await createProfile(newUser.id, {
+          image_url: null,
+          location: "",
+          external_links: [],
+          status: "Available",
+          preferred_job_type: "Any",
+          is_public: false,
+        });
+      } catch (err) {
+        console.error("Create profile failed:", err);
+        return res.status(500).json({ message: "Failed to create profile" });
+      }
+
+      const token = jwt.sign(
+        { id: newUser.id, email: newUser.email, role: newUser.role },
+        JWT_SECRET,
+        {
+          expiresIn: rememberMe ? "7d" : "1h",
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        { id: newUser.id, email: newUser.email, role: newUser.role },
+        REFRESH_SECRET,
+        {
+          expiresIn: rememberMe ? "7d" : "2h",
+        }
+      );
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
+      });
+
+      return res.status(200).json({ user: newUser, token });
     }
 
-    if (!user) {
-      return res
-        .status(500)
-        .json({ message: "Failed to create or retrieve user" });
-    }
-
+    // if user existed
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
       JWT_SECRET,
-      { expiresIn: rememberMe ? "7d" : "1h" }
+      {
+        expiresIn: rememberMe ? "7d" : "1h",
+      }
     );
 
     const refreshToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
       REFRESH_SECRET,
-      { expiresIn: rememberMe ? "7d" : "2h" }
+      {
+        expiresIn: rememberMe ? "7d" : "2h",
+      }
     );
 
     res.cookie("refreshToken", refreshToken, {
@@ -452,7 +524,7 @@ export const authWithGoogle = async (req: Request, res: Response) => {
       maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ user: existingUser, token });
   } catch (err) {
     console.error("Google Auth error:", err);
     return res.status(500).json({ message: "Google authentication failed" });
