@@ -19,7 +19,8 @@ const getIconForLink = (url: string) => {
 
 const ProfileList = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const isAdmin = user?.role === "manager";  
+  const isAdmin = "manager"
+  .includes((user?.role ?? "").toLowerCase().trim()); 
 
   const { data: profiles, error, isLoading } = useGetProfilesQuery();
 
@@ -33,9 +34,8 @@ const ProfileList = () => {
   }
   if (!profiles || profiles.length === 0) return <div>לא נמצאו פרופילים</div>;
 
-  // Filter profiles based on the user's role
   const filteredProfiles = profiles.filter((profile) =>
-    isAdmin ? true : profile.is_public // Admin can see all profiles, others can see only public ones
+    isAdmin ? true : profile.is_public
   );
 
   return (
@@ -46,6 +46,10 @@ const ProfileList = () => {
               key={profile.id}
               className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center"
             >
+              <p className="self-start text-right">
+                {profile.is_public ? "פרופיל ציבורי" : "פרופיל פרטי"}
+              </p>
+
               {profile.image_url ? (
                 <img
                   src={profile.image_url}
@@ -59,12 +63,15 @@ const ProfileList = () => {
               <h2 className="text-xl font-semibold mb-1">
                 {getFullName(profile)}
               </h2>
+
               <p className="text-sm text-gray-500">{profile.location}</p>
+
               <p className="text-sm text-gray-600 mt-2">
-                <span className="font-medium">Status:</span> {profile.status}
+                <span className="font-medium">סטטוס:</span> {profile.status}
               </p>
+
               <p className="text-sm text-gray-600">
-                <span className="font-medium">Job Type:</span>{" "}
+                <span className="font-medium">סוג משרה מועדף:</span>{" "}
                 {profile.preferred_job_type}
               </p>
 

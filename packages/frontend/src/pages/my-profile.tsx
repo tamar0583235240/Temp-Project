@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
-import axios from "axios";
 import { AiFillDelete, AiOutlineClose, AiOutlineSave } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
-import { FaPen, FaSave } from "react-icons/fa";
+import { FaPen, FaSave, FaUserCircle } from "react-icons/fa";
 import { useMessageModal } from "../shared/ui/MessageModalContext";
 import { useNavigate } from "react-router-dom";
 import { ToggleSwitch } from "../shared/ui/ToggleSwitch";
@@ -45,6 +44,7 @@ const EditProfilePage = () => {
   const [error, setError] = useState("");
   const [linkErrors, setLinkErrors] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const {
     data: profileData,
@@ -76,6 +76,8 @@ const EditProfilePage = () => {
         first_name: profileData.first_name || "",
         last_name: profileData.last_name || "",
         email: profileData.email || "",
+        phone: profileData.phone || "",
+        location: profileData.location || "",
         status: profileData.status || "",
         preferred_job_type: profileData.preferred_job_type || "",
         external_links: Array.isArray(profileData.external_links)
@@ -100,6 +102,11 @@ const EditProfilePage = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setSelectedImage(file);
   };
 
   // Handle changes for external links
@@ -192,24 +199,36 @@ const EditProfilePage = () => {
       return;
     }
 
+    const fd = new FormData();
+    fd.append("first_name", formData.first_name);
+    fd.append("last_name", formData.last_name);
+    fd.append("email", formData.email);
+    fd.append("phone", formData.phone);
+    fd.append("status", formData.status);
+    fd.append("location", formData.location);
+    fd.append("preferred_job_type", formData.preferred_job_type);
+    fd.append("bio", formData.bio);
+    fd.append("is_public", String(formData.is_public));
+    fd.append("external_links", JSON.stringify(formData.external_links));
+
+    if (selectedImage) {
+      fd.append("image", selectedImage); // 👈 VERY IMPORTANT
+    }
+
     try {
-    await updateProfile({
-      id: user.id,
-      ...formData,
-    }).unwrap();
+      await updateProfile({ id: user.id, formData: fd }).unwrap();
+      await refetch();
 
-    await refetch();
-
-    showMessage("", "הפרופיל עודכן בהצלחה");
-    setTimeout(() => {
-      hideMessage();
-      navigate("/my-profile", { replace: true });
-    }, 2000);
-  } catch (err) {
-    setError("שגיאה בעדכון הפרופיל.");
-  } finally {
-    setSaving(false);
-  }
+      showMessage("", "הפרופיל עודכן בהצלחה");
+      setTimeout(() => {
+        hideMessage();
+        navigate("/my-profile", { replace: true });
+      }, 2000);
+    } catch (err) {
+      setError("שגיאה בעדכון הפרופיל.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const onCancelEdit = () => {
@@ -271,6 +290,32 @@ const EditProfilePage = () => {
             )}
           </span>
         </div>
+
+        <div className="flex justify-center mb-4">
+          {selectedImage ? (
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt="Selected"
+              className="w-24 h-24 rounded-full object-cover border"
+            />
+          ) : profileData?.image_url ? (
+            <img
+              src={profileData.image_url}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border"
+            />
+          ) : (
+            <FaUserCircle className="w-24 h-24 text-gray-400" />
+          )}
+        </div>
+
+        <input
+          type="file"
+          name="profile_image"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="w-full border rounded px-3 py-2 mb-2"
+        />
 
         <input
           type="text"
@@ -348,69 +393,81 @@ const EditProfilePage = () => {
         {/* קישורים חיצוניים */}
         <div>
           <label className="block mb-1 font-medium">קישורים חיצוניים</label>
+
           {formData.external_links.map(
             (link: { url: string; label: string }, index: number) => (
-              <div key={index} className="p-6 shadow-md">
-                {/* שדה כתובת URL כפי שהיה */}
-                <input
-                  type="text"
-                  placeholder={`URL ${index + 1}`}
-                  value={link.url || ""}
-                  onChange={(e) =>
-                    handleLinkChange(index, "url", e.target.value)
-                  }
-                  className="w-full border rounded px-3 py-2 mb-2"
-                />
-                {linkErrors[index] && (
-                  <p className="text-sm text-red-500 mb-1">
-                    {linkErrors[index]}
-                  </p>
-                )}
+              <div
+                key={index}
+                className="grid grid-cols-12 gap-4 items-start p-4"
+              >
+                <div className="col-span-1 order-last flex justify-end pt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveLink(index)}
+                    className="text-red-500 text-lg"
+                    title="מחק קישור"
+                  >
+                    <AiFillDelete />
+                  </button>
+                </div>
 
-                {/* select תווית */}
-                <select
-                  value={
-                    labelOptions.includes(link.label) ? link.label : "Other"
-                  }
-                  onChange={(e) =>
-                    handleLinkChange(index, "label", e.target.value)
-                  }
-                  className="w-full border rounded px-3 py-2 mb-2"
-                >
-                  <option value="" disabled hidden>
-                    תווית הקישור
-                  </option>
-                  {labelOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-
-                {/* אם נבחר "Other" - אפשר להקליד תווית חופשית */}
-                {(!labelOptions.includes(link.label) ||
-                  link.label === "Other") && (
-                  <input
-                    type="text"
-                    placeholder="הקלד תווית"
-                    value={labelOptions.includes(link.label) ? "" : link.label}
+                <div className="col-span-5 flex gap-2">
+                  <select
+                    value={
+                      labelOptions.includes(link.label) ? link.label : "Other"
+                    }
                     onChange={(e) =>
                       handleLinkChange(index, "label", e.target.value)
                     }
-                    className="w-full border rounded px-3 py-2 mb-2"
-                  />
-                )}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="" disabled hidden>
+                      תווית הקישור
+                    </option>
+                    {labelOptions.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
 
-                <button
-                  type="button"
-                  onClick={() => handleRemoveLink(index)}
-                  className="text-red-500 text-sm"
-                >
-                  <AiFillDelete />
-                </button>
+                  {(!labelOptions.includes(link.label) ||
+                    link.label === "Other") && (
+                    <input
+                      type="text"
+                      placeholder="הקלד תווית"
+                      value={
+                        labelOptions.includes(link.label) ? "" : link.label
+                      }
+                      onChange={(e) =>
+                        handleLinkChange(index, "label", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  )}
+                </div>
+
+                {/* URL field */}
+                <div className="col-span-6">
+                  <input
+                    type="text"
+                    placeholder={`URL ${index + 1}`}
+                    value={link.url || ""}
+                    onChange={(e) =>
+                      handleLinkChange(index, "url", e.target.value)
+                    }
+                    className="w-full border rounded px-3 py-2"
+                  />
+                  {linkErrors[index] && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {linkErrors[index]}
+                    </p>
+                  )}
+                </div>
               </div>
             )
           )}
+
           <button
             type="button"
             onClick={handleAddLink}
