@@ -82,10 +82,10 @@ const AdminTipsAndPractices: React.FC = () => {
     }, SwalTipForm);
   };
 
-  const handleDeleteTip = async (id: string) => {
+  const handleDeleteTip = async (id: string, content: string) => {
     const result = await Swal.fire({
       title: 'מחיקת טיפ',
-      text: 'האם אתה בטוח שברצונך למחוק את הטיפ?',
+      text: `האם אתה בטוח שברצונך למחוק את הטיפ: "${content}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'מחק',
@@ -93,7 +93,7 @@ const AdminTipsAndPractices: React.FC = () => {
     });
     if (result.isConfirmed) {
       await deleteTip(id).unwrap();
-      Swal.fire('נמחק', 'הטיפ נמחק בהצלחה', 'success');
+      Swal.fire('נמחק', `הטיפ "${content}" נמחק בהצלחה`, 'success');
     }
   };
 
@@ -109,10 +109,10 @@ const AdminTipsAndPractices: React.FC = () => {
     }, SwalPracticeForm);
   };
 
-  const handleDeletePractice = async (id: string) => {
+  const handleDeletePractice = async (id: string, content: string) => {
     const result = await Swal.fire({
       title: 'מחיקת שאלה לתרגול',
-      text: 'האם אתה בטוח שברצונך למחוק את השאלה?',
+      text: `האם אתה בטוח שברצונך למחוק את השאלה: "${content}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'מחק',
@@ -120,7 +120,7 @@ const AdminTipsAndPractices: React.FC = () => {
     });
     if (result.isConfirmed) {
       await deletePractice(id).unwrap();
-      Swal.fire('נמחק', 'השאלה נמחקה בהצלחה', 'success');
+      Swal.fire('נמחק', `השאלה "${content}" נמחקה בהצלחה`, 'success');
     }
   };
 
@@ -167,7 +167,7 @@ const AdminTipsAndPractices: React.FC = () => {
                   </button>
                   <button
                     className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700"
-                    onClick={() => handleDeletePractice(practice.id)}
+                    onClick={() => handleDeletePractice(practice.id, practice.content)}
                   >
                     <FiTrash2 />
                   </button>
@@ -214,7 +214,7 @@ const AdminTipsAndPractices: React.FC = () => {
                   </button>
                   <button
                     className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700"
-                    onClick={() => handleDeleteTip(tip.id)}
+                    onClick={() => handleDeleteTip(tip.id, tip.content)}
                   >
                     <FiTrash2 />
                   </button>
