@@ -50,8 +50,8 @@ app.use("/questions", answerRoutes);
 app.use("/aiInsight", aiInsightRoutes);
 app.use('/interview-materials-hub', interviewMaterialsHub);
 app.use('/manager/interview-materials', interviewMaterialsHub);
-app.use('/work-experience', workExperienceRoutes);
-app.use('/personal-projects', projectsRoutes);
+// app.use('/work-experience', workExperienceRoutes);
+// app.use('/personal-projects', projectsRoutes);
 app.use('/profiles', profileRoutes);
 
 export default app;

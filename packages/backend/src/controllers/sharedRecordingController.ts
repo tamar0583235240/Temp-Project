@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { addParticipantRepo, deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedWithByAnswerAndOwner } from '../reposioty/sharedRecordingRpository';
+import { addParticipantRepo, deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedWithByAnswerAndOwner } from '../repository/sharedRecordingRpository';
 import { log } from 'console';
 
 export const getSharedRecordingParticipants = async (req: Request, res: Response) => {

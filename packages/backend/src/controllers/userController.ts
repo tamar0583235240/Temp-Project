@@ -55,8 +55,9 @@ export const createUser = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    first_name,
-    last_name,
+    firstName: first_name,
+    lastName: last_name,
+    slug,
     email,
     phone,
     password: hashedPassword,
@@ -67,6 +68,27 @@ export const createUser = async (req: Request, res: Response) => {
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
+    contentReports: [],
+    experienceThanks: [],
+    interviewExperiences: [],
+    userReminderSettings: [],
+    userSessions: [],
+    workExperiences: [],
+    profiles: {
+      id: uuidv4(),
+      userId: '',
+      imageUrl: null,
+      location: null,
+      externalLinks: null,
+      status: null,
+      preferredJobType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isPublic: false,
+      user: {} as Users // This will be set after the user is created
+      
+    }
+
   };
 
   const createdUser = await userRepository.createUser(newUser);
@@ -81,8 +103,8 @@ export const updateUser = async (req: Request, res: Response) => {
     userData.password = await bcrypt.hash(userData.password, SALT_ROUNDS);
   }
 
-  if (userData.first_name || userData.last_name) {
-    const slug = await generateUniqueSlug(userData.first_name || '', userData.last_name || '');
+  if (userData.firstName || userData.lastName) {
+    const slug = await generateUniqueSlug(userData.firstName || '', userData.lastName || '');
     // userData.slug = slug;
   }
 

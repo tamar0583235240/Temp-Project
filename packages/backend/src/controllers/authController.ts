@@ -16,7 +16,7 @@ import {
   sendResetEmail,
   sendVerificationCodeEmail,
 } from "../utils/emailSender";
-import { generateUniqueSlug } from "utils/generateSlug";
+import { generateUniqueSlug } from "../utils/generateSlug";
 
 type CodeData = { code: string; expiresAt: number };
 const codesPerEmail = new Map<string, CodeData>(); //שמירת הקודים לפי המיילים שאליהם נשלחו
@@ -225,12 +225,14 @@ export const requestSignup = async (req: Request, res: Response) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000;
   const hashedPassword = await bcrypt.hash(password, 10);
+  const userId = uuidv4();
 
   pendingSignups.set(email, {
     userData: {
-      id: uuidv4(),
-      first_name,
-      last_name,
+      id: userId,
+      firstName: first_name,
+      lastName: last_name,
+      slug: null,
       email,
       phone,
       password: hashedPassword,
@@ -241,6 +243,25 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       createdAt: new Date(),
       sharedRecordings: [],
+      contentReports: [],
+      experienceThanks: [],
+      interviewExperiences: [],
+      userReminderSettings: [],
+      userSessions: [],
+      workExperiences: [],
+      profiles: {
+        id: uuidv4(),
+        userId: userId, // This will be updated after user creation
+        imageUrl: null,
+        location: null,
+        externalLinks: null,
+        status: null,
+        preferredJobType: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isPublic: false,// This w // This will be set after user creation
+        user: {} as Users
+      },
     },
     code,
     expiresAt,
@@ -318,8 +339,9 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    first_name,
-    last_name,
+    firstName: first_name,
+    lastName: last_name,
+    slug,
     email,
     phone,
     password: hashedPassword,
@@ -330,6 +352,25 @@ export const signup = async (req: Request, res: Response) => {
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
+    contentReports: [],
+    experienceThanks: [],
+    interviewExperiences: [],
+    userReminderSettings: [],
+    userSessions: [],
+    workExperiences: [],
+    profiles: {
+      id: uuidv4(),
+      userId: uuidv4(), // This will be updated after user creation
+      imageUrl: null,
+      location: null,
+      externalLinks: null,
+      status: null,
+      preferredJobType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isPublic: false,
+      user: {} as Users, // This will be set after user creation
+    }
   };
 
   await authRepository.signup(newUser);

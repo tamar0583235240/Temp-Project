@@ -3,7 +3,7 @@ import {
   findProfileByUserId,
   getAllProfiles,
   updateProfileById,
-} from "../reposioty/profileRepository";
+} from "../repository/profileRepository";
 
 // GET /profiles
 export const getAllProfilesHandler = async (_req: Request, res: Response) => {

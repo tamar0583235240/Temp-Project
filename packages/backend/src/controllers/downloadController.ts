@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { getInterviewMaterialSubById } from "../repository/interviewMaterialSubRepository";
 import { fetch } from "undici";
-import { InterviewMaterialsSub } from "@interfaces/entities/InterviewMaterialsSub";
+// import { InterviewMaterialsSub } from "@interfaces/entities/InterviewMaterialsSub";
 
 type InterviewMaterial = {
   id: number;

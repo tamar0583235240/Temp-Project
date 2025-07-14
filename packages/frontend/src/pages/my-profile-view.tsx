@@ -33,6 +33,8 @@ const MyProfileViewPage = () => {
 
     const fetchProfile = async () => {
       try {
+        console.log("Fetching profile for user:", user);
+        console.log("Fetching profile for user:", user.id);
         const res = await axios.get(
           `http://localhost:5000/profiles/user/${user.id}`
         );
