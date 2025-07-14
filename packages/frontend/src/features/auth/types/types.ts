@@ -5,7 +5,7 @@ export interface User {
   email: string;
   phone?: string;
   role: 'student' | 'manager';
-  createdAt: string;
+  createdAt: Date;
   isActive: boolean;
 }
 

@@ -25,7 +25,7 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         )}
         <p className="flex items-center justify-center gap-2">
           <span className="font-mono tracking-widest select-text">
-            {showPassword ? user.password : '••••••••'}
+            {/* {showPassword ? user.password : '••••••••'} */}
           </span>
           <button
             onClick={() => setShowPassword(!showPassword)}
