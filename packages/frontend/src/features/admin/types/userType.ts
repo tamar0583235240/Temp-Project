@@ -5,6 +5,7 @@ import { User } from "../../auth/types/types";
 export interface user extends User {
   isSelected?: boolean; // שדה פנימי לצרכי UI בלבד
 }
+
 export interface UserFormFields {
   firstName: string;
   lastName: string;

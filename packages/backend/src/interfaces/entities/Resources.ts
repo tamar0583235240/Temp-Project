@@ -23,5 +23,4 @@ export class Resources {
     default: () => "now()",
   })
   createdAt: Date;
-  user: any;
 }

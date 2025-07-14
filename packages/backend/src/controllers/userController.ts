@@ -124,7 +124,6 @@ export const createUser = async (req: Request, res: Response) => {
     answers: [],
     feedbacks: [],
     passwordResetTokens: [],
-    resources: [],
     sharedRecordings: [],
     userActivities: [],
     userReminderSettings: [],

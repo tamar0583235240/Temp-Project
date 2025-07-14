@@ -9,7 +9,6 @@ import { SharedRecordings } from "./SharedRecordings";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
 import { WorkExperiences } from "./WorkExperiences";
-import { Resources } from "./Resources";
 import { UserActivity } from "./UserActivity";
 
 @Index("users_email_key", ["email"], { unique: true })
@@ -94,11 +93,10 @@ export class Users {
 
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences: WorkExperiences[];
-
-  @OneToMany(() => Resources, (resources) => resources.user)
-  resources: Resources[];
+  
 
   @OneToMany(() => UserActivity, (activity) => activity.user)
-  userActivities: UserActivity[];
+  // userActivities: UserActivity[];
+  userActivities: any;
 
 }
