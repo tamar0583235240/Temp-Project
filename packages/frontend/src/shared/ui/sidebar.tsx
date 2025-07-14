@@ -3,7 +3,6 @@ import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
 import { useSelector } from "react-redux";
 import React from "react";
-import { ExitButton } from "../../features/auth/components/ExitButton";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 

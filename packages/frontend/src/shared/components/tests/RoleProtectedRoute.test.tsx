@@ -15,6 +15,7 @@ const mockManager: User = {
   role: "manager",
   createdAt: new Date().toISOString(),
   isActive: true,
+  slug: "test-slug",
 };
 
 const mockStudent: User = {

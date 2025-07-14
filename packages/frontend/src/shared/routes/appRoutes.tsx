@@ -1,11 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-import { RecordingsList } from "../../features/recordings/components/recordingsList";
-import { SearchComponents } from "../../features/recordings/components/searchComponents";
-import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
-import { SortComponents } from "../../features/recordings/components/sortComponents";
-import { AdminQuestions } from "../../features/admin/components/adminQuestions";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
 import Dashboard from '../../pages/dashboard';
@@ -15,7 +10,7 @@ import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
-import AdminUser from "../../pages/AdminUser"; 
+import AdminUser from "../../pages/AdminUser";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
@@ -24,6 +19,7 @@ import { WorkExperienceTab } from "../../features/profile/components/WorkExperie
 import ProfileList from "../../features/profile/components/ProfileList";
 import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
+import { PublicProfilePage } from "../../pages/PublicProfilePage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -93,7 +89,7 @@ export default function AppRoutes() {
             path="/dashboard"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                    <Dashboard />
+                <Dashboard />
               </RoleProtectedRoute>
             }
           />
@@ -149,7 +145,7 @@ export default function AppRoutes() {
             path="/manager/users"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                    <AdminUser />
+                <AdminUser />
               </RoleProtectedRoute>
             }
           />
@@ -182,12 +178,13 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 {/* <WorkExperienceTab userId={user?.id ?? ""} /> */}
-                     <WorkExperienceTab  />
+                <WorkExperienceTab />
 
               </RoleProtectedRoute>
             }
           />
         </Route>
+        <Route path="/u/:slug" element={<PublicProfilePage/>} />
       </Routes>
     </div>
   );

@@ -18,6 +18,7 @@ import {
   FaStackOverflow,
   FaUserCircle,
 } from "react-icons/fa";
+import CopyLinkButton from "../features/profile/components/copyLinkButton";
 
 const MyProfileViewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -25,7 +26,7 @@ const MyProfileViewPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const [slug, setSlug] = useState<string>("");
   type ExternalLink = string | { url: string; label?: string };
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const MyProfileViewPage = () => {
     };
 
     fetchProfile();
+    setSlug(user.slug);
   }, [user]);
 
  const getIconForLink = (url: string) => {
@@ -116,6 +118,7 @@ const MyProfileViewPage = () => {
       >
         ערוך פרופיל
       </button>
+      <CopyLinkButton slug={slug} />
     </div>
   );
 };

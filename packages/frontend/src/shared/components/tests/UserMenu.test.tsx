@@ -40,6 +40,7 @@ const mockUser: User = {
   role: "student", // או "manager" – לפי מה שמוגדר אצלך במערכת
   createdAt: new Date().toISOString(), // כי createdAt הוא string
   isActive: true,
+  slug: "rivky-cohen", // הוספת שדה slag
 };
 
 // 🧪 רנדרינג עם store
