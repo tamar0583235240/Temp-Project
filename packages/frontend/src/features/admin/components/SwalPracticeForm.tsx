@@ -16,7 +16,7 @@ const SwalPracticeForm: React.FC<Props> = ({ defaultValue = '', onSubmit }) => {
     <form onSubmit={handleSubmit((data) => onSubmit(data.content))} className="flex flex-col gap-2">
       <textarea
         {...register('content', { required: 'שדה חובה' })}
-        placeholder="תוכן הטיפ"
+        placeholder="תוכן השאלה"
         className="border p-2 rounded text-right"
       />
       <button type="submit" className="bg-primary text-white py-2 rounded hover:bg-primary/90">
