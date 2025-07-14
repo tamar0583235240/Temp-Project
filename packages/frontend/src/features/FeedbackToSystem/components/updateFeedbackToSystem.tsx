@@ -64,14 +64,14 @@ export const UpdateFeedbackToSystem = ({
             <div className="space-y-2">
                 <label className="block text-sm font-medium text-text-main">{label}</label>
                 <div className="flex items-center space-x-1 rtl:space-x-reverse">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                        <FaStar
-                            key={star}
-                            className={`cursor-pointer text-xl transition-colors ${
-                                star <= rating ? "text-yellow-500" : "text-gray-300"
-                            }`}
-                            onClick={() => handleStarChange(field, star)}
-                        />
+                    {Array.from({ length: 5 }, (_, index) => (
+                        <span
+                            key={index}
+                            className="cursor-pointer text-yellow-500 text-2xl transition-colors"
+                            onClick={() => handleStarChange(field, index + 1)}
+                        >
+                            {index < rating ? '★' : '☆'}
+                        </span>
                     ))}
                     <span className="mr-2 text-sm text-text-secondary">({rating}/5)</span>
                 </div>

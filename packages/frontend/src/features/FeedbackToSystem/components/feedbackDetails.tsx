@@ -52,8 +52,10 @@ export const FeedbackDetails = ({ feedback, onClose }: { feedback: FeedbackToSys
         <div className="space-y-1">
             <label className="text-sm font-medium text-text-main">{label}</label>
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar key={star} className={`text-xl ${star <= value ? "text-yellow-500" : "text-gray-300"}`} />
+                {Array.from({ length: 5 }, (_, index) => (
+                    <span key={index} className="text-yellow-500 text-2xl">
+                        {index < value ? '★' : '☆'}
+                    </span>
                 ))}
                 <span className="text-sm text-text-secondary">({value}/5)</span>
             </div>
