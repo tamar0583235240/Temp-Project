@@ -1,4 +1,5 @@
-import { Column, Entity, Index } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Users } from "./Users";
 
 @Index("resources_pkey", ["id"], { unique: true })
 @Entity("resources", { schema: "public" })
@@ -23,5 +24,8 @@ export class Resources {
     default: () => "now()",
   })
   createdAt: Date;
-  user: any;
+
+  @ManyToOne(() => Users, (users) => users.resources)
+  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
+  user: Users;
 }
