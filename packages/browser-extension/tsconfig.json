@@ -5,6 +5,8 @@
     { "path": "./tsconfig.node.json" }
   ],
    "compilerOptions": {
-    "types": ["react", "chrome"]
+    "types": ["react", "chrome"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

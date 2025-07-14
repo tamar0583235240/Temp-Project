@@ -1,17 +1,17 @@
-import { Request, Response } from 'express';
-import { Users } from '../interfaces/entities/Users';
-import userRepository from '../reposioty/userRepository';
-import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcrypt';
-import { createProfile } from '../reposioty/profileRepository';
-import { generateUniqueSlug } from '../utils/generateSlug';
+import { Request, Response } from "express";
+import { Users } from "../interfaces/entities/Users";
+import userRepository from "../reposioty/userRepository";
+import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
+import { createProfile } from "../reposioty/profileRepository";
+import { generateUniqueSlug } from "../utils/generateSlug";
 
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await userRepository.getAllUsers();
   if (!users || users.length === 0) {
-    return res.status(404).json({ message: 'No users found' });
+    return res.status(404).json({ message: "No users found" });
   }
   res.json(users);
 };
@@ -19,12 +19,12 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const getMe = async (req: Request, res: Response) => {
   const userId = (req as any).user?.id;
   if (!userId) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const user = await userRepository.getUserById(userId);
   if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: "User not found" });
   }
 
   res.json({ user });
@@ -34,7 +34,7 @@ export const getUserById = async (req: Request, res: Response) => {
   const userId = req.params.id;
   const user = await userRepository.getUserById(userId);
   if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: "User not found" });
   }
   res.json(user);
 };
@@ -42,13 +42,15 @@ export const getUserById = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password, role } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find((user: Users) => user.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (user: Users) => user.email === email
+  );
   if (existing) {
-    return res.status(409).json({ message: 'אימייל כבר קיים' });
+    return res.status(409).json({ message: "אימייל כבר קיים" });
   }
 
   if (!password) {
-    return res.status(400).json({ message: 'Password is required' });
+    return res.status(400).json({ message: "Password is required" });
   }
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
@@ -61,7 +63,7 @@ export const createUser = async (req: Request, res: Response) => {
     email,
     phone,
     password: hashedPassword,
-    role: role || 'student',
+    role: role || "student",
     createdAt: new Date(),
     isActive: true,
     answers: [],
@@ -78,7 +80,8 @@ export const createUser = async (req: Request, res: Response) => {
     workExperiences: [],
   };
 
-    const createdUser = await userRepository.createUser(newUser);
+  const createdUser = await userRepository.createUser(newUser);
+  try {
     await createProfile(createdUser.id, {
       image_url: null,
       location: "",
@@ -87,7 +90,11 @@ export const createUser = async (req: Request, res: Response) => {
       preferred_job_type: "Any",
       is_public: false,
     });
-    res.status(201).json(createdUser);
+  } catch (err) {
+    console.error("Create profile failed:", err);
+    return res.status(500).json({ message: "Failed to create profile" });
+  }
+  res.status(201).json(createdUser);
 };
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -99,13 +106,19 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 
   if (userData.first_name || userData.last_name) {
-    const slug = await generateUniqueSlug(userData.first_name || '', userData.last_name || '');
+    const slug = await generateUniqueSlug(
+      userData.first_name || "",
+      userData.last_name || ""
+    );
     userData.slug = slug;
   }
 
-  const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
+  const updatedUser: Users | null = await userRepository.updateUser(
+    userId,
+    userData
+  );
   if (!updatedUser) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: "User not found" });
   }
 
   res.json(updatedUser);
