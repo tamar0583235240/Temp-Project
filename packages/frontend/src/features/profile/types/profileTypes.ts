@@ -5,6 +5,7 @@ export type ExternalLink = string | { url: string; label?: string };
 
 export interface Profile {
   id: string;
+  full_name: string;
   image_url?: string;
   location?: string;
   external_links?: ExternalLink[]; 
@@ -13,9 +14,4 @@ export interface Profile {
   created_at: string;
   updated_at: string;
   is_public?: boolean;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  bio?: string;
 }

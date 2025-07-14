@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
-import { AiFillDelete, AiOutlineClose, AiOutlineSave } from "react-icons/ai";
+import axios from "axios";
+import { AiFillDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
-import { FaPen, FaSave, FaTimes, FaUserCircle } from "react-icons/fa";
+import { FaPen } from "react-icons/fa";
 import { useMessageModal } from "../shared/ui/MessageModalContext";
 import { useNavigate } from "react-router-dom";
 import { ToggleSwitch } from "../shared/ui/ToggleSwitch";
-import { Button } from "../shared/ui/button";
-import { Card } from "../shared/ui/card";
-import {
-  useGetProfileByIdQuery,
-  useUpdateProfileMutation,
-} from "../features/profile/services/profileApi";
-import { Profile } from "../features/profile/types/profileTypes";
 
 // Type for external links
 interface ExternalLink {
@@ -29,29 +23,16 @@ const EditProfilePage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [profile, setProfile] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
     status: "",
-    location: "",
     preferred_job_type: "",
     external_links: [] as { url: string; label: string }[],
     bio: "",
     is_public: false,
   });
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [linkErrors, setLinkErrors] = useState<string[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
-  const {
-    data: profileData,
-    isLoading,
-    error: fetchProfileError,
-    refetch,
-  } = useGetProfileByIdQuery(user?.id || "");
 
   const API_BASE_URL = "http://localhost:5000";
 
@@ -71,26 +52,28 @@ const EditProfilePage = () => {
 
   // Fetch profile data on component mount
   useEffect(() => {
-    if (profileData) {
-      setFormData({
-        first_name: profileData.first_name || "",
-        last_name: profileData.last_name || "",
-        email: profileData.email || "",
-        phone: profileData.phone || "",
-        location: profileData.location || "",
-        status: profileData.status || "Available",
-        preferred_job_type: profileData.preferred_job_type || "Any",
-        external_links: Array.isArray(profileData.external_links)
-          ? profileData.external_links
-          : [],
-        bio: profileData.bio || "",
-        is_public: profileData.is_public ?? false,
-      });
-    }
-  }, [profileData]);
-
-  const [updateProfile, { isLoading: isUpdating, error: updateError }] =
-    useUpdateProfileMutation();
+    if (!user) return;
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/profiles/user/${user.id}`);
+        setProfile(res.data);
+        setFormData({
+          status: res.data.status || "",
+          preferred_job_type: res.data.preferred_job_type || "",
+          external_links: Array.isArray(res.data.external_links)
+            ? res.data.external_links
+            : [],
+          bio: res.data.bio || "",
+          is_public: res.data.is_public ?? false,
+        });
+      } catch (err) {
+        setError("שגיאה בטעינת הפרופיל.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, [user]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -98,15 +81,10 @@ const EditProfilePage = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev: Profile) => ({
+    setFormData((prev: any) => ({
       ...prev,
       [name]: value,
     }));
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setSelectedImage(file);
   };
 
   // Handle changes for external links
@@ -188,9 +166,17 @@ const EditProfilePage = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!user) {
       setError("אין משתמש מחובר.");
+      return;
+    }
+
+    setSaving(true);
+    setError("");
+
+    if (linkErrors.some((err) => err)) {
+      setError("אנא תקני את הקישורים הלא תקינים לפני שמירה.");
+      setSaving(false);
       return;
     }
 
@@ -199,40 +185,19 @@ const EditProfilePage = () => {
       return;
     }
 
-    const fd = new FormData();
-    fd.append("first_name", formData.first_name);
-    fd.append("last_name", formData.last_name);
-    fd.append("email", formData.email);
-    fd.append("phone", formData.phone);
-    fd.append("status", formData.status);
-    fd.append("location", formData.location);
-    fd.append("preferred_job_type", formData.preferred_job_type);
-    fd.append("bio", formData.bio);
-    fd.append("is_public", String(formData.is_public));
-    fd.append("external_links", JSON.stringify(formData.external_links));
-
-    if (selectedImage) {
-      fd.append("image", selectedImage); // 👈 VERY IMPORTANT
-    }
-
     try {
-      await updateProfile({ id: user.id, formData: fd }).unwrap();
-      await refetch();
-
+      await axios.put(`${API_BASE_URL}/profiles/user/${user.id}`, formData);
       showMessage("", "הפרופיל עודכן בהצלחה");
       setTimeout(() => {
         hideMessage();
-        navigate("/my-profile", { replace: true });
       }, 2000);
+      navigate("/my-profile");
     } catch (err) {
+      console.error("Update error:", err);
       setError("שגיאה בעדכון הפרופיל.");
     } finally {
       setSaving(false);
     }
-  };
-
-  const onCancelEdit = () => {
-    navigate("/my-profile");
   };
 
   const labelUrlMatchers: Record<string, (url: string) => boolean> = {
@@ -247,17 +212,12 @@ const EditProfilePage = () => {
     Notion: (url) => url.includes("notion.so"),
     "Google Drive / PDF": (url) =>
       url.includes("drive.google.com") || url.endsWith(".pdf"),
-    Other: () => true,
+    Other: () => true, // Other - אין בדיקה מיוחדת
   };
 
   // Loading states
-  if (isLoading) return <p className="text-center mt-8">טוען פרופיל...</p>;
+  if (loading) return <p className="text-center mt-8">טוען פרופיל...</p>;
   if (!user) return <p className="text-center mt-8">אין משתמש מחובר</p>;
-  if (fetchProfileError) {
-    return (
-      <p className="text-center mt-8 text-red-500">שגיאה בטעינת הפרופיל</p>
-    );
-  }
   if (error && !error.includes("קישורים")) {
     return <p className="text-center mt-8 text-red-500">{error}</p>;
   }
@@ -269,92 +229,20 @@ const EditProfilePage = () => {
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-xl">
+      <div>
+        <ToggleSwitch
+          checked={formData.is_public}
+          onToggle={() =>
+            setFormData((prev: any) => ({
+              ...prev,
+              is_public: !prev.is_public,
+            }))
+          }
+          label="האם הפרופיל ציבורי?"
+        />
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="">
-          <ToggleSwitch
-            checked={formData.is_public}
-            onToggle={() =>
-              setFormData((prev: any) => ({
-                ...prev,
-                is_public: !prev.is_public,
-              }))
-            }
-          />
-          {!formData.is_public && (
-            <span className="text-xs text-text-secondary">
-              (לא יוצג בפרופיל הציבורי)
-            </span>
-          )}
-        </div>
-
-        <div className="flex justify-center mb-4">
-          {selectedImage ? (
-            <img
-              src={URL.createObjectURL(selectedImage)}
-              alt="Selected"
-              className="w-24 h-24 rounded-full object-cover border"
-            />
-          ) : profileData?.image_url ? (
-            <img
-              src={profileData.image_url}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border"
-            />
-          ) : (
-            <FaUserCircle className="w-24 h-24 text-gray-400" />
-          )}
-        </div>
-
-        <input
-          type="file"
-          name="profile_image"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full border rounded px-3 py-2 mb-2"
-        />
-
-        <input
-          type="text"
-          name="first_name"
-          placeholder="הקלד שם פרטי"
-          value={formData.first_name}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2 mb-2"
-        />
-
-        <input
-          type="text"
-          name="last_name"
-          placeholder="הקלד שם משפחה"
-          value={formData.last_name}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2 mb-2"
-        />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="הקלד מייל"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2 mb-2"
-        />
-        <input
-          type="string"
-          name="phone"
-          placeholder="הקלד טלפון"
-          value={formData.phone}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2 mb-2"
-        />
-        <input
-          type="string"
-          name="location"
-          placeholder="הקלד עיר"
-          value={formData.location}
-          onChange={handleChange}
-          className="w-full border rounded px-3 py-2 mb-2"
-        />
         {/* סטטוס */}
         <div>
           <label className="block mb-1 font-medium">סטטוס</label>
@@ -370,6 +258,7 @@ const EditProfilePage = () => {
             <option value="working">עובדת כרגע</option>
           </select>
         </div>
+
         {/* סוג משרה מועדף */}
         <div>
           <label className="block mb-1 font-medium">סוג משרה מועדף</label>
@@ -386,84 +275,73 @@ const EditProfilePage = () => {
             <option value="Any">כל האפשרויות</option>
           </select>
         </div>
+
         {/* קישורים חיצוניים */}
         <div>
           <label className="block mb-1 font-medium">קישורים חיצוניים</label>
-
           {formData.external_links.map(
             (link: { url: string; label: string }, index: number) => (
-              <div
-                key={index}
-                className="grid grid-cols-12 gap-4 items-start p-4"
-              >
-                <div className="col-span-1 order-last flex justify-end pt-2">
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveLink(index)}
-                    className="text-red-500 text-lg"
-                    title="מחק קישור"
-                  >
-                    <AiFillDelete />
-                  </button>
-                </div>
+              <div key={index} className="mb-4">
+                {/* שדה כתובת URL כפי שהיה */}
+                <input
+                  type="text"
+                  placeholder={`URL ${index + 1}`}
+                  value={link.url || ""}
+                  onChange={(e) =>
+                    handleLinkChange(index, "url", e.target.value)
+                  }
+                  className="w-full border rounded px-3 py-2 mb-2"
+                />
+                {linkErrors[index] && (
+                  <p className="text-sm text-red-500 mb-1">
+                    {linkErrors[index]}
+                  </p>
+                )}
 
-                <div className="col-span-5 flex gap-2">
-                  <select
-                    value={
-                      labelOptions.includes(link.label) ? link.label : "Other"
-                    }
+                {/* select תווית */}
+                <select
+                  value={
+                    labelOptions.includes(link.label) ? link.label : "Other"
+                  }
+                  onChange={(e) =>
+                    handleLinkChange(index, "label", e.target.value)
+                  }
+                  className="w-full border rounded px-3 py-2 mb-2"
+                >
+                  <option value="" disabled hidden>
+                    תווית הקישור
+                  </option>
+                  {labelOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+
+                {/* אם נבחר "Other" - אפשר להקליד תווית חופשית */}
+                {(!labelOptions.includes(link.label) ||
+                  link.label === "Other") && (
+                  <input
+                    type="text"
+                    placeholder="הקלד תווית"
+                    value={labelOptions.includes(link.label) ? "" : link.label}
                     onChange={(e) =>
                       handleLinkChange(index, "label", e.target.value)
                     }
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    <option value="" disabled hidden>
-                      תווית הקישור
-                    </option>
-                    {labelOptions.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-
-                  {(!labelOptions.includes(link.label) ||
-                    link.label === "Other") && (
-                    <input
-                      type="text"
-                      placeholder="הקלד תווית"
-                      value={
-                        labelOptions.includes(link.label) ? "" : link.label
-                      }
-                      onChange={(e) =>
-                        handleLinkChange(index, "label", e.target.value)
-                      }
-                      className="w-full border rounded px-3 py-2"
-                    />
-                  )}
-                </div>
-
-                {/* URL field */}
-                <div className="col-span-6">
-                  <input
-                    type="text"
-                    placeholder={`URL ${index + 1}`}
-                    value={link.url || ""}
-                    onChange={(e) =>
-                      handleLinkChange(index, "url", e.target.value)
-                    }
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border rounded px-3 py-2 mb-2"
                   />
-                  {linkErrors[index] && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {linkErrors[index]}
-                    </p>
-                  )}
-                </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => handleRemoveLink(index)}
+                  className="text-red-500 text-sm"
+                >
+                  <AiFillDelete />
+                </button>
               </div>
             )
           )}
-
           <button
             type="button"
             onClick={handleAddLink}
@@ -473,26 +351,17 @@ const EditProfilePage = () => {
             הוסף קישור חדש
           </button>
         </div>
+
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
         {/* כפתור שמירה */}
-        <div className="flex gap-2 justify-start ltr">
-          <Button
-            size="sm"
-            variant="primary-dark"
-            type="submit"
-            disabled={saving}
-          >
-            <FaSave /> שמור
-          </Button>
-          <Button
-            size="sm"
-            type="button"
-            variant="outline"
-            onClick={onCancelEdit}
-          >
-            <FaTimes /> בטל
-          </Button>
-        </div>
+        <button
+          type="submit"
+          disabled={saving}
+          className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark transition"
+        >
+          {saving ? "שומר..." : "שמור שינויים"}
+        </button>
       </form>
     </div>
   );
