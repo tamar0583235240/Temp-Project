@@ -10,6 +10,7 @@ import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
 import { SharedRecordings } from "./SharedRecordings";
+import { Feedback } from "./Feedback"; // ודא שזה קיים אצלך
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
@@ -20,17 +21,21 @@ export class Answers {
   @Column("text", { name: "file_url" })
   fileUrl: string;
 
-  @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
-
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
   })
   submittedAt: Date;
 
-  // @Column("text", { name: "answer_file_name", nullable: true })
-  // answerFileName: string | null;
+  @Column("character varying", {
+    name: "answer_file_name",
+    nullable: true,
+    length: 255,
+  })
+  answerFileName: string | null;
+
+  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  amountFeedbacks: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
@@ -45,9 +50,9 @@ export class Answers {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.answer
-  )
+  @OneToMany(() => Feedback, (feedback) => feedback.answer)
+  feedbacks: Feedback[];
+
+  @OneToMany(() => SharedRecordings, (sharedRecordings) => sharedRecordings.answer)
   sharedRecordings: SharedRecordings[];
 }

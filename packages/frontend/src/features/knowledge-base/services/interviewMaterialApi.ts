@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const interviewMaterialApi = createApi({
   reducerPath: 'interviewMaterialApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/interview-materials' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/api/interview-material' }),
   tagTypes: ['InterviewMaterialSub'],
   endpoints: (builder) => ({
     getInterviewMaterialSubs: builder.query({

@@ -3,7 +3,9 @@ import {
   useGetInterviewMaterialsQuery,
   useDeleteInterviewMaterialMutation,
 } from "../../../shared/api/interviewMaterialsApi";
+
 import { InterviewMaterial } from "../types/InterviewMaterials";
+
 import MessageModal from "../../../shared/ui/messageModal";
 import { InterviewMaterialsItem } from "./interviewMaterialsItem";
 import { EditInterviewMaterialsForm } from "./EditInterviewMaterialsForm";
@@ -100,6 +102,7 @@ const InterviewMaterialsList = () => {
           onClose={handleCancelDelete}
         />
       )}
+
       {editingItem && (
         <MessageModal
           title="עריכת משאב"
@@ -115,7 +118,6 @@ const InterviewMaterialsList = () => {
               onSuccess={() => setEditingItem(null)}
               onCancel={() => setEditingItem(null)}
             />
-
           }
           onClose={() => setEditingItem(null)}
         />

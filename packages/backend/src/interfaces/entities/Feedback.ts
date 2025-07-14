@@ -1,5 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Users } from "./Users";
+import { Answers } from "./Answers";
 import { SharedRecordings } from "./SharedRecordings";
 
 @Index("feedback_pkey", ["id"], { unique: true })
@@ -14,18 +15,15 @@ export class Feedback {
   @Column("integer", { name: "rating", nullable: true })
   rating: number | null;
 
-  @Column("text", { name: "answercode", nullable: true })
-  answercode: string | null;
-
   @Column("timestamp without time zone", {
     name: "created_at",
     default: () => "now()",
   })
   createdAt: Date;
 
-  // @ManyToOne(() => Answers, (answers) => answers.feedbacks)
-  // @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
-  // answerCode: Answers;
+  @ManyToOne(() => Answers, (answers) => answers.feedbacks)
+  @JoinColumn([{ name: "answer_id", referencedColumnName: "id" }])
+  answer: Answers;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
