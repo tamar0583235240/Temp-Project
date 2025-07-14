@@ -78,8 +78,8 @@ const EditProfilePage = () => {
         email: profileData.email || "",
         phone: profileData.phone || "",
         location: profileData.location || "",
-        status: profileData.status || "",
-        preferred_job_type: profileData.preferred_job_type || "",
+        status: profileData.status || "Available",
+        preferred_job_type: profileData.preferred_job_type || "Any",
         external_links: Array.isArray(profileData.external_links)
           ? profileData.external_links
           : [],

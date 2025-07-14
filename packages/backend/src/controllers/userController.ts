@@ -3,6 +3,7 @@ import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import { createProfile } from '../reposioty/profileRepository';
 
 const SALT_ROUNDS = 10;
 
@@ -71,6 +72,14 @@ export const createUser = async (req: Request, res: Response) => {
   };
 
     const createdUser = await userRepository.createUser(newUser);
+    await createProfile(createdUser.id, {
+      image_url: null,
+      location: "",
+      external_links: [],
+      status: "Available",
+      preferred_job_type: "Any",
+      is_public: false,
+    });
     res.status(201).json(createdUser);
 };
 

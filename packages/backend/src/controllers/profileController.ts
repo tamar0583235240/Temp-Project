@@ -33,18 +33,10 @@ export const getProfileByUserIdHandler = async (
   }
 };
 
-export const updateProfileByUserIdHandler = async (
-  req: Request,
-  res: Response
-) => {
+
+export const updateProfileByUserIdHandler = async (req: Request, res: Response) => {
   const userId = req.params.userId;
-  const data = {
-    ...req.body,
-    external_links: req.body.external_links
-      ? JSON.parse(req.body.external_links)
-      : [],
-    is_public: req.body.is_public === "true",
-  };
+  const data = req.body;
 
   try {
     // Fetch the existing profile
@@ -57,7 +49,7 @@ export const updateProfileByUserIdHandler = async (
     // Handle the image upload if there's a file
     let imageUrl = profile.image_url;
     if (req.file) {
-      const folder = "profiles";
+      const folder = 'profiles';
       const result = await uploadFileToCloudinary(req.file, folder);
       imageUrl = result.secure_url;
     }
