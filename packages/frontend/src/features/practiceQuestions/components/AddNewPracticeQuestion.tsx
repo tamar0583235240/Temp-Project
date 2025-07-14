@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { useAddPracticeQuestionMutation } from '../services/practiceQuestionsApi';
 import { CreatePracticeQuestionRequest } from '../types/practiceQuestionTypes';
+import { useSelector } from 'react-redux';
+import { RootState } from "../../../shared/store/store";
+
+
 
 const AddNewPracticeQuestion = () => {
   const [addPracticeQuestion, { isLoading, error }] = useAddPracticeQuestionMutation();
+  const user = useSelector((state: RootState) => state.auth.user);
+
 
   const [formData, setFormData] = useState<CreatePracticeQuestionRequest>({
     content: '',
     difficulty: 'easy',
     type: 'free_text',
-    created_by: '4b0f6c80-1e2a-4c8a-a7f5-33b845ec95a0',
+    created_by: user?.id || '',
     topic: '',
     hints: [{ content: '', generated_by_ai: false }],
   });

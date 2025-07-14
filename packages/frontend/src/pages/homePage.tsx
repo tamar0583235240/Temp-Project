@@ -27,8 +27,8 @@ const HomePage = () => {
         משותף
       </Button>
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/practice-questions")}>
-        שאלות תרגול
-      </Button>
+ניהול שאלות תרגולל      
+</Button>
 
 
       {isManager && (
