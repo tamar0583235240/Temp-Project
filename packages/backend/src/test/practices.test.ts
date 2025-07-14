@@ -63,10 +63,7 @@ describe('practiceController', () => {
   it('should delete a practice', async () => {
     const practiceId = '1';
     const mockResponseMessage = 'Practice deleted successfully';
-
-    // מוקה של הפונקציה deletePracticeById
     (practiceRepository.deletePracticeById as jest.Mock).mockResolvedValue(mockResponseMessage);
-
     const response = await request(app).delete(`/practices/${practiceId}`);
     expect(response.status).toBe(200);
     expect(response.text).toBe(mockResponseMessage);

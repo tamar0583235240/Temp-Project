@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { createRoot } from 'react-dom/client';
+import { RiAddLine } from 'react-icons/ri';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { IoSearchOutline } from 'react-icons/io5';
 
 import SwalTipForm from './SwalTipForm';
 import SwalPracticeForm from './SwalPracticeForm';
@@ -16,10 +19,6 @@ import {
   useUpdatePracticeMutation,
   useDeletePracticeByIdMutation,
 } from '../services/TipsAndPracticesAdminApi';
-
-import { RiAddLine } from 'react-icons/ri';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
-import { IoSearchOutline } from 'react-icons/io5';
 
 const MySwal = withReactContent(Swal);
 
@@ -83,20 +82,20 @@ const AdminTipsAndPractices: React.FC = () => {
     }, SwalTipForm);
   };
 
-const handleDeleteTip = async (id: string, content: string) => {
-  const result = await Swal.fire({
-    title: 'מחיקת טיפ',
-    text: `האם אתה בטוח שברצונך למחוק את הטיפ "${content}"?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'מחק',
-    cancelButtonText: 'בטל',
-  });
-  if (result.isConfirmed) {
-    await deleteTip(id).unwrap();
-    Swal.fire('נמחק', `הטיפ "${content}" נמחק בהצלחה`, 'success');
-  }
-};
+  const handleDeleteTip = async (id: string) => {
+    const result = await Swal.fire({
+      title: 'מחיקת טיפ',
+      text: 'האם אתה בטוח שברצונך למחוק את הטיפ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'מחק',
+      cancelButtonText: 'בטל',
+    });
+    if (result.isConfirmed) {
+      await deleteTip(id).unwrap();
+      Swal.fire('נמחק', 'הטיפ נמחק בהצלחה', 'success');
+    }
+  };
 
   const handleAddPractice = () => {
     openSwalForm('הוספת שאלה לתרגול', '', async (content) => {
@@ -110,10 +109,10 @@ const handleDeleteTip = async (id: string, content: string) => {
     }, SwalPracticeForm);
   };
 
-  const handleDeletePractice = async (id: string, content: string) => {
+  const handleDeletePractice = async (id: string) => {
     const result = await Swal.fire({
       title: 'מחיקת שאלה לתרגול',
-      text: `האם אתה בטוח שברצונך למחוק את השאלה "${content}"?`,
+      text: 'האם אתה בטוח שברצונך למחוק את השאלה?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'מחק',
@@ -121,7 +120,7 @@ const handleDeleteTip = async (id: string, content: string) => {
     });
     if (result.isConfirmed) {
       await deletePractice(id).unwrap();
-      Swal.fire('נמחק', `השאלה "${content}" נמחקה בהצלחה`, 'success');
+      Swal.fire('נמחק', 'השאלה נמחקה בהצלחה', 'success');
     }
   };
 
@@ -131,48 +130,46 @@ const handleDeleteTip = async (id: string, content: string) => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen font-sans" dir="rtl">
       <h1 className="text-center text-3xl font-bold mb-6">ניהול טיפים ושאלות לתרגול</h1>
-      <div className="flex gap-6">
-        <section className="w-1/2 bg-white rounded shadow p-4">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <section className="w-full lg:w-1/2 bg-white rounded-2xl shadow p-4">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">טיפים</h2>
+            <h2 className="text-2xl font-semibold">שאלות לתרגול</h2>
             <button
-              className="btn btn-primary flex items-center gap-2"
-              onClick={handleAddTip}
+              className="bg-primary text-white px-4 py-2 rounded flex items-center gap-2"
+              onClick={handleAddPractice}
             >
-              <RiAddLine /> הוסף טיפ
+              <RiAddLine /> הוסף שאלה
             </button>
           </div>
-          <div className="flex mb-4 items-center gap-2 border border-gray-300 rounded px-3 py-2">
-            <IoSearchOutline />
+          <div className="flex mb-4 items-center gap-2 border border-[#10b981] rounded-xl px-3 py-2">
+            <div className="bg-[#10b981] text-white p-2 rounded-md">
+              <IoSearchOutline />
+            </div>
             <input
               type="text"
-              placeholder="חיפוש טיפים..."
-              className="flex-grow outline-none"
-              value={searchTips}
-              onChange={(e) => setSearchTips(e.target.value)}
+              placeholder="חיפוש שאלות..."
+              className="flex-grow outline-none bg-transparent"
+              value={searchPractices}
+              onChange={(e) => setSearchPractices(e.target.value)}
             />
           </div>
           <ul>
-            {filteredTips.length === 0 && <li>לא נמצאו טיפים לפי החיפוש שלך.</li>}
-            {filteredTips.map((tip) => (
-              <li key={tip.id} className="mb-3 p-3 bg-gray-50 rounded shadow-sm flex justify-between items-center">
-              💡  <span>{tip.content}</span>
-                <div className="flex gap-2">
+            {filteredPractices.length === 0 && <li>לא נמצאו שאלות.</li>}
+            {filteredPractices.map((practice) => (
+              <li key={practice.id} className="mb-3 p-4 bg-green-50 rounded-2xl shadow flex flex-col">
+                <span className="mb-2">📌 {practice.content}</span>
+                <div className="flex gap-2 self-end mt-2">
                   <button
-                    className="btn btn-edit text-blue-600 hover:text-blue-800"
-                    onClick={() => handleEditTip(tip)}
-                    aria-label="ערוך טיפ"
-                    title="ערוך"
+                    className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700"
+                    onClick={() => handleEditPractice(practice)}
                   >
-                    <FiEdit size={18} />
+                    <FiEdit />
                   </button>
                   <button
-                    className="btn btn-delete text-red-600 hover:text-red-800"
-                    onClick={() => handleDeleteTip(tip.id, tip.content)}
-                    aria-label="מחק טיפ"
-                    title="מחק"
+                    className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700"
+                    onClick={() => handleDeletePractice(practice.id)}
                   >
-                    <FiTrash2 size={18} />
+                    <FiTrash2 />
                   </button>
                 </div>
               </li>
@@ -180,47 +177,46 @@ const handleDeleteTip = async (id: string, content: string) => {
           </ul>
         </section>
 
-        <section className="w-1/2 bg-white rounded shadow p-4">
+        <section className="w-full lg:w-1/2 bg-white rounded-2xl shadow p-4">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">שאלות לתרגול</h2>
+            <h2 className="text-2xl font-semibold">טיפים</h2>
             <button
-              className="btn btn-primary flex items-center gap-2"
-              onClick={handleAddPractice}
+              className="bg-primary text-white px-4 py-2 rounded flex items-center gap-2"
+              onClick={handleAddTip}
             >
-              <RiAddLine /> הוסף שאלה לתרגול
+              <RiAddLine /> הוסף טיפ
             </button>
           </div>
-          <div className="flex mb-4 items-center gap-2 border border-gray-300 rounded px-3 py-2">
-            <IoSearchOutline />
+          <div className="flex mb-4 items-center gap-2 border border-[#10b981] rounded-xl px-3 py-2">
+            <div className="bg-[#10b981] text-white p-2 rounded-md">
+              <IoSearchOutline />
+            </div>
             <input
               type="text"
-              placeholder="חיפוש שאלות לתרגול..."
-              className="flex-grow outline-none"
-              value={searchPractices}
-              onChange={(e) => setSearchPractices(e.target.value)}
+              placeholder="חיפוש טיפים..."
+              className="flex-grow outline-none bg-transparent"
+              value={searchTips}
+              onChange={(e) => setSearchTips(e.target.value)}
             />
           </div>
+
           <ul>
-            {filteredPractices.length === 0 && <li>לא נמצאו שאלות לפי החיפוש שלך.</li>}
-            {filteredPractices.map((practice) => (
-              <li key={practice.id} className="mb-3 p-3 bg-gray-50 rounded shadow-sm flex justify-between items-center">
-              📌  <span>{practice.content}</span>
-                <div className="flex gap-2">
+            {filteredTips.length === 0 && <li>לא נמצאו טיפים.</li>}
+            {filteredTips.map((tip) => (
+              <li key={tip.id} className="mb-3 p-4 bg-pink-50 rounded-2xl shadow flex flex-col">
+                <span className="mb-2">💡 {tip.content}</span>
+                <div className="flex gap-2 self-end mt-2">
                   <button
-                    className="btn btn-edit text-blue-600 hover:text-blue-800"
-                    onClick={() => handleEditPractice(practice)}
-                    aria-label="ערוך שאלה"
-                    title="ערוך"
+                    className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700"
+                    onClick={() => handleEditTip(tip)}
                   >
-                    <FiEdit size={18} />
+                    <FiEdit />
                   </button>
                   <button
-                    className="btn btn-delete text-red-600 hover:text-red-800"
-                    onClick={() => handleDeletePractice(practice.id, practice.content)}
-                    aria-label="מחק שאלה"
-                    title="מחק"
+                    className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700"
+                    onClick={() => handleDeleteTip(tip.id)}
                   >
-                    <FiTrash2 size={18} />
+                    <FiTrash2 />
                   </button>
                 </div>
               </li>
