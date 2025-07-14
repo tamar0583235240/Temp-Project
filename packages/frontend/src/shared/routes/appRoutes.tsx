@@ -130,6 +130,8 @@ import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import Dashboard from "../../pages/dashboard"
+import PracticeQuestionsPage from '../../pages/PracticeQuestionsPage';
+
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -153,14 +155,14 @@ export default function AppRoutes() {
             }
           />
 
-<Route
-  path="/dashboard"
-  element={
-    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-      <Dashboard />
-    </RoleProtectedRoute>
-  }
-/>
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <Dashboard />
+              </RoleProtectedRoute>
+            }
+          />
 
 
           <Route
@@ -233,6 +235,15 @@ export default function AppRoutes() {
             }
           />
         </Route>
+
+        <Route
+          path="/practice-questions"
+          element={
+            <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+              <PracticeQuestionsPage />
+            </RoleProtectedRoute>
+          }
+        />
 
         <Route path="/not-authorized" element={<NotAuthorizedPage />} />
       </Routes>
