@@ -11,7 +11,10 @@ import { GridContainer } from "../../../shared/ui/GridContainer"
 import { IconWrapper } from "../../../shared/ui/IconWrapper"
 import type { interview_materials_subType } from "../../../features/interview-materials-hub/types/interview_materials_subType"
 import { useUpdateDownloadsCountMutation } from "../../../features/interview-materials-hub/store/interviewMaterialSubApi"
-import { fileTypeToThumbnail, getFileType } from "../../../shared/utils/FileType"
+import getFileType, { fileTypeToThumbnail } from "../../../shared/utils/FileType"
+
+
+
 type Props = {
   files: interview_materials_subType[]
   isLoading: boolean
@@ -135,11 +138,8 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
                       )} */}
                       <div className="w-12 h-12 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
                         <img
-                          src={
-                            file.thumbnail ||
-                            fileTypeToThumbnail[getFileType(file.file_url || '')] ||
-                            fileTypeToThumbnail['other']
-                          }
+                            src={file.thumbnail || fileTypeToThumbnail['other']}
+
                           alt={file.title}
                           className="w-full h-full object-contain"
                           onError={(e) => {
@@ -173,8 +173,8 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
                         fullWidth
                         icon={<Download className="h-4 w-4" />}
                         iconPosition="right"
-                        onClick={() => handleDownload(file.thumbnail, file.id)}
-                        disabled={!file.thumbnail}
+                        onClick={() => handleDownload(file.file_url, file.id)}
+                        disabled={!file.file_url}
                       >
                         הורד
                       </Button>
@@ -184,8 +184,8 @@ const DownloadCard: React.FC<Props> = ({ files, isLoading, isError, hasSearched,
                         fullWidth
                         icon={<Eye className="h-4 w-4 bg-transparent" />}
                         iconPosition="right"
-                        onClick={() => handleView(file.thumbnail)}
-                        disabled={!file.thumbnail}
+                        onClick={() => handleView(file.file_url)}
+                        disabled={!file.file_url}
                       >
                         צפה
                       </Button>

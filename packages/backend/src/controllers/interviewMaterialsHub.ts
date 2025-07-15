@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { v2 as cloudinary } from 'cloudinary';
-import { Pool } from 'pg';
 import { pool } from '../config/dbConnection';
 import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
 import processHebrewText from '../utils/processHebrewText';
+import getFileType, { fileTypeToThumbnail } from "../../../shared/src/FileType"
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -42,16 +42,20 @@ export const addFile = async (req: Request, res: Response) => {
     const result = await uploadStream();
 
     const fileUrl = (result as any).secure_url;
+    const fileType = getFileType(fileUrl);
+        const thumbnail = fileTypeToThumbnail[fileType] || fileTypeToThumbnail['other'];
+
 const cleanedText = processHebrewText(`${req.body.title} ${req.body.description || ''}`);
 
 const query = `
-  INSERT INTO interview_materials_sub (title, thumbnail, short_description, search_text_cleaned)
-  VALUES ($1, $2, $3, $4)
+  INSERT INTO interview_materials_sub (title, file_url,thumbnail, short_description, search_text_cleaned)
+  VALUES ($1, $2, $3, $4,$5)
 `;
 
  const values = [
   req.body.title || 'File for interview',
   fileUrl,
+  thumbnail,
   req.body.description || '',
   cleanedText
 ];

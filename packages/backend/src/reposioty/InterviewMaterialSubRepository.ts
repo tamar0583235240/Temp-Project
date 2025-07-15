@@ -22,7 +22,7 @@ console.log("yess");
 
 
 let results = await pool.query(
-  `SELECT id, title, thumbnail, short_description
+  `SELECT id, title,file_url, thumbnail, short_description, downloads_count
    FROM interview_materials_sub
    WHERE title ILIKE '%' || $1 || '%'
       OR short_description ILIKE '%' || $1 || '%'
@@ -35,7 +35,7 @@ let results = await pool.query(
 
 
     results = await pool.query(
-        `SELECT id, title, thumbnail, short_description,
+        `SELECT id, title,file_url ,thumbnail, short_description, downloads_count
             ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
      FROM interview_materials_sub
      WHERE document_with_weights @@ to_tsquery('simple', $1)
