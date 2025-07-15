@@ -8,6 +8,7 @@ type CancelDisplayingReportProps = {
 };
 
 export const CancelDisplayingReport: React.FC<CancelDisplayingReportProps> = ({ idExpericence }) => {
+    console.log("delete:", idExpericence);
     const [deleteInterviewExperience, { isLoading }] = useDeleteInterviewExperiencesByIdMutation();
     const { showMessage } = useMessageModal();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
