@@ -21,3 +21,20 @@ export const deleteInterviewExperience = async (req: Request, res: Response): Pr
         res.status(500).json({ error });
     }
 }
+
+export const addInterviewExperiences = async (req: Request, res: Response):Promise<InterviewExperiences | void> => {
+  try {
+    const interviewExperiences: InterviewExperiences = req.body;
+    console.log(interviewExperiences);
+    console.log("bhjbjb");
+    
+    const result = await InterviewExperiencesRepository.addInterviewExperiences(interviewExperiences);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error('Error adding interviewExperiences:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+

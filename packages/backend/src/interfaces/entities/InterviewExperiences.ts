@@ -13,7 +13,7 @@ export class InterviewExperiences {
   id: string;
 
   @Column("character varying", { name: "company_name" })
-  companyName: string;
+  company_name: string;
 
   @Column("character varying", { name: "position" })
   position: string;
@@ -37,7 +37,7 @@ export class InterviewExperiences {
   rating: number | null;
 
   @Column("uuid", { name: "user_id", nullable: true })
-  userId: string | null;
+  user_id: string | null;
 
 
   @Column("boolean", {
@@ -52,7 +52,7 @@ export class InterviewExperiences {
     nullable: true,
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdAt: Date | null;
+  created_at: Date | null;
 
   @OneToMany(
     () => ContentReports,
