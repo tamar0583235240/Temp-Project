@@ -54,8 +54,6 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
     const getCardClasses = (count: number) => {
         if (count === 0) return "bg-green-50 border-green-200 text-green-700";
         if (count <= 5) return "bg-orange-50 border-orange-200 text-orange-700";
-        if (count === 0) return "bg-green-50 border-green-200 text-green-700";
-        if (count <= 5) return "bg-orange-50 border-orange-200 text-orange-700";
         return "bg-red-50 border-red-200 text-red-700";
     };
 
@@ -109,14 +107,11 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                         <div className="space-y-2">
                             <h3 className="text-lg font-semibold">סך כל הראיונות</h3>
                             <div className="text-3xl font-bold">{allInterview?.length || 0}</div>
-                            <div className="text-3xl font-bold">{allInterview?.length || 0}</div>
                         </div>
                     </CardSimple>
                     <CardSimple className={`${getCardClasses(contentReports?.length || 0)} border-2 text-center`}>
-                    <CardSimple className={`${getCardClasses(contentReports?.length || 0)} border-2 text-center`}>
                         <div className="space-y-2">
                             <h3 className="text-lg font-semibold">דיווחים על תוכן לא הולם</h3>
-                            <div className="text-3xl font-bold">{contentReports?.length || 0}</div>
                             <div className="text-3xl font-bold">{contentReports?.length || 0}</div>
                         </div>
                     </CardSimple>
@@ -124,7 +119,6 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
 
                 {filteredInterviews.length > 0 ? (
                     <div className="max-w-7xl mx-auto">
-                        <h2 className="text-xl font-semibold text-[--color-text] mb-6 text-center">רשימת חוויות מראיונות</h2>
                         <h2 className="text-xl font-semibold text-[--color-text] mb-6 text-center">רשימת חוויות מראיונות</h2>
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                             {filteredInterviews.map((interview) => (
@@ -207,7 +201,6 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                     </div>
                 ) : (
                     <div className="text-center py-12 text-[--color-secondary-text]">לא נמצאו ראיונות להצגה</div>
-                    <div className="text-center py-12 text-[--color-secondary-text]">לא נמצאו ראיונות להצגה</div>
                 )}
             </div>
 
@@ -220,7 +213,6 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                             <button
                                 onClick={closeDescriptionModal}
                                 className="text-gray-400 hover:text-gray-600 transition-colors"
-                                className="text-gray-400 hover:text-gray-600 transition-colors"
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -229,45 +221,10 @@ export const ManagerInterview: React.FC<AdminQuestionsProps> = ({ allowedRoles, 
                         </div>
                         <div className="p-6 overflow-y-auto max-h-[60vh]">
                             <p className="text-[--color-text] whitespace-pre-wrap">{selectedDescription}</p>
-                            <p className="text-[--color-text] whitespace-pre-wrap">{selectedDescription}</p>
                         </div>
                         <div className="flex justify-end p-6 border-t border-gray-200">
                             <button
                                 onClick={closeDescriptionModal}
-                                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                            >
-                                סגור
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {selectedCandidate && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" dir="rtl">
-                    <div className="bg-white rounded-lg shadow-xl max-w-lg w-full">
-                        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                            <h3 className="text-lg font-semibold text-[--color-text]">פרטי הנבחן</h3>
-                            <button
-                                onClick={closeCandidateModal}
-                                className="text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div className="p-6 space-y-4 text-[--color-text] text-sm leading-relaxed">
-                            <div><strong>שם:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</div>
-                            <div><strong>אימייל:</strong> {selectedCandidate.email}</div>
-                            <div><strong>טלפון:</strong> {selectedCandidate.phone}</div>
-                            <div><strong>תפקיד:</strong> {selectedCandidate.role}</div>
-                            <div><strong>סטטוס:</strong> {selectedCandidate.is_active ? 'פעיל' : 'לא פעיל'}</div>
-                        </div>
-                        <div className="flex justify-end p-6 border-t border-gray-200">
-                            <button
-                                onClick={closeCandidateModal}
-                                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
                                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
                             >
                                 סגור
