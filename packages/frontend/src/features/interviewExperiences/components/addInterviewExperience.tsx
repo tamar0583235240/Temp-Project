@@ -1,6 +1,6 @@
 import { useMessageModal } from "../../../shared/ui/MessageModalContext";
 import { useAddExperienceThanksMutation } from "../services/experienceThanksApi";
-import { useAdddInterviewExperiencesMutation } from "../services/interviewExperiencesApi";
+import { useAddInterviewExperiencesMutation } from "../services/interviewExperiencesApi";
 import { interviewExperiences } from "../types/interviewExperiences";
 import { useState } from "react";
 import { GridContainer } from "../../../shared/ui/GridContainer";
@@ -14,9 +14,9 @@ export const AddInterviewExperience = (props: {
     onClose: () => void;
     onSubmit: (interviewExperience: interviewExperiences) => void;
 }) => {
-    const user = useSelector((state: RootState) => state.auth.user);
+    const user = useSelector((state: RootState) => (state as any).auth.user);
     const userId = user?.id ?? '';
-    const [addInterviewExperiences, { isLoading }] = useAdddInterviewExperiencesMutation();
+    const [addInterviewExperiences, { isLoading }] = useAddInterviewExperiencesMutation();
     const { showMessage } = useMessageModal();
     const { onClose, onSubmit } = props;
 
@@ -44,7 +44,6 @@ export const AddInterviewExperience = (props: {
         }
     
         try {
-            console.log(interviewExperience);
             await addInterviewExperiences(interviewExperience);
             showMessage("הצלחה!", "החוויה נוספה בהצלחה");
     

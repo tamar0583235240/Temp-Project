@@ -6,7 +6,7 @@ import { useGetAllInterviewExperiencesQuery } from "../services/interviewExperie
 import { CancelDisplayingReport } from "./CancelDisplayingReport";
 import { FilterByField } from './filterByField';
 import { FaFilter } from 'react-icons/fa';
-import { interviewExperiences } from "../types/interviewExperiences";
+import { interviewExperiences } from "../types/interviewExperiencesWithUserDetails";
 
 type AdminQuestionsProps = {
     allowedRoles: string[];

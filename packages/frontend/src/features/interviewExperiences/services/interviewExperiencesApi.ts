@@ -14,7 +14,7 @@ export const interviewExperiencesApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'interviewExperiences' }],
     }),
-    addInterviewExperiences: builder.mutation<void, interviewExperiences>({
+    AddInterviewExperiences: builder.mutation<void, interviewExperiences>({
       query: (interviewExperience) => ({
         url: `/interviewExperiences/addInterviewExperiences`,
         method: 'POST',
