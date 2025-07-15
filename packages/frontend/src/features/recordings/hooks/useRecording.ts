@@ -1,11 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../shared/store/store';
-import { 
-  setRecordingState, 
-  setShowRecordingModal, 
+import {
+  setRecordingState,
+  setShowRecordingModal,
   resetRecording,
-  addAnswer 
+  addAnswer
 } from '../store/recordingSlice';
 import { useUploadAnswerMutation } from '../services/recordingApi';
 import { useUploadRecordingMutation } from '../services/resourceApi';
@@ -14,10 +14,10 @@ import { UploadAnswerDto } from '../types/UploadAnswerDto';
 export const useRecording = () => {
   const dispatch = useDispatch();
   const { currentRecording, showRecordingModal } = useSelector(
-    (state: RootState) => state.recording);  
+    (state: RootState) => state.recording);
   const [uploadAnswer, { isLoading }] = useUploadAnswerMutation();
   const [uploadRecording] = useUploadRecordingMutation();
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -25,12 +25,12 @@ export const useRecording = () => {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
   // טיימר להקלטה
-  
+
   useEffect(() => {
     if (currentRecording.isRecording && !currentRecording.isPaused) {
       timerRef.current = setInterval(() => {
-        dispatch(setRecordingState({ 
-          recordingTime: currentRecording.recordingTime + 1 
+        dispatch(setRecordingState({
+          recordingTime: currentRecording.recordingTime + 1
         }));
       }, 1000);
     } else {
@@ -51,7 +51,7 @@ export const useRecording = () => {
       deleteRecording();
     }
     setAudioBlob(null); // איפוס גם ב-state
-    
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
@@ -65,15 +65,15 @@ export const useRecording = () => {
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
         audioBlobRef.current = blob;
-        setAudioBlob(blob); // עדכן state כדי לגרום לרינדור
+        setAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorder.start();
-      dispatch(setRecordingState({ 
-        isRecording: true, 
-        isPaused: false, 
-        recordingTime: 0 
+      dispatch(setRecordingState({
+        isRecording: true,
+        isPaused: false,
+        recordingTime: 0
       }));
       dispatch(setShowRecordingModal(true));
     } catch (error) {
@@ -85,20 +85,19 @@ export const useRecording = () => {
   const pauseRecording = () => {
     if (mediaRecorderRef.current && currentRecording.isRecording) {
       mediaRecorderRef.current.pause();
-      dispatch(setRecordingState({ 
-        isPaused: true, 
-        isRecording: false 
+      dispatch(setRecordingState({
+        isPaused: true,
+        isRecording: false
       }));
-      // אל תאפס כאן את audioBlobRef.current!
     }
   };
 
   const resumeRecording = () => {
     if (mediaRecorderRef.current && currentRecording.isPaused) {
       mediaRecorderRef.current.resume();
-      dispatch(setRecordingState({ 
-        isPaused: false, 
-        isRecording: true 
+      dispatch(setRecordingState({
+        isPaused: false,
+        isRecording: true
       }));
     }
   };
@@ -106,9 +105,9 @@ export const useRecording = () => {
   const stopRecording = () => {
     if (mediaRecorderRef.current && (currentRecording.isRecording || currentRecording.isPaused)) {
       mediaRecorderRef.current.stop();
-      dispatch(setRecordingState({ 
-        isRecording: false, 
-        isPaused: false 
+      dispatch(setRecordingState({
+        isRecording: false,
+        isPaused: false
       }));
       dispatch(setShowRecordingModal(false));
     }
@@ -119,16 +118,16 @@ export const useRecording = () => {
       mediaRecorderRef.current.onstop = null;
       mediaRecorderRef.current.stop();
     }
-    
+
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     audioBlobRef.current = null;
     setAudioBlob(null); // איפוס גם ב-state
-    
+
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    
+
     dispatch(resetRecording());
   };
 
@@ -141,7 +140,7 @@ export const useRecording = () => {
     userId: string,
     questionId: string,
     answerFileName: string,
-    amountFeedbacks: number = 0 
+    amountFeedbacks: number = 0
   ) => {
     if (!audioBlobRef.current || !answerFileName.trim()) {
       alert('אנא הזן שם לקובץ');
@@ -161,7 +160,7 @@ export const useRecording = () => {
       const uploadRes = await uploadRecording(formData).unwrap();
       fileUrl = uploadRes.url;
     } catch (e) {
-      console.error ('שגיאה בהעלאת הקלטה לשרת');
+      console.error('שגיאה בהעלאת הקלטה לשרת');
       return;
     }
 
@@ -203,6 +202,6 @@ export const useRecording = () => {
     restartRecording,
     saveRecording,
     audioBlobRef,
-    audioBlob, 
+    audioBlob,
   };
 };
