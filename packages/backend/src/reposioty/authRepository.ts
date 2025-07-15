@@ -4,16 +4,16 @@ import bcrypt from "bcrypt";
 
 export const login = async (email: string, password: string): Promise<Users | null> => {
   try {
-    // שליפת המשתמש
+    // Retrieving the user
     const res = await pool.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
     const user = res.rows[0];
     if (!user) return null;
 
-    // בדיקת סיסמה
+    // Password check
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return null;
 
-    // סימון כמשתמש פעיל
+    // Mark as active user
     await pool.query('UPDATE users SET is_active = true WHERE id = $1', [user.id]);
 
     return user as Users;

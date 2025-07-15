@@ -9,9 +9,9 @@ import {
   createToken,
   getToken,
   deleteToken,
-} from "../repository/passwordResetRepository";
-import userRepository from "../repository/userRepository";
-import authRepository from "../repository/authRepository";
+} from "../reposioty/passwordResetRepository";
+import userRepository from "../reposioty/userRepository";
+import authRepository from "../reposioty/authRepository";
 import {
   sendResetEmail,
   sendVerificationCodeEmail,
@@ -135,7 +135,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password, rememberMe } = req.body;
 
-    const user = await userRepository.getUserByEmailAndPassword(
+    const user = await authRepository.login(
       email,
       password
     );

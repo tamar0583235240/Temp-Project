@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Users } from '../interfaces/entities/Users';
-import userRepository from '../repository/userRepository';
+import userRepository from '../reposioty/userRepository';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { generateUniqueSlug } from '../utils/generateSlug';

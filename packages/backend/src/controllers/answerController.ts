@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { pool } from "../config/dbConnection";
 import { validate as isUuid } from "uuid";  
-import  answerRepository  from '../repository/answerRepository';
+import  answerRepository  from '../reposioty/answerRepository';
 
 export const getProgressStats = async (req: Request, res: Response) => {
   try {

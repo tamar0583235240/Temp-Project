@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AiInsights } from '../interfaces/entities/AiInsights';
-import AiInsightsReposiory from '../repository/AiInsightsReposiory';
+import AiInsightsReposiory from '../reposioty/AiInsightsReposiory';
 
 export const getAiInsightsByAnswerId = async (req: Request, res: Response): Promise<AiInsights | void> => {
     try {

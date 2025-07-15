@@ -3,7 +3,7 @@ import {
   deleteFileFromCloudinary,
   uploadFileToCloudinary,
 } from "../config/cloudinary";
-import * as interviewMaterialSubRepository from "../repository/interviewMaterialSubRepository";
+import * as interviewMaterialSubRepository from "../reposioty/interviewMaterialSubRepository";
 
 const getInterviewMaterialSub = async (
   req: Request,
@@ -74,75 +74,68 @@ const addInterviewMaterialSub = async (req: Request, res: Response) => {
   }
 };
 
-// 🟢 עדכון חומר ריאיון קיים
 const updateInterviewMaterialSub = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, short_description } = req.body;
+  const { title, short_description, existingFileUrl } = req.body;
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-
   try {
-    const existingMaterial =
-      await interviewMaterialSubRepository.getInterviewMaterialSubById(id);
+    const existingMaterial = await  interviewMaterialSubRepository.getInterviewMaterialSubById(id);
     if (!existingMaterial) {
-      res.status(404).json({ message: "חומר ריאיון לא נמצא" });
-      return;
+      return res.status(404).json({ message: "חומר ריאיון לא נמצא" });
     }
-
-    let updatedThumbnail = existingMaterial.thumbnail;
+    const newTitle = title?.trim();
+    const newShortDesc = short_description?.trim();
+    if (!newTitle || !newShortDesc) {
+      return res.status(400).json({ message: "כותרת ותיאור קצר הם שדות חובה" });
+    }
     let updatedFileUrl = existingMaterial.fileUrl;
     let updatedOriginalFileName = existingMaterial.originalFileName;
-
-    const extractPublicId = (url?: string | null) => {
-      if (typeof url !== "string") return null;
-      const match = url.match(
-        /\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/
-      );
-      return match?.[1];
-    };
-
-    if (files?.thumbnail?.[0]) {
-      const publicId = extractPublicId(existingMaterial.thumbnail);
-      if (publicId)
-        await deleteFileFromCloudinary(
-          `interviewMaterialsHub/thumbnails/${publicId}`
-        );
-      const thumbUpload = await uploadFileToCloudinary(
-        files.thumbnail[0],
-        "interviewMaterialsHub/thumbnails"
-      );
-      updatedThumbnail = thumbUpload.secure_url;
-    }
-
     if (files?.file?.[0]) {
       const publicId = extractPublicId(existingMaterial.fileUrl);
-      if (publicId)
-        await deleteFileFromCloudinary(
-          `interviewMaterialsHub/files/${publicId}`
-        );
-      const fileUpload = await uploadFileToCloudinary(
-        files.file[0],
-        "interviewMaterialsHub/files"
-      );
+      if (publicId) {
+        await deleteFileFromCloudinary(`interviewMaterialsHub/files/${publicId}`);
+      }
+      const fileUpload = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
       updatedFileUrl = fileUpload.secure_url;
       updatedOriginalFileName = files.file[0].originalname;
+    } else if (existingFileUrl) {
+      // אם נשלח existingFileUrl, נעדכן איתו במקום הקיים
+      updatedFileUrl = existingFileUrl;
+      updatedOriginalFileName = existingMaterial.originalFileName;
     }
-
-    const updated =
-      await interviewMaterialSubRepository.updateInterviewMaterialSub(
-        id,
-        title || existingMaterial.title,
-        short_description || existingMaterial.shortDescription,
-        updatedThumbnail ?? existingMaterial.thumbnail ?? "",
-        updatedFileUrl ?? existingMaterial.fileUrl ?? "",
-        updatedOriginalFileName ?? existingMaterial.originalFileName ?? ""
-      );
-
-    res.json(updated);
+    if (!updatedFileUrl) {
+      return res.status(400).json({ message: "לא ניתן לעדכן חומר ריאיון ללא קובץ מצורף" });
+    }
+    let updatedThumbnail = existingMaterial.thumbnail;
+    if (files?.thumbnail?.[0]) {
+      const publicId = extractPublicId(existingMaterial.thumbnail);
+      if (publicId) {
+        await deleteFileFromCloudinary(`interviewMaterialsHub/thumbnails/${publicId}`);
+      }
+      const thumbUpload = await uploadFileToCloudinary(files.thumbnail[0], 'interviewMaterialsHub/thumbnails');
+      updatedThumbnail = thumbUpload.secure_url;
+    }
+    const updated = await interviewMaterialSubRepository.updateInterviewMaterialSub(
+      id,
+      newTitle,
+      newShortDesc,
+      updatedThumbnail || existingMaterial.thumbnail || "",
+      updatedFileUrl,
+      updatedOriginalFileName || existingMaterial.originalFileName || ""
+    );
+    return res.json(updated);
   } catch (error) {
     console.error("Error updating interview material:", error);
-    res.status(500).json({ message: "שגיאה בעדכון" });
+    return res.status(500).json({ message: "שגיאה בעדכון" });
   }
 };
+
+const extractPublicId = (url?: string | null): string | null => {
+  if (typeof url !== "string") return null;
+  const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.(pdf|doc|docx|mp4|avi|mp3|wav)$/i);
+  return match ? match[1] : null;
+};
+
 const deleteInterviewMaterialSub = async (
   req: Request,
   res: Response
