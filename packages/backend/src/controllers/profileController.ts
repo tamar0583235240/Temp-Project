@@ -5,6 +5,7 @@ import {
   updateProfile,
 } from "../reposioty/profileRepository";
 import { uploadFileToCloudinary } from "../config/cloudinary";
+import userRepository from "../reposioty/userRepository";
 
 export const getAllProfilesHandler = async (_req: Request, res: Response) => {
   try {
@@ -32,12 +33,16 @@ export const getProfileByUserIdHandler = async (
   }
 };
 
-export const updateProfileByUserIdHandler = async (req: Request, res: Response) => {
+export const updateProfileByUserIdHandler = async (
+  req: Request,
+  res: Response
+) => {
   const userId = req.params.userId;
 
   try {
     const profile = await getProfileByUserId(userId);
-    if (!profile) return res.status(404).json({ message: "Profile not found." });
+    if (!profile)
+      return res.status(404).json({ message: "Profile not found." });
 
     const parsedLinks =
       typeof req.body.external_links === "string"
@@ -64,12 +69,24 @@ export const updateProfileByUserIdHandler = async (req: Request, res: Response) 
 
     const updatedProfile = await updateProfile(profile.id, profileData);
 
+    const user = await userRepository.getUserById(userId);
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    await userRepository.updateUser(userId, {
+      first_name: profileData.first_name,
+      last_name: profileData.last_name,
+      email: profileData.email,
+      phone: profileData.phone,
+      role: user.role,
+    });
+
     return res.json({
       ...updatedProfile,
       first_name: profileData.first_name,
       last_name: profileData.last_name,
       email: profileData.email,
       image_url: imageUrl,
+      isPublic: profile.is_public,
     });
   } catch (err) {
     console.error("Error updating profile:", err);
