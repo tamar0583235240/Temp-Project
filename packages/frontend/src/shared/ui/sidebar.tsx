@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
   { label: "Resources", href: "/resources" },
   { label: "Admin", href: "", isSectionTitle: true },
   { label: "Manage Questions", href: "/admin/questions" },
+  { label: "Manage Practice Questions", href: "/practice-questions" },
   { label: "Manage Users", href: "/admin/users" },
   { label: "Manage Resources", href: "/admin/resources" },
   { label: "Manage Dynamic Content", href: "/admin/dynamic-content" }, // ← הוספה חדשה

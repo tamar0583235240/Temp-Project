@@ -6,9 +6,7 @@ import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
-import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
-import { UserActivity } from "./UserActivity";
 import { UserActivity } from "./UserActivity";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
@@ -80,5 +78,4 @@ export class Users {
   userSessions: UserSessions[];
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences: WorkExperiences[];
-}
 }

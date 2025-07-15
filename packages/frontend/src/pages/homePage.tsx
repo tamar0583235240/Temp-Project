@@ -28,6 +28,7 @@ const HomePage = () => {
       </Button>
 
 
+
       {isManager && (
         <>
           <div className="col-span-full mt-6 text-right">
@@ -49,7 +50,11 @@ const HomePage = () => {
 
         
       )}
+      
     </GridContainer>
+
+
+    
 
   );
 };
