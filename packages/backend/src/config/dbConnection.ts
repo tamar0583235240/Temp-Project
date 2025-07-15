@@ -25,12 +25,29 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { createClient } from '@supabase/supabase-js';
 
+console.log('[DB INIT]', {
+  PGHOST: process.env.DB_HOST,
+  PGPORT: process.env.DB_PORT,
+  PGUSER: process.env.DB_USER,
+  PGPASSWORD: process.env.DB_PASSWORD,
+  PGDATABASE: process.env.DB_NAME,
+});
+
 
 export const pool = new Pool({
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
- });
+  host: String(process.env.DB_HOST),
+  port: Number(process.env.DB_PORT),
+  user: String(process.env.DB_USER),
+  password: String(process.env.DB_PASSWORD), // ← הכי חשוב
+  database: String(process.env.DB_NAME),
+});
+
+
+// export const pool = new Pool({
+//   host: process.env.PGHOST,
+//   port: Number(process.env.PGPORT),
+//   user: process.env.PGUSER,
+//   password: process.env.PGPASSWORD,
+//   database: process.env.PGDATABASE,
+//  });
 console.log('Database connection pool created');
