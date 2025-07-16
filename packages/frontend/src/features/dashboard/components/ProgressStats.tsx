@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect } from 'react';
 import { BarChart2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
@@ -13,10 +14,26 @@ const ProgressStats = (): JSX.Element => {
   // קריאה ל־API רק אם יש משתמש
   const { data, isLoading, isError } = useGetProgressStatsQuery(user?.id ?? '', {
     skip: !user,
+=======
+import React, { useEffect } from "react";
+import { BarChart2 } from "lucide-react";
+import { useUserStore } from "../store/progressSlice";
+import { useGetProgressStatsQuery } from "../../../shared/api/question";
+
+const ProgressStats: React.FC = () => {
+  const userId =
+    useUserStore((state) => state.userId) || "f370c05a-dfe5-4fac-9d65-121702bdb8bf";
+  const setAnswered = useUserStore((state) => state.setAnswered);
+  const setTotal = useUserStore((state) => state.setTotal);
+
+  const { data, isLoading, isError } = useGetProgressStatsQuery(userId, {
+    skip: !userId,
+>>>>>>> Activity-Monitoring
   });
 
   useEffect(() => {
     if (data) {
+<<<<<<< HEAD
       // לוגיקה נוספת על הנתונים במידת הצורך
       console.log('Progress data:', data);
     }
@@ -25,13 +42,27 @@ const ProgressStats = (): JSX.Element => {
   if (!user) return <p className="text-center">אנא התחבר</p>;
   if (isLoading) return <p className="text-center">טוען נתונים...</p>;
   if (isError) return <p className="text-center text-red-500">שגיאה בטעינת נתונים</p>;
+=======
+      setAnswered(data.answeredQuestions);
+      setTotal(data.totalQuestions);
+    }
+  }, [data, setAnswered, setTotal]);
+
+  if (!userId) return <p>אנא התחבר</p>;
+  if (isLoading) return <p>טוען נתונים...</p>;
+  if (isError) return <p>שגיאה בטעינת נתונים</p>;
+>>>>>>> Activity-Monitoring
 
   const total = data?.totalQuestions ?? 0;
   const answered = data?.answeredQuestions ?? 0;
   const percentage = total ? (answered / total) * 100 : 0;
 
   return (
+<<<<<<< HEAD
     <section className="relative mx-auto max-w-md text-center p-6 bg-gradient-to-tr from-[--color-primary]/10 via-white to-[--color-primary]/20 rounded-3xl shadow-md rtl">
+=======
+    <section className="relative mx-auto max-w-md text-center p-6 bg-gradient-to-tr from-[--color-primary]/10 via-white to-[--color-primary]/20 rounded-3xl shadow-md">
+>>>>>>> Activity-Monitoring
       <div className="flex flex-col items-center gap-4">
         <div className="flex items-center gap-2 text-[--color-text]">
           <BarChart2 size={24} />

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.1.1",
     "@reduxjs/toolkit": "^2.8.2",
@@ -20,5 +21,19 @@
   "devDependencies": {
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6"
+=======
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.20.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "lucide-react": "^0.522.0",
+    "react-icons": "^5.5.0",
+    "tailwind-merge": "^3.3.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.8"
+>>>>>>> Activity-Monitoring
   }
 }

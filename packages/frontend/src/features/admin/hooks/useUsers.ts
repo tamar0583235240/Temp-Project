@@ -1,4 +1,5 @@
 import {
+<<<<<<< HEAD
   useGetUsersQueryAdmin,
   useDeleteUserMutationAdmin,
   useUpdateUserMutationAdmin,
@@ -23,11 +24,27 @@ export const useUsers = () => {
 
 
 // >>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
+=======
+  useGetUsersQuery,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
+    useCreateUserMutation, 
+} from '../services/adminApi';
+
+export const useUsers = () => {
+  const { data: users, isLoading } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
+  const [createUser] = useCreateUserMutation(); 
+
+
+>>>>>>> Activity-Monitoring
   return {
     users,
     isLoading,
     deleteUser,
     updateUser,
+<<<<<<< HEAD
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // >>>>>>> f54d24c (הוספה מחיקה ועדכון)
@@ -37,3 +54,8 @@ export const useUsers = () => {
   // };
 // };
 // >>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
+=======
+    createUser,
+  };
+};
+>>>>>>> Activity-Monitoring

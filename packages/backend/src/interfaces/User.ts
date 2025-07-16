@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Answers } from "./entities/Answers";
 import { ContentReports } from "./entities/ContentReports";
 import { ExperienceThanks } from "./entities/ExperienceThanks";
@@ -36,3 +37,17 @@ export interface User {
   workExperiences: WorkExperiences[];
   // userReminderSettings: null; // או אובייקט, תלוי מה מצופה
 }
+=======
+
+export interface User {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string|undefined;
+    role: 'student' | 'manager';
+    createdAt: Date;
+    isActive: boolean;
+    password: string;
+}
+>>>>>>> Activity-Monitoring

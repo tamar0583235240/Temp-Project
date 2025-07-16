@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+<<<<<<< HEAD
 import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository';
 import bcrypt from 'bcrypt';
@@ -10,6 +11,13 @@ import { createUserByAdminSchema, updateUserByAdminSchema } from '../validations
 const SALT_ROUNDS = 10;
 
 // ממיר שורות DB ל־camelCase
+=======
+import { pool } from '../config/dbConnection';
+import { v4 as uuidv4 } from 'uuid';
+import { insertUsersFromExcel } from '../reposioty/userRpository';
+import { createUserSchema, updateUserSchema } from '../validations/userValidation';
+
+>>>>>>> Activity-Monitoring
 function mapUserRowToCamelCase(row: any) {
   return {
     id: row.id,
@@ -19,11 +27,16 @@ function mapUserRowToCamelCase(row: any) {
     phone: row.phone,
     role: row.role,
     password: row.password,
+<<<<<<< HEAD
     createdAt: row.created_dat || row.created_at,
+=======
+    createdAt: row.created_at,
+>>>>>>> Activity-Monitoring
     isActive: row.is_active,
   };
 }
 
+<<<<<<< HEAD
 // החזרת כל המשתמשים
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -84,11 +97,81 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
        VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
        RETURNING *`,
       [id, firstName, lastName, email, phone, role || 'student', createdAt, hashedPassword]
+=======
+export const getAllUsers = async (req: Request, res: Response) => {
+  const { isActive, search, startDate, endDate } = req.query;
+
+  let baseQuery = 'SELECT * FROM users';
+  const conditions: string[] = [];
+  const values: any[] = [];
+
+  if (isActive === 'true') {
+    conditions.push('is_active = true');
+  } else if (isActive === 'false') {
+    conditions.push('is_active = false');
+  }
+
+  if (typeof search === 'string' && search.trim() !== '') {
+    values.push(`%${search.trim()}%`);
+    conditions.push(`(first_name ILIKE $${values.length} OR last_name ILIKE $${values.length})`);
+  }
+
+  if (startDate && endDate) {
+    values.push(startDate, endDate);
+    conditions.push(`created_at BETWEEN $${values.length - 1} AND $${values.length}`);
+  }
+
+  if (conditions.length > 0) {
+    baseQuery += ' WHERE ' + conditions.join(' AND ');
+  }
+
+  try {
+    const result = await pool.query(baseQuery, values);
+    const users = result.rows.map(mapUserRowToCamelCase);
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Failed to fetch users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+};
+
+
+
+export const createUser = async (req: Request, res: Response) => {
+  const { firstName, lastName, email, phone, role, password } = req.body;
+  const id = uuidv4();
+  const createdAt = new Date();
+
+  try {
+    await createUserSchema.validate(req.body, { abortEarly: false });
+
+    // בדיקת אימייל כפול
+    const checkEmail = await pool.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+    if ((checkEmail.rowCount ?? 0) > 0) {
+      return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
+    }
+
+    // יצירת המשתמש
+    const hashedPassword = password; // אם בעתיד תשתמשי ב־bcrypt תעדכני כאן
+
+    const result = await pool.query(
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, false, $8)
+       RETURNING *`,
+      [id, firstName, lastName, email, phone, role, createdAt, hashedPassword]
+>>>>>>> Activity-Monitoring
     );
 
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
   } catch (error: any) {
+<<<<<<< HEAD
     console.error('Create user error:', error);
+=======
+    console.error("Create user error:", error);
+>>>>>>> Activity-Monitoring
 
     if (error.code === '23505' && error.constraint === 'users_email_key') {
       return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
@@ -102,23 +185,46 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
   }
 };
 
+<<<<<<< HEAD
 // עדכון משתמש ע"י Admin
 export const updateUserByAdmin = async (req: Request, res: Response) => {
+=======
+
+
+export const updateUser = async (req: Request, res: Response) => {
+>>>>>>> Activity-Monitoring
   const { id } = req.params;
   const { firstName, lastName, email, phone, role, password } = req.body;
 
   try {
+<<<<<<< HEAD
     await updateUserByAdminSchema.validate(req.body, { abortEarly: false });
 
     const emailCheck = await pool.query(`SELECT id FROM users WHERE email = $1 AND id != $2`, [email, id]);
+=======
+    await updateUserSchema.validate(req.body, { abortEarly: false });
+
+    // בדיקה אם המייל קיים אצל משתמש אחר
+    const emailCheck = await pool.query(
+      `SELECT id FROM users WHERE email = $1 AND id != $2`,
+      [email, id]
+    );
+>>>>>>> Activity-Monitoring
     if (emailCheck.rowCount && emailCheck.rowCount > 0) {
       return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
     }
 
+<<<<<<< HEAD
     const hashedPassword = password ? await bcrypt.hash(password, SALT_ROUNDS) : null;
 
     const result = await pool.query(
       `UPDATE users SET 
+=======
+    const hashedPassword = password || null;
+
+    const result = await pool.query(
+      `UPDATE users SET
+>>>>>>> Activity-Monitoring
         first_name = $1,
         last_name = $2,
         email = $3,
@@ -144,8 +250,13 @@ export const updateUserByAdmin = async (req: Request, res: Response) => {
   }
 };
 
+<<<<<<< HEAD
 // מחיקת משתמש ע"י Admin
 export const deleteUserByAdmin = async (req: Request, res: Response) => {
+=======
+
+export const deleteUser = async (req: Request, res: Response) => {
+>>>>>>> Activity-Monitoring
   const { id } = req.params;
 
   try {
@@ -155,12 +266,19 @@ export const deleteUserByAdmin = async (req: Request, res: Response) => {
     }
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
+<<<<<<< HEAD
     console.error('Delete user error:', error);
+=======
+>>>>>>> Activity-Monitoring
     res.status(500).json({ error: 'Failed to delete user' });
   }
 };
 
+<<<<<<< HEAD
 // העלאת משתמשים מקובץ Excel
+=======
+
+>>>>>>> Activity-Monitoring
 export const uploadUsersExcel = async (req: Request, res: Response) => {
   try {
     if (!req.file) {

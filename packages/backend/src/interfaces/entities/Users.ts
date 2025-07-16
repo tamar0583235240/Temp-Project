@@ -1,4 +1,5 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
+<<<<<<< HEAD
 import { ContentReports } from "./ContentReports";
 import { ExperienceThanks } from "./ExperienceThanks";
 import { InterviewExperiences } from "./InterviewExperiences";
@@ -15,6 +16,15 @@ import { WorkExperiences } from "./WorkExperiences";
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
 @Index("users_slug_key", ["slug"], { unique: true })
+=======
+import { Answers } from "./Answers";
+import { Feedback } from "./Feedback";
+import { PasswordResetTokens } from "./PasswordResetTokens";
+import { SharedRecordings } from "./SharedRecordings";
+
+@Index("users_email_key", ["email"], { unique: true })
+@Index("users_pkey", ["id"], { unique: true })
+>>>>>>> Activity-Monitoring
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("uuid", { primary: true, name: "id" })
@@ -44,6 +54,7 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+<<<<<<< HEAD
   @Column("text", { name: "password", nullable: true })
   password: string | null;
 
@@ -64,6 +75,10 @@ export class Users {
     (interviewExperiences) => interviewExperiences.user
   )
   interviewExperiences: InterviewExperiences[];
+=======
+  @Column("text", { name: "password" })
+  password: string;
+>>>>>>> Activity-Monitoring
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
@@ -77,14 +92,18 @@ export class Users {
   )
   passwordResetTokens: PasswordResetTokens[];
 
+<<<<<<< HEAD
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
 
+=======
+>>>>>>> Activity-Monitoring
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+<<<<<<< HEAD
 
   @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
   userActivities: UserActivity[];
@@ -100,4 +119,6 @@ export class Users {
 
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences: WorkExperiences[];
+=======
+>>>>>>> Activity-Monitoring
 }

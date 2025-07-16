@@ -1,13 +1,19 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
+<<<<<<< HEAD
 import { ContentReports } from "./ContentReports";
 import { ExperienceThanks } from "./ExperienceThanks";
 import { InterviewExperiences } from "./InterviewExperiences";
+=======
+>>>>>>> Activity-Monitoring
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { SharedRecordings } from "./SharedRecordings";
+<<<<<<< HEAD
 import { UserReminderSettings } from "./UserReminderSettings";
 import { WorkExperiences } from "./WorkExperiences";
+=======
+>>>>>>> Activity-Monitoring
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -43,6 +49,7 @@ export class Users {
   @Column("text", { name: "password", nullable: true })
   password: string | null;
 
+<<<<<<< HEAD
   @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
   contentReports: ContentReports[];
 
@@ -58,6 +65,8 @@ export class Users {
   )
   interviewExperiences: InterviewExperiences[];
 
+=======
+>>>>>>> Activity-Monitoring
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
 
@@ -75,6 +84,7 @@ export class Users {
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
+<<<<<<< HEAD
 
   @OneToMany(
     () => UserReminderSettings,
@@ -84,4 +94,6 @@ export class Users {
 
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences: WorkExperiences[];
+=======
+>>>>>>> Activity-Monitoring
 }

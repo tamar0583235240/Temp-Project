@@ -1,10 +1,14 @@
 import React, { useRef } from "react";
+<<<<<<< HEAD
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
+=======
+>>>>>>> Activity-Monitoring
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Download, Printer } from "lucide-react";
 import { Button } from "../../../shared/ui/button";
+<<<<<<< HEAD
 import { useDynamicContents } from "../../dynamicContent/hooks/useDynamicContents";
 
 interface CertificateProps {
@@ -29,6 +33,16 @@ export const Certificate: React.FC<CertificateProps> = ({ first_name, last_name 
     ? certificateDescriptionItem.content
     : "על הישגים יוצאי דופן, התמדה וחתירה למצוינות. אנו מוקירים את הדרך שעשית, מעריכים את תרומתך ומברכים אותך להמשך הצלחה.";
 
+=======
+
+interface CertificateProps {
+  fullName: string;
+}
+
+export const Certificate: React.FC<CertificateProps> = ({ fullName }) => {
+  const certificateRef = useRef<HTMLDivElement>(null);
+
+>>>>>>> Activity-Monitoring
   const handleDownload = async () => {
     if (!certificateRef.current) return;
     const canvas = await html2canvas(certificateRef.current);
@@ -62,9 +76,16 @@ export const Certificate: React.FC<CertificateProps> = ({ first_name, last_name 
       ref={certificateRef}
       className="relative max-w-3xl mx-auto py-12 px-10 rounded-[28px] border border-[--color-primary]/30 bg-[--color-background] text-center space-y-5 shadow-2xl cursor-default"
     >
+<<<<<<< HEAD
       <div
         className="absolute top-4 left-4 flex gap-2"
         onClick={(e) => e.stopPropagation()}
+=======
+      {/* כפתורים בצד שמאל למעלה */}
+      <div
+        className="absolute top-4 left-4 flex gap-2"
+        onClick={(e) => e.stopPropagation()} // מונע סגירה מהכפתורים
+>>>>>>> Activity-Monitoring
       >
         <Button
           icon={<Download size={16} />}
@@ -84,16 +105,31 @@ export const Certificate: React.FC<CertificateProps> = ({ first_name, last_name 
         />
       </div>
 
+<<<<<<< HEAD
+=======
+      {/* כותרת */}
+>>>>>>> Activity-Monitoring
       <h1 className="text-3xl font-bold text-[--color-primary-dark] mb-1">
         תעודת מוכנות לראיון
       </h1>
       <p className="text-base text-[--color-secondary-text]">מוענקת ל־</p>
+<<<<<<< HEAD
       <h2 className="text-2xl font-semibold text-[--color-primary]">{first_name} {last_name}</h2>
 
       <p className="text-[--color-text] text-sm leading-relaxed max-w-prose mx-auto">
         {certificateDescription}
       </p>
 
+=======
+      <h2 className="text-2xl font-semibold text-[--color-primary]">{fullName}</h2>
+
+      {/* תיאור */}
+      <p className="text-[--color-text] text-sm leading-relaxed max-w-prose mx-auto">
+        על הישגים יוצאי דופן, התמדה וחתירה למצוינות. אנו מוקירים את הדרך שעשית, מעריכים את תרומתך ומברכים אותך להמשך הצלחה.
+      </p>
+
+      {/* חתימה ותאריך */}
+>>>>>>> Activity-Monitoring
       <div className="mt-6 flex justify-between text-sm text-[--color-secondary-text] px-6">
         <span>{new Date().toLocaleDateString("he-IL")}</span>
       </div>

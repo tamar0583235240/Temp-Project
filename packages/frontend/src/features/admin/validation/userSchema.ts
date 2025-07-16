@@ -1,4 +1,8 @@
 import * as yup from 'yup';
+<<<<<<< HEAD
+=======
+
+>>>>>>> Activity-Monitoring
 // מגדירים schema רגיל
 export const userSchema = yup.object({
   firstName: yup.string().required('שדה חובה'),
@@ -12,5 +16,9 @@ export const userSchema = yup.object({
     .oneOf(['student', 'manager'], 'יש לבחור תפקיד')
     .required('שדה חובה'),
 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> Activity-Monitoring
 // ואז מייצאים טיפוס מהסכמה
 export type UserFormFields = yup.InferType<typeof userSchema>;
