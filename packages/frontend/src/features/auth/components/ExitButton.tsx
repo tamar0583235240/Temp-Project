@@ -6,7 +6,7 @@ import { Button } from "../../../shared/ui/button";
 import { useNavigate } from "react-router-dom";
 
 export const ExitButton = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth?.user);
   const [logout, { isLoading }] = useLogoutMutation();
   const navigate = useNavigate();
 

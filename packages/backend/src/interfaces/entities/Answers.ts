@@ -16,26 +16,26 @@ import { SharedRecordings } from "./SharedRecordings";
 @Entity("answers", { schema: "public" })
 export class Answers {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "file_url" })
-  fileUrl: string;
+  fileUrl!: string;
 
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
   })
-  submittedAt: Date;
+  submittedAt!: Date;
 
   @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
+  answerFileName!: string | null;
 
   @Column("integer", {
     name: "amount_feedbacks",
     nullable: true,
     default: () => "0",
   })
-  amountFeedbacks: number | null;
+  amountFeedbacks!: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];
@@ -44,18 +44,18 @@ export class Answers {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "question_id", referencedColumnName: "id" }])
-  question: Questions;
+  question!: Questions;
 
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user!: Users;
 
   @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
-  feedbacks: Feedback[];
+  feedbacks!: Feedback[];
 
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.answer
   )
-  sharedRecordings: SharedRecordings[];
+  sharedRecordings!: SharedRecordings[];
 }

@@ -12,10 +12,16 @@ export const AdminQuestionApi = api.injectEndpoints({
             }),
             invalidatesTags: ["question"],
         }),
+        // getAllQuestions: builder.query<Question[], void>({
+        //     query: () => 'question/getAllQuestions',
+
+        //     providesTags: ['question'],
+        // }),
         getAllQuestions: builder.query<Question[], void>({
             query: () => 'question/getAllQuestions',
             providesTags: ['question'],
         }),
+   
         updateQuestion: builder.mutation<Question, Partial<Question>>({
             query: (data) => ({
                 url: `question/updateQuestion`,

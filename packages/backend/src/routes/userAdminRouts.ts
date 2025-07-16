@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import {
-  getAllUsersByAdmin,
+  getAllUsers ,
   updateUserByAdmin,
   deleteUserByAdmin,
   createUserByAdmin,
@@ -14,7 +14,7 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
 // עדיף לשנות prefix לנתיבי admin, למשל /admin, כדי למנוע כפילויות והתנגשויות
-router.get('/', getAllUsersByAdmin);
+router.get('/',  getAllUsers);
 router.post('/add', createUserByAdmin);
 router.put('/:id', updateUserByAdmin);
 router.delete('/:id', deleteUserByAdmin);

@@ -1,4 +1,3 @@
-
 import { cn } from "../utils/cn";
 interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 export const Heading1 = ({ className, children, ...props }: HeadingProps) => (

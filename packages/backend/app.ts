@@ -9,7 +9,7 @@ import answerRouter from './src/routes/answerRouts';
 import questionRoute from './src/routes/questionRouts';
 import sharedRecordingRouter from './src/routes/sharedRecordingRouts';
 import interviewMaterialsHub from './src/routes/interview-materials-hub';
-import userRouts from './src/routes/userRouts';
+import userRouts from '../backend/src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import usedynamicContentRouter from './src/routes/DynamicContentRoutes';
 import userAdminRouts from './src/routes/userAdminRouts';
@@ -38,16 +38,16 @@ app.use(cookieParser());
 
 // רישום ראוטים
 app.use('/api/feedback', feedbackRouter);
-app.use('/api/ai-insights', AiInsightsRouter);
+app.use('/api/AiInsights', AiInsightsRouter);
 app.use('/api/shared-recordings', sharedRecordingRouter);
 app.use('/api/answers', answerRouter);
-app.use('/api/questions', questionRoute); // חשוב שזה לא יתנגש עם popularQuestionsRoute
+app.use('/api/questions', questionRoute); 
 app.use('/api/auth', authRouts);
 app.use('/api/interview-materials-hub', interviewMaterialsHub);
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
 app.use('/api/dynamic-contents', usedynamicContentRouter);
-app.use('/api/popular-questions', popularQuestionsRoute);
+app.use('/api/popular-questions', popularQuestionsRoute); 
 app.use('/api/example', exampleRouts);
 
 // אם תרצה להוסיף ראוטים נוספים מה-backend, תוכל לעשות זאת פה

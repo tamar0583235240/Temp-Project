@@ -1,24 +1,12 @@
-<<<<<<< HEAD
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../controllers/userController';
 import express from 'express';
+import {  createUserByAdmin, deleteUserByAdmin, getAllUsers, getUserById, updateUserByAdmin } from '../controllers/userController';
 
 const router = express.Router();
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
-router.post('/', createUser);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
-=======
-import express from "express";
-import {getAllUsers,updateUser,deleteUser,  createUser, } from "../controllers/userController";
+router.post('/', createUserByAdmin);
+router.put('/:id', updateUserByAdmin);
+router.delete('/:id', deleteUserByAdmin);
 
-const router = express.Router();
-
-router.get("/", getAllUsers);
-router.post("/add", createUser); // ← נוספה כאן
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
-
-
->>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
+// export const userRouts = router;
 export default router;

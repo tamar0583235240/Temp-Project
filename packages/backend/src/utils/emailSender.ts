@@ -28,7 +28,7 @@ export async function sendVerificationCodeEmail(to: string, text: string): Promi
         port: Number(process.env.SMTP_PORT) || 587,
         secure: false, 
         auth: {
-            user: process.env.Email_USER,
+            user: process.env.EMAIL_USER,
             pass: process.env.Email_PASS,
         },
     });

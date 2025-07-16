@@ -165,13 +165,22 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: rememberMe ? "7d" : "2h" }
     );
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
-    });
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "lax",
+    //   path: "/",
+    //   maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
+    // });
+const isDev = process.env.NODE_ENV !== "production";
+
+res.cookie("refreshToken", refreshToken, {
+  httpOnly: true,
+  secure: !isDev ? true : false,
+  sameSite: isDev ? "lax" : "none", // ← לפיתוח זה יכול להיות גם lax, לפרודקשן none אם דומיינים שונים
+  path: "/",
+  maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
+});
 
     res.json({ user, token });
   } catch (error) {

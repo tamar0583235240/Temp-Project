@@ -1,4 +1,3 @@
-
 import { JSX, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ interface Props {
 }
 
 export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Element | null {
+  
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
 

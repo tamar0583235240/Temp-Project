@@ -1,12 +1,12 @@
 import { api } from "../../../shared/api/api";
-import { User } from "../types/userTypes"; // טיפוס של משתמש
+import { User } from "../types/userTypes";
 
 export const adminApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // שליפת כל המשתמשים
     getUsers: builder.query<User[], void>({
       query: () => "users",
-      providesTags: ["User"], // ✅ עובד רק אם tagTypes מוגדר
+      providesTags: ["users"], // ← תואם ל-tagTypes
     }),
 
     // עדכון משתמש
@@ -16,18 +16,18 @@ export const adminApi = api.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["User"], // ✅ יעדכן את המטמון
+      invalidatesTags: ["users"], // ← תואם ל-tagTypes
     }),
-    
-createUser: builder.mutation<User, Partial<User>>({
-  query: (newUser) => ({
-    url: "users/add",
-    method: "POST",
-    body: newUser,
-  }),
-  invalidatesTags: ["User"],
-}),
 
+    // יצירת משתמש
+    createUser: builder.mutation<User, Partial<User>>({
+      query: (newUser) => ({
+        url: "users/add",
+        method: "POST",
+        body: newUser,
+      }),
+      invalidatesTags: ["users"], // ← תואם ל-tagTypes
+    }),
 
     // מחיקת משתמש
     deleteUser: builder.mutation<void, string>({
@@ -35,7 +35,7 @@ createUser: builder.mutation<User, Partial<User>>({
         url: `users/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["users"], // ← תואם ל-tagTypes
     }),
   }),
 });

@@ -1,5 +1,5 @@
 import React from 'react'
-import PopularQuestions from '../features/activity-Moonitoring/components/activity-Moonitoring';
+import PopularQuestions from '../features/activity-Moonitoring/components/activity-Monitoring';
 // import PopularQuestions from '../features/activity-Monitoring/components/PopularQuestions';
 
 const Activity_Monitoring = () => {

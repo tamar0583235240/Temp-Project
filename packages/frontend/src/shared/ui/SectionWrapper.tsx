@@ -1,5 +1,4 @@
-// components/profile/SectionWrapper.tsx
-import * as React from "react";
+import React, { ReactNode } from "react";
 import { cn } from "../utils/cn";
 import { CardSimple } from "./card"; 
 import { Heading1 } from "./typography"; 
@@ -25,7 +24,9 @@ export const SectionWrapper = ({
   showEditButton = true,
   className,
   ...props
-}: SectionWrapperProps) => {
+// }: SectionWrapperProps): JSX.Element => {
+  }: SectionWrapperProps) => {
+
   return (
     <CardSimple className={cn("p-6 flex flex-col gap-6", className)} {...props}>
       <div className="flex justify-between items-center border-b border-[--color-border] pb-4 mb-4">
@@ -43,13 +44,11 @@ export const SectionWrapper = ({
           )}
         </div>
       </div>
-      <div>
-        {children}
-      </div>
+      <div>{children}</div>
       {!isPubliclyVisible && (
-          <p className="text-sm text-text-secondary text-right mt-4 italic">
-            *המידע בסקשן זה מסומן כפרטי ולא יוצג בפרופיל הציבורי.
-          </p>
+        <p className="text-sm text-text-secondary text-right mt-4 italic">
+          *המידע בסקשן זה מסומן כפרטי ולא יוצג בפרופיל הציבורי.
+        </p>
       )}
     </CardSimple>
   );

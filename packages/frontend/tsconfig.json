@@ -6,6 +6,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

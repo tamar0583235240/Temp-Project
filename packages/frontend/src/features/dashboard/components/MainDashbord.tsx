@@ -38,7 +38,6 @@ const user = authState.user
 
   const { answered, total } = useUserStore();
   const isComplete = answered === total && total > 0;
-
   const { contents, loading, error } = useDynamicContents();
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {

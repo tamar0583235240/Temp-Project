@@ -5,9 +5,12 @@ import { getAiInsights, getAiInsightsByAnswerId } from "../controllers/aIInsight
 const AiInsightsRouter = Router();
 
 // נתיב שמחזיר את כל התובנות
-AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);
+// AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);
 
 // נתיב שמחזיר תובנות לפי מזהה תשובה
-AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+// AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+
+AiInsightsRouter.get('/getAiInsights', getAiInsights);
+AiInsightsRouter.get('/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
 
 export default AiInsightsRouter;

@@ -3,22 +3,23 @@ import { pool } from '../config/dbConnection';
 
 const router = Router();
 
-// GET /api/questions/popular?limit=10
 router.get('/popular', async (req: Request, res: Response) => {
   const limit = parseInt(req.query.limit as string) || 10;
+  const offset = parseInt(req.query.offset as string) || 0;
+  console.log("OFFSET שנשלח:", offset); 
 
   try {
     const result = await pool.query(`
       SELECT 
         q.id,
         q.title AS question,
-        COALESCE(qac.answers_count, 0) AS popularity
+        COUNT(a.id) AS popularity
       FROM public.questions q
-      LEFT JOIN public.question_answers_count qac ON q.id = qac.question_id
-      WHERE q.is_active = TRUE
-      ORDER BY popularity DESC
-      LIMIT $1
-    `, [limit]);
+      LEFT JOIN public.answers a ON a.question_id = q.id
+      GROUP BY q.id, q.title
+      ORDER BY popularity DESC, q.id 
+      LIMIT $1 OFFSET $2
+    `, [limit, offset]);
 
     res.json(result.rows);
   } catch (error) {
@@ -28,6 +29,3 @@ router.get('/popular', async (req: Request, res: Response) => {
 });
 
 export default router;
-
-
-

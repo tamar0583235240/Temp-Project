@@ -3,7 +3,6 @@ import { aiInsightsType } from "../types/aiInsightsType";
 
 export const aiInsightsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-<<<<<<< HEAD
     getAiInsights: builder.query<aiInsightsType[], void>({
       query: () => "/AiInsights/getAiInsights",
       providesTags: ["users"],
@@ -11,7 +10,7 @@ export const aiInsightsApi = api.injectEndpoints({
     getAiInsightsByAnswerId: builder.query<aiInsightsType[], string>({
       query: (answerId) => `/AiInsights/getAiInsightsByAnswerId/${answerId}`,
       providesTags: ["users"],
-=======
+    }),
     getItems: builder.query<aiInsightsType[], void>({
       query: () => "/insights",
       providesTags: ["Item"],
@@ -19,7 +18,7 @@ export const aiInsightsApi = api.injectEndpoints({
     addItem: builder.mutation<aiInsightsType, Partial<aiInsightsType>>({
       query: (item) => ({
         url: "/insights",
-        method: "GET",
+        method: "GET",  // שימי לב: בדרך כלל הוספה היא POST, בדקי אם צריך לשנות ל-POST
         body: item,
       }),
       invalidatesTags: ["Item"],
@@ -30,20 +29,14 @@ export const aiInsightsApi = api.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: ["Item"],
->>>>>>> 7671d8f (AI Insights List fronted)
     }),
   }),
 });
 
 export const {
-<<<<<<< HEAD
   useGetAiInsightsQuery,
   useGetAiInsightsByAnswerIdQuery,
-} = aiInsightsApi;
-
-=======
   useGetItemsQuery,
   useAddItemMutation,
   useDeleteItemMutation,
 } = aiInsightsApi;
->>>>>>> 7671d8f (AI Insights List fronted)

@@ -4,8 +4,8 @@ import { AIInsight } from "../types/aiInsightsType";
 export const aiInsightApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAIInsights: builder.query<AIInsight[], void>({
-      query: () => ({
-url: "/api/aiInsights/getAiInsights"
+      query: () => ({       
+        url: "aiInsights/getAiInsights"
       }),
     }),
   }),
