@@ -99,6 +99,45 @@ const createPracticeQuestion = async (questionData: {
   return result.rows[0];
 };
 
+const updatePracticeQuestion = async (questionData: {
+  id: string;
+  content: string;
+  difficulty: string;
+  type: string;
+  generated_by_ai: boolean;
+  created_by: string;
+}) => {
+  const { id, content, difficulty, type, generated_by_ai, created_by } = questionData;
+  const result = await pool.query(
+    // `UPDATE practice_questions
+    //  SET content = $1,
+    //      difficulty = $2,
+    //      type = $3,
+    //      generated_by_ai = $4,
+    //      created_by = $5
+    //  WHERE id = $6
+    //  RETURNING *`,
+      `UPDATE practice_questions
+      SET content = $1,
+          difficulty = $2,
+          type = $3,
+          generated_by_ai = $4,
+          created_by = $5
+      WHERE id = $6
+        AND (
+          content IS DISTINCT FROM $1 OR
+          difficulty IS DISTINCT FROM $2 OR
+          type IS DISTINCT FROM $3 OR
+          generated_by_ai IS DISTINCT FROM $4 OR
+          created_by IS DISTINCT FROM $5
+      )
+      RETURNING *`,
+    [content, difficulty, type, generated_by_ai, created_by, id]
+  );
+  return result.rows[0];
+};
+
+
 // חיפוש או יצירת נושא לפי שם
 const findOrCreateTopicByName = async (name: string): Promise<Topics> => {
   const existing: QueryResult<Topics> = await pool.query(
@@ -150,6 +189,7 @@ export const getAllTopics = async (): Promise<Topics[]> => {
 export default {
   getallPracticeQuestions,
   createPracticeQuestion,
+  updatePracticeQuestion,
   findOrCreateTopicByName,
   createQuestionTopicLink,
   createHint,

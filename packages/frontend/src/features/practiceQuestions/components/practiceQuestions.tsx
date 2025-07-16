@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGetPracticeQuestionsQuery } from "../services/practiceQuestionsApi";
+import AddNewPracticeQuestion from "./AddNewPracticeQuestion"; // נתיב נכון אל הקומפוננטה
+import { PracticeQuestion } from "../types/practiceQuestionTypes";
 import { CardSimple } from "../../../shared/ui/card";
 import { Grid } from "../../../shared/ui/grid";
-import { IconWrapper } from "../../../shared/ui/IconWrapper";
 import { Button } from "../../../shared/ui/button";
-import { FiHelpCircle, FiClock, FiCpu, FiCalendar, FiTag, FiZap, FiEdit2, FiTrash2, FiInfo, FiSettings } from "react-icons/fi";
+import { FiHelpCircle, FiEdit2, FiTrash2, FiTag, FiInfo, FiZap, FiCpu, FiSettings, FiCalendar } from "react-icons/fi";
 import { EmptyState } from "../../../shared/ui/EmptyState";
 
 const PracticeQuestions: React.FC = () => {
-  const { data, isLoading, error } = useGetPracticeQuestionsQuery();
+  const { data, isLoading, error, refetch } = useGetPracticeQuestionsQuery();
+
+  // מצב למעקב אחרי השאלה שנבחרה לעריכה
+  const [editingQuestion, setEditingQuestion] = useState<PracticeQuestion | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // לפתיחת מודל העריכה עם השאלה
+  const openEditModal = (question: PracticeQuestion) => {
+    setEditingQuestion(question);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditingQuestion(null);
+    setIsEditModalOpen(false);
+  };
+
+  // מחיקה (פשוט דוגמה)
+  const deleteQuestion = (id: string) => {
+    // כאן תשים לוגיקה למחיקה, למשל קריאה ל-API ואז refetch
+    console.log("Delete question", id);
+  };
 
   if (isLoading)
     return <div className="text-center mt-8 text-gray-500">טוען שאלות...</div>;
@@ -24,11 +46,14 @@ const PracticeQuestions: React.FC = () => {
     );
 
   return (
-    <div className="mt-8 mb-12">
-      <h2 className="text-3xl font-bold text-center text-[--color-primary] mb-8">שאלות תרגול</h2>
-      <Grid cols={3}>
-        {data.map((q) => (
-          <CardSimple
+    <>
+      <div className="mt-8 mb-12">
+        <h2 className="text-3xl font-bold text-center text-[--color-primary] mb-8">
+          שאלות תרגול
+        </h2>
+        <Grid cols={3}>
+          {data.map((q) => (
+           <CardSimple
             key={q.id}
             className="flex flex-col justify-between border border-[--color-border] p-5 rounded-2xl shadow-md hover:shadow-lg transition min-h-[520px]"
           >
@@ -75,7 +100,7 @@ const PracticeQuestions: React.FC = () => {
                   <FiTag className="text-text-secondary" /> נושאים
                 </p>
                 <p className="text-sm text-text-secondary">
-                  {q.topics.length > 0 ? q.topics.map((t: any) => t.name).join(", ") : "לא סווג"}
+                  {q.topic ? q.topic.name : "לא סווג"}
                 </p>
               </div>
 
@@ -94,15 +119,41 @@ const PracticeQuestions: React.FC = () => {
                 )}
               </div>
             </div>
+              <div className="flex justify-end gap-2 pt-4 border-t border-[--color-border] mt-auto">
+                <Button
+                  onClick={() => openEditModal(q)}
+                  variant="ghost"
+                  size="sm"
+                  icon={<FiEdit2 />}
+                  aria-label="עריכה"
+                />
+                <Button
+                  onClick={() => deleteQuestion(q.id)}
+                  variant="ghost"
+                  size="sm"
+                  icon={<FiTrash2 />}
+                  aria-label="מחיקה"
+                />
+              </div>
+            </CardSimple>
+          ))}
+        </Grid>
+      </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-[--color-border] mt-auto">
-              <Button variant="ghost" size="sm" icon={<FiEdit2 />} aria-label="עריכה" />
-              <Button variant="ghost" size="sm" icon={<FiTrash2 />} aria-label="מחיקה" />
-            </div>
-          </CardSimple>
-        ))}
-      </Grid>
-    </div>
+      {/* קומפוננטת עריכה */}
+      {isEditModalOpen && editingQuestion && (
+        <AddNewPracticeQuestion
+          isOpen={isEditModalOpen}
+          // action="edit"
+          onClose={closeEditModal}
+          // initialData={editingQuestion}
+          // onSuccess={() => {
+          //   refetch(); // רענון הנתונים אחרי עריכה
+          //   closeEditModal();
+          // }}
+        />
+      )}
+    </>
   );
 };
 

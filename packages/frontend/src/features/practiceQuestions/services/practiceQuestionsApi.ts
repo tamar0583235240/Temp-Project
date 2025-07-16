@@ -1,7 +1,7 @@
 import { api } from "../../../shared/api/api";
 import {
   PracticeQuestion,
-  CreatePracticeQuestionRequest,
+  PracticeQuestionRequestType,
   Topic,
 } from "../types/practiceQuestionTypes";
 
@@ -15,11 +15,19 @@ export const practiceQuestionsApi = api.injectEndpoints({
       query: (topicId) => `api/practiceQuestions/topic/${topicId}`,
       providesTags: ["PracticeQuestion"],
     }),
-    addPracticeQuestion: builder.mutation<PracticeQuestion, CreatePracticeQuestionRequest>({
+    addPracticeQuestion: builder.mutation<PracticeQuestion, PracticeQuestionRequestType>({
       query: (newQuestion) => ({
         url: "api/practiceQuestions",
         method: "POST",
         body: newQuestion,
+      }),
+      invalidatesTags: ["PracticeQuestion"],
+    }),
+    editPracticeQuestion: builder.mutation<PracticeQuestion, PracticeQuestionRequestType>({
+      query: (editQuestion) => ({
+        url: "api/practiceQuestions/${editQuestion.id}",
+        method: "put",
+        body: editQuestion,
       }),
       invalidatesTags: ["PracticeQuestion"],
     }),
@@ -33,6 +41,7 @@ export const practiceQuestionsApi = api.injectEndpoints({
 export const {
   useGetPracticeQuestionsQuery,
   useAddPracticeQuestionMutation,
+  useEditPracticeQuestionMutation,
   useGetTopicsQuery,
   useGetPracticeQuestionsByTopicQuery
 

@@ -1,6 +1,24 @@
 import e, { Request, Response } from 'express';
 import practiceQuestionsRepository from '../reposioty/PracticeQuestionsRepository';
 
+const handleRelatedQuestionData = async (
+  questionId: string,
+  topic: string,
+  hints: string[]
+) => {
+  const topicRecord = await practiceQuestionsRepository.findOrCreateTopicByName(topic);
+  await practiceQuestionsRepository.createQuestionTopicLink(questionId, topicRecord.id);
+
+  // await practiceQuestionsRepository.deleteHintsByQuestionId(questionId);
+
+  for (const hint of hints) {
+    await practiceQuestionsRepository.createHint({
+      question_id: questionId,
+      content: hint,
+      generated_by_ai: false,
+    });
+  }
+};
 
  export const getallPracticeQuestions = async (req: Request, res: Response) => {
   try {
@@ -43,20 +61,7 @@ export const createPracticeQuestionController = async (req: Request, res: Respon
       created_by,
     });
 
-    //מציאת או יצירת נושא
-    const topicRecord = await practiceQuestionsRepository.findOrCreateTopicByName(topic);
-
-    //קישור השאלה לנושא
-    await practiceQuestionsRepository.createQuestionTopicLink(question.id, topicRecord.id);
-
-    //הוספת רמזים
-    for (const hint of hints) {
-      await practiceQuestionsRepository.createHint({
-        question_id: question.id,
-        content: hint,
-        generated_by_ai: false, // או true אם מגיע מ-AI
-      });
-    }
+    await handleRelatedQuestionData(question.id, topic, hints);
 
     res.status(201).json({
       message: 'השאלה נוספה בהצלחה',
@@ -70,6 +75,45 @@ export const createPracticeQuestionController = async (req: Request, res: Respon
     });
   }
 };
+
+export const updatePracticeQuestionController = async (req: Request, res: Response) => {
+  const {
+    id,
+    content,
+    difficulty,
+    type,
+    generated_by_ai = false,
+    created_by,
+    topic,
+    hints = [],
+  } = req.body;
+
+  try {
+    //יצירת שאלה חדשה
+    const question = await practiceQuestionsRepository.updatePracticeQuestion({
+      id,
+      content,
+      difficulty,
+      type,
+      generated_by_ai,
+      created_by,
+    });
+
+    await handleRelatedQuestionData(question.id, topic, hints);
+
+    res.status(200).json({
+      message: 'השאלה עודכנה בהצלחה',
+      questionId: question.id,
+    });
+  } catch (error: any) {
+    console.error('שגיאה בעדכון שאלה:', error);
+    res.status(500).json({
+      message: 'שגיאה בעת עדכון שאלה ',
+      error: error.message,
+    });
+  }
+};
+
 
 export const getAllTopicsController = async (req: Request, res: Response) => {
   try {

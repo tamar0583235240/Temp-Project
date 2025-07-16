@@ -28,6 +28,7 @@ const AddPracticeQuestionButton = () => {
 
       <AddNewPracticeQuestion
         isOpen={isModalOpen}
+        // action='add'
         onClose={handleCloseModal}
       />
     </>
