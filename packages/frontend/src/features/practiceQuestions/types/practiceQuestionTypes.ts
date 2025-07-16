@@ -22,3 +22,10 @@ export interface CreatePracticeQuestionRequest {
   topic: string;
   hints: Hint[];
 }
+
+export interface Topic {
+  id: string;
+  name: string;
+  created_at: string;
+}
+

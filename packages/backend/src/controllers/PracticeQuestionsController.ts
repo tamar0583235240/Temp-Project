@@ -50,15 +50,25 @@ export const createPracticeQuestionController = async (req: Request, res: Respon
     }
 
     res.status(201).json({
-      message: '✅ השאלה נוספה בהצלחה',
+      message: 'השאלה נוספה בהצלחה',
       questionId: question.id,
     });
   } catch (error: any) {
-    console.error('❌ שגיאה בהוספת שאלה:', error);
+    console.error('שגיאה בהוספת שאלה:', error);
     res.status(500).json({
       message: 'שגיאה בעת יצירת שאלה חדשה',
       error: error.message,
     });
+  }
+};
+
+export const getAllTopicsController = async (req: Request, res: Response) => {
+  try {
+    const topics = await practiceQuestionsRepository.getAllTopics();
+    res.status(200).json(topics);
+  } catch (error) {
+    console.error("Error getting topics:", error);
+    res.status(500).json({ message: 'שגיאה בטעינת נושאים' });
   }
 };
 

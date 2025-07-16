@@ -27,8 +27,7 @@ const HomePage = () => {
         משותף
       </Button>
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/practice-questions")}>
-ניהול שאלות תרגולל      
-</Button>
+        ניהול שאלות תרגול</Button>
 
 
       {isManager && (
@@ -45,12 +44,12 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
             ניהול משתמשים
           </Button>
-              <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
-      ניהול תכנים דינמיים
-    </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
+            ניהול תכנים דינמיים
+          </Button>
         </>
 
-        
+
       )}
     </GridContainer>
 

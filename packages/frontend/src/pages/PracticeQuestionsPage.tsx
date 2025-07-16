@@ -1,9 +1,14 @@
 import React from 'react'
-import AddPracticeQuestion from '../features/practiceQuestions/components/AddNewPracticeQuestion';
+import AddPracticeQuestionButton from '../features/practiceQuestions/components/AddPracticeQuestionButton';
 const PracticeQuestionsPage = () => {
     return (
-        <AddPracticeQuestion/>
+        <AddPracticeQuestionButton />
     )
 }
 
 export default PracticeQuestionsPage
+
+
+
+
+// בתוך הקומפוננטה שלך

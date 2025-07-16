@@ -2,6 +2,7 @@ import { api } from "../../../shared/api/api";
 import {
   PracticeQuestion,
   CreatePracticeQuestionRequest,
+  Topic, 
 } from "../types/practiceQuestionTypes";
 
 export const practiceQuestionsApi = api.injectEndpoints({
@@ -18,10 +19,15 @@ export const practiceQuestionsApi = api.injectEndpoints({
       }),
       invalidatesTags: ["PracticeQuestion"],
     }),
+     getTopics: builder.query<Topic[], void>({
+      query: () => "api/practiceQuestions/topics",
+      providesTags: ["Topics"],
+    }),
   }),
 });
 
 export const {
   useGetPracticeQuestionsQuery,
   useAddPracticeQuestionMutation,
+  useGetTopicsQuery
 } = practiceQuestionsApi;
