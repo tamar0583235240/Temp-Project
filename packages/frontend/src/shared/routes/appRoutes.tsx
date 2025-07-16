@@ -84,7 +84,6 @@
 //   }
 // />
 
-
 //           <Route
 //             path="/admin/users"
 //             element={
@@ -121,7 +120,7 @@ import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import { RecordingsList } from "../../features/recordings/components/recordingsList";
 import { AdminQuestions } from "../../features/admin/components/adminQuestions";
-import AdminUser from '../../pages/AdminUser';
+import AdminUser from "../../pages/AdminUser";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
@@ -129,7 +128,8 @@ import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
-import Dashboard from "../../pages/dashboard"
+import Dashboard from "../../pages/dashboard";
+import FeedbackChart from "../../features/feedback/components/FeedbackChart";
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -153,15 +153,14 @@ export default function AppRoutes() {
             }
           />
 
-<Route
-  path="/dashboard"
-  element={
-    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-      <Dashboard />
-    </RoleProtectedRoute>
-  }
-/>
-
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <Dashboard />
+              </RoleProtectedRoute>
+            }
+          />
 
           <Route
             path="/recordings"
@@ -229,6 +228,15 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <DynamicContentPage />
+              </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/feedbackes/chart"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager", "student"]}>
+                <FeedbackChart/>
               </RoleProtectedRoute>
             }
           />
