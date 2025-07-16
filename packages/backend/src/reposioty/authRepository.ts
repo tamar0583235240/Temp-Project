@@ -16,14 +16,16 @@ export const login = async (email: string, password: string): Promise<Users | nu
     // Mark as active user
     await pool.query('UPDATE users SET is_active = true WHERE id = $1', [user.id]);
 
-    return user as Users;
+    // מחזיר את המשתמש ללא שדה הסיסמה
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword as Users;
   } catch (error) {
     console.error("Error during login:", error);
     throw error;
   }
 };
 
-const signup = async (userData: Users): Promise<Users> => {
+export const signup = async (userData: Users): Promise<Users> => {
   try {
     const { id, firstName, lastName, email, phone, role, createdAt, isActive, password, slug } = userData;
 
@@ -34,7 +36,7 @@ const signup = async (userData: Users): Promise<Users> => {
       [id, firstName, lastName, email, phone, role, createdAt, isActive, password, slug]
     );
 
-    return (res.rows[0] as Users) || null;
+    return res.rows[0] as Users;
   } catch (error) {
     console.error("Error creating user in local DB:", error);
     throw error;

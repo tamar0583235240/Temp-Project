@@ -15,7 +15,7 @@ export class InterviewMaterialsSub {
   @Column("text", { name: "short_description", nullable: true })
   shortDescription: string | null;
 
-  @Column("text", { name: "file_url", nullable: true })
+  @Column("text", { name: "file_url" })
   fileUrl: string;
 
   @Column("text", { name: "original_file_name", nullable: true })

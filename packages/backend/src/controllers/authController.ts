@@ -4,6 +4,7 @@ import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { OAuth2Client } from "google-auth-library";
+
 import { Users } from "../interfaces/entities/Users";
 import {
   createToken,
@@ -18,9 +19,11 @@ import {
 } from "../utils/emailSender";
 import { generateUniqueSlug } from "../utils/generateSlug";
 
+// Map לשמירת קודי אימות זמניים
 type CodeData = { code: string; expiresAt: number };
-const codesPerEmail = new Map<string, CodeData>(); //שמירת הקודים לפי המיילים שאליהם נשלחו
-// ניקוי המפות שפג תוקפן -כל שעה
+const codesPerEmail = new Map<string, CodeData>();
+
+// ניקוי קודים שפג תוקפם כל שעה
 const cleanExpiredCodes = () => {
   const now = Date.now();
   for (const [email, data] of codesPerEmail.entries()) {
@@ -31,25 +34,32 @@ const cleanExpiredCodes = () => {
 };
 setInterval(cleanExpiredCodes, 60 * 60 * 1000);
 
+// יצירת ושליחת קוד אימות למייל
 export const generateAndSendCode = async (req: Request, res: Response) => {
   const email = req.body.email;
-  if (!email)
+  if (!email) {
     return res.status(400).json({ sent: false, message: "Email is required" });
-  // יצירת קוד אקראי בן 6 ספרות
+  }
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = Date.now() + 5 * 60 * 1000; // הקוד תקף ל-5 דקות
+  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 דקות תוקף
   codesPerEmail.set(email, { code, expiresAt });
-  // בקוד הזה צריך לטפל...
-  await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`);
-  res.status(200).json({ sent: true, message: "הקוד נשלח בהצלחה!" });
+
+  try {
+    await sendVerificationCodeEmail(email, `קוד האימות שלך הוא: ${code}`);
+    return res.status(200).json({ sent: true, message: "הקוד נשלח בהצלחה!" });
+  } catch (error) {
+    console.error("Error sending verification code email:", error);
+    return res.status(500).json({ sent: false, message: "שגיאת שרת" });
+  }
 };
 
+// אימות קוד שהתקבל מהמשתמש
 export const validateCode = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const code = req.body.code;
+  const { email, code } = req.body;
 
-  if (!email || !code)
+  if (!email || !code) {
     return res.status(400).json({ error: "Email and code are required" });
+  }
 
   const validCode = codesPerEmail.get(email);
   if (!validCode) {
@@ -61,11 +71,13 @@ export const validateCode = async (req: Request, res: Response) => {
       });
   }
   if (Date.now() > validCode.expiresAt) {
+    codesPerEmail.delete(email);
     return res
       .status(200)
       .json({ valid: false, message: "הקוד פג תוקף. אנא בקש קוד חדש." });
   }
   if (code === validCode.code) {
+    codesPerEmail.delete(email); // אפשר למחוק את הקוד לאחר אימות מוצלח
     return res.status(200).json({ valid: true, message: "הקוד אומת בהצלחה" });
   } else {
     return res
@@ -84,6 +96,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const user = await userRepository.getUserByEmail(email);
     if (!user) {
+      // מחזיר בהצלחה כדי לא לחשוף האם האימייל במערכת
       return res
         .status(200)
         .json({ message: "If email exists, reset link sent" });
@@ -104,6 +117,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
+// איפוס סיסמה לפי טוקן חדש וסיסמה חדשה
 export const resetPassword = async (req: Request, res: Response) => {
   const { token, password } = req.body;
   if (!token || !password)
@@ -120,7 +134,9 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Token expired" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const SALT_ROUNDS = 10;
+    
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     await userRepository.updateUserPassword(tokenData.user_id, hashedPassword);
     await deleteToken(token);
 
@@ -131,6 +147,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
+// התחברות עם אימייל וסיסמה
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password, rememberMe } = req.body;
@@ -172,13 +189,12 @@ export const login = async (req: Request, res: Response) => {
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
-    return res.status(407).json({ message: "לא סופק refresh token" });
+    return res.status(401).json({ message: "No refresh token provided" });
   }
 
   try {
     const userData = jwt.verify(refreshToken, REFRESH_SECRET) as any;
     const user = await userRepository.getUserById(userData.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -190,9 +206,9 @@ export const refreshToken = async (req: Request, res: Response) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ token: newToken, user }); // 👈 מחזיר גם user
+    res.json({ token: newToken, user });
   } catch (err) {
-    return res.status(403).json({ message: "refresh token לא תקין" });
+    return res.status(403).json({ message: "Invalid refresh token" });
   }
 };
 
@@ -205,11 +221,13 @@ export const logout = (req: Request, res: Response) => {
   res.json({ message: "התנתקת בהצלחה" });
 };
 
+// Map לשמירת הרשמות ממתינות עם קוד אימות
 const pendingSignups = new Map<
   string,
   { userData: Users; code: string; expiresAt: number }
 >();
 
+// בקשת הרשמה (שולח קוד אימות)
 export const requestSignup = async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password } = req.body;
 
@@ -219,7 +237,7 @@ export const requestSignup = async (req: Request, res: Response) => {
 
   const existing = (await userRepository.getAllUsers()).find((u: Users) => u.email === email);
   if (existing) {
-    return res.status(409).json({ message: "אימייל כבר קיים" });
+    return res.status(409).json({ message: "Email already exists" });
   }
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -248,6 +266,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       interviewExperiences: [],
       userReminderSettings: [],
       userSessions: [],
+      userActivities: [],
       workExperiences: [],
       profiles: {
         id: uuidv4(),
@@ -262,6 +281,7 @@ export const requestSignup = async (req: Request, res: Response) => {
         isPublic: false,// This w // This will be set after user creation
         user: {} as Users
       },
+
     },
     code,
     expiresAt,
@@ -276,6 +296,7 @@ export const requestSignup = async (req: Request, res: Response) => {
     });
 };
 
+// אישור הרשמה עם קוד
 export const confirmSignup = async (req: Request, res: Response) => {
   const { email, code } = req.body;
 
@@ -286,7 +307,7 @@ export const confirmSignup = async (req: Request, res: Response) => {
 
   if (pending.expiresAt < Date.now()) {
     pendingSignups.delete(email);
-    return res.status(400).json({ message: "הקוד פג תוקף. נא לבקש קוד חדש." });
+    return res.status(400).json({ message: "Code expired. Please request a new code." });
   }
 
   if (pending.code !== code) return res.status(400).json({ message: "הקוד שגוי." });
@@ -294,7 +315,6 @@ export const confirmSignup = async (req: Request, res: Response) => {
   await authRepository.signup(pending.userData);
   pendingSignups.delete(email);
 
-  // יוצרים טוקן
   const token = jwt.sign(
     {
       id: pending.userData.id,
@@ -331,7 +351,7 @@ export const signup = async (req: Request, res: Response) => {
 
   const existing = (await userRepository.getAllUsers()).find((user: Users) => user.email === email);
   if (existing) {
-    return res.status(409).json({ message: "אימייל כבר קיים" });
+    return res.status(409).json({ message: "Email already exists" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -357,6 +377,7 @@ export const signup = async (req: Request, res: Response) => {
     interviewExperiences: [],
     userReminderSettings: [],
     userSessions: [],
+    userActivities: [],
     workExperiences: [],
     profiles: {
       id: uuidv4(),
@@ -373,7 +394,9 @@ export const signup = async (req: Request, res: Response) => {
     }
   };
 
-  await authRepository.signup(newUser);
+
+
+await authRepository.signup(newUser);
 
   const token = jwt.sign(
     { id: newUser.id, email: newUser.email, role: newUser.role },
@@ -381,11 +404,19 @@ export const signup = async (req: Request, res: Response) => {
     { expiresIn: "1h" }
   );
 
+
+res.status(201).json({ user: newUser, token });
+
+
+  await authRepository.signup(newUser);
+
+
   res.status(201).json({ user: newUser, token });
 };
 
 const client = new OAuth2Client();
 
+// אימות באמצעות גוגל OAuth
 export const authWithGoogle = async (req: Request, res: Response) => {
   try {
     const { payload, rememberMe } = req.body;
@@ -400,9 +431,7 @@ export const authWithGoogle = async (req: Request, res: Response) => {
 
     const googleUser = ticket.getPayload();
     if (!googleUser?.email) {
-      return res
-        .status(400)
-        .json({ message: "Invalid token or email not found" });
+      return res.status(400).json({ message: "Invalid token or email not found" });
     }
 
     let user = await userRepository.getUserByEmail(googleUser.email);

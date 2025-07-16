@@ -6,6 +6,7 @@ import { SearchComponents } from "../../features/recordings/components/searchCom
 import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
 import { SortComponents } from "../../features/recordings/components/sortComponents";
 import { AdminQuestions } from "../../features/admin/components/adminQuestions";
+import AdminUser from '../../pages/AdminUser';
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
 import Dashboard from '../../pages/dashboard';
@@ -15,7 +16,6 @@ import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
-import AdminUser from "../../pages/AdminUser"; 
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
 // import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
@@ -26,6 +26,9 @@ import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+
+import NotAuthorizedPage from "../components/NotAuthorizedPage";
+import DynamicContentPage from "../../pages/DynamicContentPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -95,8 +98,24 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+
+<Route
+  path="/dashboard"
+  element={
+    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+      <Dashboard />
+    </RoleProtectedRoute>
+  }
+/>
+
+
           <Route
-            path="/dashboard"
+            path="/recordings"
+            element={<RecordingsList allowedRoles={["student", "manager"]} />}
+          />
+
+          <Route
+            path="/shared"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                     <Dashboard />
@@ -147,7 +166,9 @@ export default function AppRoutes() {
             path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>AdminQuestions</p>
+                <AdminQuestions allowedRoles={["manager"]}>
+                  <p>AdminQuestions</p>
+                </AdminQuestions>
               </RoleProtectedRoute>
             }
           />
@@ -161,6 +182,35 @@ export default function AppRoutes() {
           />
           <Route
             path="/manager/resources"
+            element = {
+            <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>InterviewMaterialsHub</p>
+            </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/questions"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <AdminQuestions allowedRoles={["manager"]}>
+                  <p>AdminQuestions</p>
+                </AdminQuestions>
+              </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/users"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <AdminUser />
+              </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/resources"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <p>AdminResources</p>
@@ -189,11 +239,22 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                      <WorkExperienceTab  />
+              </RoleProtectedRoute>
+            }
+          />
 
+
+          <Route
+            path="/admin/dynamic-content"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <DynamicContentPage />
               </RoleProtectedRoute>
             }
           />
         </Route>
+
+        <Route path="/not-authorized" element={<NotAuthorizedPage />} />
       </Routes>
     </div>
   );
