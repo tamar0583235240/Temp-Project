@@ -7,19 +7,19 @@ export class InterviewMaterialsSub {
   id: number;
 
   @Column("text", { name: "title", nullable: true })
-  title: string | null;
+  title: string;
 
   @Column("text", { name: "thumbnail", nullable: true })
-  thumbnail: string | null;
+  thumbnail: string;
 
   @Column("text", { name: "short_description", nullable: true })
   shortDescription: string | null;
 
   @Column("text", { name: "file_url", nullable: true })
-  fileUrl: string | null;
+  fileUrl: string;
 
   @Column("text", { name: "original_file_name", nullable: true })
-  originalFileName: string | null;
+  originalFileName: string;
 
   @Column("integer", {
     name: "downloads_count",

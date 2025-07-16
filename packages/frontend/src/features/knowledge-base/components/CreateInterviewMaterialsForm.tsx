@@ -66,8 +66,6 @@ export const CreateInterviewMaterialsForm = ({
     }
     if (data.file?.length) {
       formData.append("file", data.file[0]);
-      console.log("שם הקובץ:", data.file[0].name); // ← כאן תראי אם זה בעברית תקין
-
     }
 
     onSubmit(formData);

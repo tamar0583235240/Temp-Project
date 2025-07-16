@@ -21,12 +21,24 @@ export const getInterviewMaterialSubById = async (
       "SELECT * FROM interview_materials_sub WHERE id = $1",
       [id]
     );
-    return result.rows[0] || null;
+    const row = result.rows[0];
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      title: row.title,
+      thumbnail: row.thumbnail,
+      shortDescription: row.short_description,
+      fileUrl: row.file_url,
+      originalFileName: row.original_file_name,
+      downloadsCount: row.downloads_count,
+    };
   } catch (error) {
-    console.error("Error fetching AIInsight from PostgreSQL:", error);
+    console.error("Error fetching interview material sub by ID from PostgreSQL:", error);
     throw error;
   }
 };
+
 
 export const updateInterviewMaterialSub = async (
   id: string,
@@ -42,7 +54,7 @@ export const updateInterviewMaterialSub = async (
     SET title = $1,
         short_description = $2,
         thumbnail = $3,
-        file_url = $4
+        file_url = $4,
         original_file_name = $5
     WHERE id = $6
     RETURNING *;
@@ -98,10 +110,3 @@ export const deleteInterviewMaterialSub = async (id: string) => {
     throw error;
   }
 };
-// export default{
-//   deleteInterviewMaterialSub,
-//   getInterviewMaterialsSubs,
-//   getInterviewMaterialSubById,
-//   updateInterviewMaterialSub,
-//   createInterviewMaterialSub,
-// };

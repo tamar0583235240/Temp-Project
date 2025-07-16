@@ -93,7 +93,7 @@ const updateUser = async (
   }
 };
 
-const updateActiveUser = async (id: string): Promise<Users | null> => {
+const updateIsActiveUser = async (id: string, isActive: boolean): Promise<Users | null> => {
   try {
     const res = await pool.query(
       `
@@ -186,7 +186,7 @@ export default {
     getUserByEmail,
     updateUserPassword,
     updateUser,
-    updateActiveUser,
+    updateIsActiveUser,
     createUser,
     insertUser,
     deleteUser

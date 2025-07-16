@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getInterviewMaterialSubById } from "../reposioty/interviewMaterialSubRepository";
-import { fetch } from "undici";
+// import { fetch } from "undici";
 // import { InterviewMaterialsSub } from "@interfaces/entities/InterviewMaterialsSub";
 
 type InterviewMaterial = {
@@ -20,19 +20,10 @@ export const downloadInterviewMaterial = async (
     const id = req.params.id;
     console.log("downloadInterviewMaterial called with id:", id);
 
-    const dbMaterialRaw: any = await getInterviewMaterialSubById(id);
-    if (!dbMaterialRaw) {
+    const material: any = await getInterviewMaterialSubById(id);
+    if (!material) {
       return res.status(404).json({ message: "קובץ לא נמצא" });
     }
-
-    const material: InterviewMaterial = {
-      id: dbMaterialRaw.id,
-      title: dbMaterialRaw.title,
-      thumbnail: dbMaterialRaw.thumbnail,
-      shortDescription: dbMaterialRaw.short_description,
-      fileUrl: dbMaterialRaw.file_url,
-      originalFileName: dbMaterialRaw.original_file_name,
-    };
 
     console.log("material:", material);
 

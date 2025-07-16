@@ -2,15 +2,16 @@ import { useState } from "react";
 import { CreateInterviewMaterialsForm } from "./CreateInterviewMaterialsForm";
 import MessageModal from "../../../shared/ui/messageModal";
 import { Button } from "../../../shared/ui/button";
-import { Plus } from "lucide-react"; 
-import { useCreateInterviewMaterialSubMutation } from "../../../shared/api/interviewMaterialApi";
+import { Plus } from "lucide-react";
+import { useCreateInterviewMaterialMutation } from "../../../shared/api/interviewMaterialsApi";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
 import { InterviewMaterialsList } from "./InterviewMaterialsList";
 
 const InterviewMaterialPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createResource, { isLoading, isSuccess, isError, error }] = useCreateInterviewMaterialSubMutation();
+  const [createResource, { isLoading, isSuccess, isError, error }] =
+    useCreateInterviewMaterialMutation();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -19,7 +20,6 @@ const InterviewMaterialPage = () => {
     try {
       await createResource(formData).unwrap();
       setIsModalOpen(false);
-
     } catch (e) {
       console.error(e);
     }
@@ -27,18 +27,18 @@ const InterviewMaterialPage = () => {
 
   return (
     <>
-    <div  className="fixed top-6 right-6 z-50">
-      <Button
-        onClick={handleOpenModal}
-        variant="primary-dark" 
-        size="md"
-        icon={<Plus size={18} />}
-        iconPosition="left"
-        className="mb-4"
-      >
-        הוסף פריט 
-      </Button>
-</div>
+      <div className="fixed top-6 right-6 z-50">
+        <Button
+          onClick={handleOpenModal}
+          variant="primary-dark"
+          size="md"
+          icon={<Plus size={18} />}
+          iconPosition="left"
+          className="mb-4"
+        >
+          הוסף פריט
+        </Button>
+      </div>
       {isModalOpen && (
         <MessageModal
           title="הוספת פריט"
@@ -52,14 +52,9 @@ const InterviewMaterialPage = () => {
         />
       )}
 
-      
-      <Provider store={store}>
-        <InterviewMaterialsList />
-      </Provider>
-     
+      <InterviewMaterialsList />
     </>
   );
 };
 
 export default InterviewMaterialPage;
-
