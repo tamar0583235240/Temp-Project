@@ -1,62 +1,107 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useGetPracticeQuestionsByTopicQuery, useGetPracticeQuestionsQuery } from "../services/practiceQuestionsApi";
-import { RootState } from "../../../shared/store/store";
+import { useGetPracticeQuestionsQuery } from "../services/practiceQuestionsApi";
+import { CardSimple } from "../../../shared/ui/card";
+import { Grid } from "../../../shared/ui/grid";
+import { IconWrapper } from "../../../shared/ui/IconWrapper";
+import { Button } from "../../../shared/ui/button";
+import { FiHelpCircle, FiClock, FiCpu, FiCalendar, FiTag, FiZap, FiEdit2, FiTrash2, FiInfo, FiSettings } from "react-icons/fi";
+import { EmptyState } from "../../../shared/ui/EmptyState";
 
 const PracticeQuestions: React.FC = () => {
-  // const {topicId} = useSelector((state: RootState) => state.api.);
-  // const topicId = "00000000-0000-0000-0000-000000000001";
-  // const { data, isLoading, error } = useGetPracticeQuestionsByCategoryQuery(topicId);
-
   const { data, isLoading, error } = useGetPracticeQuestionsQuery();
 
-  if (isLoading) return <div className="text-center mt-8 text-gray-500">טוען שאלות...</div>;
-  if (error) return <div className="text-center mt-8 text-red-500">שגיאה בטעינת שאלות.</div>;
-  if (!data || data.length === 0) return <div className="text-center mt-8 text-gray-400">לא נמצאו שאלות.</div>;
+  if (isLoading)
+    return <div className="text-center mt-8 text-gray-500">טוען שאלות...</div>;
+  if (error)
+    return <div className="text-center mt-8 text-red-500">שגיאה בטעינת שאלות.</div>;
+  if (!data || data.length === 0)
+    return (
+      <EmptyState
+        icon={<FiHelpCircle size={28} />}
+        title="לא נמצאו שאלות"
+        description="אין כרגע שאלות תרגול זמינות להצגה."
+      />
+    );
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-[--color-primary]">שאלות תרגול</h2>
-      <ul className="space-y-4">
+    <div className="mt-8 mb-12">
+      <h2 className="text-3xl font-bold text-center text-[--color-primary] mb-8">שאלות תרגול</h2>
+      <Grid cols={3}>
         {data.map((q) => (
-          <li key={q.id} className="bg-white border border-[--color-border] shadow-md rounded-2xl p-4 transition hover:shadow-lg">
-            <div className="text-sm text-gray-500 mb-2">
-              <span className="font-semibold text-gray-700">סוג:</span> {q.type}
-            </div>
-            <div className="text-sm text-gray-500 mb-2">
-              <span className="font-semibold text-gray-700">רמת קושי:</span> {q.difficulty}
-            </div>
-            <div className="text-sm text-gray-500 mb-2">
-              <span className="font-semibold text-gray-700">שאלה:</span> {q.content}
-            </div>
-            <div className="text-sm text-gray-500 mb-2">
-              <span className="font-semibold text-gray-700">נוצר על ידי AI:</span> {q.generated_by_ai ? "כן" : "לא"}
-            </div>
-            <div className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-700">נוצר בתאריך:</span> {new Date(q.created_at).toLocaleString("he-IL")}
-            </div>
-            <div className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-700">נושאים:</span>{" "}
-              {q.topics.length > 0
-                ? q.topics.map((topic: any) => topic.name).join(", ")
-                : "לא סווג"}
+          <CardSimple
+            key={q.id}
+            className="flex flex-col justify-between border border-[--color-border] p-5 rounded-2xl shadow-md hover:shadow-lg transition min-h-[520px]"
+          >
+            <div className="grid gap-3 text-left flex-1">
+              <div className="min-h-[56px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiTag className="text-text-secondary" /> סוג שאלה
+                </p>
+                <p className="text-sm text-text-secondary">{q.type}</p>
+              </div>
+
+              <div className="min-h-[56px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiZap className="text-text-secondary" /> רמת קושי
+                </p>
+                <p className="text-sm text-text-secondary">{q.difficulty}</p>
+              </div>
+
+              <div className="min-h-[80px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiCpu className="text-text-secondary" /> שאלה
+                </p>
+                <p className="text-sm text-text-secondary">{q.content}</p>
+              </div>
+
+              <div className="min-h-[56px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiSettings className="text-text-secondary" /> נוצר על ידי AI
+                </p>
+                <p className="text-sm text-text-secondary">{q.generated_by_ai ? "כן" : "לא"}</p>
+              </div>
+
+              <div className="min-h-[56px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiCalendar className="text-text-secondary" /> תאריך יצירה
+                </p>
+                <p className="text-sm text-text-secondary">
+                  {new Date(q.created_at).toLocaleDateString("he-IL")}
+                </p>
+              </div>
+
+              <div className="min-h-[56px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiTag className="text-text-secondary" /> נושאים
+                </p>
+                <p className="text-sm text-text-secondary">
+                  {q.topics.length > 0 ? q.topics.map((t: any) => t.name).join(", ") : "לא סווג"}
+                </p>
+              </div>
+
+              <div className="min-h-[80px]">
+                <p className="text-sm font-semibold text-text-main mb-1 flex items-center gap-1">
+                  <FiInfo className="text-text-secondary" /> רמזים
+                </p>
+                {q.hints.length > 0 ? (
+                  <ul className="list-disc list-inside ml-4 text-sm text-text-secondary">
+                    {q.hints.map((hint: any, index: number) => (
+                      <li key={index}>{hint.content}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-text-secondary">אין רמזים</p>
+                )}
+              </div>
             </div>
 
-            <div className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-700">רמזים:</span>{" "}
-              {q.hints.length > 0 ? (
-                <ul className="list-disc list-inside ml-4">
-                  {q.hints.map((hint: any, index: number) => (
-                    <li key={index}>{hint.content}</li>
-                  ))}
-                </ul>
-              ) : (
-                "אין רמזים"
-              )}
+            <div className="flex justify-end gap-2 pt-4 border-t border-[--color-border] mt-auto">
+              <Button variant="ghost" size="sm" icon={<FiEdit2 />} aria-label="עריכה" />
+              <Button variant="ghost" size="sm" icon={<FiTrash2 />} aria-label="מחיקה" />
             </div>
-          </li>
+          </CardSimple>
         ))}
-      </ul>
+      </Grid>
     </div>
   );
 };
