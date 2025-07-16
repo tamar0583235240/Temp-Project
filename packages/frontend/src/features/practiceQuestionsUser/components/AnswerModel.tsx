@@ -1,5 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
+import CodeRunner from './CodeRunner';
 
 interface AnswerModalProps {
   question: {
@@ -43,16 +44,13 @@ export const AnswerModal = ({ question, onClose, onSubmit }: AnswerModalProps) =
             placeholder="כתבי את תשובתך כאן..."
           />
         );
-      case "code":
+   case "code":
         return (
-          <textarea
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            className="w-full font-mono bg-gray-100 border mt-4 p-2 rounded"
-            rows={6}
-            placeholder="כתבי כאן את הקוד שלך..."
-          />
+          <div className="mt-4" style={{ width: '100%', maxWidth: '900px', height: '450px' }}>
+<CodeRunner onCodeChange={setAnswer} />
+          </div>
         );
+
       default:
         return null;
     }
