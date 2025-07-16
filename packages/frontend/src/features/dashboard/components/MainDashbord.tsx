@@ -22,12 +22,12 @@ export const MainDashboard: React.FC = () => {
   const authState = useSelector((state: RootState) => state.auth);
 
   // המרה של המשתמש ל-camelCase
-const user = authState.user
-  ? {
+  const user = authState.user
+    ? {
       firstName: (authState.user as any).first_name ?? authState.user.firstName,
       lastName: (authState.user as any).last_name ?? authState.user.lastName,
     }
-  : null;
+    : null;
 
 
   const userName = user?.firstName || "משתמש ללא שם";
@@ -76,7 +76,7 @@ const user = authState.user
           onClick={handleOverlayClick}
         >
           <div ref={certificateRef}>
-<Certificate first_name={user?.firstName ?? ""} last_name={user?.lastName ?? ""} />
+            <Certificate first_name={user?.firstName ?? ""} last_name={user?.lastName ?? ""} />
           </div>
         </div>
       )}
@@ -119,20 +119,20 @@ const user = authState.user
         </motion.div>
         {isComplete && !showCertificate && (
 
-        <motion.div
-          className="max-w-md mx-auto text-center"
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.3 }}
-        >
-          <button
-            onClick={() => setShowCertificate(true)}
-            className="inline-flex items-center gap-3 bg-gradient-to-br from-[--color-primary] to-[--color-primary-dark] text-white py-3 px-6 rounded-full text-lg font-semibold shadow-md hover:shadow-xl transition"
+          <motion.div
+            className="max-w-md mx-auto text-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
           >
-            <Award size={24} className="text-white" />
-            תעודת מוכנות לראיון
-          </button>
-        </motion.div>
-       )}
+            <button
+              onClick={() => setShowCertificate(true)}
+              className="inline-flex items-center gap-3 bg-gradient-to-br from-[--color-primary] to-[--color-primary-dark] text-white py-3 px-6 rounded-full text-lg font-semibold shadow-md hover:shadow-xl transition"
+            >
+              <Award size={24} className="text-white" />
+              תעודת מוכנות לראיון
+            </button>
+          </motion.div>
+        )}
       </motion.div>
     </>
   );

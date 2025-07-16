@@ -129,7 +129,9 @@ import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
-import Dashboard from "../../pages/dashboard"
+import Dashboard from "../../pages/dashboard";
+import PracticeQuestionsUser from "../../pages/practiceQuestionsUser"
+
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -153,15 +155,23 @@ export default function AppRoutes() {
             }
           />
 
-<Route
-  path="/dashboard"
-  element={
-    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-      <Dashboard />
-    </RoleProtectedRoute>
-  }
-/>
+          <Route
+            path="/practiceQuestionsUser"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <PracticeQuestionsUser />
+              </RoleProtectedRoute>
+            }
+          />
 
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <Dashboard />
+              </RoleProtectedRoute>
+            }
+          />
 
           <Route
             path="/recordings"

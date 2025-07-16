@@ -3,6 +3,7 @@
 import { User } from "../../auth/types/types";
 
 export interface user extends User {
+  password: string;
   isSelected?: boolean; // שדה פנימי לצרכי UI בלבד
 }
 

@@ -16,6 +16,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Simulation", href: "/simulation" },
+  { label: "Programming Questions", href: "/practiceQuestionsUser" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "My Recordings", href: "/recordings" },
   { label: "Shared Recordings", href: "/shared" },
@@ -72,7 +73,7 @@ const SidebarNavigation = () => {
           )
         )}
       </nav>
-    
+
       <ExitButton />
     </aside>
   );

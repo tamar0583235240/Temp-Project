@@ -19,7 +19,7 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
       lastName: user.lastName,
       email: user.email,
       phone: user.phone ?? '',
-  password: user.password ?? undefined,
+      password: user.password ?? undefined,
       role: user.role === 'manager' ? 'manager' : 'student',
     },
     resolver: yupResolver(userSchema),

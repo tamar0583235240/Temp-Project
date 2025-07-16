@@ -14,6 +14,9 @@ const HomePage = () => {
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/simulation")}>
         התחלי סימולציה
       </Button>
+      <Button variant="primary-dark" fullWidth onClick={() => navigate("/practiceQuestionsUser")}>
+        שאלות בתכנות
+      </Button>
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/dashboard")}>
         דשבורד
       </Button>
@@ -42,12 +45,12 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
             ניהול משתמשים
           </Button>
-              <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
-      ניהול תכנים דינמיים
-    </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
+            ניהול תכנים דינמיים
+          </Button>
         </>
 
-        
+
       )}
     </GridContainer>
 
