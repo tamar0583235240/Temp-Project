@@ -1,13 +1,19 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Column, Entity, Index, OneToMany, OneToOne } from "typeorm";
+import { ContentReports } from "./ContentReports";
+import { ExperienceThanks } from "./ExperienceThanks";
+import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Profiles } from "./Profiles";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
 import { UserReminderSettings } from "./UserReminderSettings";
+import { WorkExperiences } from "./WorkExperiences";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
+@Index("users_slug_key", ["slug"], { unique: true })
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("uuid", { primary: true, name: "id" })
@@ -37,9 +43,26 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+  @Column("text", { name: "password" })
+  password: string;
 
-  @Column("text", { name: "password", nullable: true })
-  password: string | null;
+  @Column("text", { name: "slug", nullable: true, unique: true })
+  slug: string | null;
+
+  @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
+  contentReports: ContentReports[];
+
+  @OneToMany(
+    () => ExperienceThanks,
+    (experienceThanks) => experienceThanks.user
+  )
+  experienceThanks: ExperienceThanks[];
+
+  @OneToMany(
+    () => InterviewExperiences,
+    (interviewExperiences) => interviewExperiences.user
+  )
+  interviewExperiences: InterviewExperiences[];
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
@@ -52,6 +75,10 @@ export class Users {
     (passwordResetTokens) => passwordResetTokens.user
   )
   passwordResetTokens: PasswordResetTokens[];
+
+  @OneToOne(() => Profiles, (profiles) => profiles.user, { nullable: true })
+  profiles: Profiles | null;
+
 
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
@@ -67,4 +94,7 @@ export class Users {
     (userReminderSettings) => userReminderSettings.user
   )
   userReminderSettings: UserReminderSettings[];
+
+  @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
+  workExperiences: WorkExperiences[];
 }

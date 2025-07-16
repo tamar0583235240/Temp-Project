@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Feedback } from '../interfaces/entities/Feedback';
-import { getFeedbackesByanswerIdRepo, getFeedbackAveragesRepo } from '../reposioty/feedBackRepository';
+import { getFeedbackesByanswerIdRepo } from '../reposioty/feedBackRepository';
 
 export const getFeedbackesByanswerId = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -15,12 +15,4 @@ export const getFeedbackesByanswerId = async (req: Request, res: Response): Prom
     }
 };
 
-export const getFeedbackAverages = async (req: Request, res: Response) => {
-  try {
-    const averages = await getFeedbackAveragesRepo();
-    res.json(averages);
-  } catch (error) {
-    console.error("Error fetching feedback averages", error);
-    res.status(500).json({ message: "Failed to get feedback averages" });
-  }
-};
+

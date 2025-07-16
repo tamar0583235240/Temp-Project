@@ -8,6 +8,7 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
+import FeedbackChart from './features/feedback/components/FeedbackChart';
 
 function App() {
   const dispatch = useAppDispatch();

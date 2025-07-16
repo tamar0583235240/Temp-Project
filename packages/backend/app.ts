@@ -17,6 +17,7 @@ import usedynamicContentRouter from './src/routes/DynamicContentRoutes'; // וד
 import answerRoutes from './src/routes/answerRouts';
 import aiInsightRoutes from './src/routes/aIInsightRouts';
 import userAdminRouts from './src/routes/userAdminRouts';
+import feedbacksInManagerRouter from './src/routes/feedbacksInManagerRouts';
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -46,5 +47,6 @@ app.use('/api/admin', userAdminRouts);
 app.use('/api/dynamic-contents', usedynamicContentRouter);
 app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);
+app.use("/api", feedbacksInManagerRouter);
 
 export default app
