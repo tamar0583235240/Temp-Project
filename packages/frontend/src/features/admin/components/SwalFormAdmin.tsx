@@ -26,19 +26,19 @@ const SwalForm = () => {
       phone: data.phone || '',
       createdAt: new Date(),
       isActive: false,
-      slug: null, // או תוכלי ליצור לפי שם
-  contentReports: [],
-  experienceThanks: [],
-  interviewExperiences: [],
-  answers: [],
-  feedbacks: [],
-  passwordResetTokens: [],
-  resources: [],
-  sharedRecordings: [],
-  userActivities: [],
-  userReminderSettings: [],
-  userSessions: [],
-  workExperiences: [],
+  //     slug: null, // או תוכלי ליצור לפי שם
+  // contentReports: [],
+  // experienceThanks: [],
+  // interviewExperiences: [],
+  // answers: [],
+  // feedbacks: [],
+  // passwordResetTokens: [],
+  // resources: [],
+  // sharedRecordings: [],
+  // userActivities: [],
+  // userReminderSettings: [],
+  // userSessions: [],
+  // workExperiences: [],
     };
     try {
       await createUser(fullUser).unwrap();

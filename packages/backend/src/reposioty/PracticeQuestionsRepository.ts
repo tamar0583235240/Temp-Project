@@ -65,6 +65,22 @@ const getallPracticeQuestions = async (): Promise<PracticeQuestionsWithExtras[]>
   }
 };
 
+const getPracticeQuestionsByTopic = async (topic_id: string): Promise<PracticeQuestions[]> => {
+  try {
+    const query = `
+      SELECT q.*
+      FROM practice_questions q
+      JOIN question_topics qt ON qt.question_id = q.id
+      WHERE qt.topic_id = $1
+    `;
+    const result = await pool.query(query, [topic_id]);
+    return result.rows as PracticeQuestions[];
+  } catch (error) {
+    console.error(":x: Error fetching practice_questions by topic:", error);
+    throw error;
+  }
+};
+
 // יצירת שאלה חדשה
 const createPracticeQuestion = async (questionData: {
   content: string;
@@ -137,5 +153,6 @@ export default {
   findOrCreateTopicByName,
   createQuestionTopicLink,
   createHint,
-  getAllTopics
+  getAllTopics,
+  getPracticeQuestionsByTopic
 };

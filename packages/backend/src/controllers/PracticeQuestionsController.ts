@@ -12,6 +12,15 @@ import practiceQuestionsRepository from '../reposioty/PracticeQuestionsRepositor
   }
 };
 
+export const getPracticeQuestionsByTopicController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { topicId } = req.params;
+    const practiceQuestions = await practiceQuestionsRepository.getPracticeQuestionsByTopic(topicId);
+    res.json(practiceQuestions);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
 
 export const createPracticeQuestionController = async (req: Request, res: Response) => {
   const {
@@ -23,7 +32,6 @@ export const createPracticeQuestionController = async (req: Request, res: Respon
     topic,
     hints = [],
   } = req.body;
-  console.log('Received request body:', req.body);
 
   try {
     //יצירת שאלה חדשה

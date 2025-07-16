@@ -11,6 +11,8 @@ export interface PracticeQuestion {
   generated_by_ai: boolean;
   created_by: string;
   created_at: string;
+    topics: [];
+  hints: [];
 }
 
 export interface CreatePracticeQuestionRequest {
