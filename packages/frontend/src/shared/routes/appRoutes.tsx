@@ -130,6 +130,7 @@ import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import Dashboard from "../../pages/dashboard";
 import FeedbackChart from "../../features/feedback/components/FeedbackChart";
+import FeedbackInManager from "../../pages/FeedbackInManager";
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -233,10 +234,11 @@ export default function AppRoutes() {
           />
 
           <Route
-            path="/admin/feedbackes/chart"
+          
+            path="/admin/feedbacks"
             element={
               <RoleProtectedRoute allowedRoles={["manager", "student"]}>
-                <FeedbackChart/>
+                <FeedbackInManager/>
               </RoleProtectedRoute>
             }
           />

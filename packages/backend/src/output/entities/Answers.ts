@@ -18,14 +18,24 @@ export class Answers {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("text", { name: "file_url" })
-  fileUrl: string;
+  @Column("text", { name: "answer_file_name" })
+  answerFileName: string;
 
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
   })
   submittedAt: Date;
+
+  @Column("text", { name: "file_url", nullable: true })
+  fileUrl: string | null;
+
+  @Column("integer", {
+    name: "amount_feedbacks",
+    nullable: true,
+    default: () => "0",
+  })
+  amountFeedbacks: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights: AiInsights[];

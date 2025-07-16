@@ -1,4 +1,4 @@
-export interface feedbackType {
+export interface FeedbackType {
     id: string
     shared_recording_id: string
     given_by_user_id: string

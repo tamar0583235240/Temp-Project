@@ -54,3 +54,9 @@ export const getFeedbackAveragesRepo = async (): Promise<FeedbackAverages> => {
   const { rows } = await pool.query(query);
   return rows[0];
 };
+
+export const getAllFeedbacksRepo=async(): Promise<Feedback[]>=>{
+const query=`SELECT * FROM feedback_to_system`
+const res=await pool.query(query)
+return res .rows as Feedback[];
+}
