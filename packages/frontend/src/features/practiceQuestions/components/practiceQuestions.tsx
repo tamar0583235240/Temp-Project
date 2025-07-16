@@ -1,7 +1,13 @@
 import React from "react";
-import { useGetPracticeQuestionsQuery } from "../services/practiceQuestionsApi";
+import { useSelector } from "react-redux";
+import { useGetPracticeQuestionsByCategoryQuery, useGetPracticeQuestionsQuery } from "../services/practiceQuestionsApi";
+import { RootState } from "../../../shared/store/store";
 
 const PracticeQuestions: React.FC = () => {
+  // const {topicId} = useSelector((state: RootState) => state.api.);
+  // const topicId = "00000000-0000-0000-0000-000000000001";
+  // const { data, isLoading, error } = useGetPracticeQuestionsByCategoryQuery(topicId);
+
   const { data, isLoading, error } = useGetPracticeQuestionsQuery();
 
   if (isLoading) return <div className="text-center mt-8 text-gray-500">טוען שאלות...</div>;
@@ -28,6 +34,25 @@ const PracticeQuestions: React.FC = () => {
             </div>
             <div className="text-sm text-gray-500">
               <span className="font-semibold text-gray-700">נוצר בתאריך:</span> {new Date(q.created_at).toLocaleString("he-IL")}
+            </div>
+            <div className="text-sm text-gray-500">
+              <span className="font-semibold text-gray-700">נושאים:</span>{" "}
+              {q.topics.length > 0
+                ? q.topics.map((topic: any) => topic.name).join(", ")
+                : "לא סווג"}
+            </div>
+
+            <div className="text-sm text-gray-500">
+              <span className="font-semibold text-gray-700">רמזים:</span>{" "}
+              {q.hints.length > 0 ? (
+                <ul className="list-disc list-inside ml-4">
+                  {q.hints.map((hint: any, index: number) => (
+                    <li key={index}>{hint.content}</li>
+                  ))}
+                </ul>
+              ) : (
+                "אין רמזים"
+              )}
             </div>
           </li>
         ))}

@@ -8,6 +8,10 @@ export const practiceQuestionsApi = api.injectEndpoints({
       query: () => "api/practiceQuestions",
       providesTags: ["PracticeQuestion"],
     }),
+    getPracticeQuestionsByCategory: builder.query<PracticeQuestion[], string>({
+      query: (topicId) => `api/practiceQuestions/topic/${topicId}`,
+      providesTags: ["PracticeQuestion"],
+    }),
     addPracticeQuestion: builder.mutation<PracticeQuestion, CreatePracticeQuestionRequest>({
       query: (newQuestion) => ({
         url: "api/practiceQuestions",
@@ -21,5 +25,6 @@ export const practiceQuestionsApi = api.injectEndpoints({
 
 export const {
   useGetPracticeQuestionsQuery,
+  useGetPracticeQuestionsByCategoryQuery,
   useAddPracticeQuestionMutation,
 } = practiceQuestionsApi;

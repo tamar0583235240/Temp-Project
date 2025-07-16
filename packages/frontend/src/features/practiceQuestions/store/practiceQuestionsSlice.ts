@@ -4,11 +4,13 @@ import { PracticeQuestion } from "../types/practiceQuestionsType";
 interface PracticeQuestionsState {
   data: PracticeQuestion[];
   loading: boolean;
+  topicId: string;
 }
 
 const initialState: PracticeQuestionsState = {
   data: [],
   loading: false,
+  topicId: "00000000-0000-0000-0000-000000000001",
 };
 
 const practiceQuestionsSlice = createSlice({
