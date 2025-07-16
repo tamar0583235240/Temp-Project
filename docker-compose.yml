@@ -1,25 +1,24 @@
 services:
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: bitnami/zookeeper:3.7.0
     ports:
-      - "2181:2181"
+     - "2181:2181"
     environment:
       ALLOW_ANONYMOUS_LOGIN: "yes"
 
   kafka:
     image: bitnami/kafka:latest
     ports:
-      - "9092:9092"
-      - "9094:9094"
+     - "9092:9092"
+    expose:
+     - "9093"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_CFG_PROCESS_ROLES: "broker"
       KAFKA_CFG_NODE_ID: "1"
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT"  # ודא שהשורה הזו קיימת
-      KAFKA_CLUSTER_ID: "your-cluster-id"  # הוסף אם יש לך מספר קונטיינרים
-    depends_on:
-      - zookeeper
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
