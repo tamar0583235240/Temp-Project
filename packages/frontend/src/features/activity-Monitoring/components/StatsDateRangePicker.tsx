@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useStats from "../hooks/States";
 import { log } from "console";
+import { useGetPageStatsQuery } from "../../../shared/api/activity_MonitoringhApi";
 
 const getRange = (option: string): [string, string] => {
   const today = new Date();
@@ -29,13 +30,10 @@ const getRange = (option: string): [string, string] => {
 };
 
 const StatsDateRangePicker = () => {
-  const { data, loading, error, fetchStats } = useStats();
   const [selected, setSelected] = useState("month");
+  const [from, to] = getRange(selected);
+    const { data, isLoading, error } = useGetPageStatsQuery({ from, to });
 
-  useEffect(() => {
-    const [from, to] = getRange(selected);
-    fetchStats(from, to);
-  }, [selected]);
 
   return (
     <div>
@@ -54,10 +52,10 @@ const StatsDateRangePicker = () => {
         <option value="year">📆 השנה</option>
       </select>
 
-      {loading && <div>🔄 טוען נתונים…</div>}
-      {error && <div>❌ שגיאה: {error}</div>}
+      {isLoading && <div>🔄 טוען נתונים…</div>}
+      {error && <div>❌ שגיאה: error</div>}
 
-      {!loading && !error && data && data.length > 0 && (
+      {!isLoading && !error && data && data.length > 0 && (
         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
           <thead>
             <tr>
@@ -78,7 +76,7 @@ const StatsDateRangePicker = () => {
         </table>
       )}
 
-      {!loading && !error && (!data || data.length === 0) && (
+      {!isLoading && !error && (!data || data.length === 0) && (
         <div>לא נמצאו נתונים לטווח התאריכים שנבחר</div>
       )}
     </div>

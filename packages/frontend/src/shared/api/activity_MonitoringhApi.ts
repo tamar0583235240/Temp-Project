@@ -20,13 +20,6 @@ export const activity_MonitoringhApi = api.injectEndpoints({
         body,
       }),
     }),
-
-    // getPageStats: builder.query<PageStats[], void>({
-    //   query: () => ({
-    //     url: "/monitoringh/state",
-    //     method: "GET",
-    //   }),
-    // }),
     getPageStats: builder.query<PageStats[], { from: string; to: string }>({
       query: ({ from, to }) => ({
         url: `/monitoring/state`,
