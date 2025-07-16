@@ -1,22 +1,22 @@
 // In your profilesApi.ts RTK Query slice
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Profile } from '../types/profileTypes';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Profile } from "../types/profileTypes";
 
 export const profilesApi = createApi({
-  reducerPath: 'profilesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  reducerPath: "profilesApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/" }),
   endpoints: (build) => ({
     getProfiles: build.query<Profile[], void>({
-      query: () => 'profiles',
+      query: () => "profiles",
     }),
     getProfileById: build.query<Profile, string>({
       query: (id) => `profiles/user/${id}`,
     }),
-    updateProfile: build.mutation<Profile, Partial<Profile> & { id: string }>({
-      query: ({ id, ...patch }) => ({
+    updateProfile: build.mutation<Profile, { id: string; formData: FormData }>({
+      query: ({ id, formData }) => ({
         url: `profiles/user/${id}`,
-        method: 'PUT',
-        body: patch,
+        method: "PUT",
+        body: formData,
       }),
     }),
   }),
