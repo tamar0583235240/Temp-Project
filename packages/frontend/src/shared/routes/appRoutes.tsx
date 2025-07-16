@@ -130,6 +130,7 @@ import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import Dashboard from "../../pages/dashboard"
+import PracticeQuestionList from '../../pages/practice'
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -148,7 +149,8 @@ export default function AppRoutes() {
             path="/simulation"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Simulation</p>
+                {/* <p>Simulation</p> */}
+                <PracticeQuestionList />
               </RoleProtectedRoute>
             }
           />
