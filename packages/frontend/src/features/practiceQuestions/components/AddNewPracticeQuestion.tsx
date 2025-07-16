@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAddPracticeQuestionMutation, useGetTopicsQuery } from '../services/practiceQuestionsApi';
 import { CreatePracticeQuestionRequest } from '../types/practiceQuestionTypes';
@@ -8,15 +7,12 @@ import { Button } from '../../../shared/ui/button';
 import { Input } from '../../../shared/ui/input';
 import { useMessageModal } from '../../../shared/ui/MessageModalContext';
 import { FaPlus, FaTimes, FaTrash, FaSave } from 'react-icons/fa';
+import { Select } from '../../../shared/ui/Select';
 
 interface AddNewPracticeQuestionProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-// נושאים קיימים - אפשר להעביר אותם כ-props או לטעון מה-API
-
-
 
 const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps) => {
   const [addPracticeQuestion, { isLoading, error }] = useAddPracticeQuestionMutation();
@@ -29,9 +25,7 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
     isLoading: isTopicsLoading,
     error: topicsError,
     refetch: refetchTopics,
-
   } = useGetTopicsQuery();
-
 
   const initialFormData: CreatePracticeQuestionRequest = {
     content: '',
@@ -43,29 +37,11 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
   };
 
   const [formData, setFormData] = useState<CreatePracticeQuestionRequest>(initialFormData);
-  const [showCustomTopic, setShowCustomTopic] = useState(false);
   const [customTopic, setCustomTopic] = useState('');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value === 'custom') {
-      setShowCustomTopic(true);
-      setFormData((prev) => ({ ...prev, topic: '' }));
-    } else {
-      setShowCustomTopic(false);
-      setFormData((prev) => ({ ...prev, topic: value }));
-    }
-  };
-
-  const handleCustomTopicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCustomTopic(value);
-    setFormData((prev) => ({ ...prev, topic: value }));
   };
 
   const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -94,7 +70,7 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
 
   const confirmResetForm = () => {
     setFormData(initialFormData);
-    setShowCustomTopic(false);
+    setIsCustomTopic(false);
     setCustomTopic('');
     setShowResetConfirm(false);
     showMessage('הצלחה', 'הטופס נוקה בהצלחה');
@@ -107,25 +83,26 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // סינון רמזים ריקים
+    // סינון רמזים ריקים לפני השליחה
     const filteredHints = formData.hints.filter(hint => hint.content.trim() !== '');
+
     const dataToSubmit = {
       ...formData,
-      hints: filteredHints.length > 0 ? filteredHints : [{ content: '', generated_by_ai: false }]
+      hints: filteredHints, // שולח רק רמזים עם תוכן
     };
 
     try {
-      const response = await addPracticeQuestion(dataToSubmit).unwrap();
-      showMessage('הצלחה', 'השאלה נוספה בהצלחה');
+      await addPracticeQuestion(dataToSubmit).unwrap();
+      showMessage('success', 'השאלה נוספה בהצלחה');
       refetchTopics();
       // איפוס הטופס
       setFormData(initialFormData);
-      setShowCustomTopic(false);
+      setIsCustomTopic(false);
       setCustomTopic('');
       onClose();
     } catch (err) {
       console.error('Failed to save the question:', err);
-      showMessage('שגיאה', 'שגיאה בהוספת השאלה');
+      showMessage('error', 'שגיאה בהוספת השאלה');
     }
   };
 
@@ -136,17 +113,13 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-text-main">הוספת שאלה מקצועית</h2>
-          <Button variant="ghost" onClick={onClose}>
-            ✕
-          </Button>
+          <Button variant="ghost" onClick={onClose}>✕</Button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* תוכן השאלה - תיבת טקסט מורחבת */}
+
           <div>
-            <label className="block text-sm font-medium text-text-main mb-2">
-              תוכן השאלה *
-            </label>
+            <label className="block text-sm font-medium text-text-main mb-2">תוכן השאלה *</label>
             <textarea
               name="content"
               value={formData.content}
@@ -158,74 +131,34 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
             />
           </div>
 
-          {/* רמת קושי */}
           <div>
-            <label className="block text-sm font-medium text-text-main mb-2">
-              רמת קושי
-            </label>
-            <select
-              name="difficulty"
-              value={formData.difficulty}
-              onChange={handleChange}
-              className="w-full rounded-md border border-[--color-border] px-3 py-2 text-sm focus:ring-[--color-primary] focus:border-[--color-primary]"
-            >
-              <option value="easy">קל</option>
-              <option value="medium">בינוני</option>
-              <option value="hard">קשה</option>
-            </select>
-          </div>
-
-          {/* סוג השאלה */}
-          <div>
-            <label className="block text-sm font-medium text-text-main mb-2">
-              סוג השאלה
-            </label>
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-              className="w-full rounded-md border border-[--color-border] px-3 py-2 text-sm focus:ring-[--color-primary] focus:border-[--color-primary]"
-            >
-              <option value="yes_no">כן/לא</option>
-              <option value="free_text">טקסט חופשי</option>
-              <option value="code">קטע קוד</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-text-main mb-2">
-              נושא
-            </label>
-
+            <label className="block text-sm font-medium text-text-main mb-2">נושא</label>
             {!isCustomTopic ? (
               isTopicsLoading ? (
                 <p className="text-sm text-gray-500">טוען נושאים...</p>
               ) : topicsError ? (
                 <p className="text-sm text-red-500">שגיאה בטעינת הנושאים</p>
               ) : (
-                <select
-                  name="topic"
+                <Select
+                  options={[
+                    { label: "בחרי נושא", value: "", disabled: true },
+                    ...topics.map((topic) => ({
+                      label: topic.name,
+                      value: topic.name,
+                    })),
+                    { label: "+ הוסיפי נושא חדש", value: "custom" },
+                  ]}
                   value={formData.topic}
-                  onChange={(e) => {
-                    if (e.target.value === 'custom') {
+                  onChange={(val) => {
+                    if (val === "custom") {
                       setIsCustomTopic(true);
-                      setFormData((prev) => ({ ...prev, topic: '' }));
+                      setFormData((prev) => ({ ...prev, topic: "" }));
                     } else {
-                      setFormData((prev) => ({ ...prev, topic: e.target.value }));
+                      setFormData((prev) => ({ ...prev, topic: val }));
                     }
                   }}
-                  className="w-full rounded-md border border-[--color-border] px-3 py-2 text-sm z-50 relative"
-                  required 
-                >
-                  <option value="" disabled>בחרי נושא</option>
-                  {topics?.map((topic: { id: string; name: string }) => (
-                    <option key={topic.id} value={topic.name}>
-                      {topic.name}
-                    </option>
-                  ))}
-                  <option value="custom">+ הוסיפי נושא חדש</option>
-                </select>
-               
-
+                  placeholder="בחרי נושא"
+                />
               )
             ) : (
               <div className="flex items-center gap-2">
@@ -243,12 +176,41 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
             )}
           </div>
 
-          {/* רמזים */}
+          <div>
+            <label className="block text-sm font-medium text-text-main mb-2">רמת קושי</label>
+            <Select
+              options={[
+                { label: "קל", value: "easy" },
+                { label: "בינוני", value: "medium" },
+                { label: "קשה", value: "hard" },
+              ]}
+              value={formData.difficulty}
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, difficulty: val }))
+              }
+              placeholder="בחרי רמת קושי"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-text-main mb-2">סוג השאלה</label>
+            <Select
+              options={[
+                { label: "כן/לא", value: "yes_no" },
+                { label: "טקסט חופשי", value: "free_text" },
+                { label: "קטע קוד", value: "code" },
+              ]}
+              value={formData.type}
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, type: val as "free_text" | "yes_no" | "code" }))
+              }
+              placeholder="בחרי סוג שאלה"
+            />
+          </div>
+
           <div>
             <div className="flex justify-between items-center mb-3">
-              <label className="block text-sm font-medium text-text-main">
-                רמזים
-              </label>
+              <label className="block text-sm font-medium text-text-main">רמזים</label>
               <Button
                 type="button"
                 variant="outline"
@@ -293,9 +255,7 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
             )}
           </div>
 
-          {/* כפתורי פעולה */}
           <div className="flex flex-col gap-3 pt-4 border-t border-[--color-border]">
-            {/* כפתור הוספת שאלה - רחב וברור */}
             <Button
               type="submit"
               variant="primary-dark"
@@ -310,7 +270,6 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
               {isLoading ? 'מוסיף שאלה...' : 'הוסף שאלה מקצועית'}
             </Button>
 
-            {/* כפתור ניקוי טופס */}
             <Button
               type="button"
               variant="danger"
@@ -331,7 +290,6 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
           )}
         </form>
 
-        {/* מודל אישור ניקוי טופס */}
         {showResetConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60">
             <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
@@ -364,5 +322,3 @@ const AddNewPracticeQuestion = ({ isOpen, onClose }: AddNewPracticeQuestionProps
 };
 
 export default AddNewPracticeQuestion;
-
-

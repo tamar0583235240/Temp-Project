@@ -23,6 +23,7 @@ export const createPracticeQuestionController = async (req: Request, res: Respon
     topic,
     hints = [],
   } = req.body;
+  console.log('Received request body:', req.body);
 
   try {
     //יצירת שאלה חדשה
