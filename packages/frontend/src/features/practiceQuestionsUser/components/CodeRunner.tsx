@@ -3,6 +3,7 @@ import Editor, { Monaco } from '@monaco-editor/react';
 import { Button } from '../../../shared/ui/button';
 import { useRunCodeMutation } from '../../../shared/api/runCodeApi';
 
+
 type Language = 'java' | 'python' | 'sql' | 'html';
 
 interface CodeRunnerProps {
@@ -100,7 +101,7 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
           zIndex: 1,
         }}
       >
-        <h3 style={{ marginBottom: 0 }}>הרצת קוד - בחר שפה</h3>
+        {/* <h3 style={{ marginBottom: 0 }}>הרצת קוד - בחר שפה</h3> */}
 
         <div
           style={{
@@ -228,7 +229,7 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
                   overflowY: 'auto',
                 }}
               >
-  {typeof output === 'string' ? output : JSON.stringify(output, null, 2)}
+                {typeof output === 'string' ? output : JSON.stringify(output, null, 2)}
               </pre>
             )}
           </div>
@@ -239,3 +240,4 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
 };
 
 export default CodeRunner;
+

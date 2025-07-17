@@ -1,7 +1,7 @@
-import { FaSpinner, FaCheckCircle, FaRegClock, FaCircle } from "react-icons/fa";
+import { FaSpinner, FaCheckCircle, FaCircle } from "react-icons/fa";
 
 interface QuestionStatusProps {
-    value: "not_started" | "in_progress" | "completed" | "later";
+    value: "not_started" | "in_progress" | "completed";
     onChange: (newStatus: QuestionStatusProps["value"]) => void;
 }
 
@@ -27,19 +27,12 @@ const statuses = [
         ring: "ring-green-400",
         icon: <FaCheckCircle className="text-green-600" />,
     },
-    {
-        value: "later",
-        label: "נדחה",
-        color: "bg-blue-100 text-blue-800",
-        ring: "ring-blue-300",
-        icon: <FaRegClock className="text-blue-600" />,
-    },
 ];
 
 export const QuestionStatus = ({ value, onChange }: QuestionStatusProps) => {
     return (
         <div className="flex flex-col gap-1 mt-3">
-            <label className="text-sm font-medium text-[--color-text]">סטטוס:</label>
+            <label className="text-mm font-medium text-[--color-text]">סטטוס:</label>
             <div className="flex flex-wrap gap-2">
                 {statuses.map((status) => (
                     <button

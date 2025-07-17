@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get("/topics", getAllTopics);
 router.get("/questions", getAllQuestions);
-router.post('/runCode', validateRunCode, runCodeController);
+router.post("/runCode", validateRunCode, runCodeController);
 
 
 export default router;

@@ -51,19 +51,28 @@ export const writeTempFile = (dir: string, fileName: string, code: string): stri
 };
 
 const execCommand = (command: string, cwd: string, res: Response) => {
+  console.log('מריץ פקודה:', command, 'בתיקייה:', cwd);
   exec(command, { cwd }, (error, stdout, stderr) => {
+    console.log('stdout:', stdout);
+    console.log('stderr:', stderr);
     if (error) {
+      console.log('שגיאה בהרצה:', stderr || error.message);
       return res.json({ success: false, error: stderr || error.message });
     }
     res.json({ success: true, output: stdout });
   });
 };
 
+
 export const runCodeController = async (req: Request, res: Response) => {
   const { language, code } = req.body;
   if (!language || !code) {
     return res.status(400).json({ message: 'שפת תכנות או קוד חסרים' });
   }
+
+  console.log('runCodeController activated');
+  console.log('language:', req.body.language);
+  console.log('code:', req.body.code);
 
   clearTempDir();
 
@@ -75,7 +84,9 @@ export const runCodeController = async (req: Request, res: Response) => {
 
     case 'python':
       writeTempFile(tempDir, 'script.py', code);
-      execCommand('python3 script.py', tempDir, res);
+      // execCommand('python3 script.py', tempDir, res);
+      // execCommand('python script.py', tempDir, res);
+      execCommand('"C:/Users/user1/AppData/Local/Programs/Python/Python313/python.exe" script.py', tempDir, res);
       break;
 
     case 'csharp':
@@ -86,19 +97,19 @@ export const runCodeController = async (req: Request, res: Response) => {
 
     case 'c':
       writeTempFile(tempDir, 'main.c', code);
-execCommand('C:/MinGW/bin/gcc main.c -o main.exe && main.exe', tempDir, res);
+      execCommand('C:/MinGW/bin/gcc main.c -o main.exe && main.exe', tempDir, res);
       break;
 
     case 'cpp':
     case 'c++':
       writeTempFile(tempDir, 'main.cpp', code);
-execCommand('C:/MinGW/bin/g++ main.cpp -o main.exe && main.exe', tempDir, res);
+      execCommand('C:/MinGW/bin/g++ main.cpp -o main.exe && main.exe', tempDir, res);
       break;
 
-case 'html':
-  const htmlContent = code; // הקוד עצמו הוא התוכן
-  res.json({ success: true, output: htmlContent });
-  break;
+    case 'html':
+      const htmlContent = code; // הקוד עצמו הוא התוכן
+      res.json({ success: true, output: htmlContent });
+      break;
 
 
     case 'sql':

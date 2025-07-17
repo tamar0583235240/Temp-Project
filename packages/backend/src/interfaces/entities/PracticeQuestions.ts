@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Hints } from "./Hints";
 import { PracticeCorrectAnswers } from "./PracticeCorrectAnswers";
+import { QuestionLikes } from "./QuestionLikes";
 import { Topics } from "./Topics";
 import { UserPracticeAnswers } from "./UserPracticeAnswers";
 
@@ -58,6 +59,9 @@ export class PracticeQuestions {
     (practiceCorrectAnswers) => practiceCorrectAnswers.question
   )
   practiceCorrectAnswers: PracticeCorrectAnswers[];
+
+  @OneToMany(() => QuestionLikes, (questionLikes) => questionLikes.question)
+  questionLikes: QuestionLikes[];
 
   @ManyToMany(() => Topics, (topics) => topics.practiceQuestions)
   @JoinTable({

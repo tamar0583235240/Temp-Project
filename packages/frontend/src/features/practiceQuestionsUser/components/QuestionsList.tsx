@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 import { QuestionStatus } from "./QuestionStatus";
 import { AnswerModal } from "./AnswerModel";
@@ -104,7 +104,6 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
                   />
                 </div>
 
-                {/* כפתור בצד שמאל */}
                 <button
                   onClick={() => setSelectedQuestion(q)}
                   className="group flex-shrink-0 flex items-center gap-2 bg-[--color-primary] hover:bg-[--color-primary-dark] active:scale-95 text-white text-sm font-medium px-4 py-1.5 rounded-md transition-transform duration-200 shadow-sm"
