@@ -26,9 +26,9 @@ import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
-
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
+import { PublicProfilePage } from "../../pages/PublicProfilePage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -118,7 +118,7 @@ export default function AppRoutes() {
             path="/shared"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                    <Dashboard />
+                <Dashboard />
               </RoleProtectedRoute>
             }
           />
@@ -176,7 +176,7 @@ export default function AppRoutes() {
             path="/manager/users"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                    <AdminUser />
+                <AdminUser />
               </RoleProtectedRoute>
             }
           />
@@ -255,6 +255,7 @@ export default function AppRoutes() {
         </Route>
 
         <Route path="/not-authorized" element={<NotAuthorizedPage />} />
+        <Route path="/u/:slug" element={<PublicProfilePage/>} />
       </Routes>
     </div>
   );

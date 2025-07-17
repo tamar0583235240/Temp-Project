@@ -1,11 +1,10 @@
 // components/common/EditableListItem.tsx
 import * as React from "react";
 import { cn } from "../utils/cn";
-import { CardSimple } from "./card"; 
-import { Button } from "./button"; 
-import { Input } from "./input"; 
-import { ToggleSwitch } from "./ToggleSwitch"; 
-import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa"; 
+import { CardSimple } from "./card";
+import { Button } from "./button";
+import { ToggleSwitch } from "./ToggleSwitch";
+import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa";
 
 interface EditableListItemProps<T> extends React.HTMLAttributes<HTMLDivElement> {
   itemData: T; 

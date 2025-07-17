@@ -19,7 +19,6 @@
     "noEmit": true,
     "types": [
       "jest",
-      "node",
       "react"
     ],
     "experimentalDecorators": true,

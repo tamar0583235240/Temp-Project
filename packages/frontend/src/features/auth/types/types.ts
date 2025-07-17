@@ -7,6 +7,7 @@ export interface User {
   role: 'student' | 'manager';
   createdAt: string;
   isActive: boolean;
+  slug: string;
 }
 
 export interface ForgotPasswordForm {

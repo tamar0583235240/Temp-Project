@@ -72,7 +72,12 @@ export const UploadUsers = () => {
       html: '<div class="spinner"></div>',
       showConfirmButton: false,
       allowOutsideClick: false,
-      willOpen: () => Swal.showLoading(),
+      willOpen: (popup) => {
+        const confirmButton = popup.querySelector<HTMLButtonElement>('.swal2-confirm');
+        if (confirmButton) {
+          Swal.showLoading(confirmButton);
+        }
+      },
     });
 
     try {

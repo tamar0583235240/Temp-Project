@@ -3,21 +3,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {
-  FaBehance,
-  FaCodepen,
-  FaDev,
-  FaDribbble,
-  FaExternalLinkAlt,
-  FaFileAlt,
-  FaFilePdf,
-  FaGithub,
-  FaGlobe,
-  FaLinkedin,
-  FaMedium,
-  FaStackOverflow,
-  FaUserCircle,
-} from "react-icons/fa";
+import { FaBehance, FaCodepen, FaDev, FaDribbble, FaExternalLinkAlt, FaFileAlt, FaFilePdf, FaGithub, FaGlobe, FaLinkedin, FaMedium, FaStackOverflow, FaUserCircle } from "react-icons/fa";
+import { ExternalLink, Profile } from "../features/profile/types/profileTypes";
+import { useGetProfileByIdQuery } from "../features/profile/services/profileApi";
+import CopyLinkButton from "../features/profile/components/copyLinkButton";
 
 const MyProfileViewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -118,6 +107,7 @@ const MyProfileViewPage = () => {
       >
         ערוך פרופיל
       </button>
+      <CopyLinkButton slug={user!.slug} /> 
     </div>
   );
 };
