@@ -12,20 +12,14 @@ type InterviewMaterial = {
   originalFileName: string;
 };
 
-export const downloadInterviewMaterial = async (
-  req: Request,
-  res: Response
-) => {
+export const downloadInterviewMaterial = async (req: Request,res: Response) => {
   try {
     const id = req.params.id;
-    console.log("downloadInterviewMaterial called with id:", id);
 
     const material: any = await getInterviewMaterialSubById(id);
     if (!material) {
       return res.status(404).json({ message: "קובץ לא נמצא" });
     }
-
-    console.log("material:", material);
 
     if (!material.fileUrl) {
       return res.status(404).json({ message: "הקישור לא נמצא" });

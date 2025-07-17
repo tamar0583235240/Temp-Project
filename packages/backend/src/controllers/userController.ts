@@ -5,8 +5,9 @@ import bcrypt from 'bcrypt';
 import { generateUniqueSlug } from '../utils/generateSlug';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
-import { insertUsersFromExcel } from '../reposioty/userRepository';
+// import { insertUsersFromExcel } from '../reposioty/userRepository';
 import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
+import { insertUsersFromExcel } from '../reposioty/userRpository';
 
 const SALT_ROUNDS = 10;
 
@@ -27,7 +28,7 @@ function mapUserRowToCamelCase(row: any) {
     phone: row.phone,
     role: row.role,
     password: row.password,
-    createdAt: row.created_dat,
+    createdAt: row.created_at,
     isActive: row.is_active,
   };
 }
@@ -203,7 +204,7 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
 
     // הכנסת המשתמש לבסיס
     const result = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_dat, is_active, password)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
        VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
        RETURNING *`,
       [id, firstName, lastName, email, phone, role || 'student', createdAt, hashedPassword]

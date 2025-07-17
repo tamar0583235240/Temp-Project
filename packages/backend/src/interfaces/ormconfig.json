@@ -6,8 +6,9 @@
     "port": 5432,
     "username": "postgres",
     "password": "huser",
-    "database": "",
-    "synchronize": false,
-    "entities": ["entities/*.js"]
+    "database": "lingo-prep",
+    "synchronize": true,
+    "logging": true,
+    "entities": ["dist/entities/*.js"]
   }
 ]
