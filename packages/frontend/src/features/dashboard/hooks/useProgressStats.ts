@@ -1,11 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { getProgressStats } from '../services/dashboardService';
-import { ProgressStats } from '../types/aiInsightsType';
+import { useGetProgressStatsQuery } from "../../../shared/api/progressStatsApi";
 
 export const useProgressStats = (userId?: string) => {
-  return useQuery<ProgressStats>({
-    queryKey: ['progressStats', userId],
-    queryFn: () => getProgressStats(userId!),
-    enabled: !userId, // מריץ רק אם יש userId
+  return useGetProgressStatsQuery(userId ?? "", {
+    skip: !userId,
   });
 };

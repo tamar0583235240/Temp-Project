@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 import { QuestionStatus } from "./QuestionStatus";
 import { AnswerModal } from "./AnswerModel";
+import { LikeDislike } from "./LikeDislike";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../shared/store/store";
 
 interface Question {
   id: string;
@@ -17,6 +20,8 @@ interface Props {
 }
 
 export const QuestionsList = ({ topicName, level, type }: Props) => {
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(false);
   const [questionStatuses, setQuestionStatuses] = useState<Record<string, string>>({});
@@ -91,20 +96,24 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
               className="border rounded p-4 shadow text-right bg-white space-y-3"
             >
               <div className="flex justify-between items-start gap-4">
-                {/* תוכן השאלה */}
                 <div className="flex-1 space-y-2">
                   <p className="text-lg font-semibold text-[--color-primary-dark]">{q.content}</p>
                   <p className="text-sm text-gray-600">
                     רמת קושי: <span className="font-bold">{getDifficultyLabel(q.difficulty)}</span> | אופן המענה:{" "}
                     <span className="font-bold">{getTypeLabel(q.type)}</span>
                   </p>
+
                   <QuestionStatus
                     value={(questionStatuses[q.id] as any) ?? "not_started"}
                     onChange={(val) => handleStatusChange(q.id, val)}
                   />
+
+                  {/* ✅ הוספת קומפוננטת הלייקים עם questionId ו-userId */}
+                  {userId && (
+                    <LikeDislike questionId={q.id} userId={userId} />
+                  )}
                 </div>
 
-                {/* כפתור בצד שמאל */}
                 <button
                   onClick={() => setSelectedQuestion(q)}
                   className="group flex-shrink-0 flex items-center gap-2 bg-[--color-primary] hover:bg-[--color-primary-dark] active:scale-95 text-white text-sm font-medium px-4 py-1.5 rounded-md transition-transform duration-200 shadow-sm"
@@ -118,7 +127,6 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
         </ul>
       )}
 
-      {/* מודל תשובה */}
       {selectedQuestion && (
         <AnswerModal
           question={selectedQuestion}

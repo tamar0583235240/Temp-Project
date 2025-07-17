@@ -100,6 +100,10 @@ case 'html':
   res.json({ success: true, output: htmlContent });
   break;
 
+case 'javascript':
+  writeTempFile(tempDir, 'script.js', code);
+  execCommand('node script.js', tempDir, res);
+  break;
 
     case 'sql':
       try {
