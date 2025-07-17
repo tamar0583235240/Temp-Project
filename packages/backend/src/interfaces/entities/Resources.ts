@@ -28,8 +28,4 @@ export class Resources {
   @ManyToOne(() => Users, (users) => users.resources)
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9ee6ca6e47c755277c384223ec4b4383c5e40441

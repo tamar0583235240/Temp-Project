@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PracticeQuestion } from "../types/practiceQuestionsType";
+import { PracticeQuestion } from "../types/practiceQuestionTypes";
 
 interface PracticeQuestionsState {
   data: PracticeQuestion[];
