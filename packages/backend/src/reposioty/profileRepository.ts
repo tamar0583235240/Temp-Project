@@ -10,6 +10,7 @@ export const getAllProfiles = async () => {
   return result.rows;
 };
 
+
 export const getProfileById = async (profileId: string) => {
   const result = await pool.query(
     `
