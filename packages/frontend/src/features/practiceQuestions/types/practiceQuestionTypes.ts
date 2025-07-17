@@ -13,7 +13,7 @@ export interface PracticeQuestion {
   created_by: string;
   created_at: string;
   topic: Topic;
-  hints: [];
+  hints: Hint[];
 }
 export interface PracticeQuestionRequestType {
   content: string;

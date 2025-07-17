@@ -11,10 +11,6 @@ import { UserActivity } from "./UserActivity";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
 import { WorkExperiences } from "./WorkExperiences";
-<<<<<<< HEAD
-
-=======
->>>>>>> 9ee6ca6e47c755277c384223ec4b4383c5e40441
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
 @Index("users_slug_key", ["slug"], { unique: true })
@@ -39,15 +35,8 @@ export class Users {
   createdAt: Date;
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
-<<<<<<< HEAD
-
   @Column("text", { name: "password", nullable: true })
   password: string | null;
-
-=======
-  @Column("text", { name: "password", nullable: true })
-  password: string | null;
->>>>>>> 9ee6ca6e47c755277c384223ec4b4383c5e40441
   @Column("text", { name: "slug", nullable: true, unique: true })
   slug: string | null;
   @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
@@ -71,29 +60,15 @@ export class Users {
     (passwordResetTokens) => passwordResetTokens.user
   )
   passwordResetTokens: PasswordResetTokens[];
-<<<<<<< HEAD
-
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
-
-=======
-  @OneToMany(() => Resources, (resources) => resources.user)
-  resources: Resources[];
->>>>>>> 9ee6ca6e47c755277c384223ec4b4383c5e40441
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.owner
   )
   sharedRecordings: SharedRecordings[];
-<<<<<<< HEAD
-
   @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
   userActivities: UserActivity[];
-
-=======
-  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
-  userActivities: UserActivity[];
->>>>>>> 9ee6ca6e47c755277c384223ec4b4383c5e40441
   @OneToMany(
     () => UserReminderSettings,
     (userReminderSettings) => userReminderSettings.user
@@ -103,8 +78,4 @@ export class Users {
   userSessions: UserSessions[];
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences: WorkExperiences[];
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9ee6ca6e47c755277c384223ec4b4383c5e40441

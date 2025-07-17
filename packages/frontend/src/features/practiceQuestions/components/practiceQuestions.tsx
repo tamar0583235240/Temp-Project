@@ -110,7 +110,7 @@ const PracticeQuestions: React.FC = () => {
                 </p>
                 {q.hints.length > 0 ? (
                   <ul className="list-disc list-inside ml-4 text-sm text-text-secondary">
-                    {q.hints.map((hint: any, index: number) => (
+                    {q.hints.map((hint, index) => (
                       <li key={index}>{hint.content}</li>
                     ))}
                   </ul>

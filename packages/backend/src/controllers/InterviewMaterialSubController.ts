@@ -11,54 +11,74 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
         res.status(500).json({ error });
     }
 };
-
 export const updateInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { title, short_description } = req.body;
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const { id } = req.params;
+  const { title, short_description } = req.body;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-    try {
-        const existingMaterialSub = await InterviewMaterialSubRepository.getInterviewMaterialSubById(id);
+  try {
+    const existingMaterialSub = await InterviewMaterialSubRepository.getInterviewMaterialSubById(id);
 
-        if (!existingMaterialSub) {
-            res.status(404).json({ message: 'Interview material sub not found' });
-            return;
-        }
-
-        console.log('Existing Material Sub file:', existingMaterialSub.fileUrl);
-        
-        let updatedThumbnail = existingMaterialSub.thumbnail;
-        let updatedFileUrl = existingMaterialSub.fileUrl;
-
-        if (files?.thumbnail?.[0]) {
-            const match = existingMaterialSub.thumbnail.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) { await deleteFileFromCloudinary(match[1]); }
-            const thumbnailResult = await uploadFileToCloudinary(files.thumbnail[0], 'interviewMaterialsHub/thumbnails');
-            updatedThumbnail = thumbnailResult.secure_url;
-        }
-        if (files?.file?.[0]) {
-            const match = existingMaterialSub.fileUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/);
-            if (match && match[1]) { await deleteFileFromCloudinary(match[1]); }
-            const fileResult = await uploadFileToCloudinary(files.file[0], 'interviewMaterialsHub/files');
-            updatedFileUrl = fileResult.secure_url;
-        }
-
-        const updatedInterviewMaterialSub = await InterviewMaterialSubRepository.updateInterviewMaterialSub(
-            id,
-            title || existingMaterialSub.title,
-            short_description || existingMaterialSub.shortDescription,
-            updatedThumbnail,
-            updatedFileUrl
-        );
-
-        res.json(updatedInterviewMaterialSub);
-
-    } catch (error) {
-        console.error('Error in update interview material sub controller:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    if (!existingMaterialSub) {
+      res.status(404).json({ message: 'Interview material sub not found' });
+      return;
     }
-};
 
+    let updatedThumbnail = existingMaterialSub.thumbnail;
+    let updatedFileUrl = existingMaterialSub.fileUrl;
+
+    // מחיקת תמונה קודמת (אם קיימת) והעלאת חדשה
+    if (files?.thumbnail?.[0]) {
+      if (existingMaterialSub.thumbnail) {
+        const match = existingMaterialSub.thumbnail.match(
+          /\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/
+        );
+        if (match?.[1]) {
+          await deleteFileFromCloudinary(match[1]);
+        }
+      }
+
+      const thumbnailResult = await uploadFileToCloudinary(
+        files.thumbnail[0],
+        'interviewMaterialsHub/thumbnails'
+      );
+      updatedThumbnail = thumbnailResult.secure_url;
+    }
+
+    // מחיקת קובץ קיים (אם קיים) והעלאת חדש
+    if (files?.file?.[0]) {
+      if (existingMaterialSub.fileUrl) {
+        const match = existingMaterialSub.fileUrl.match(
+          /\/upload\/(?:v\d+\/)?(.+)\.(jpg|png|jpeg|pdf|mp4|webm|svg|gif)$/
+        );
+        if (match?.[1]) {
+          await deleteFileFromCloudinary(match[1]);
+        }
+      }
+
+      const fileResult = await uploadFileToCloudinary(
+        files.file[0],
+        'interviewMaterialsHub/files'
+      );
+      updatedFileUrl = fileResult.secure_url;
+    }
+
+    // עדכון במסד הנתונים
+    const updatedInterviewMaterialSub = await InterviewMaterialSubRepository.updateInterviewMaterialSub(
+      id,
+      title || existingMaterialSub.title,
+      short_description || existingMaterialSub.shortDescription,
+      updatedThumbnail ?? '',
+      updatedFileUrl ?? ''
+    );
+
+    res.json(updatedInterviewMaterialSub);
+
+  } catch (error) {
+    console.error('Error in update interview material sub controller:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 export const addInterviewMaterialSub = async (req: Request, res: Response): Promise<void> => {
     try {

@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Hints } from "./Hints";
+import { PracticeCorrectAnswers } from "./PracticeCorrectAnswers";
 import { Topics } from "./Topics";
 import { UserPracticeAnswers } from "./UserPracticeAnswers";
 
@@ -46,8 +47,17 @@ export class PracticeQuestions {
   })
   createdAt: Date | null;
 
+  @Column("text", { name: "correct_answer", nullable: true })
+  correctAnswer: string | null;
+
   @OneToMany(() => Hints, (hints) => hints.question)
   hints: Hints[];
+
+  @OneToMany(
+    () => PracticeCorrectAnswers,
+    (practiceCorrectAnswers) => practiceCorrectAnswers.question
+  )
+  practiceCorrectAnswers: PracticeCorrectAnswers[];
 
   @ManyToMany(() => Topics, (topics) => topics.practiceQuestions)
   @JoinTable({
