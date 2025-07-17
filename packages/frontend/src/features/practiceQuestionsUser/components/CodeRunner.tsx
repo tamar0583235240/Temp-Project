@@ -3,19 +3,54 @@ import Editor, { Monaco } from '@monaco-editor/react';
 import { Button } from '../../../shared/ui/button';
 import { useRunCodeMutation } from '../../../shared/api/runCodeApi';
 
-
-type Language = 'java' | 'python' | 'sql' | 'html';
+type Language = 'java' | 'python' | 'sql' | 'html' | 'c' | 'cpp'| 'javascript';
 
 interface CodeRunnerProps {
   onCodeChange?: (code: string) => void; // הוספתי את הפרופס כאן
 }
 
+// const languageMap: Record<Language, string> = {
+//   java: 'java',
+//   python: 'python',
+//   sql: 'sql',
+//   html: 'html',
+// };
+
+// const initialCode: Record<Language, string> = {
+//   java: `public class Main {
+//   public static void main(String[] args) {
+//     System.out.println("Hello, Java!");
+//   }
+// }`,
+//   python: `print("Hello, Python!")`,
+//   sql: `SELECT 'Hello, SQL!' AS message;`,
+//   html: `<!DOCTYPE html>
+// <html>
+//   <head>
+//     <title>Hello HTML</title>
+//   </head>
+//   <body>
+//     <h1>Hello, HTML!</h1>
+//   </body>
+// </html>`,
+// };
+
+// const commentSymbols: Record<Language, string> = {
+//   java: '//',
+//   python: '#',
+//   sql: '--',
+//   html: '<!--',
+// };
 const languageMap: Record<Language, string> = {
   java: 'java',
   python: 'python',
   sql: 'sql',
   html: 'html',
+  c: 'c',
+  cpp: 'cpp',
+  javascript: 'javascript',
 };
+
 
 const initialCode: Record<Language, string> = {
   java: `public class Main {
@@ -34,6 +69,21 @@ const initialCode: Record<Language, string> = {
     <h1>Hello, HTML!</h1>
   </body>
 </html>`,
+  c: `#include <stdio.h>
+
+int main() {
+  printf("Hello, C!\\n");
+  return 0;
+}
+`,
+  cpp: `#include <iostream>
+
+int main() {
+  std::cout << "Hello, C++!" << std::endl;
+  return 0;
+}
+`,
+  javascript: `console.log("Hello, JavaScript!");`,
 };
 
 const commentSymbols: Record<Language, string> = {
@@ -41,6 +91,10 @@ const commentSymbols: Record<Language, string> = {
   python: '#',
   sql: '--',
   html: '<!--',
+  c: '//',
+  cpp: '//',
+    javascript: '//',
+
 };
 
 const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
@@ -124,11 +178,15 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
             }}
             disabled={isLoading}
           >
-            <option value="java">Java</option>
-            <option value="python">Python</option>
-            <option value="sql">SQL</option>
-            <option value="html">HTML</option>
-          </select>
+      <option value="java">Java</option>
+  <option value="python">Python</option>
+  <option value="sql">SQL</option>
+  <option value="html">HTML</option>
+  <option value="c">C</option>
+  <option value="cpp">C++</option>
+    <option value="javascript">JavaScript</option>
+
+</select>
 
           <Button
             onClick={handleRunCode}
