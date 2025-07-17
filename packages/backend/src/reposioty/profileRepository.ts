@@ -8,9 +8,18 @@ export const getAllProfiles = async () => {
   return result.rows;
 };
 
-// Get profile by its own ID (UUID)
-export const getProfileById = async (id: string) => {
-  const result = await pool.query("SELECT * FROM profiles WHERE id = $1", [id]);
+
+export const getProfileById = async (profileId: string) => {
+  const result = await pool.query(
+    `
+    SELECT profiles.*, users.first_name, users.last_name, users.email, user.phone
+    FROM profiles
+    JOIN users ON profiles.user_id = users.id
+    WHERE profiles.id = $1
+  `,
+    [profileId]
+  );
+
   return result.rows[0] || null;
 };
 
